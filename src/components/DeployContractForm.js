@@ -1,4 +1,17 @@
 import React, { Component } from 'react';
+import { Form, Input, InputNumber } from 'antd';
+const FormItem = Form.Item;
+
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 8 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 8 },
+  },
+};
 
 class DeployContractForm extends Component {
   constructor(props) {
@@ -20,7 +33,7 @@ class DeployContractForm extends Component {
 
   onInputChange(event) {
     this.setState({
-      [event.target.id]: event.target.value
+      [event.target.name]: event.target.value
     });
   }
 
@@ -30,92 +43,151 @@ class DeployContractForm extends Component {
   }
 
   render() {
-    return (
-      <form
-        className="pure-form pure-form-stacked"
-        onSubmit={this.handleDeploy.bind(this)}
-      >
-        <fieldset>
-          <input
-            id="contractName"
-            type="text"
-            value={this.state.contractName}
-            onChange={this.onInputChange.bind(this)}
-            placeholder="Name"
-          />
-          <input
-            id="baseTokenAddress"
-            type="text"
-            value={this.state.baseTokenAddress}
-            onChange={this.onInputChange.bind(this)}
-            placeholder="Base Token Address"
-          />
-          <input
-            id="priceFloor"
-            type="number"
-            value={this.state.priceFloor}
-            onChange={this.onInputChange.bind(this)}
-            placeholder="Price Floor"
-          />
-          <input
-            id="priceCap"
-            type="number"
-            value={this.state.priceCap}
-            onChange={this.onInputChange.bind(this)}
-            placeholder="Price Cap"
-          />
-          <input
-            id="priceDecimalPlaces"
-            type="number"
-            value={this.state.priceDecimalPlaces}
-            onChange={this.onInputChange.bind(this)}
-            placeholder="Price Decimal Places"
-          />
-          <input
-            id="qtyDecimalPlaces"
-            type="number"
-            value={this.state.qtyDecimalPlaces}
-            onChange={this.onInputChange.bind(this)}
-            placeholder="Qty Decimal Places"
-          />
-          <input
-            id="expirationTimeStamp"
-            type="number"
-            value={this.state.expirationTimeStamp}
-            onChange={this.onInputChange.bind(this)}
-            placeholder="Expiration Time Stamp"
-          />
-          <input
-            id="oracleDataSource"
-            type="text"
-            value={this.state.oracleDataSource}
-            onChange={this.onInputChange.bind(this)}
-            placeholder="Oraclize.it data source"
-          />
-          <input
-            id="oracleQuery"
-            type="text"
-            value={this.state.oracleQuery}
-            onChange={this.onInputChange.bind(this)}
-            placeholder="Oraclize.it Query"
-          />
-          <input
-            id="oracleQueryRepeatSeconds"
-            type="number"
-            value={this.state.oracleQueryRepeatSeconds}
-            onChange={this.onInputChange.bind(this)}
-            placeholder="Query Repeat Seconds"
-          />
+    const { getFieldDecorator } = this.props.form;
 
-          <br />
+    return (
+      <Form onSubmit={this.handleDeploy.bind(this)}>
+        <FormItem
+          {...formItemLayout}
+          label="Name"
+        >
+          {getFieldDecorator('contractName', {
+            rules: [{
+              required: true, message: 'Please enter a name for your contract',
+            }],
+          })(
+            <Input />
+          )}
+        </FormItem>
+
+        <FormItem
+          {...formItemLayout}
+          label="Base Token Address"
+        >
+          {getFieldDecorator('baseTokenAddress', {
+            rules: [{
+              required: true, message: 'Please enter an base token address',
+            }],
+          })(
+            <Input />
+          )}
+        </FormItem>
+
+        <FormItem
+          {...formItemLayout}
+          label="Price Floor"
+        >
+          {getFieldDecorator('priceFloor', {
+            rules: [{
+              required: true, message: 'Please enter an base token address',
+            }],
+          })(
+            <InputNumber min={0} />
+          )}
+        </FormItem>
+
+        <FormItem
+          {...formItemLayout}
+          label="Price Cap"
+        >
+          {getFieldDecorator('priceCap', {
+            rules: [{
+              required: true, message: 'Please enter an base token address',
+            }],
+          })(
+            <InputNumber min={0} />
+          )}
+        </FormItem>
+
+        <FormItem
+          {...formItemLayout}
+          label="Price Decimal Places"
+        >
+          {getFieldDecorator('priceDecimalPlaces', {
+            rules: [{
+              required: true, message: 'Please enter an base token address',
+            }],
+          })(
+            <InputNumber min={0} />
+          )}
+        </FormItem>
+
+        <FormItem
+          {...formItemLayout}
+          label="Qty Decimal Places"
+        >
+          {getFieldDecorator('qtyDecimalPlaces', {
+            rules: [{
+              required: true, message: 'Please enter an base token address',
+            }],
+          })(
+            <InputNumber min={0} />
+          )}
+        </FormItem>
+
+        <FormItem
+          {...formItemLayout}
+          label="Expiration Time Stamp"
+        >
+          {getFieldDecorator('expirationTimeStamp', {
+            rules: [{
+              required: true, message: 'Please enter an base token address',
+            }],
+          })(
+            <InputNumber min={0} />
+          )}
+        </FormItem>
+
+        <FormItem
+          {...formItemLayout}
+          label="Oraclize.it data source"
+        >
+          {getFieldDecorator('oracleDataSource', {
+            rules: [{
+              required: true, message: 'Please enter a name for your contract',
+            }],
+          })(
+            <Input />
+          )}
+        </FormItem>
+
+
+        <FormItem
+          {...formItemLayout}
+          label="Oraclize.it Query"
+        >
+          {getFieldDecorator('oracleQuery', {
+            rules: [{
+              required: true, message: 'Please enter a name for your contract',
+            }],
+          })(
+            <Input />
+          )}
+        </FormItem>
+
+
+        <FormItem
+          {...formItemLayout}
+          label="Query Repeat Seconds"
+        >
+          {getFieldDecorator('oracleQueryRepeatSeconds', {
+            rules: [{
+              required: true, message: 'Please enter an base token address',
+            }],
+          })(
+            <InputNumber min={0} />
+          )}
+        </FormItem>
 
           <button type="deploy" className="pure-button pure-button-primary">
             Deploy Contract
           </button>
-        </fieldset>
-      </form>
+      </Form>
     );
   }
 }
 
-export default DeployContractForm;
+
+const WrappedDeployContactForm = Form.create()(DeployContractForm);
+
+export default WrappedDeployContactForm;
