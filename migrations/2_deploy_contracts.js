@@ -78,7 +78,7 @@ module.exports = function(deployer, network) {
       let marketContractRegistry = await MarketContractRegistry.deployed();
       for (let i = 0; i < 25; i++) {
         let contractName = "ETHXBT-" + i;
-        let expirationTimeStamp = Math.floor(Date.now() / 1000) + 60 * 15 * i;
+        let expirationTimeStamp = Math.floor(Date.now() / 1000) + 60 * 15 * (i+1);
         let deployedMarketContract = await MarketContractOraclize.new(
           contractName,
           MarketToken.address,
@@ -86,8 +86,8 @@ module.exports = function(deployer, network) {
           [20155 + i, 60465 + i * 2, 2, 10, expirationTimeStamp],
           "URL",
           "json(https://api.kraken.com/0/public/Ticker?pair=ETHUSD).result.XETHZUSD.c.0",
-          120,
-          {gas: gasLimit, value: web3.toWei('.2', 'ether'), from: web3.eth.accounts[0]}
+          3600,
+          {gas: gasLimit, value: web3.toWei('.3', 'ether'), from: web3.eth.accounts[0]}
         );
 
         let deployedCollateralPool = await MarketCollateralPool.new(
