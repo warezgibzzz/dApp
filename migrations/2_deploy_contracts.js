@@ -76,9 +76,11 @@ module.exports = function(deployer, network) {
       await MarketToken.deployed();
       await CollateralToken.deployed();
       let marketContractRegistry = await MarketContractRegistry.deployed();
-      for (let i = 0; i < 25; i++) {
-        let contractName = "ETHXBT-" + i;
+      let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      for (let i = 0; i < 3; i++) {
+        let contractName = alphabet[i % alphabet.length] + "-ETHXBT-" + i; // create unique name for UI testing
         let expirationTimeStamp = Math.floor(Date.now() / 1000) + 60 * 15 * (i+1);
+        console.log("Deploying test contract " + contractName);
         let deployedMarketContract = await MarketContractOraclize.new(
           contractName,
           MarketToken.address,
