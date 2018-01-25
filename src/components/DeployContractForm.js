@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Form } from 'antd';
+import { Form, Button } from 'antd';
 
 import Field from './DeployContractField';
 
 class DeployContractForm extends Component {
   handleDeploy(event) {
-    debugger;
     event.preventDefault();
+
     this.props.onDeployContract(this.props.form.getFieldsValue());
   }
 
@@ -25,9 +25,9 @@ class DeployContractForm extends Component {
           fields.map(fieldName => <Field name={fieldName} key={fieldName} form={this.props.form} />)
         }
 
-        <button type="deploy" className="pure-button pure-button-primary">
+        <Button type="primary" htmlType="submit">
           Deploy Contract
-        </button>
+        </Button>
       </Form>
     );
   }
