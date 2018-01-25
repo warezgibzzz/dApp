@@ -5,7 +5,7 @@ const FormItem = Form.Item;
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
-    sm: { span: 8 },
+    sm: { span: 10 },
   },
   wrapperCol: {
     xs: { span: 24 },
@@ -20,6 +20,8 @@ const fieldSettingsByName = {
     rules: [{
       required: true, message: 'Please enter a name for your contract',
     }],
+    extra: 'Placeholder explanation',
+
     component: (<Input />)
   },
 
@@ -29,6 +31,8 @@ const fieldSettingsByName = {
     rules: [{
       required: true, message: 'Please enter a name for your contract',
     }],
+    extra: 'Placeholder explanation',
+
     component: (<Input />)
   },
 
@@ -38,6 +42,8 @@ const fieldSettingsByName = {
     rules: [{
       required: true, message: 'Please enter a name for your contract',
     }],
+    extra: 'Placeholder explanation',
+
     component: (<InputNumber min={0} />)
   },
 
@@ -47,6 +53,8 @@ const fieldSettingsByName = {
     rules: [{
       required: true, message: 'Please enter a name for your contract',
     }],
+    extra: 'Placeholder explanation',
+
     component: (<InputNumber min={0} />)
   },
 
@@ -56,6 +64,8 @@ const fieldSettingsByName = {
     rules: [{
       required: true, message: 'Please enter a name for your contract',
     }],
+    extra: 'Placeholder explanation',
+
     component: (<InputNumber min={0} />)
   },
 
@@ -65,6 +75,8 @@ const fieldSettingsByName = {
     rules: [{
       required: true, message: 'Please enter a name for your contract',
     }],
+    extra: 'Placeholder explanation',
+
     component: (<InputNumber min={0} />)
   },
 
@@ -74,6 +86,8 @@ const fieldSettingsByName = {
     rules: [{
       required: true, message: 'Please enter a name for your contract',
     }],
+    extra: 'Placeholder explanation',
+
     component: (<InputNumber min={0} />)
   },
 
@@ -83,6 +97,8 @@ const fieldSettingsByName = {
     rules: [{
       required: true, message: 'Please enter a name for your contract',
     }],
+    extra: 'Placeholder explanation',
+
     component: (<Input />)
   },
 
@@ -92,6 +108,8 @@ const fieldSettingsByName = {
     rules: [{
       required: true, message: 'Please enter a name for your contract',
     }],
+    extra: 'Placeholder explanation',
+
     component: (<Input />)
   },
 
@@ -101,6 +119,8 @@ const fieldSettingsByName = {
     rules: [{
       required: true, message: 'Please enter a name for your contract',
     }],
+    extra: 'Placeholder explanation',
+
     component: (<InputNumber min={0} />)
   },
 };
@@ -114,6 +134,7 @@ function DeployContractField(props) {
     <FormItem
       {...formItemLayout}
       label={fieldSettings.label}
+      extra={fieldSettings.extra}
     >
       {getFieldDecorator(name, {
         initialValue: fieldSettings.initialValue,

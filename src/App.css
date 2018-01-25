@@ -20,3 +20,7 @@ code {
 .clearfix {
   zoom: 1;
 }
+
+#dapp {
+  height: 100%;
+}
