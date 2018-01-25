@@ -3,6 +3,21 @@ import { Form, Button } from 'antd';
 
 import Field from './DeployContractField';
 
+const FormItem = Form.Item
+
+const tailFormItemLayout = {
+  wrapperCol: {
+    xs: {
+      span: 24,
+      offset: 0,
+    },
+    sm: {
+      span: 16,
+      offset: 8,
+    },
+  },
+};
+
 class DeployContractForm extends Component {
   handleDeploy(event) {
     event.preventDefault();
@@ -25,9 +40,11 @@ class DeployContractForm extends Component {
           fields.map(fieldName => <Field name={fieldName} key={fieldName} form={this.props.form} />)
         }
 
-        <Button type="primary" htmlType="submit">
-          Deploy Contract
-        </Button>
+        <FormItem {...tailFormItemLayout}>
+          <Button type="primary" htmlType="submit">
+            Deploy Contract
+          </Button>
+        </FormItem>
       </Form>
     );
   }
