@@ -40,6 +40,7 @@ export function loadContracts() {
 
             processContractsList(deployedContracts, marketContract, marketCollateralPool)
               .then(function (data) {
+                console.log('Dispatch Contracts');
                 dispatch({ type: `${type}_FULFILLED`, payload: data });
               });
           });
@@ -56,23 +57,24 @@ async function processContractsList(deployedContracts, marketContract, marketCol
       .at(contract)
       .then(async function(instance) {
         const contractJSON = [];
+        contractJSON['key'] = instance.address;
         contractJSON['CONTRACT_NAME'] = await instance.CONTRACT_NAME.call();
         contractJSON['BASE_TOKEN'] = await instance.BASE_TOKEN.call();
-        contractJSON['PRICE_FLOOR'] = await instance.PRICE_FLOOR.call();
-        contractJSON['PRICE_CAP'] = await instance.PRICE_CAP.call();
-        contractJSON['PRICE_DECIMAL_PLACES'] = await instance.PRICE_DECIMAL_PLACES.call();
-        contractJSON['QTY_DECIMAL_PLACES'] = await instance.QTY_DECIMAL_PLACES.call();
+        contractJSON['PRICE_FLOOR'] = await instance.PRICE_FLOOR.call().then(data => data.toString());
+        contractJSON['PRICE_CAP'] = await instance.PRICE_CAP.call().then(data => data.toString());
+        contractJSON['PRICE_DECIMAL_PLACES'] = await instance.PRICE_DECIMAL_PLACES.call().then(data => data.toString());
+        contractJSON['QTY_DECIMAL_PLACES'] = await instance.QTY_DECIMAL_PLACES.call().then(data => data.toString());
         contractJSON['ORACLE_QUERY'] = await instance.ORACLE_QUERY.call();
-        contractJSON['lastPrice'] = await instance.lastPrice.call();
+        contractJSON['lastPrice'] = await instance.lastPrice.call().then(data => data.toString());
         contractJSON['isSettled'] = await instance.isSettled.call();
 
-        marketCollateralPool
+        await marketCollateralPool
           .at(await instance.marketCollateralPoolAddress.call())
           .then(async function(collateralPoolInstance) {
-            contractJSON['collateralPoolBalance'] = await collateralPoolInstance.collateralPoolBalance.call();
+            contractJSON['collateralPoolBalance'] = await collateralPoolInstance.collateralPoolBalance.call().then(data => data.toString());
           });
 
-        return new Promise(resolve => resolve(contractJSON));
+        return contractJSON;
       });
   });
 
