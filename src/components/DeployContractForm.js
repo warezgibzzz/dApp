@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Form, Button } from 'antd';
+import { message, Form, Button } from 'antd';
 
 import Field from './DeployContractField';
-
-const FormItem = Form.Item
+const FormItem = Form.Item;
 
 const tailFormItemLayout = {
   wrapperCol: {
@@ -19,6 +18,23 @@ const tailFormItemLayout = {
 };
 
 class DeployContractForm extends Component {
+  componentWillReceiveProps(nextProps) {
+    if(!this.props.loading && nextProps.loading) {
+      // We've submitted the form and contract is being deployed
+      message.info('Deploying contract...');
+    }
+
+    if(this.props.loading && !nextProps.loading) {
+      if(nextProps.error) {
+        // We had an error
+        message.error(`There was an error deploying the contract: ${nextProps.error}`);
+      } else if (nextProps.contract) {
+        // Contract was deployed
+        message.success('Contract successfully deployed');
+      }
+    }
+  }
+
   handleDeploy(event) {
     event.preventDefault();
 
@@ -41,7 +57,7 @@ class DeployContractForm extends Component {
         }
 
         <FormItem {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={this.props.loading}>
             Deploy Contract
           </Button>
         </FormItem>
