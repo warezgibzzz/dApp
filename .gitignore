@@ -4,3 +4,4 @@ build/
 coverage.json
 coverage/
 node_modules/
+.DS_Store
