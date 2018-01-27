@@ -45,10 +45,10 @@ class DeployContractForm extends Component {
     if(this.props.loading && !nextProps.loading) {
       if(nextProps.error) {
         // We had an error
-        message.error(`There was an error deploying the contract: ${nextProps.error}`);
+        message.error(`There was an error deploying the contract: ${nextProps.error}`, 8);
       } else if (nextProps.contract) {
         // Contract was deployed
-        message.success('Contract successfully deployed');
+        message.success('Contract successfully deployed', 5);
       }
     }
   }

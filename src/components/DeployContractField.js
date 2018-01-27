@@ -12,105 +12,118 @@ const fieldSettingsByName = {
     }],
     extra: 'Placeholder explanation',
 
-    component: (<Input />)
+    component: () => (<Input />)
   },
 
   baseTokenAddress: {
     label: 'Base Token Address',
     initialValue: '0x123',
     rules: [{
-      required: true, message: 'Please enter a name for your contract',
+      required: true, message: 'Please enter a base token address',
     }],
     extra: 'Placeholder explanation',
 
-    component: (<Input />)
+    component: () => (<Input />)
   },
 
   priceFloor: {
     label: 'Price Floor',
     initialValue: 0,
     rules: [{
-      required: true, message: 'Please enter a name for your contract',
+      required: true, message: 'Please enter a price floor',
     }],
     extra: 'Placeholder explanation',
 
-    component: (<InputNumber min={0} style={{width: '100%'}} />)
+    component: () => (<InputNumber min={0} style={{ width: '100%' }} />)
   },
 
   priceCap: {
     label: 'Price Cap',
     initialValue: 150,
     rules: [{
-      required: true, message: 'Please enter a name for your contract',
+      required: true, message: 'Please enter a price cap',
     }],
     extra: 'Placeholder explanation',
 
-    component: (<InputNumber min={0} style={{width: '100%'}} />)
+    component: ({ form }) => {
+      return (
+        <InputNumber
+          min={form.getFieldValue('priceFloor')}
+          style={{ width: '100%' }}
+        />
+      );
+    }
   },
 
   priceDecimalPlaces: {
     label: 'Price Decimal Places',
     initialValue: 2,
     rules: [{
-      required: true, message: 'Please enter a name for your contract',
+      required: true, message: 'Please enter the number of decimal places of the price',
     }],
     extra: 'Placeholder explanation',
 
-    component: (<InputNumber min={0} style={{width: '100%'}} />)
+    component: () => (<InputNumber min={0} style={{ width: '100%' }} />)
   },
 
   qtyDecimalPlaces: {
     label: 'Qty Decimal Places',
     initialValue: 2,
     rules: [{
-      required: true, message: 'Please enter a name for your contract',
+      required: true, message: 'Please enter the number of decimal places of the quantity',
     }],
     extra: 'Placeholder explanation',
 
-    component: (<InputNumber min={0} style={{width: '100%'}} />)
+    component: () => (<InputNumber min={0} style={{ width: '100%' }} />)
   },
 
   expirationTimeStamp: {
     label: 'Expiration Time',
     initialValue: moment().add(28, 'days'),
     rules: [{
-      required: true, message: 'Please enter a name for your contract',
+      required: true, message: 'Please enter an expiration time',
     }],
     extra: 'Placeholder explanation',
 
-    component: (<DatePicker showTime format="YYYY-MM-DD HH:mm:ss" style={{width: '100%'}} />)
+    component: () => (<DatePicker showTime format="YYYY-MM-DD HH:mm:ss" style={{ width: '100%' }} />)
   },
 
   oracleDataSource: {
     label: 'Oraclize.it data source',
-    rules: [{
-      required: true, message: 'Please enter a name for your contract',
-    }],
+    placeholder: 'URL',
+    rules: [
+      {
+        required: true, message: 'Please enter a URL of the data source',
+      },
+      {
+        type: 'url', message: 'Please enter a valid URL',
+      }
+    ],
     extra: 'Placeholder explanation',
 
-    component: (<Input />)
+    component: ({ fieldSettings }) => (<Input placeholder={fieldSettings.placeholder} />)
   },
 
   oracleQuery: {
     label: 'Oraclize.it Query',
     initialValue: 'json(https://api.kraken.com/0/public/Ticker?pair=ETHUSD).result.XETHZUSD.c.0',
     rules: [{
-      required: true, message: 'Please enter a name for your contract',
+      required: true, message: 'Please enter a valid query',
     }],
     extra: 'Placeholder explanation',
 
-    component: (<Input />)
+    component: () => (<Input />)
   },
 
   oracleQueryRepeatSeconds: {
     label: 'Query Repeat Seconds',
     initialValue: 86400,
     rules: [{
-      required: true, message: 'Please enter a name for your contract',
+      required: true, message: 'Please enter the number of seconds before repeating the query',
     }],
     extra: 'Placeholder explanation',
 
-    component: (<InputNumber min={0} style={{width: '100%'}}/>)
+    component: () => (<InputNumber min={0} style={{ width: '100%' }}/>)
   },
 };
 
@@ -128,7 +141,10 @@ function DeployContractField(props) {
         initialValue: fieldSettings.initialValue,
         rules: fieldSettings.rules,
       })(
-        fieldSettings.component
+        fieldSettings.component({
+          form,
+          fieldSettings,
+        })
       )}
     </FormItem>
   );
