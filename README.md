@@ -50,5 +50,5 @@ $ npm run start
 * Query Tester : Simple ability to create a query and retrieve the results from the blockchain in order to test query structure and expected results prior to deploying a contract.
 * Address lookup : Reverse contract lookup for MARKET contracst already deployed.  Will allow users to enter an address and retrieve pertinent variables as well as the contract's current status.
 
-## Testnet only
+### Testnet only
 * Simulated Exchange : Users will register using their email address that will be used for tracking of simulated earnings for contest rewards, future airdrops, and project udpates.  This game or sim, will allow users to trade against an automated bot that trades a few different MARKET contracts while making or losing tokens that keep score in the competition.
