@@ -20,9 +20,9 @@ class App extends Component {
   render() {
     return (
       <Router history={this.props.history}>
-        <Layout style={{height: '100%'}}>
+        <Layout>
           <Header />
-          <Content style={{padding: '20px 30px', background: '#FFF'}}>
+          <Content style={{height: 'calc(100vh - 134px)', padding: '20px 30px', background: '#FFF'}}>
             { routes.map((route) => (
               <Route key={route.path} {...route} />
             ) ) }
