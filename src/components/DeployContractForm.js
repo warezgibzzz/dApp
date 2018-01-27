@@ -71,57 +71,55 @@ class DeployContractForm extends Component {
   }
 
   render() {
-    const DecoratedField = (props) => (<Field {...props} form={this.props.form} />);
-
     return (
       <Form onSubmit={this.handleDeploy.bind(this)} layout="vertical">
         <ContractFormRow>
           <ContractFormCol>
-            <DecoratedField name='contractName' />
+            <Field name='contractName' form={this.props.form} />
           </ContractFormCol>
 
           <ContractFormCol>
-            <DecoratedField name='baseTokenAddress' />
-          </ContractFormCol>
-        </ContractFormRow>
-
-        <ContractFormRow>
-          <ContractFormCol>
-            <DecoratedField name='priceFloor' />
-          </ContractFormCol>
-
-          <ContractFormCol>
-            <DecoratedField name='priceCap' />
+            <Field name='baseTokenAddress' form={this.props.form} />
           </ContractFormCol>
         </ContractFormRow>
 
         <ContractFormRow>
           <ContractFormCol>
-            <DecoratedField name='priceDecimalPlaces' />
+            <Field name='priceFloor' form={this.props.form} />
           </ContractFormCol>
 
           <ContractFormCol>
-            <DecoratedField name='qtyDecimalPlaces' />
-          </ContractFormCol>
-        </ContractFormRow>
-
-        <ContractFormRow>
-          <ContractFormCol>
-            <DecoratedField name='expirationTimeStamp' />
-          </ContractFormCol>
-
-          <ContractFormCol>
-            <DecoratedField name='oracleDataSource' />
+            <Field name='priceCap' form={this.props.form} />
           </ContractFormCol>
         </ContractFormRow>
 
         <ContractFormRow>
           <ContractFormCol>
-            <DecoratedField name='oracleQuery' />
+            <Field name='priceDecimalPlaces' form={this.props.form} />
           </ContractFormCol>
 
           <ContractFormCol>
-            <DecoratedField name='oracleQueryRepeatSeconds' />
+            <Field name='qtyDecimalPlaces' form={this.props.form} />
+          </ContractFormCol>
+        </ContractFormRow>
+
+        <ContractFormRow>
+          <ContractFormCol>
+            <Field name='expirationTimeStamp' form={this.props.form} />
+          </ContractFormCol>
+
+          <ContractFormCol>
+            <Field name='oracleDataSource' form={this.props.form} />
+          </ContractFormCol>
+        </ContractFormRow>
+
+        <ContractFormRow>
+          <ContractFormCol>
+            <Field name='oracleQuery' form={this.props.form} />
+          </ContractFormCol>
+
+          <ContractFormCol>
+            <Field name='oracleQueryRepeatSeconds' form={this.props.form} />
           </ContractFormCol>
         </ContractFormRow>
 
