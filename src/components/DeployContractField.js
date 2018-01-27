@@ -1,8 +1,7 @@
 import React from 'react';
-import { Form, Input, InputNumber } from 'antd';
+import moment from 'moment';
+import { Form, Input, InputNumber, DatePicker } from 'antd';
 const FormItem = Form.Item;
-
-const formItemLayout = null;
 
 const fieldSettingsByName = {
   contractName: {
@@ -72,19 +71,18 @@ const fieldSettingsByName = {
   },
 
   expirationTimeStamp: {
-    label: 'Expiration Time Stamp',
-    initialValue: Math.floor(Date.now() / 1000) + 28 * 86400, // default to 28 days from now
+    label: 'Expiration Time',
+    initialValue: moment().add(28, 'days'),
     rules: [{
       required: true, message: 'Please enter a name for your contract',
     }],
     extra: 'Placeholder explanation',
 
-    component: (<InputNumber min={0} style={{width: '100%'}} />)
+    component: (<DatePicker showTime format="YYYY-MM-DD HH:mm:ss" style={{width: '100%'}} />)
   },
 
   oracleDataSource: {
     label: 'Oraclize.it data source',
-    initialValue: 'URL',
     rules: [{
       required: true, message: 'Please enter a name for your contract',
     }],
@@ -123,7 +121,6 @@ function DeployContractField(props) {
 
   return (
     <FormItem
-      {...formItemLayout}
       label={fieldSettings.label}
       extra={fieldSettings.extra}
     >

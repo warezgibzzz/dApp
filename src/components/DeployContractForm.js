@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { Row, Col, message, Form, Button } from 'antd';
 
 import Field from './DeployContractField';
-const FormItem = Form.Item;
 
-const tailFormItemLayout = {
+const formButtonLayout = {
   xs: {
     span: 24,
   },
@@ -13,13 +12,36 @@ const tailFormItemLayout = {
   },
 };
 
+const formItemColLayout = {
+  lg: {
+    span: 8
+  },
+  sm: {
+    span: 12
+  },
+  xs: {
+    span: 24
+  }
+};
+
+function ContractFormRow(props) {
+  return (
+    <Row type="flex" justify="center" gutter={16} {...props}>
+      {props.children}
+    </Row>
+  );
+}
+
+function ContractFormCol(props) {
+  return (
+    <Col {...formItemColLayout} {...props}>
+      {props.children}
+    </Col>
+  );
+}
+
 class DeployContractForm extends Component {
   componentWillReceiveProps(nextProps) {
-    if(!this.props.loading && nextProps.loading) {
-      // We've submitted the form and contract is being deployed
-      message.info('Deploying contract...');
-    }
-
     if(this.props.loading && !nextProps.loading) {
       if(nextProps.error) {
         // We had an error
@@ -34,7 +56,18 @@ class DeployContractForm extends Component {
   handleDeploy(event) {
     event.preventDefault();
 
-    this.props.onDeployContract(this.props.form.getFieldsValue());
+    this.props.form.validateFields((err, fieldsValue) => {
+      if (err) {
+        return;
+      }
+
+      const values = {
+        ...fieldsValue,
+        expirationTimeStamp: Math.floor(fieldsValue['expirationTimeStamp'].valueOf() / 1000)
+      };
+
+      this.props.onDeployContract(values);
+    });
   }
 
   render() {
@@ -42,55 +75,58 @@ class DeployContractForm extends Component {
 
     return (
       <Form onSubmit={this.handleDeploy.bind(this)} layout="vertical">
-
-        <Row type="flex" gutter={16}>
-          <Col span="12">
+        <ContractFormRow>
+          <ContractFormCol>
             <DecoratedField name='contractName' />
-          </Col>
-          <Col span="12">
+          </ContractFormCol>
+
+          <ContractFormCol>
             <DecoratedField name='baseTokenAddress' />
-          </Col>
-        </Row>
+          </ContractFormCol>
+        </ContractFormRow>
 
-        <Row type="flex" gutter={16}>
-          <Col span="12">
+        <ContractFormRow>
+          <ContractFormCol>
             <DecoratedField name='priceFloor' />
-          </Col>
-          <Col span="12">
+          </ContractFormCol>
+
+          <ContractFormCol>
             <DecoratedField name='priceCap' />
-          </Col>
-        </Row>
+          </ContractFormCol>
+        </ContractFormRow>
 
-        <Row type="flex" gutter={16}>
-          <Col span="12">
+        <ContractFormRow>
+          <ContractFormCol>
             <DecoratedField name='priceDecimalPlaces' />
-          </Col>
-          <Col span="12">
+          </ContractFormCol>
+
+          <ContractFormCol>
             <DecoratedField name='qtyDecimalPlaces' />
-          </Col>
-        </Row>
+          </ContractFormCol>
+        </ContractFormRow>
 
-        <Row type="flex" gutter={16}>
-          <Col span="12">
+        <ContractFormRow>
+          <ContractFormCol>
             <DecoratedField name='expirationTimeStamp' />
-          </Col>
+          </ContractFormCol>
 
-          <Col span="12">
+          <ContractFormCol>
             <DecoratedField name='oracleDataSource' />
-          </Col>
-        </Row>
+          </ContractFormCol>
+        </ContractFormRow>
 
-        <Row type="flex" gutter={16}>
-          <Col span="12">
+        <ContractFormRow>
+          <ContractFormCol>
             <DecoratedField name='oracleQuery' />
-          </Col>
-          <Col span="12">
+          </ContractFormCol>
+
+          <ContractFormCol>
             <DecoratedField name='oracleQueryRepeatSeconds' />
-          </Col>
-        </Row>
+          </ContractFormCol>
+        </ContractFormRow>
 
         <Row type="flex" justify="center">
-          <Col {...tailFormItemLayout}>
+          <Col {...formButtonLayout}>
             <Button type="primary" htmlType="submit" loading={this.props.loading} style={{width: '100%'}}>
               Deploy Contract
             </Button>
