@@ -53,6 +53,15 @@ class DeployContractForm extends Component {
     }
   }
 
+  handleReset(event) {
+    event.preventDefault();
+
+    // Don't allow reset if we're submitting
+    if(this.props.loading) return;
+
+    this.props.form.resetFields();
+  }
+
   handleDeploy(event) {
     event.preventDefault();
 
@@ -127,6 +136,14 @@ class DeployContractForm extends Component {
           <Col {...formButtonLayout}>
             <Button type="primary" htmlType="submit" loading={this.props.loading} style={{width: '100%'}}>
               Deploy Contract
+            </Button>
+          </Col>
+        </Row>
+
+        <Row type="flex" justify="center" style={{ marginTop: '16px' }}>
+          <Col {...formButtonLayout}>
+            <Button type="secondary" style={{width: '100%'}} disabled={this.props.loading} onClick={this.handleReset.bind(this)}>
+              Reset Form
             </Button>
           </Col>
         </Row>
