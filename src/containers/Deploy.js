@@ -5,11 +5,12 @@ import { deployContract } from "../actions/deploy";
 import DeployContractForm from '../components/DeployContractForm';
 
 const mapStateToProps = (state, ownProps) => {
-  const { loading, error } = state.deploy;
+  const { loading, error, contract } = state.deploy;
 
   return {
     loading,
-    error
+    error,
+    contract
   };
 };
 
