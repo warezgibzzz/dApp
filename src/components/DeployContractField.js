@@ -2,16 +2,7 @@ import React from 'react';
 import { Form, Input, InputNumber } from 'antd';
 const FormItem = Form.Item;
 
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 10 },
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 8 },
-  },
-};
+const formItemLayout = null;
 
 const fieldSettingsByName = {
   contractName: {
@@ -44,7 +35,7 @@ const fieldSettingsByName = {
     }],
     extra: 'Placeholder explanation',
 
-    component: (<InputNumber min={0} />)
+    component: (<InputNumber min={0} style={{width: '100%'}} />)
   },
 
   priceCap: {
@@ -55,7 +46,7 @@ const fieldSettingsByName = {
     }],
     extra: 'Placeholder explanation',
 
-    component: (<InputNumber min={0} />)
+    component: (<InputNumber min={0} style={{width: '100%'}} />)
   },
 
   priceDecimalPlaces: {
@@ -66,7 +57,7 @@ const fieldSettingsByName = {
     }],
     extra: 'Placeholder explanation',
 
-    component: (<InputNumber min={0} />)
+    component: (<InputNumber min={0} style={{width: '100%'}} />)
   },
 
   qtyDecimalPlaces: {
@@ -77,7 +68,7 @@ const fieldSettingsByName = {
     }],
     extra: 'Placeholder explanation',
 
-    component: (<InputNumber min={0} />)
+    component: (<InputNumber min={0} style={{width: '100%'}} />)
   },
 
   expirationTimeStamp: {
@@ -88,7 +79,7 @@ const fieldSettingsByName = {
     }],
     extra: 'Placeholder explanation',
 
-    component: (<InputNumber min={0} />)
+    component: (<InputNumber min={0} style={{width: '100%'}} />)
   },
 
   oracleDataSource: {
@@ -121,7 +112,7 @@ const fieldSettingsByName = {
     }],
     extra: 'Placeholder explanation',
 
-    component: (<InputNumber min={0} />)
+    component: (<InputNumber min={0} style={{width: '100%'}}/>)
   },
 };
 

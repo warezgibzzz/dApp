@@ -1,19 +1,15 @@
 import React, { Component } from 'react';
-import { message, Form, Button } from 'antd';
+import { Row, Col, message, Form, Button } from 'antd';
 
 import Field from './DeployContractField';
 const FormItem = Form.Item;
 
 const tailFormItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0,
-    },
-    sm: {
-      span: 16,
-      offset: 10,
-    },
+  xs: {
+    span: 24,
+  },
+  sm: {
+    span: 8
   },
 };
 
@@ -42,25 +38,64 @@ class DeployContractForm extends Component {
   }
 
   render() {
-    const fields = [
-      'contractName', 'baseTokenAddress',
-      'priceFloor', 'priceCap', 'priceDecimalPlaces', 'qtyDecimalPlaces',
-      'expirationTimeStamp',
-      'oracleDataSource', 'oracleQuery', 'oracleQueryRepeatSeconds'
-    ];
+    const DecoratedField = (props) => (<Field {...props} form={this.props.form} />);
 
     return (
-      <Form onSubmit={this.handleDeploy.bind(this)}>
+      <Form onSubmit={this.handleDeploy.bind(this)} layout="vertical">
 
-        {
-          fields.map(fieldName => <Field name={fieldName} key={fieldName} form={this.props.form} />)
-        }
+        <Row type="flex" gutter={16}>
+          <Col span="12">
+            <DecoratedField name='contractName' />
+          </Col>
+          <Col span="12">
+            <DecoratedField name='baseTokenAddress' />
+          </Col>
+        </Row>
 
-        <FormItem {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit" loading={this.props.loading}>
-            Deploy Contract
-          </Button>
-        </FormItem>
+        <Row type="flex" gutter={16}>
+          <Col span="12">
+            <DecoratedField name='priceFloor' />
+          </Col>
+          <Col span="12">
+            <DecoratedField name='priceCap' />
+          </Col>
+        </Row>
+
+        <Row type="flex" gutter={16}>
+          <Col span="12">
+            <DecoratedField name='priceDecimalPlaces' />
+          </Col>
+          <Col span="12">
+            <DecoratedField name='qtyDecimalPlaces' />
+          </Col>
+        </Row>
+
+        <Row type="flex" gutter={16}>
+          <Col span="12">
+            <DecoratedField name='expirationTimeStamp' />
+          </Col>
+
+          <Col span="12">
+            <DecoratedField name='oracleDataSource' />
+          </Col>
+        </Row>
+
+        <Row type="flex" gutter={16}>
+          <Col span="12">
+            <DecoratedField name='oracleQuery' />
+          </Col>
+          <Col span="12">
+            <DecoratedField name='oracleQueryRepeatSeconds' />
+          </Col>
+        </Row>
+
+        <Row type="flex" justify="center">
+          <Col {...tailFormItemLayout}>
+            <Button type="primary" htmlType="submit" loading={this.props.loading} style={{width: '100%'}}>
+              Deploy Contract
+            </Button>
+          </Col>
+        </Row>
       </Form>
     );
   }
