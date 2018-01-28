@@ -1,7 +1,23 @@
 import React from 'react';
 import moment from 'moment';
-import { Form, Input, InputNumber, DatePicker } from 'antd';
+
+import { Form, Input, Select, InputNumber, DatePicker } from 'antd';
+
 const FormItem = Form.Item;
+const Option = Select.Option;
+
+const ethAddressValidator = (rule, value, callback) => {
+  const web3 = window.web3;
+
+  // If web3 isn't set up for some reason, we probably shouldn't block validation
+  if(!web3) callback();
+
+  callback(web3.isAddress(value) ? undefined : 'Invalid ETH address');
+};
+
+const timestampValidator = (rule, value, callback) => {
+  callback(value > moment() ? undefined : 'Expiration must be in the future');
+}
 
 const fieldSettingsByName = {
   contractName: {
@@ -17,10 +33,15 @@ const fieldSettingsByName = {
 
   baseTokenAddress: {
     label: 'Base Token Address',
-    initialValue: '0x123',
-    rules: [{
-      required: true, message: 'Please enter a base token address',
-    }],
+    initialValue: '0x3333333333333333333333333333333333333333',
+    rules: [
+      {
+        required: true, message: 'Please enter a base token address',
+      },
+      {
+        validator: ethAddressValidator
+      }
+    ],
     extra: 'Placeholder explanation',
 
     component: () => (<Input />)
@@ -48,7 +69,7 @@ const fieldSettingsByName = {
     component: ({ form }) => {
       return (
         <InputNumber
-          min={form.getFieldValue('priceFloor')}
+          min={parseFloat(form.getFieldValue('priceFloor')) || 0}
           style={{ width: '100%' }}
         />
       );
@@ -58,9 +79,14 @@ const fieldSettingsByName = {
   priceDecimalPlaces: {
     label: 'Price Decimal Places',
     initialValue: 2,
-    rules: [{
-      required: true, message: 'Please enter the number of decimal places of the price',
-    }],
+    rules: [
+      {
+        required: true, message: 'Please enter the number of decimal places of the price',
+      },
+      {
+        type: 'integer', message: 'Value must be an integer'
+      }
+    ],
     extra: 'Placeholder explanation',
 
     component: () => (<InputNumber min={0} style={{ width: '100%' }} />)
@@ -69,9 +95,14 @@ const fieldSettingsByName = {
   qtyDecimalPlaces: {
     label: 'Qty Decimal Places',
     initialValue: 2,
-    rules: [{
-      required: true, message: 'Please enter the number of decimal places of the quantity',
-    }],
+    rules: [
+      {
+        required: true, message: 'Please enter the number of decimal places of the quantity',
+      },
+      {
+        type: 'integer', message: 'Value must be an integer'
+      }
+    ],
     extra: 'Placeholder explanation',
 
     component: () => (<InputNumber min={0} style={{ width: '100%' }} />)
@@ -80,9 +111,14 @@ const fieldSettingsByName = {
   expirationTimeStamp: {
     label: 'Expiration Time',
     initialValue: moment().add(28, 'days'),
-    rules: [{
-      required: true, message: 'Please enter an expiration time',
-    }],
+    rules: [
+      {
+        required: true, message: 'Please enter an expiration time',
+      },
+      {
+        validator: timestampValidator
+      }
+    ],
     extra: 'Placeholder explanation',
 
     component: () => (<DatePicker showTime format="YYYY-MM-DD HH:mm:ss" style={{ width: '100%' }} />)
@@ -90,18 +126,23 @@ const fieldSettingsByName = {
 
   oracleDataSource: {
     label: 'Oraclize.it data source',
-    placeholder: 'URL',
+    initialValue: 'URL',
     rules: [
       {
-        required: true, message: 'Please enter a URL of the data source',
-      },
-      {
-        type: 'url', message: 'Please enter a valid URL',
+        required: true, message: 'Please select a data source',
       }
     ],
     extra: 'Placeholder explanation',
 
-    component: ({ fieldSettings }) => (<Input placeholder={fieldSettings.placeholder} />)
+    component: () => {
+      return (
+        <Select>
+          <Option value="URL">URL</Option>
+          <Option value="WolframAlpha">Wolfram Alpha</Option>
+          <Option value="IPFS">IPFS</Option>
+        </Select>
+      );
+    }
   },
 
   oracleQuery: {
@@ -118,9 +159,14 @@ const fieldSettingsByName = {
   oracleQueryRepeatSeconds: {
     label: 'Query Repeat Seconds',
     initialValue: 86400,
-    rules: [{
-      required: true, message: 'Please enter the number of seconds before repeating the query',
-    }],
+    rules: [
+      {
+        required: true, message: 'Please enter the number of seconds before repeating the query',
+      },
+      {
+        type: 'integer', message: 'Value must be an integer'
+      }
+    ],
     extra: 'Placeholder explanation',
 
     component: () => (<InputNumber min={0} style={{ width: '100%' }}/>)

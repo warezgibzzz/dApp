@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col, message, Form, Button } from 'antd';
 
+import Loader from './Loader';
 import Field from './DeployContractField';
 
 const formButtonLayout = {
@@ -147,6 +148,8 @@ class DeployContractForm extends Component {
             </Button>
           </Col>
         </Row>
+
+        <Loader loading={this.props.loading} />
       </Form>
     );
   }
