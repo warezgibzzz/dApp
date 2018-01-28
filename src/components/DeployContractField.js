@@ -17,7 +17,7 @@ const ethAddressValidator = (rule, value, callback) => {
 
 const timestampValidator = (rule, value, callback) => {
   callback(value > moment() ? undefined : 'Expiration must be in the future');
-}
+};
 
 const fieldSettingsByName = {
   contractName: {

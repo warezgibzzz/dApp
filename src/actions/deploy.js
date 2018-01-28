@@ -92,10 +92,7 @@ export function deployContract(contractSpecs) {
               { from: web3.eth.accounts[0] }
             );
 
-            // TODO: REMOVE THIS TIMEOUT BEFORE MERGE
-            setTimeout(() => {
-              dispatch({ type: `${type}_FULFILLED`, payload: marketContract });
-            }, 3000);
+            dispatch({ type: `${type}_FULFILLED`, payload: marketContract });
           })
           .catch(err => {
             dispatch({ type: `${type}_REJECTED`, payload: err });
