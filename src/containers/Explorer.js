@@ -4,7 +4,7 @@ import ContractsList from "../components/ContractsList";
 import { loadContracts } from "../actions/explorer";
 
 const mapStateToProps = state => ({
-  ...state.explorer
+  ...state.explorer,
 });
 
 const mapDispatchToProps = dispatch => ({

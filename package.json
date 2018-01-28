@@ -9,14 +9,14 @@
     "eslint-plugin-flowtype": "^2.41.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-react": "^7.5.1",
-    "truffle-contract": "^3.0.2"
+    "eslint-plugin-react": "^7.5.1"
   },
   "dependencies": {
     "antd": "^3.1.4",
     "husky": "^0.14.3",
     "lint-staged": "^6.0.1",
     "market-solidity": "0.0.4",
+    "moment": "^2.20.1",
     "prettier": "^1.10.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
@@ -30,6 +30,7 @@
     "redux-persist": "^5.4.0",
     "redux-promise-middleware": "^5.0.0",
     "redux-thunk": "^2.2.0",
+    "truffle-contract": "^3.0.2",
     "zeppelin-solidity": "1.5.0"
   },
   "lint-staged": {

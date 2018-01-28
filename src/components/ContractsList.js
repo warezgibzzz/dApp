@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Table, Input, Button, Icon, Row, Col } from 'antd';
+import moment from 'moment';
 
 import './ContractsList.css';
 
@@ -44,7 +45,6 @@ class ContractsList extends Component {
   }
 
   handleChange = (pagination, filters, sorter) => {
-    console.log('Various parameters', pagination, filters, sorter);
     this.setState({
       filters: filters,
       sort: sorter,
@@ -62,7 +62,7 @@ class ContractsList extends Component {
     this.setState({
       [searchVisibleKey]: false,
       [filteredKey]: !!searchText,
-      data: this.state.contracts.map((record) => {
+      contracts: this.props.contracts.map((record) => {
         const match = record[dataKey].match(reg);
         if (!match) {
           return null;
@@ -173,6 +173,15 @@ class ContractsList extends Component {
       className: 'text-center',
       sorter: (a, b) => a.collateralPoolBalance - b.collateralPoolBalance,
       sortOrder: sort.columnKey === 'collateralPoolBalance' && sort.order,
+    }, {
+      title: 'Expiration',
+      dataIndex: 'EXPIRATION',
+      width: 200,
+      render: (text, row, index) => {
+        return moment.unix(text).format("Do MMM YYYY, HH:MM:ss");
+      },
+      sorter: (a, b) => a.EXPIRATION - b.EXPIRATION,
+      sortOrder: sort.columnKey === 'EXPIRATION' && sort.order,
     }];
 
     if (!this.state.contracts) {
@@ -198,6 +207,9 @@ class ContractsList extends Component {
                title={() => 'Contracts'}
                expandedRowRender={record => {
                  return <Row>
+                   <Col xs={{ span: 24 }} lg={{ span: 12 }}>
+                     <strong>Address :</strong> { record.key }
+                   </Col>
                    <Col xs={{ span: 12 }} lg={{ span: 6 }}>
                      <strong>Price Cap :</strong> { record.PRICE_CAP }
                    </Col>
@@ -209,6 +221,9 @@ class ContractsList extends Component {
                    </Col>
                    <Col xs={{ span: 12 }} lg={{ span: 6 }}>
                      <strong>Qty Decimal Places :</strong> { record.QTY_DECIMAL_PLACES }
+                   </Col>
+                   <Col xs={{ span: 12 }} lg={{ span: 6 }}>
+                     <strong>Last Price :</strong> { record.lastPrice }
                    </Col>
                  </Row>
                }}
