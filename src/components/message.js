@@ -13,11 +13,16 @@ function showMessage(type, content, duration) {
   const msgKey = new Date();
 
   const handleDismiss = () => {
-    msgHandlers[msgKey]();
+    if(msgHandlers[msgKey]) {
+      msgHandlers[msgKey]();
+
+      delete msgHandlers[msgKey];
+    }
   };
 
   const handleClose = () => {
     // Clean-up and remove the dismiss handler from the object
+    // This is NOT called if dismissed manually
     delete msgHandlers[msgKey];
   };
 
