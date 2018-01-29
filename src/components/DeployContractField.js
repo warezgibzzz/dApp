@@ -19,6 +19,18 @@ const timestampValidator = (rule, value, callback) => {
   callback(value > moment() ? undefined : 'Expiration must be in the future');
 };
 
+const priceFloorValidator = (form, rule, value, callback) => {
+  const priceCap = form.getFieldValue('priceCap');
+
+  callback(value <= priceCap ? undefined : 'Price floor must be less-than or equal to the price cap');
+};
+
+const priceCapValidator = (form, rule, value, callback) => {
+  const priceFloor = form.getFieldValue('priceFloor');
+
+  callback(value >= priceFloor ? undefined : 'Price cap must be greater-than or equal to the price floor');
+};
+
 const fieldSettingsByName = {
   contractName: {
     label: 'Name',
@@ -50,9 +62,18 @@ const fieldSettingsByName = {
   priceFloor: {
     label: 'Price Floor',
     initialValue: 0,
-    rules: [{
-      required: true, message: 'Please enter a price floor',
-    }],
+    rules: (form) => {
+      return [
+        {
+          required: true, message: 'Please enter a price floor',
+        },
+        {
+          validator: (rule, value, callback) => {
+            priceFloorValidator(form, rule, value, callback);
+          },
+        }
+      ];
+    },
     extra: 'Placeholder explanation',
 
     component: () => (<InputNumber min={0} style={{ width: '100%' }} />)
@@ -61,15 +82,24 @@ const fieldSettingsByName = {
   priceCap: {
     label: 'Price Cap',
     initialValue: 150,
-    rules: [{
-      required: true, message: 'Please enter a price cap',
-    }],
+    rules: (form) => {
+      return [
+        {
+          required: true, message: 'Please enter a price cap',
+        },
+        {
+          validator: (rule, value, callback) => {
+            priceCapValidator(form, rule, value, callback);
+          },
+        }
+      ];
+    },
     extra: 'Placeholder explanation',
 
     component: ({ form }) => {
       return (
         <InputNumber
-          min={parseFloat(form.getFieldValue('priceFloor')) || 0}
+          min={0}
           style={{ width: '100%' }}
         />
       );
@@ -178,6 +208,8 @@ function DeployContractField(props) {
   const { getFieldDecorator } = form;
   const fieldSettings = fieldSettingsByName[name];
 
+  const rules = typeof fieldSettings.rules === 'function' ? fieldSettings.rules(form) : fieldSettings.rules;
+
   return (
     <FormItem
       label={fieldSettings.label}
@@ -185,7 +217,7 @@ function DeployContractField(props) {
     >
       {getFieldDecorator(name, {
         initialValue: fieldSettings.initialValue,
-        rules: fieldSettings.rules,
+        rules,
       })(
         fieldSettings.component({
           form,

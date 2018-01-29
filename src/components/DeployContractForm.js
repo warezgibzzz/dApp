@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Row, Col, message, Form, Button } from 'antd';
+import { Row, Col, Form, Button } from 'antd';
 
+import showMessage from './message';
 import Loader from './Loader';
 import Field from './DeployContractField';
 
@@ -46,10 +47,10 @@ class DeployContractForm extends Component {
     if(this.props.loading && !nextProps.loading) {
       if(nextProps.error) {
         // We had an error
-        message.error(`There was an error deploying the contract: ${nextProps.error}`, 8);
+        showMessage('error', `There was an error deploying the contract: ${nextProps.error}`, 8);
       } else if (nextProps.contract) {
         // Contract was deployed
-        message.success('Contract successfully deployed', 5);
+        showMessage('success', 'Contract successfully deployed', 5);
       }
     }
   }
@@ -78,6 +79,13 @@ class DeployContractForm extends Component {
 
       this.props.onDeployContract(values);
     });
+  }
+
+  isSubmitDisabled() {
+    if(this.props.loading) return true;
+
+    const errors = this.props.form.getFieldsError();
+    return Object.keys(errors).some(field => errors[field]);
   }
 
   render() {
@@ -135,7 +143,7 @@ class DeployContractForm extends Component {
 
         <Row type="flex" justify="center">
           <Col {...formButtonLayout}>
-            <Button type="primary" htmlType="submit" loading={this.props.loading} style={{width: '100%'}}>
+            <Button type="primary" htmlType="submit" loading={this.props.loading} disabled={this.isSubmitDisabled()} style={{width: '100%'}}>
               Deploy Contract
             </Button>
           </Col>

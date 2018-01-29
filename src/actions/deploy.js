@@ -54,6 +54,7 @@ export function deployContract(contractSpecs) {
         marketToken
           .deployed()
           .then(function(marketTokenInstance) {
+
             return marketContract.new(
               contractSpecs.contractName,
               marketTokenInstance.address,
