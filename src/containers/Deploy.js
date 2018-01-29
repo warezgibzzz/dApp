@@ -5,7 +5,13 @@ import { deployContract } from "../actions/deploy";
 import DeployContractForm from '../components/DeployContractForm';
 
 const mapStateToProps = (state, ownProps) => {
-  return {};
+  const { loading, error, contract } = state.deploy;
+
+  return {
+    loading,
+    error,
+    contract
+  };
 };
 
 const mapDispatchToProps = dispatch => {
