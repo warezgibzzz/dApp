@@ -1,121 +1,168 @@
 import React, { Component } from 'react';
+import { Row, Col, Form, Button } from 'antd';
+
+import showMessage from './message';
+import Loader from './Loader';
+import Field from './DeployContractField';
+
+const formButtonLayout = {
+  xs: {
+    span: 24,
+  },
+  sm: {
+    span: 8
+  },
+};
+
+const formItemColLayout = {
+  lg: {
+    span: 8
+  },
+  sm: {
+    span: 12
+  },
+  xs: {
+    span: 24
+  }
+};
+
+function ContractFormRow(props) {
+  return (
+    <Row type="flex" justify="center" gutter={16} {...props}>
+      {props.children}
+    </Row>
+  );
+}
+
+function ContractFormCol(props) {
+  return (
+    <Col {...formItemColLayout} {...props}>
+      {props.children}
+    </Col>
+  );
+}
 
 class DeployContractForm extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      contractName: 'ETH/BTC',
-      baseTokenAddress: '0x123',
-      priceFloor: 0,
-      priceCap: 150,
-      priceDecimalPlaces: 2,
-      qtyDecimalPlaces: 2,
-      expirationTimeStamp: Math.floor(Date.now() / 1000) + 28 * 86400, // default to 28 days from now
-      oracleDataSource: 'URL',
-      oracleQuery: 'json(https://api.kraken.com/0/public/Ticker?pair=ETHUSD).result.XETHZUSD.c.0',
-      oracleQueryRepeatSeconds: 86400
-    };
+  componentWillReceiveProps(nextProps) {
+    if(this.props.loading && !nextProps.loading) {
+      if(nextProps.error) {
+        // We had an error
+        showMessage('error', `There was an error deploying the contract: ${nextProps.error}`, 8);
+      } else if (nextProps.contract) {
+        // Contract was deployed
+        showMessage('success', 'Contract successfully deployed', 5);
+      }
+    }
   }
 
-  onInputChange(event) {
-    this.setState({
-      [event.target.id]: event.target.value
-    });
+  handleReset(event) {
+    event.preventDefault();
+
+    // Don't allow reset if we're submitting
+    if(this.props.loading) return;
+
+    this.props.form.resetFields();
   }
 
   handleDeploy(event) {
     event.preventDefault();
-    this.props.onDeployContract(this.state);
+
+    this.props.form.validateFields((err, fieldsValue) => {
+      if (err) {
+        return;
+      }
+
+      const values = {
+        ...fieldsValue,
+        expirationTimeStamp: Math.floor(fieldsValue['expirationTimeStamp'].valueOf() / 1000)
+      };
+
+      this.props.onDeployContract(values);
+    });
+  }
+
+  isSubmitDisabled() {
+    if(this.props.loading) return true;
+
+    const errors = this.props.form.getFieldsError();
+    return Object.keys(errors).some(field => errors[field]);
   }
 
   render() {
     return (
-      <form
-        className="pure-form pure-form-stacked"
-        onSubmit={this.handleDeploy.bind(this)}
-      >
-        <fieldset>
-          <input
-            id="contractName"
-            type="text"
-            value={this.state.contractName}
-            onChange={this.onInputChange.bind(this)}
-            placeholder="Name"
-          />
-          <input
-            id="baseTokenAddress"
-            type="text"
-            value={this.state.baseTokenAddress}
-            onChange={this.onInputChange.bind(this)}
-            placeholder="Base Token Address"
-          />
-          <input
-            id="priceFloor"
-            type="number"
-            value={this.state.priceFloor}
-            onChange={this.onInputChange.bind(this)}
-            placeholder="Price Floor"
-          />
-          <input
-            id="priceCap"
-            type="number"
-            value={this.state.priceCap}
-            onChange={this.onInputChange.bind(this)}
-            placeholder="Price Cap"
-          />
-          <input
-            id="priceDecimalPlaces"
-            type="number"
-            value={this.state.priceDecimalPlaces}
-            onChange={this.onInputChange.bind(this)}
-            placeholder="Price Decimal Places"
-          />
-          <input
-            id="qtyDecimalPlaces"
-            type="number"
-            value={this.state.qtyDecimalPlaces}
-            onChange={this.onInputChange.bind(this)}
-            placeholder="Qty Decimal Places"
-          />
-          <input
-            id="expirationTimeStamp"
-            type="number"
-            value={this.state.expirationTimeStamp}
-            onChange={this.onInputChange.bind(this)}
-            placeholder="Expiration Time Stamp"
-          />
-          <input
-            id="oracleDataSource"
-            type="text"
-            value={this.state.oracleDataSource}
-            onChange={this.onInputChange.bind(this)}
-            placeholder="Oraclize.it data source"
-          />
-          <input
-            id="oracleQuery"
-            type="text"
-            value={this.state.oracleQuery}
-            onChange={this.onInputChange.bind(this)}
-            placeholder="Oraclize.it Query"
-          />
-          <input
-            id="oracleQueryRepeatSeconds"
-            type="number"
-            value={this.state.oracleQueryRepeatSeconds}
-            onChange={this.onInputChange.bind(this)}
-            placeholder="Query Repeat Seconds"
-          />
+      <Form onSubmit={this.handleDeploy.bind(this)} layout="vertical">
+        <ContractFormRow>
+          <ContractFormCol>
+            <Field name='contractName' form={this.props.form} />
+          </ContractFormCol>
 
-          <br />
+          <ContractFormCol>
+            <Field name='baseTokenAddress' form={this.props.form} />
+          </ContractFormCol>
+        </ContractFormRow>
 
-          <button type="deploy" className="pure-button pure-button-primary">
-            Deploy Contract
-          </button>
-        </fieldset>
-      </form>
+        <ContractFormRow>
+          <ContractFormCol>
+            <Field name='priceFloor' form={this.props.form} />
+          </ContractFormCol>
+
+          <ContractFormCol>
+            <Field name='priceCap' form={this.props.form} />
+          </ContractFormCol>
+        </ContractFormRow>
+
+        <ContractFormRow>
+          <ContractFormCol>
+            <Field name='priceDecimalPlaces' form={this.props.form} />
+          </ContractFormCol>
+
+          <ContractFormCol>
+            <Field name='qtyDecimalPlaces' form={this.props.form} />
+          </ContractFormCol>
+        </ContractFormRow>
+
+        <ContractFormRow>
+          <ContractFormCol>
+            <Field name='expirationTimeStamp' form={this.props.form} />
+          </ContractFormCol>
+
+          <ContractFormCol>
+            <Field name='oracleDataSource' form={this.props.form} />
+          </ContractFormCol>
+        </ContractFormRow>
+
+        <ContractFormRow>
+          <ContractFormCol>
+            <Field name='oracleQuery' form={this.props.form} />
+          </ContractFormCol>
+
+          <ContractFormCol>
+            <Field name='oracleQueryRepeatSeconds' form={this.props.form} />
+          </ContractFormCol>
+        </ContractFormRow>
+
+        <Row type="flex" justify="center">
+          <Col {...formButtonLayout}>
+            <Button type="primary" htmlType="submit" loading={this.props.loading} disabled={this.isSubmitDisabled()} style={{width: '100%'}}>
+              Deploy Contract
+            </Button>
+          </Col>
+        </Row>
+
+        <Row type="flex" justify="center" style={{ marginTop: '16px' }}>
+          <Col {...formButtonLayout}>
+            <Button type="secondary" style={{width: '100%'}} disabled={this.props.loading} onClick={this.handleReset.bind(this)}>
+              Reset Form
+            </Button>
+          </Col>
+        </Row>
+
+        <Loader loading={this.props.loading} />
+      </Form>
     );
   }
 }
 
-export default DeployContractForm;
+const WrappedDeployContactForm = Form.create()(DeployContractForm);
+
+export default WrappedDeployContactForm;
