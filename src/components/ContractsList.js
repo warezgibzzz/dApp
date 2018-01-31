@@ -220,7 +220,7 @@ class ContractsList extends Component {
                      <strong>Price Floor :</strong> { record.PRICE_FLOOR }
                    </Col>
                    <Col xs={{ span: 12 }} lg={{ span: 6 }}>
-                     <strong>Qty Decimal Places :</strong> { record.QTY_DECIMAL_PLACES }
+                     <strong>Qty Multiplier :</strong> { record.QTY_MULTIPLIER }
                    </Col>
                    <Col xs={{ span: 12 }} lg={{ span: 6 }}>
                      <strong>Last Price :</strong> { record.lastPrice }

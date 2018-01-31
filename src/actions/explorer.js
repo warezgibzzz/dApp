@@ -63,7 +63,7 @@ async function processContractsList(deployedContracts, marketContract, marketCol
         contractJSON['PRICE_FLOOR'] = await instance.PRICE_FLOOR.call().then(data => data.toNumber());
         contractJSON['PRICE_CAP'] = await instance.PRICE_CAP.call().then(data => data.toNumber());
         contractJSON['PRICE_DECIMAL_PLACES'] = await instance.PRICE_DECIMAL_PLACES.call().then(data => data.toNumber());
-        contractJSON['QTY_DECIMAL_PLACES'] = await instance.QTY_DECIMAL_PLACES.call().then(data => data.toNumber());
+        contractJSON['QTY_MULTIPLIER'] = await instance.QTY_MULTIPLIER.call().then(data => data.toNumber());
         contractJSON['ORACLE_QUERY'] = await instance.ORACLE_QUERY.call();
         contractJSON['EXPIRATION'] = await instance.EXPIRATION.call().then(data => data.toNumber());
         contractJSON['lastPrice'] = await instance.lastPrice.call().then(data => data.toNumber());

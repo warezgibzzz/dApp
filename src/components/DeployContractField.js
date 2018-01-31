@@ -130,7 +130,7 @@ const fieldSettingsByName = {
     component: () => (<InputNumber min={0} style={{ width: '100%' }} />)
   },
 
-  qtyDecimalPlaces: {
+  qtyMultiplier: {
     label: 'Qty Multiplier',
     initialValue: 2,
     rules: [
