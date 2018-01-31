@@ -76,7 +76,19 @@ const fieldSettingsByName = {
     },
     extra: 'Placeholder explanation',
 
-    component: () => (<InputNumber min={0} style={{ width: '100%' }} />)
+    component: ({ form }) => {
+      return (
+        <InputNumber
+          min={0}
+          style={{ width: '100%' }}
+          onChange={() => {
+            setTimeout(() => {
+              form.validateFields(['priceCap'], { force: true });
+            }, 100);
+          }}
+        />
+      );
+    }
   },
 
   priceCap: {
@@ -101,6 +113,11 @@ const fieldSettingsByName = {
         <InputNumber
           min={0}
           style={{ width: '100%' }}
+          onChange={() => {
+            setTimeout(() => {
+              form.validateFields(['priceFloor'], { force: true });
+            }, 100);
+          }}
         />
       );
     }
