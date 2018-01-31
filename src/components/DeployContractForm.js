@@ -117,7 +117,7 @@ class DeployContractForm extends Component {
           </ContractFormCol>
 
           <ContractFormCol>
-            <Field name='qtyDecimalPlaces' form={this.props.form} />
+            <Field name="qtyMultiplier" form={this.props.form} />
           </ContractFormCol>
         </ContractFormRow>
 

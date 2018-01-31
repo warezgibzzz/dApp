@@ -35,7 +35,7 @@ export function deployContract(contractSpecs) {
         contractSpecs.priceFloor,
         contractSpecs.priceCap,
         contractSpecs.priceDecimalPlaces,
-        contractSpecs.qtyDecimalPlaces,
+        contractSpecs.qtyMultiplier,
         contractSpecs.expirationTimeStamp
       ];
 
