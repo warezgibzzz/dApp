@@ -4,6 +4,7 @@ import { Row, Col, Form, Button } from 'antd';
 import showMessage from './message';
 import Loader from './Loader';
 import Field from './DeployContractField';
+import DeployContractSuccess from './DeployContractSuccess';
 
 const formButtonLayout = {
   xs: {
@@ -50,7 +51,7 @@ class DeployContractForm extends Component {
         showMessage('error', `There was an error deploying the contract: ${nextProps.error}`, 8);
       } else if (nextProps.contract) {
         // Contract was deployed
-        showMessage('success', 'Contract successfully deployed', 5);
+        showMessage('success', DeployContractSuccess({ contract: nextProps.contract }), 5);
       }
     }
   }
