@@ -179,16 +179,14 @@ class SetQueryStep extends Component {
  */
 class QueryResultStep extends Component {
     render() {
-        return (<div style={{ background: '#ECECEC', padding: '30px' }}>
+        return (<div style={{ padding: '30px' }}>
         <Row type="flex" justify="center">
-            <Col>
-            <Loader loading={this.props.loading}/>
-            {!this.props.loading &&
-            <Card title="Query Result" bordered style={{ width: 400 }}>
-                <p>{this.props.result}</p>
-                {this.props.error && <Alert message={this.props.error} type="error" />}
+            <Col lg={{ span: 16 }} sm={{ span: 24 }} xs={{ span: 24 }}>
+            <Card title="Query Result" style={{ width: '100%' }}>
+                <Loader loading={this.props.loading} style={{ width: 80, height: 80 }}/>
+                {!this.props.loading && !this.props.error && <p>{this.props.result}</p>}
+                {!this.props.loading && this.props.error && <Alert message={this.props.error} type="error" />}
             </Card>
-            }
             </Col>
         </Row>
         <br/>
