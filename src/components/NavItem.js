@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
+
+import Link from './Link.js';
 
 class NavItem extends Component {
   render () {
