@@ -23,21 +23,36 @@ class AboutOraclesStep extends Component {
     return (<div>
       <Row>
         <Col>
-          <h2>Testing Oracle Queries</h2>
+          <h1>Testing Oracle Queries</h1>
           <div>
-            In the blockchain space, an oracle is a party which provides data. The need for such figure arise from the fact that blockchain applications 
-            cannot access and fetch directly the data they require.
+            <h2>What is an Oracle?</h2>
+            In the blockchain space, an oracle is a party which provides data. The need for such 
+             figure arise from the fact that blockchain applications cannot access and fetch 
+             directly the data they require.
           </div>
           <br/>
           <div>
-            This page is used to test requests to an oracle Cools.
+            <h2>Which Oracle are we using?</h2>
+            The oracle is <a href="http://www.oraclize.it/">Oraclize</a>. Oraclize is the 
+             leading oracle service for smart contracts and blockchain applications, serving 
+             thousands of requests for day every day on Ethereum, Bitcoin and Rootstock.
           </div>
+          <br/>
+          <div>
+            <h2>How it works</h2>
+            Oraclize internally replicates an “If This Then That” logical model. This means that it 
+             will execute a given set of instructions if some other given conditions are met.
+             A valid request to Oraclize should specify a <b>Data Source</b> and a <b>Query</b>.
+          </div>
+          <br/>
         </Col>
       </Row>
       <br/>
-      <Row type="flex" justify="center">
+      <Row type="flex" justify="end">
         <Col>
-          <Button type="primary" onClick={this.props.onNextClicked} >Cick Here to Start</Button>
+          <Button type="primary" onClick={this.props.onNextClicked} >
+            Select a Data Source <Icon type="arrow-right" />
+          </Button>
         </Col>
       </Row>
     </div>)
@@ -69,9 +84,17 @@ class SelectDataSourceStep extends Component {
       return (<div>
       <Row>
       <Col>
-          <h2>Select an Oracle Datasource</h2>
+          <h1>Select a Data Source</h1>
           <div>
-          Listed here are the data-sources you can choose from when using oracle service.
+            A data source is a trusted provider of data. It can be a website or web API such as Reuters, 
+             Weather.com, BBC.com, or a secure application running on an hardware-enforced Trusted 
+             Execution Environment (TEE) or an auditable, locked-down virtual machine instance running 
+             in a cloud provider.
+          </div>
+          <br/>
+          <div>
+            Below are the data sources you can choose from when using <a href="http://www.oraclize.it/">Oraclize</a>.
+            Select one and proceed to test out a query.
           </div>
       </Col>
       </Row>
@@ -79,7 +102,11 @@ class SelectDataSourceStep extends Component {
       <Col>
         <FormItem
         label="Select a Datasource">
-            <Select defaultValue={source} size="large" onChange={this.onDataSourceChange.bind(this)} style={{ width: '100%' }}>
+            <Select 
+              defaultValue={source} 
+              size="large" 
+              onChange={this.onDataSourceChange.bind(this)} 
+              style={{ width: '100%' }}>
                 {OracleDataSources.map(({ name }) => <Option key={name} value={name}>{name}</Option>)}
             </Select>
         </FormItem>
@@ -144,23 +171,33 @@ class SetQueryStep extends Component {
       return (<div>
         <Row>
           <Col>
-            <h2>Enter a Query to test on '{dataSource}' Datasource</h2>
+            <h1>Enter a Query to test on '{dataSource}' Datasource</h1>
             <div>
-            NOTE: You can specify your <a href="http://docs.oraclize.it/#general-concepts-parsing-helpers">parsing helpers</a> with the query too.
+              A query is request which needs to be evaluated in order to complete a specific data source type request.
             </div>
             <br/>
+            <div>
+              <h2>Some examples of {dataSource} Queries</h2>
+              <ul>
+                {getDataSourceObj(dataSource).sampleQueries.map(sample => <li>{sample}</li>)}
+              </ul>
+            </div>
             <FormItem
-              label="Enter Query">
+              label="Enter a query to text">
                 {this.state.error && <Alert message={this.state.error} type="error" />}
                 <Input placeholder="Query" onChange={this.onInputChange.bind(this)}/>
             </FormItem>
+            <div>
+              NOTE: You can specify your <a href="http://docs.oraclize.it/#general-concepts-parsing-helpers">parsing helpers</a> with 
+               the query too.
+            </div>
           </Col>
         </Row>
         <Row type="flex" justify="end">
           <Col>
           <ButtonGroup>
             <Button type="default" onClick={this.props.onPrevClicked} >
-              <Icon type="left" />Back
+              <Icon type="left" />Change Data Source
             </Button>
             <Button type="primary" onClick={this.validateAndSubmit.bind(this)} >
               Submit Query<Icon type="right" />
@@ -193,7 +230,7 @@ class QueryResultStep extends Component {
         <Row type="flex" justify="end">
             <Col>
             <Button type="primary" onClick={this.props.onRestartClicked} >
-                <Icon type="arrow-left" />Try Another Test
+                <Icon type="arrow-left" />Test another query
             </Button>
             </Col>
         </Row>

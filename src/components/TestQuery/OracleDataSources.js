@@ -26,7 +26,10 @@ const OracleDataSources = [
         // regex tests to ensure a url is within the query
         return (new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?([^ ])+"))
             .test(query)
-      }
+      },
+      sampleQueries: [
+        'json(https://api.kraken.com/0/public/Ticker?pair=ETHUSD).result.XETHZUSD.c.0'
+      ]
     },
     {
       name: 'WolframAlpha',
@@ -40,7 +43,11 @@ const OracleDataSources = [
       },
       isQueryValid(query) {
         return query.length !== 0
-      }
+      },
+      sampleQueries: [
+        '2*2',
+        '2^2+3'
+      ]
     },
     { 
       name: 'IPFS',
@@ -58,7 +65,10 @@ const OracleDataSources = [
       },
       isQueryValid(query) {
         return isIPFS.multihash(query)
-      }
+      },
+      sampleQueries: [
+        'QmT78zSuBmuS4z925WZfrqQ1qHaJ56DQaTfyMUF7F8ff5o'
+      ]
     }, 
     { 
       name: 'computation',
@@ -86,7 +96,10 @@ const OracleDataSources = [
       },
       isQueryValid(query) {
         return query.length !== 0
-      }
+      },
+      sampleQueries: [
+        'QmRxtL9K2de7v7QBYCCrwcjZHjYmuKggZ8xaqZ6UUWvd1s'
+      ]
     }
   ]
 

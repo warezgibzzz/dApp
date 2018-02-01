@@ -23,8 +23,7 @@ class TestQueryForm extends Component {
     this.state = {
       step: 0,
       oracleDataSource: 'URL',
-      oracleQuery:
-        'json(https://api.kraken.com/0/public/Ticker?pair=ETHUSD).result.XETHZUSD.c.0'
+      oracleQuery: ''
     };
   }
 
@@ -95,7 +94,7 @@ class TestQueryForm extends Component {
         loading={this.props.loading}
         result={this.props.results}
         error={this.props.error} 
-        onRestartClicked={this.onRestart.bind(this)} />,
+        onRestartClicked={this.toPrevStep.bind(this)} />,
     ]
     
     return (
@@ -103,7 +102,7 @@ class TestQueryForm extends Component {
           <Col {...parentColLayout}>
             <Steps current={currentStep}>
               <Step title="Introduction"/>
-              <Step title="Oracle Datasource" />
+              <Step title="Oracle Data Source" />
               <Step title="Oracle Query" />
               <Step title="Result" />
             </Steps>
