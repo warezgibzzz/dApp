@@ -42,34 +42,34 @@ class TestQueryForm extends Component {
   onQueryChange(query) {
     this.setState({
       oracleQuery: query
-    })
+    });
   }
 
   onQuerySubmit() {
-    this.toNextStep()
-    this.props.onTestQuery(this.state)
+    this.toNextStep();
+    this.props.onTestQuery(this.state);
   }
 
   toNextStep() {
     this.setState({
       step: this.state.step + 1
-    })
+    });
   }
 
   toPrevStep() {
     this.setState({
       step: this.state.step - 1
-    })
+    });
   }
 
   onRestart() {
     this.setState({
       step: 1 // <-- Select Datasource Step
-    })
+    });
   }
 
   render() {
-    const currentStep = this.state.step
+    const currentStep = this.state.step;
     const steps = [
       <AboutOraclesStep 
         key="0"
@@ -95,7 +95,7 @@ class TestQueryForm extends Component {
         result={this.props.results}
         error={this.props.error} 
         onRestartClicked={this.toPrevStep.bind(this)} />,
-    ]
+    ];
     
     return (
         <Row type="flex" justify="center">

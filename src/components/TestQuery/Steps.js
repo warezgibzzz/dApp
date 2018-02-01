@@ -131,7 +131,7 @@ class SelectDataSourceStep extends Component {
           </ButtonGroup>
       </Col>
       </Row>
-  </div>)
+  </div>);
   }
 }
 
@@ -162,7 +162,7 @@ class SetQueryStep extends Component {
       if (dataSourceObj.isQueryValid(this.state.query)) {
         this.props.onSubmit();
       } else {
-        this.setState({ error: dataSourceObj.queryHint() })
+        this.setState({ error: dataSourceObj.queryHint() });
       }
     }
   
@@ -179,7 +179,7 @@ class SetQueryStep extends Component {
             <div>
               <h2>Some examples of {dataSource} Queries</h2>
               <ul>
-                {getDataSourceObj(dataSource).sampleQueries.map(sample => <li>{sample}</li>)}
+                {getDataSourceObj(dataSource).sampleQueries.map(sample => <li key={sample}>{sample}</li>)}
               </ul>
             </div>
             <FormItem
@@ -191,6 +191,7 @@ class SetQueryStep extends Component {
               NOTE: You can specify your <a href="http://docs.oraclize.it/#general-concepts-parsing-helpers">parsing helpers</a> with 
                the query too.
             </div>
+            <br/>
           </Col>
         </Row>
         <Row type="flex" justify="end">
@@ -205,7 +206,7 @@ class SetQueryStep extends Component {
           </ButtonGroup>
           </Col>
         </Row>
-      </div>)
+      </div>);
     }
 }
   
@@ -221,7 +222,7 @@ class QueryResultStep extends Component {
             <Col lg={{ span: 16 }} sm={{ span: 24 }} xs={{ span: 24 }}>
             <Card title="Query Result" style={{ width: '100%' }}>
                 <Loader loading={this.props.loading} style={{ width: 80, height: 80 }}/>
-                {!this.props.loading && !this.props.error && <p>{this.props.result}</p>}
+                {!this.props.loading && !this.props.error && <p className="result">{this.props.result}</p>}
                 {!this.props.loading && this.props.error && <Alert message={this.props.error} type="error" />}
             </Card>
             </Col>
@@ -234,7 +235,7 @@ class QueryResultStep extends Component {
             </Button>
             </Col>
         </Row>
-        </div>)
+        </div>);
     }
 }
 

@@ -5,7 +5,7 @@ import splash from '../animations/splash.gif';
 function Loader(props) {
   const style = {
     display: props.loading ? 'flex' : 'none',
-    'justify-content': 'center'
+    justifyContent: 'center'
   };
   const imageStyle = props.style || {}
 
