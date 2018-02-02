@@ -1,13 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Button, Select } from 'antd';
+import enzyme, { shallow } from 'enzyme';
 import sinon from 'sinon';
 import { expect } from 'chai';
-import { shallow } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16'
 
-import { AboutOraclesStep, SelectDataSourceStep, SetQueryStep, QueryResultStep } from './Steps';
-import DataSources from './OracleDataSources';
-import Loader from '../Loader';
+import DataSources from '../../../components/TestQuery/OracleDataSources'
+import Loader from '../../../components/Loader';
+import {
+  AboutOraclesStep,
+  QueryResultStep,
+  SelectDataSourceStep,
+  SetQueryStep
+} from '../../../components/TestQuery/Steps'
+
+enzyme.configure({ adapter: new Adapter() })
 
 const Option = Select.Option;
 
@@ -68,7 +76,6 @@ describe('SelectDataSourceStep', () => {
 })
 
 describe('SetQueryStep', () => {
-
   it('renders without crashing', () => {
     const div = document.createElement('div');
     ReactDOM.render(<SetQueryStep dataSource={DataSources[0].name} />, div);
