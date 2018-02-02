@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import getWeb3 from './util/web3/getWeb3';
 
 // Layouts
-import Splash from './Splash'
+import Splash from './Splash';
 import App from './App';
 
 // Redux Store

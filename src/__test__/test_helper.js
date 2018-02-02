@@ -1,8 +1,8 @@
-import React from 'react'
-import { mount } from 'enzyme'
-import { Provider } from 'react-redux'
+import React from 'react';
+import { mount } from 'enzyme';
+import { Provider } from 'react-redux';
 
-import store from '../store'
+import store from '../store';
 
 /**
  * Helper to test components that need the redux provider
@@ -20,5 +20,5 @@ export const renderComponent = (Component, state = {}, props = {}) => {
     <Provider store={store}>
       <Component {...props} />
     </Provider>
-  )
-}
+  );
+};
