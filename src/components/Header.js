@@ -22,6 +22,9 @@ class Header extends Component {
               <NavItem to="/contract/explorer">Explore Contracts</NavItem>
               <NavItem to="/test">Test Query</NavItem>
               <NavItem to="/exchange">Sim Exchange</NavItem>
+              <li className="ant-menu-item">
+                <Link to="http://docs.marketprotocol.io" target="_blank">Documentation</Link>
+              </li>
             </ul>
           </div>
         </div>

@@ -4,18 +4,23 @@
   "private": true,
   "devDependencies": {
     "babel-eslint": "^7.2.3",
+    "chai": "^4.1.2",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "eslint": "^4.16.0",
     "eslint-config-react-app": "^2.1.0",
     "eslint-plugin-flowtype": "^2.41.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-react": "^7.5.1"
+    "eslint-plugin-react": "^7.5.1",
+    "sinon": "^4.2.2"
   },
   "dependencies": {
     "antd": "^3.1.4",
     "husky": "^0.14.3",
+    "is-ipfs": "^0.3.2",
     "lint-staged": "^6.0.1",
-    "market-solidity": "0.0.4",
+    "market-solidity": "0.0.5",
     "moment": "^2.20.1",
     "prettier": "^1.10.2",
     "react": "^16.2.0",

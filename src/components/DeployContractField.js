@@ -38,7 +38,10 @@ const fieldSettingsByName = {
     rules: [{
       required: true, message: 'Please enter a name for your contract',
     }],
-    extra: 'Placeholder explanation',
+    extra: `The contract name should be as descriptive as possible capturing the underlying asset relationship 
+    as well as possibly the expiration.  Something like "ETH/BTC-20180228-Kraken" may help others understand
+    the underlying asset, the data source, and expiration date in a nice human readable and searchable way.
+    In the future, we hope to implement a standardized naming spec to assist in this process`,
 
     component: () => (<Input />)
   },
@@ -54,7 +57,7 @@ const fieldSettingsByName = {
         validator: ethAddressValidator
       }
     ],
-    extra: 'Placeholder explanation',
+    extra: 'This is the token that collateralizes the contract, it can be any valid ERC20 token',
 
     component: () => (<Input />)
   },
@@ -74,9 +77,22 @@ const fieldSettingsByName = {
         }
       ];
     },
-    extra: 'Placeholder explanation',
+    extra: `The lower bound of price exposure this contract will trade. If the oracle reports a price below this 
+    value the contract will enter into settlement`,
 
-    component: () => (<InputNumber min={0} style={{ width: '100%' }} />)
+    component: ({ form }) => {
+      return (
+        <InputNumber
+          min={0}
+          style={{ width: '100%' }}
+          onChange={() => {
+            setTimeout(() => {
+              form.validateFields(['priceCap'], { force: true });
+            }, 100);
+          }}
+        />
+      );
+    }
   },
 
   priceCap: {
@@ -94,13 +110,19 @@ const fieldSettingsByName = {
         }
       ];
     },
-    extra: 'Placeholder explanation',
+    extra: `The upper bound of price exposure this contract will trade. If the oracle reports a price above this
+    value the contract will enter into settlement`,
 
     component: ({ form }) => {
       return (
         <InputNumber
           min={0}
           style={{ width: '100%' }}
+          onChange={() => {
+            setTimeout(() => {
+              form.validateFields(['priceFloor'], { force: true });
+            }, 100);
+          }}
         />
       );
     }
@@ -117,23 +139,30 @@ const fieldSettingsByName = {
         type: 'integer', message: 'Value must be an integer'
       }
     ],
-    extra: 'Placeholder explanation',
+    extra: `Since all numbers must be represented as integers on the Ethereum blockchain, this is how many 
+    decimal places one needs to move the decimal in order to go from the oracle query price to an integer. 
+    For instance if the oracle query results returned a value such as 190.22, we need to move the 
+    decimal two(2) places to convert to an integer value of 19022.`,
 
     component: () => (<InputNumber min={0} style={{ width: '100%' }} />)
   },
 
-  qtyDecimalPlaces: {
-    label: 'Qty Decimal Places',
+  qtyMultiplier: {
+    label: 'Qty Multiplier',
     initialValue: 2,
     rules: [
       {
-        required: true, message: 'Please enter the number of decimal places of the quantity',
+        required: true, message: 'Please enter a valid quantity multiplier',
       },
       {
         type: 'integer', message: 'Value must be an integer'
       }
     ],
-    extra: 'Placeholder explanation',
+    extra: `The qty multiplier allows the user to specify how many base units (for ethereum, this would be wei) each
+    integer price movement changes the value of the contract.  If our integerized price was 19022 with a qty
+    multiplier of 1, and the price moved to 19023, then the value will have change by 1 wei.  If however the
+    multiplier was set at 1,000,000,000 the price movement of 1 unit would now
+    correspond to a value of 1 gwei (not wei)`,
 
     component: () => (<InputNumber min={0} style={{ width: '100%' }} />)
   },
@@ -149,7 +178,7 @@ const fieldSettingsByName = {
         validator: timestampValidator
       }
     ],
-    extra: 'Placeholder explanation',
+    extra: 'Upon reaching the expiration timestamp all open positions will settle to the defined oracle query',
 
     component: () => (<DatePicker showTime format="YYYY-MM-DD HH:mm:ss" style={{ width: '100%' }} />)
   },
@@ -162,7 +191,7 @@ const fieldSettingsByName = {
         required: true, message: 'Please select a data source',
       }
     ],
-    extra: 'Placeholder explanation',
+    extra: 'Available data sources from Oraclize.it',
 
     component: () => {
       return (
@@ -181,7 +210,7 @@ const fieldSettingsByName = {
     rules: [{
       required: true, message: 'Please enter a valid query',
     }],
-    extra: 'Placeholder explanation',
+    extra: 'Properly structured Oraclize.it query, please use the test query page for clarification',
 
     component: () => (<Input />)
   },
@@ -197,7 +226,9 @@ const fieldSettingsByName = {
         type: 'integer', message: 'Value must be an integer'
       }
     ],
-    extra: 'Placeholder explanation',
+    extra: `Number of seconds in between repeating the oracle query.  Typically this only need be once per day.
+    Additional frequency can be beneficial in some circumstances but will increase the needed amount of ETH that
+    is needs to be pre-funded to the contract in order to pay for the query gas costs`,
 
     component: () => (<InputNumber min={0} style={{ width: '100%' }}/>)
   },

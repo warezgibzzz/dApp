@@ -20,53 +20,56 @@ export function testQuery(querySpecs) {
 
       // Get current ethereum wallet.
       web3.eth.getCoinbase((error, coinbase) => {
-        // Log errors, if any.
         if (error) {
           console.error(error);
+          return dispatch({ type: `${type}_REJECTED`, payload: { error } });
         }
 
         console.log('Attempting to submit test query from ' + coinbase);
-        queryTest.deployed().then(function(queryTestContractInstance) {
-          queryTestContractInstance
-            .testOracleQuery(
+        let queryTestContractInstance
+
+        queryTest
+          .deployed()
+          .then(function(queryTestContract) {
+            queryTestContractInstance = queryTestContract
+            return queryTestContractInstance.testOracleQuery(
               querySpecs.oracleDataSource,
               querySpecs.oracleQuery,
-              { gas: 200000, from: coinbase, value: web3.toWei('.006', 'ether') }
-            )
-            .then(function(queryTransactionResults) {
-              // TODO: this is a very rough example, please clean up!!!
-
-              let queryID;
-              for (let i = 0; i < queryTransactionResults.logs.length; i++) {
-                const log = queryTransactionResults.logs[i];
-                if (log.event === 'QueryScheduled') {
-                  // We found the event!
-                  console.log(
-                    'Scheduled Query Id = ' + log.args.queryIDScheduled
-                  );
-                  queryID = log.args.queryIDScheduled;
-                }
+              { 
+                gas: 200000, 
+                from: coinbase, 
+                value: web3.toWei('.006', 'ether') 
               }
-
-              // TODO: not sure where to actually handle this event
-              queryTestContractInstance
-                .QueryCompleted()
-                .watch(function(error, result) {
-                  console.log(result);
-                  // TODO:  subscribe to events from contract and when this query is completed, we can display the results.
+            );
+          })
+          .then(function(queryTransactionResults) {
+            let queryEventIds = queryTransactionResults.logs
+              .filter(({ event }) => event === 'QueryScheduled')
+              .map(log => log.args.queryIDScheduled);
+            
+            if (queryEventIds.length === 0) {
+              return dispatch({ type: `${type}_REJECTED`, payload: { error: 'Could not find `QueryScheduled` event.'} });
+            }
+            const queryID = queryEventIds[0]
+            
+            // Listen for query completed
+            queryTestContractInstance.QueryCompleted()
+              .watch(function(error, result) {
+                if (result.args.queryIDCompleted === queryID) {
                   console.log('attempting to retrieve results for ' + queryID);
-                  queryTestContractInstance.getQueryResults
-                    .call(queryID)
+                  queryTestContractInstance.getQueryResults.call(queryID)
                     .then(function(queryResults) {
-                      console.log(queryResults);
                       dispatch({ type: `${type}_FULFILLED`, payload: queryResults });
+                    })
+                    .catch(err => {
+                      dispatch({ type: `${type}_REJECTED`, payload: { error: err } });
                     });
-                });
-            });
-        });
+                }
+              });
+          });
       });
     } else {
-      dispatch({ type: `${type}_REJECTED`, payload: {'error': 'Web3 not initialised'} });
+      dispatch({ type: `${type}_REJECTED`, payload: { error: 'Web3 not initialised'} });
     }
   };
 }

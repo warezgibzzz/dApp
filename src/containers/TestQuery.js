@@ -1,11 +1,10 @@
 import { connect } from 'react-redux';
-import TestQueryForm from '../components/TestQueryForm';
+import TestQueryForm from '../components/TestQuery/TestQueryForm';
 import { testQuery } from '../actions/testQuery';
 
 const mapStateToProps = (state, ownProps) => {
-  return {
-    testQuery: state.testQuery
-  };
+  const { error, loading, results } = state.testQuery;
+  return { error, loading, results };
 };
 
 const mapDispatchToProps = dispatch => {
