@@ -92,7 +92,7 @@ export function deployContract(contractSpecs) {
               { from: web3.eth.accounts[0] }
             );
 
-            dispatch({ type: `${type}_FULFILLED`, payload: marketContract });
+            dispatch({ type: `${type}_FULFILLED`, payload: marketContractInstanceDeployed });
           })
           .catch(err => {
             dispatch({ type: `${type}_REJECTED`, payload: err });
