@@ -23,6 +23,7 @@
     "market-solidity": "0.0.5",
     "moment": "^2.20.1",
     "prettier": "^1.10.2",
+    "query-string": "^5.0.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.2",

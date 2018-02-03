@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 
 import { deployContract } from "../actions/deploy";
 
-import DeployContractForm from '../components/DeployContractForm';
+import DeployContractForm from '../components/DeployContract/DeployContractForm';
 
 const mapStateToProps = (state, ownProps) => {
   const { loading, error, contract } = state.deploy;

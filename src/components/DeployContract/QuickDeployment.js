@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Row, Col, Form, Button } from 'antd';
 
-import showMessage from './message';
-import Loader from './Loader';
+import showMessage from '../message';
+import Loader from '../Loader';
 import Field from './DeployContractField';
 import DeployContractSuccess from './DeployContractSuccess';
 
@@ -43,7 +43,11 @@ function ContractFormCol(props) {
   );
 }
 
-class DeployContractForm extends Component {
+/**
+ * Component for deploying Contracts Quickly.
+ * 
+ */
+class QuickDeployment extends Component {
   componentWillReceiveProps(nextProps) {
     if(this.props.loading && !nextProps.loading) {
       if(nextProps.error) {
@@ -164,6 +168,4 @@ class DeployContractForm extends Component {
   }
 }
 
-const WrappedDeployContactForm = Form.create()(DeployContractForm);
-
-export default WrappedDeployContactForm;
+export default Form.create()(QuickDeployment);
