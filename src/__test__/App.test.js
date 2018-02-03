@@ -9,6 +9,7 @@ enzyme.configure({ adapter: new Adapter() });
 
 jest.mock('../actions/deploy.js', () => {}, { virtual: true });
 jest.mock('../actions/explorer.js', () => {}, { virtual: true });
+jest.mock('../actions/testQuery.js', () => {}, { virtual: true });
 
 it('renders without crashing', () => {
   renderComponent(App, null, { history });
