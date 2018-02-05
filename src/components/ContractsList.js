@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Table, Input, Button, Icon, Row, Col } from 'antd';
 import moment from 'moment';
+import Loader from './Loader';
 
 import './ContractsList.css';
 
@@ -186,7 +187,7 @@ class ContractsList extends Component {
 
     if (!this.state.contracts) {
       return (
-        <div>Loading...</div>
+        <div><Loader loading/></div>
       );
     }
 
