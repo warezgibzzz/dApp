@@ -7,7 +7,7 @@ function Loader(props) {
     display: props.loading ? 'flex' : 'none',
     justifyContent: 'center'
   };
-  const imageStyle = props.style || {}
+  const imageStyle = props.style || {};
 
   return (
     <div style={{ ...style }}>

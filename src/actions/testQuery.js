@@ -26,12 +26,12 @@ export function testQuery(querySpecs) {
         }
 
         console.log('Attempting to submit test query from ' + coinbase);
-        let queryTestContractInstance
+        let queryTestContractInstance;
 
         queryTest
           .deployed()
           .then(function(queryTestContract) {
-            queryTestContractInstance = queryTestContract
+            queryTestContractInstance = queryTestContract;
             return queryTestContractInstance.testOracleQuery(
               querySpecs.oracleDataSource,
               querySpecs.oracleQuery,
@@ -46,12 +46,12 @@ export function testQuery(querySpecs) {
             let queryEventIds = queryTransactionResults.logs
               .filter(({ event }) => event === 'QueryScheduled')
               .map(log => log.args.queryIDScheduled);
-            
+
             if (queryEventIds.length === 0) {
               return dispatch({ type: `${type}_REJECTED`, payload: { error: 'Could not find `QueryScheduled` event.'} });
             }
-            const queryID = queryEventIds[0]
-            
+            const queryID = queryEventIds[0];
+
             // Listen for query completed
             queryTestContractInstance.QueryCompleted()
               .watch(function(error, result) {

@@ -81,7 +81,7 @@ class ContractsList extends Component {
       title: 'Name',
       dataIndex: 'CONTRACT_NAME',
       width: 200,
-      sorter: (a, b) => { return a.CONTRACT_NAME.localeCompare(b.CONTRACT_NAME) },
+      sorter: (a, b) => { return a.CONTRACT_NAME.localeCompare(b.CONTRACT_NAME); },
       sortOrder: sort.columnKey === 'CONTRACT_NAME' && sort.order,
       filterDropdown: (
         <div className="custom-filter-dropdown">
@@ -225,7 +225,7 @@ class ContractsList extends Component {
                    <Col xs={{ span: 12 }} lg={{ span: 6 }}>
                      <strong>Last Price :</strong> { record.lastPrice }
                    </Col>
-                 </Row>
+                 </Row>;
                }}
         />
       </div>
