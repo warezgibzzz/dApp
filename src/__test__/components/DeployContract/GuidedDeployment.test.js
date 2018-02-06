@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { Steps } from 'antd';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
