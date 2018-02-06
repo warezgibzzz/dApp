@@ -11,7 +11,7 @@ class NavItem extends Component {
       <li className={isActive ? 'ant-menu-item ant-menu-item-selected' : 'ant-menu-item'}>
         <Link to={to}>{children}</Link>
       </li>
-    )
+    );
   }
 }
 

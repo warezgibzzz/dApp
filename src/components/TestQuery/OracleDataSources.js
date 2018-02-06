@@ -16,16 +16,16 @@ const OracleDataSources = [
           Note that if the second parameter is valid JSON, then it will be posted as such. 
           The URL data source type supports TLSNotary Proofs and Android Proofs. 
           More advanced HTTP capabilities, such as Basic Authentication or OAuth, 
-          can be build by leveraging the computation data source type.</div>)
+          can be build by leveraging the computation data source type.</div>);
       },
       queryHint() {
         return (<div>Query should be a valid URL or one coated in a <a href="http://docs.oraclize.it/#general-concepts-parsing-helpers">parsing helper</a>
-          </div>)
+          </div>);
       },
       isQueryValid(query) {
         // regex tests to ensure a url is within the query
         return (new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?([^ ])+"))
-            .test(query)
+            .test(query);
       },
       sampleQueries: [
         'json(https://api.kraken.com/0/public/Ticker?pair=ETHUSD).result.XETHZUSD.c.0'
@@ -36,13 +36,13 @@ const OracleDataSources = [
       descriptionComponent() {
         return (<div>The WolframAlpha data source type enables direct access to the WolframAlpha Knowledge Engine API. 
           This datasource expects as sole parameter the string which should be passed to WolframAlpha. 
-          It will returns the result as a string.</div>)
+          It will returns the result as a string.</div>);
       },
       queryHint() {
-        return (<div>A valid WolframAlpha alpha query is required. For example try: <strong>2+2</strong></div>)
+        return (<div>A valid WolframAlpha alpha query is required. For example try: <strong>2+2</strong></div>);
       },
       isQueryValid(query) {
-        return query.length !== 0
+        return query.length !== 0;
       },
       sampleQueries: [
         '2*2',
@@ -58,13 +58,13 @@ const OracleDataSources = [
           the file QmT78zSuBmuS4z925WZfrqQ1qHaJ56DQaTfyMUF7F8ff5o would return `“hello world\n”.
           <br/>
           If Oraclize fails to fetch the IPFS content within 20 seconds, the request will fail.
-          </div>)
+          </div>);
       },
       queryHint() {
-        return (<div>A valid IPFS hash is required. For example try: <strong>QmT78zSuBmuS4z925WZfrqQ1qHaJ56DQaTfyMUF7F8ff5o</strong></div>)
+        return (<div>A valid IPFS hash is required. For example try: <strong>QmT78zSuBmuS4z925WZfrqQ1qHaJ56DQaTfyMUF7F8ff5o</strong></div>);
       },
       isQueryValid(query) {
-        return isIPFS.multihash(query)
+        return isIPFS.multihash(query);
       },
       sampleQueries: [
         'QmT78zSuBmuS4z925WZfrqQ1qHaJ56DQaTfyMUF7F8ff5o'
@@ -87,20 +87,20 @@ const OracleDataSources = [
           Dockerfile by creating an archive and uploading it to IPFS. The query expects as first argument 
           the IPFS multihash of that archive, while the following arguments will be passed to the execution 
           environment as environmental variables, making them accessible by the application.
-        </div>)
+        </div>);
       },
       queryHint() {
         return (<div>The query expects as first argument 
           the IPFS multihash of the uploaded archive, while the following arguments will be passed to the execution 
-          environment as environmental variables, making them accessible by the application.</div>)
+          environment as environmental variables, making them accessible by the application.</div>);
       },
       isQueryValid(query) {
-        return query.length !== 0
+        return query.length !== 0;
       },
       sampleQueries: [
         'QmRxtL9K2de7v7QBYCCrwcjZHjYmuKggZ8xaqZ6UUWvd1s'
       ]
     }
-  ]
+  ];
 
-  export default OracleDataSources
+export default OracleDataSources;

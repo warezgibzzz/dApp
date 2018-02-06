@@ -1,17 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import enzyme, { shallow } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 import { Steps } from 'antd';
 import { expect } from 'chai';
-import { shallow } from 'enzyme';
 
-import TestQueryForm from './TestQueryForm';
-import { AboutOraclesStep, SelectDataSourceStep, SetQueryStep, QueryResultStep } from './Steps';
+import TestQueryForm from '../../../components/TestQuery/TestQueryForm';
+import {
+  AboutOraclesStep,
+  QueryResultStep,
+  SelectDataSourceStep,
+  SetQueryStep
+} from '../../../components/TestQuery/Steps';
+
+enzyme.configure({ adapter: new Adapter() });
 
 describe('TestQueryForm', () => {
   let testQueryForm;
 
   beforeEach(() => {
-    testQueryForm = shallow(<TestQueryForm />)
+    testQueryForm = shallow(<TestQueryForm />);
   });
 
   it('renders without crashing', () => {
@@ -21,24 +29,24 @@ describe('TestQueryForm', () => {
 
   it('should render 4 steps', () => {
     expect(testQueryForm.find(Steps.Step)).to.have.length(4);
-  })
+  });
 
   it('should render AboutOracleStep by default', () => {
     expect(testQueryForm.find(AboutOraclesStep)).to.have.length(1);
-  })
+  });
 
   it('should render SelectDataSourceStep as second step', () => {
-    testQueryForm.setState({ step: 1 })
-    expect(testQueryForm.find(SelectDataSourceStep)).to.have.length(1)
-  })
+    testQueryForm.setState({ step: 1 });
+    expect(testQueryForm.find(SelectDataSourceStep)).to.have.length(1);
+  });
 
   it('should render SetQueryStep as third step', () => {
-    testQueryForm.setState({ step: 2 })
-    expect(testQueryForm.find(SetQueryStep)).to.have.length(1)
-  })
+    testQueryForm.setState({ step: 2 });
+    expect(testQueryForm.find(SetQueryStep)).to.have.length(1);
+  });
 
   it('should render QueryResultStep as fourth step', () => {
-    testQueryForm.setState({ step: 3 })
-    expect(testQueryForm.find(QueryResultStep)).to.have.length(1)
-  })
-})
+    testQueryForm.setState({ step: 3 });
+    expect(testQueryForm.find(QueryResultStep)).to.have.length(1);
+  });
+});

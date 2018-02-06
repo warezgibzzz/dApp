@@ -10,7 +10,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => {
   return {
     onTestQuery: querySpecs => {
-      dispatch(testQuery(querySpecs))
+      dispatch(testQuery(querySpecs));
     }
   };
 };
