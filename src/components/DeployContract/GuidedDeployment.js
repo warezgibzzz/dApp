@@ -22,7 +22,7 @@ const parentColLayout = {
 class GuidedDeployment extends Component {
 
   render() {
-    const currentStep = 0
+    const currentStep = 0;
     return (
       <Row type="flex" justify="center">
         <Col {...parentColLayout}>
