@@ -8,4 +8,4 @@ function DeployContractSuccess({ contract }) {
   );
 }
 
-export default DeployContractSuccess
+export default DeployContractSuccess;

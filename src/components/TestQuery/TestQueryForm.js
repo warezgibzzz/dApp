@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, Steps } from 'antd';
-import { AboutOraclesStep, SelectDataSourceStep, SetQueryStep, QueryResultStep } from './Steps'
+import { AboutOraclesStep, SelectDataSourceStep, SetQueryStep, QueryResultStep } from './Steps';
 
 const Step = Steps.Step;
 
