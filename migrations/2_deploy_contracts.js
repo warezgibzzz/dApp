@@ -42,7 +42,7 @@ module.exports = function(deployer, network) {
       marketTokenToLockForTrading,
       marketTokenAmountForContractCreation
     ).then(function () {
-      return deployer.deploy(CollateralToken).then(function () {
+      return deployer.deploy(CollateralToken, "FakeDollars", "FUSD", 1e+9, 18).then(function () {
         let gasLimit = 6200000;  // gas limit for development network
         let block = web3.eth.getBlock("latest");
         if (block.gasLimit > 7000000) {  // coverage network
@@ -142,7 +142,7 @@ module.exports = function(deployer, network) {
 
 
       deployedMarketContract = await MarketContractOraclize.new(
-        "BCHUSD_git " + expirationString,
+        "BCHUSD_" + expirationString,
         MarketToken.address,
         CollateralToken.address,
         [50000, 200000, 2, 1e+18, marketContractExpiration],
