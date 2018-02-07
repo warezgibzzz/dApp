@@ -259,4 +259,5 @@ function DeployContractField(props) {
   );
 }
 
+export const FieldSettings = fieldSettingsByName;
 export default DeployContractField;
