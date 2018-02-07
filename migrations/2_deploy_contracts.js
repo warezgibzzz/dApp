@@ -142,7 +142,7 @@ module.exports = function(deployer, network) {
 
 
       deployedMarketContract = await MarketContractOraclize.new(
-        "BCHUSD_" + expirationString,
+        "BCHUSD_git " + expirationString,
         MarketToken.address,
         CollateralToken.address,
         [50000, 200000, 2, 1e+18, marketContractExpiration],
