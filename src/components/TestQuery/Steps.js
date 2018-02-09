@@ -26,23 +26,24 @@ class AboutOraclesStep extends Component {
             <h1>Testing Oracle Queries</h1>
             <div>
               <h2>What is an Oracle?</h2>
-              In the blockchain space, an oracle is a party which provides data. The need for such 
-              figure arise from the fact that blockchain applications cannot access and fetch 
-              directly the data they require.
+              Blockchain applications natively are unable to interact with outside data sources. An oracle is a
+              third party that provides the ability to access off chain data from the blockchain ensuring its validity
+              using cryptographic proofs.
             </div>
             <br/>
             <div>
               <h2>Which Oracle are we using?</h2>
-              The oracle is <a href="http://www.oraclize.it/">Oraclize</a>. Oraclize is the 
-              leading oracle service for smart contracts and blockchain applications, serving 
-              thousands of requests for day every day on Ethereum, Bitcoin and Rootstock.
+              Our proof of concept has been built using <a href="http://www.oraclize.it/">Oraclize.it</a>,
+              the leading oracle service for smart contracts and blockchain applications, serving
+              thousands of requests every day on Ethereum, Bitcoin and Rootstock.
             </div>
             <br/>
             <div>
               <h2>How it works</h2>
-              Oraclize internally replicates an “If This Then That” logical model. This means that it 
-              will execute a given set of instructions if some other given conditions are met.
-              A valid request to Oraclize should specify a <b>Data Source</b> and a <b>Query</b>.
+              Oraclize internally replicates an “If This Then That” logical model. This means that it
+              will execute a given set of instructions if some other given conditions have been met.
+              A valid request to Oraclize should specify both a <b>Data Source</b> and a <b>Query</b>. We will walk
+              you through that process here.
             </div>
             <br/>
           </Col>
@@ -64,7 +65,7 @@ class AboutOraclesStep extends Component {
 /**
  * Component to enlighten about Selecting Oracles
  * Second Step
- * 
+ *
  */
 class SelectDataSourceStep extends Component {
   constructor(props) {
@@ -86,14 +87,16 @@ class SelectDataSourceStep extends Component {
         <Col>
           <h1>Select a Data Source</h1>
           <div>
-            A data source is a trusted provider of data. It can be a website or web API such as Reuters, 
-            Weather.com, BBC.com, or a secure application running on an hardware-enforced Trusted 
-            Execution Environment (TEE) or an auditable, locked-down virtual machine instance running 
-            in a cloud provider.
+            A data source is a trusted provider of data. It can be a website or web API such as Reuters,
+            Weather.com, BBC.com. For many of our intended use cases a centralised crypto exchanges API works well.
+            Additional options include a secure application running on an hardware-enforced Trusted
+            Execution Environment (TEE) or perhaps, an audit-able, locked-down virtual machine instance running
+            in a cloud provider.  The most obviously useful data sources for our derivatives contracts are URL
+            and WolframAlpha.
           </div>
           <br/>
           <div>
-            Below are the data sources you can choose from when using <a href="http://www.oraclize.it/">Oraclize</a>.
+            Below are the data sources you can choose from when using <a href="http://www.oraclize.it/">Oraclize.it</a>.
             Select one and proceed to test out a query.
           </div>
         </Col>
@@ -101,11 +104,11 @@ class SelectDataSourceStep extends Component {
       <Row>
         <Col>
           <FormItem
-            label="Select a Datasource">
-            <Select 
-              defaultValue={source} 
-              size="large" 
-              onChange={this.onDataSourceChange.bind(this)} 
+            label="Select a Data Source">
+            <Select
+              defaultValue={source}
+              size="large"
+              onChange={this.onDataSourceChange.bind(this)}
               style={{ width: '100%' }}>
               {OracleDataSources.map(({ name }) => <Option key={name} value={name}>{name}</Option>)}
             </Select>
@@ -114,7 +117,7 @@ class SelectDataSourceStep extends Component {
       </Row>
       <Row>
         <Col>
-          <h3>About '{source}' Datasources</h3>
+          <h3>More info on '{source}' data sources</h3>
           {getDataSourceObj(source).descriptionComponent()}
         </Col>
       </Row>
@@ -138,7 +141,7 @@ class SelectDataSourceStep extends Component {
 /**
  * Component to Set Query based on the data source specified.
  * Third Step
- * 
+ *
  */
 class SetQueryStep extends Component {
 
@@ -171,7 +174,7 @@ class SetQueryStep extends Component {
     return (<div>
       <Row>
         <Col>
-          <h1>Enter a Query to test on '{dataSource}' Datasource</h1>
+          <h1>Enter a Query to test on '{dataSource}' Data Source</h1>
           <div>
             A query is request which needs to be evaluated in order to complete a specific data source type request.
           </div>
@@ -188,7 +191,7 @@ class SetQueryStep extends Component {
             <Input placeholder="Query" onChange={this.onInputChange.bind(this)}/>
           </FormItem>
           <div>
-            NOTE: You can specify your <a href="http://docs.oraclize.it/#general-concepts-parsing-helpers">parsing helpers</a> with 
+            NOTE: You can specify your <a href="http://docs.oraclize.it/#general-concepts-parsing-helpers">parsing helpers</a> with
             the query too.
           </div>
           <br/>
@@ -213,7 +216,7 @@ class SetQueryStep extends Component {
 /**
  * Component to Show the Result of Query after fetching
  * Fourth Step
- * 
+ *
  */
 class QueryResultStep extends Component {
   render() {
