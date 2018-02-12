@@ -2,9 +2,9 @@ import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
 
-import DeployContractForm from '../../../components/DeployContract/DeployContractForm';
-import QuickDeployment from '../../../components/DeployContract/QuickDeployment';
-import GuidedDeployment from '../../../components/DeployContract/GuidedDeployment';
+import DeployContractForm from '../../../src/components/DeployContract/DeployContractForm';
+import QuickDeployment from '../../../src/components/DeployContract/QuickDeployment';
+import GuidedDeployment from '../../../src/components/DeployContract/GuidedDeployment';
 
 describe('DeployContractForm', () => {
   let deployContractForm;

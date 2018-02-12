@@ -11,7 +11,7 @@ import {
   ExpirationStep,
   DataSourceStep,
   DeployStep
-} from '../../../components/DeployContract/Steps';
+} from '../../../src/components/DeployContract/Steps';
 
 enzyme.configure({ adapter: new Adapter() });
 

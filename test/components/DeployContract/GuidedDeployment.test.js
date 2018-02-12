@@ -3,7 +3,7 @@ import { Steps } from 'antd';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
 
-import GuidedDeployment from '../../../components/DeployContract/GuidedDeployment';
+import GuidedDeployment from '../../../src/components/DeployContract/GuidedDeployment';
 
 describe('GuidedDeployment', () => {
   let guidedDeployment;
