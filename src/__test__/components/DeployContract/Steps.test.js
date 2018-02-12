@@ -47,8 +47,8 @@ describe('PricingStep', () => {
     ReactDOM.render(<PricingStep />, div);
   });
 
-  it('should display two inputs felds to accept price cap and price floor address', () => {
-    expect(pricingStep.find(InputNumber)).to.have.length(2);
+  it('should display four inputs felds to accept price cap, price floor, multiplier & decimal address', () => {
+    expect(pricingStep.find(InputNumber)).to.have.length(4);
   });
 
   it('should have two buttons to navigate back and forward', () => {

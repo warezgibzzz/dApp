@@ -27,6 +27,16 @@ class GuidedDeployment extends Component {
 
     this.state = {
       step: 0,
+      contractName: '',
+      baseTokenAddress: '',
+      priceFloor: '',
+      priceCap: '',
+      priceDecimalPlaces: '',
+      qtyMultiplier: '',
+      expirationTimeStamp: '',
+      oracleDataSource: '',
+      oracleQuery: '',
+      oracleQueryRepeatSeconds: ''
     };
   }
 
@@ -47,25 +57,37 @@ class GuidedDeployment extends Component {
     const steps = [
       <NameContractStep 
         key="0"
-        onNextClicked={this.toNextStep.bind(this)}/>,
+        onNextClicked={this.toNextStep.bind(this)}
+        updateDeploymentState={this.setState.bind(this)}
+        {...this.state} />,
 
       <PricingStep 
         key="1"
         onPrevClicked={this.toPrevStep.bind(this)}
-        onNextClicked={this.toNextStep.bind(this)} />,
+        onNextClicked={this.toNextStep.bind(this)}
+        updateDeploymentState={this.setState.bind(this)} 
+        {...this.state} />,
 
       <ExpirationStep
         key="2"
         onPrevClicked={this.toPrevStep.bind(this)}
-        onNextClicked={this.toNextStep.bind(this)} />,
+        onNextClicked={this.toNextStep.bind(this)}
+        updateDeploymentState={this.setState.bind(this)} 
+        {...this.state} />,
 
       <DataSourceStep
         key="3"
         onPrevClicked={this.toPrevStep.bind(this)}
-        onNextClicked={this.toNextStep.bind(this)} />,
+        onNextClicked={this.toNextStep.bind(this)}
+        updateDeploymentState={this.setState.bind(this)}
+        {...this.state} />,
 
       <DeployStep
-        key="4" />
+        key="4"
+        deployContract={() => { this.props.onDeployContract(this.state); }}
+        loading={this.props.loading}
+        contract={this.props.contract}
+        error={this.props.error} />
     ];
 
     return (

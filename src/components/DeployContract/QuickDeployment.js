@@ -98,51 +98,51 @@ class QuickDeployment extends Component {
       <Form onSubmit={this.handleDeploy.bind(this)} layout="vertical">
         <ContractFormRow>
           <ContractFormCol>
-            <Field name='contractName' form={this.props.form} />
+            <Field name='contractName' form={this.props.form} showHint/>
           </ContractFormCol>
 
           <ContractFormCol>
-            <Field name='baseTokenAddress' form={this.props.form} />
-          </ContractFormCol>
-        </ContractFormRow>
-
-        <ContractFormRow>
-          <ContractFormCol>
-            <Field name='priceFloor' form={this.props.form} />
-          </ContractFormCol>
-
-          <ContractFormCol>
-            <Field name='priceCap' form={this.props.form} />
+            <Field name='baseTokenAddress' form={this.props.form} showHint/>
           </ContractFormCol>
         </ContractFormRow>
 
         <ContractFormRow>
           <ContractFormCol>
-            <Field name='priceDecimalPlaces' form={this.props.form} />
+            <Field name='priceFloor' form={this.props.form} showHint/>
           </ContractFormCol>
 
           <ContractFormCol>
-            <Field name="qtyMultiplier" form={this.props.form} />
-          </ContractFormCol>
-        </ContractFormRow>
-
-        <ContractFormRow>
-          <ContractFormCol>
-            <Field name='expirationTimeStamp' form={this.props.form} />
-          </ContractFormCol>
-
-          <ContractFormCol>
-            <Field name='oracleDataSource' form={this.props.form} />
+            <Field name='priceCap' form={this.props.form} showHint/>
           </ContractFormCol>
         </ContractFormRow>
 
         <ContractFormRow>
           <ContractFormCol>
-            <Field name='oracleQuery' form={this.props.form} />
+            <Field name='priceDecimalPlaces' form={this.props.form} showHint/>
           </ContractFormCol>
 
           <ContractFormCol>
-            <Field name='oracleQueryRepeatSeconds' form={this.props.form} />
+            <Field name="qtyMultiplier" form={this.props.form} showHint/>
+          </ContractFormCol>
+        </ContractFormRow>
+
+        <ContractFormRow>
+          <ContractFormCol>
+            <Field name='expirationTimeStamp' form={this.props.form} showHint/>
+          </ContractFormCol>
+
+          <ContractFormCol>
+            <Field name='oracleDataSource' form={this.props.form} showHint/>
+          </ContractFormCol>
+        </ContractFormRow>
+
+        <ContractFormRow>
+          <ContractFormCol>
+            <Field name='oracleQuery' form={this.props.form} showHint/>
+          </ContractFormCol>
+
+          <ContractFormCol>
+            <Field name='oracleQueryRepeatSeconds' form={this.props.form} showHint/>
           </ContractFormCol>
         </ContractFormRow>
 

@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
 import { Row, Col, Form, Input, Select, Button, Icon, Card, Alert } from 'antd';
 import Loader from '../Loader';
-import OracleDataSources from './OracleDataSources';
+import OracleDataSources, { getDataSourceObj } from './OracleDataSources';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const ButtonGroup = Button.Group;
 
 // Steps used by the TestQueryForm
-
-function getDataSourceObj(source) {
-  return OracleDataSources.filter(sourceObj => source === sourceObj.name)[0];
-};
 
 /**
  * Component in charge of rendering about Oracles step
@@ -223,7 +219,7 @@ class QueryResultStep extends Component {
           <Card title="Query Result" style={{ width: '100%' }}>
             <Loader loading={this.props.loading} style={{ width: 80, height: 80 }}/>
             {!this.props.loading && !this.props.error && <p className="result">{this.props.result}</p>}
-            {!this.props.loading && this.props.error && <Alert message={this.props.error} type="error" />}
+            {!this.props.loading && this.props.error && <Alert message={`${this.props.error}`} type="error" />}
           </Card>
         </Col>
       </Row>

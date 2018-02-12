@@ -1,7 +1,9 @@
 import React from 'react';
+import ReactDOMServer from 'react-dom/server';
 import moment from 'moment';
 
-import { Form, Input, Select, InputNumber, DatePicker } from 'antd';
+import { Form, Input, Select, InputNumber, DatePicker, Icon, Tooltip } from 'antd';
+import OracleDataSources, { getDataSourceObj } from '../TestQuery/OracleDataSources';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -31,6 +33,23 @@ const priceCapValidator = (form, rule, value, callback) => {
   callback(value >= priceFloor ? undefined : 'Price cap must be greater-than or equal to the price floor');
 };
 
+const oracleQueryValidator = (form, rule, value, callback) => {
+  const oracleDataSource = form.getFieldValue('oracleDataSource');
+  const oracleQuery = form.getFieldValue('oracleQuery');
+  const dataSourceObj = getDataSourceObj(oracleDataSource);
+
+  if (dataSourceObj) {
+    callback(dataSourceObj.isQueryValid(oracleQuery) ? undefined 
+    : `Invalid Query for '${oracleDataSource}' Data Source. A valid example is: ${dataSourceObj.sampleQueries[0]}`);
+  } else {
+    callback(undefined);
+  }
+};
+
+const Hint = (props) => (<Tooltip title={props.hint} >
+                          <Icon type="question-circle-o" />
+                        </Tooltip>);
+
 const fieldSettingsByName = {
   contractName: {
     label: 'Name',
@@ -38,12 +57,8 @@ const fieldSettingsByName = {
     rules: [{
       required: true, message: 'Please enter a name for your contract',
     }],
-    extra: `The contract name should be as descriptive as possible capturing the underlying asset relationship 
-    as well as possibly the expiration.  Something like "ETH/BTC-20180228-Kraken" may help others understand
-    the underlying asset, the data source, and expiration date in a nice human readable and searchable way.
-    In the future, we hope to implement a standardized naming spec to assist in this process`,
-
-    component: () => (<Input />)
+    extra: `Name of contract should be descriptive, e.g. "ETH/BTC-20180228-Kraken"`,
+    component: ({ showHint }) => (<Input />)
   },
 
   baseTokenAddress: {
@@ -178,7 +193,7 @@ const fieldSettingsByName = {
         validator: timestampValidator
       }
     ],
-    extra: 'Upon reaching the expiration timestamp all open positions will settle to the defined oracle query',
+    extra: 'Expiration timestamp for all open positions to settle.',
 
     component: () => (<DatePicker showTime format="YYYY-MM-DD HH:mm:ss" style={{ width: '100%' }} />)
   },
@@ -196,9 +211,8 @@ const fieldSettingsByName = {
     component: () => {
       return (
         <Select>
-          <Option value="URL">URL</Option>
-          <Option value="WolframAlpha">Wolfram Alpha</Option>
-          <Option value="IPFS">IPFS</Option>
+          {OracleDataSources.map(dataSource => 
+            <Option value={dataSource.name}>{dataSource.name}</Option>)}
         </Select>
       );
     }
@@ -207,9 +221,16 @@ const fieldSettingsByName = {
   oracleQuery: {
     label: 'Oraclize.it Query',
     initialValue: 'json(https://api.kraken.com/0/public/Ticker?pair=ETHUSD).result.XETHZUSD.c.0',
-    rules: [{
-      required: true, message: 'Please enter a valid query',
-    }],
+    rules: (form) => ([
+      {
+        required: true, message: 'Please enter a valid query',
+      },
+      {
+        validator: (rule, value, callback) => {
+          oracleQueryValidator(form, rule, value, callback);
+        },
+      }
+    ]),
     extra: 'Properly structured Oraclize.it query, please use the test query page for clarification',
 
     component: () => (<Input />)
@@ -226,33 +247,32 @@ const fieldSettingsByName = {
         type: 'integer', message: 'Value must be an integer'
       }
     ],
-    extra: `Number of seconds in between repeating the oracle query.  Typically this only need be once per day.
-    Additional frequency can be beneficial in some circumstances but will increase the needed amount of ETH that
-    is needs to be pre-funded to the contract in order to pay for the query gas costs`,
+    extra: `Number of seconds in between repeating the oracle query.`,
 
     component: () => (<InputNumber min={0} style={{ width: '100%' }}/>)
   },
 };
 
 function DeployContractField(props) {
-  const { name, form } = props;
+  const { name, form, initialValue, showHint } = props;
   const { getFieldDecorator } = form;
   const fieldSettings = fieldSettingsByName[name];
 
   const rules = typeof fieldSettings.rules === 'function' ? fieldSettings.rules(form) : fieldSettings.rules;
-
+  const label = (<span>{fieldSettings.label} {showHint && <Hint hint={fieldSettings.extra}/>}</span>);
   return (
     <FormItem
-      label={fieldSettings.label}
-      extra={fieldSettings.extra}
+      label={label}
     >
+      
       {getFieldDecorator(name, {
-        initialValue: fieldSettings.initialValue,
+        initialValue,
         rules,
       })(
         fieldSettings.component({
           form,
           fieldSettings,
+          showHint
         })
       )}
     </FormItem>
