@@ -27,7 +27,9 @@ class ContractsList extends Component {
   };
 
   componentWillMount() {
-    this.props.onLoad();
+    if (!this.props.contracts) {
+      this.props.onLoad();
+    }
   }
 
   componentWillReceiveProps(nextProps) {

@@ -16,8 +16,6 @@ ReactDOM.render(
 // Initialize web3 and set in Redux
 getWeb3(window)
   .then(results => {
-    console.log('Web3 initialized!');
-
     ReactDOM.render(
       <Provider store={store}>
         <App history={history} />
