@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
 import moment from 'moment';
 
 import { Form, Input, Select, InputNumber, DatePicker, Icon, Tooltip } from 'antd';

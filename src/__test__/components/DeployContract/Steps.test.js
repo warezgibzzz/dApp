@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Input, InputNumber, Button } from 'antd';
 import enzyme, { mount } from 'enzyme';
-import sinon from 'sinon';
 import { expect } from 'chai';
 import Adapter from 'enzyme-adapter-react-16';
 
@@ -57,9 +56,8 @@ describe('PricingStep', () => {
 });
 
 describe('ExpirationStep', () => {
-  let expirationStep;
   beforeEach(() => {
-    expirationStep = mount(<ExpirationStep />);
+    mount(<ExpirationStep />);
   });
 
   it('renders without crashing', () => {
@@ -69,9 +67,8 @@ describe('ExpirationStep', () => {
 });
 
 describe('DataSourceStep', () => {
-  let dataSourceStep;
   beforeEach(() => {
-    dataSourceStep = mount(<DataSourceStep />);
+    mount(<DataSourceStep />);
   });
 
   it('renders without crashing', () => {
@@ -81,9 +78,8 @@ describe('DataSourceStep', () => {
 });
 
 describe('DeplyStep', () => {
-  let deployStep;
   beforeEach(() => {
-    deployStep = mount(<DeployStep />);
+    mount(<DeployStep />);
   });
 
   it('renders without crashing', () => {
