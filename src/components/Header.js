@@ -12,7 +12,7 @@ class Header extends Component {
       <header id="header" className="clearfix">
         <div className="ant-row">
           <div className="ant-col-xs-24 ant-col-sm-24 ant-col-md-6 ant-col-lg-5 ant-col-xl-5 ant-col-xxl-4">
-            <Link to="http://www.marketprotocol.io" id="logo">
+            <Link to="http://www.marketprotocol.io" target="_blank" id="logo">
               <img src={logo} alt="Market Protocol Logo" />
             </Link>
           </div>
