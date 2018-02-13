@@ -1,6 +1,6 @@
 /**
  * Steps for use by GuidedDeployment.
- * 
+ *
  */
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
@@ -28,12 +28,12 @@ function BiDirectionalNav(props) {
 class BaseStepComponent extends Component {
   /**
    * Validates form and updates Deployment State
-   * 
-   * @param {*} e 
+   *
+   * @param {*} e
    */
   handleSubmit(e) {
     e.preventDefault();
-    
+
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) {
         return;
@@ -54,7 +54,7 @@ class BaseStepComponent extends Component {
  * First step in the guided contract.
  * It displays two fields. First to collect name of the contract and
  * second to collect the base address.
- * 
+ *
  */
  class NameContractStep extends BaseStepComponent {
 
@@ -65,19 +65,23 @@ class BaseStepComponent extends Component {
       <Form onSubmit={this.handleSubmit.bind(this)} layout="vertical">
         <h1>Contract Name and Collateral Token</h1>
         <div>
-          Market allows users to create a contract, specify its terms, publish those terms, and provide a
-          mechanism for automated settlement. Any Trader can create a new contract by outlining the contract specifications. 
-          This guide will walk you through creating a contract. 
+          MARKET allows users to create user defined derivative contracts by outlining the needed specifications.
+          This guide will walk you through creating a contract and the important variables.
         </div>
         <br/>
         <h2>Contract Name</h2>
         <div>
-          First, you will need to specify a name for your contract.
-          The contract name should be as descriptive as possible capturing the underlying asset relationship 
-          as well as possibly the expiration.  Something like "<b>{contractNameSettings.initialValue}</b>" may help others understand
-          the underlying asset, the data source, and expiration date in a nice human readable and searchable way.
+          The contract name should be as descriptive as possible capturing the underlying asset relationship
+          as well as possibly the expiration. Something like "<b>{contractNameSettings.initialValue}</b>" may
+          help others understand the underlying asset, the data source, and expiration date in a nice
+          human readable and searchable way.
           <br/>
-          In the future, we hope to implement a standardized naming spec to assist in this process
+          <br/>
+          In the future, MARKET will implement a standardized naming convention and guidelines to formalize this process
+
+          <br/>
+          <br/>
+          Example name <b>ETH/BTC-Kraken_2018-03-01</b>
         </div>
         <br/>
         <Field name='contractName'
@@ -86,10 +90,22 @@ class BaseStepComponent extends Component {
         <h2>Collateral Token</h2>
         <div>
           Next, every contract should be backed by an ERC20 Token that will be used a collateral for the contract.
-          Specify a ERC20 Token address for this contract. For example: <b>{baseTokenSettings.initialValue}</b> 
+          Traders must deposit tokens to the smart contract prior to trading, and upon execution of a trade, the
+          appropriate amount of collateral becomes locked until that position is exited.  In this fashion, all open
+          positions always remain 100% collateralized removing counter party risk from the traders.
+          Please specify a ERC20 Token address for this contract.
+
+          <br/>
+          <br/>
+          In the future, users will be able to easily select from well known ERC20 tokens to ensure more safety and
+          avoid dealing with long addresses.
+
+          <br/>
+          <br/>
+          Example address <b>{baseTokenSettings.initialValue}</b>
         </div>
         <br/>
-        <Field name='baseTokenAddress' 
+        <Field name='baseTokenAddress'
           initialValue={this.props.baseTokenAddress}
           form={this.props.form} />
         <Row type="flex" justify="end">
@@ -123,11 +139,11 @@ class BaseStepComponent extends Component {
 
         <h2>Price Floor</h2>
         <div>
-          This is the lower bound of price exposure this contract will trade. If the oracle reports a price below this 
+          This is the lower bound of price exposure this contract will trade. If the oracle reports a price below this
           value the contract will enter into settlement.
         </div>
         <br/>
-        <Field name='priceFloor' 
+        <Field name='priceFloor'
             initialValue={this.props.priceFloor}
             form={this.props.form} />
 
@@ -137,19 +153,19 @@ class BaseStepComponent extends Component {
           value the contract will enter into settlement.
         </div>
         <br/>
-        <Field name='priceCap' 
+        <Field name='priceCap'
           initialValue={this.props.priceCap}
           form={this.props.form} />
 
         <h2>Price Decimal Places</h2>
         <div>
-          Since all numbers must be represented as integers on the Ethereum blockchain, this is how many 
-          decimal places one needs to move the decimal in order to go from the oracle query price to an integer. 
-          For instance if the oracle query results returned a value such as 190.22, we need to move the 
+          Since all numbers must be represented as integers on the Ethereum blockchain, this is how many
+          decimal places one needs to move the decimal in order to go from the oracle query price to an integer.
+          For instance if the oracle query results returned a value such as 190.22, we need to move the
           decimal two(2) places to convert to an integer value of 19022.
         </div>
         <br/>
-        <Field name='priceDecimalPlaces' 
+        <Field name='priceDecimalPlaces'
           initialValue={this.props.priceDecimalPlaces}
           form={this.props.form} />
 
@@ -162,7 +178,7 @@ class BaseStepComponent extends Component {
         correspond to a value of 1 gwei (not wei).
         </div>
         <br/>
-        <Field name='qtyMultiplier' 
+        <Field name='qtyMultiplier'
           initialValue={this.props.qtyMultiplier}
           form={this.props.form} />
         <Row type="flex" justify="end">
@@ -190,7 +206,7 @@ class BaseStepComponent extends Component {
           Upon reaching the expiration timestamp all open positions will settle to the defined oracle query.
         </div>
         <br/>
-        <Field name='expirationTimeStamp' 
+        <Field name='expirationTimeStamp'
             initialValue={this.props.expirationTimeStamp ? moment(this.props.expirationTimeStamp * 1000) : ''}
             form={this.props.form} />
         <Row type="flex" justify="end">
@@ -205,7 +221,7 @@ class BaseStepComponent extends Component {
  ExpirationStep = Form.create()(ExpirationStep);
 
  /**
-  * Step to select the Oracle Data source and the query frequency for the contract 
+  * Step to select the Oracle Data source and the query frequency for the contract
   *
   */
  class DataSourceStep extends BaseStepComponent {
@@ -216,7 +232,7 @@ class BaseStepComponent extends Component {
       <Form onSubmit={this.handleSubmit.bind(this)} layout="vertical">
         <h1>Set Oracle Data Source</h1>
         <div>
-          An oracle-based solution is used to determine the final settlement price 
+          An oracle-based solution is used to determine the final settlement price
           of the contract, and is also used in profit and loss calculations.
         </div>
         <h2>Select Data Source</h2>
@@ -224,7 +240,7 @@ class BaseStepComponent extends Component {
           Available data sources from Oraclize.it
         </div>
         <br/>
-        <Field name='oracleDataSource' 
+        <Field name='oracleDataSource'
             initialValue={this.props.oracleDataSource || initialValues.oracleDataSource}
             form={this.props.form} />
 
@@ -233,21 +249,21 @@ class BaseStepComponent extends Component {
           Properly structured Oraclize.it query, Please use the <a href="/test">test query page</a> for clarification.
         </div>
         <br/>
-        <Field name='oracleQuery' 
+        <Field name='oracleQuery'
             initialValue={this.props.oracleQuery || initialValues.oracleQuery}
             form={this.props.form} />
-        
+
         <h2>Query Repeat Interval</h2>
         <div>
-          Number of seconds in between repeating the oracle query. Typically this only need be once per day. 
-          Additional frequency can be beneficial in some circumstances but will increase the needed amount of ETH that 
+          Number of seconds in between repeating the oracle query. Typically this only need be once per day.
+          Additional frequency can be beneficial in some circumstances but will increase the needed amount of ETH that
           is needs to be pre-funded to the contract in order to pay for the query gas costs.
         </div>
         <br/>
-        <Field name='oracleQueryRepeatSeconds' 
+        <Field name='oracleQueryRepeatSeconds'
             initialValue={this.props.oracleQueryRepeatSeconds}
             form={this.props.form} />
-            
+
         <Row type="flex" justify="end">
           <Col>
             <BiDirectionalNav text="Deploy Contract" {...this.props} />
@@ -261,7 +277,7 @@ class BaseStepComponent extends Component {
 
  /**
   * Final Step for showing deploy status of Contract
-  * and possible a summary of the deployed contract on success. 
+  * and possible a summary of the deployed contract on success.
   *
   */
  class DeployStep extends BaseStepComponent {

@@ -38,7 +38,7 @@ const oracleQueryValidator = (form, rule, value, callback) => {
   const dataSourceObj = getDataSourceObj(oracleDataSource);
 
   if (dataSourceObj) {
-    callback(dataSourceObj.isQueryValid(oracleQuery) ? undefined 
+    callback(dataSourceObj.isQueryValid(oracleQuery) ? undefined
     : `Invalid Query for '${oracleDataSource}' Data Source. A valid example is: ${dataSourceObj.sampleQueries[0]}`);
   } else {
     callback(undefined);
@@ -52,7 +52,7 @@ const Hint = (props) => (<Tooltip title={props.hint} >
 const fieldSettingsByName = {
   contractName: {
     label: 'Name',
-    initialValue: 'ETH/BTC',
+    initialValue: 'ETH/BTC-Kraken_YYYY-MM-DD',
     rules: [{
       required: true, message: 'Please enter a name for your contract',
     }],
@@ -210,7 +210,7 @@ const fieldSettingsByName = {
     component: () => {
       return (
         <Select>
-          {OracleDataSources.map(dataSource => 
+          {OracleDataSources.map(dataSource =>
             <Option key={dataSource.name} value={dataSource.name}>{dataSource.name}</Option>)}
         </Select>
       );
@@ -263,7 +263,7 @@ function DeployContractField(props) {
     <FormItem
       label={label}
     >
-      
+
       {getFieldDecorator(name, {
         initialValue,
         rules,
