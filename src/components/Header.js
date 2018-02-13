@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { Menu } from 'antd';
 
 import NavItem from './NavItem';
-
 import './Header.css';
 import logo from '../img/market-logo-small.png';
+
+const SubMenu = Menu.SubMenu;
+const MenuItem = Menu.Item;
 
 class Header extends Component {
   render() {
@@ -17,15 +20,18 @@ class Header extends Component {
             </Link>
           </div>
           <div className="ant-col-xs-0 ant-col-sm-0 ant-col-md-18 ant-col-lg-19 ant-col-xl-19 ant-col-xxl-20">
-            <ul className="ant-menu menu-site ant-menu-light ant-menu-root ant-menu-horizontal" role="menu" id="nav">
-              <NavItem to="/contract/deploy">Deploy Contracts</NavItem>
-              <NavItem to="/contract/explorer">Explore Contracts</NavItem>
-              <NavItem to="/test">Test Query</NavItem>
-              <NavItem to="/exchange">Sim Exchange</NavItem>
-              <li className="ant-menu-item">
-                <Link to="http://docs.marketprotocol.io" target="_blank">Documentation</Link>
-              </li>
-            </ul>
+              <Menu mode="horizontal" className="menu-site" id="nav">
+                <SubMenu title="Deploy Contracts">
+                  <NavItem to="/contract/deploy?mode=quick">Quick Deploy</NavItem>
+                  <NavItem to="/contract/deploy?mode=guided">Guided Deploy</NavItem>
+                </SubMenu>
+                <NavItem to="/contract/explorer">Explore Contracts</NavItem>
+                <NavItem to="/test">Test Query</NavItem>
+                <NavItem to="/exchange">Sim Exchange</NavItem>
+                <MenuItem>
+                  <Link to="http://docs.marketprotocol.io" target="_blank">Documentation</Link>
+                </MenuItem>
+              </Menu>
           </div>
         </div>
       </header>

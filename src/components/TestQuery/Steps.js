@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
 import { Row, Col, Form, Input, Select, Button, Icon, Card, Alert } from 'antd';
 import Loader from '../Loader';
-import OracleDataSources from './OracleDataSources';
+import OracleDataSources, { getDataSourceObj } from './OracleDataSources';
+import '../Step.css';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const ButtonGroup = Button.Group;
 
 // Steps used by the TestQueryForm
-
-function getDataSourceObj(source) {
-  return OracleDataSources.filter(sourceObj => source === sourceObj.name)[0];
-};
 
 /**
  * Component in charge of rendering about Oracles step
@@ -226,18 +223,24 @@ class QueryResultStep extends Component {
           <Card title="Query Result" style={{ width: '100%' }}>
             <Loader loading={this.props.loading} style={{ width: 80, height: 80 }}/>
             {!this.props.loading && !this.props.error && <p className="result">{this.props.result}</p>}
-            {!this.props.loading && this.props.error && <Alert message={this.props.error} type="error" />}
+            {!this.props.loading && this.props.error && <Alert message={`${this.props.error}`} type="error" />}
           </Card>
         </Col>
       </Row>
       <br/>
-      <Row type="flex" justify="end">
+      {!this.props.loading && !this.props.error &&
+      <Row type="flex" justify="center">
         <Col>
-          <Button type="primary" onClick={this.props.onRestartClicked} >
-            <Icon type="arrow-left" />Test another query
-          </Button>
+          <ButtonGroup>
+            <Button type="default" onClick={this.props.onPrevClicked} >
+              <Icon type="left" />Test another query
+            </Button>
+            <Button type="primary" onClick={this.props.onCreateContactClicked} >
+              Create contract with Query<Icon type="right" />
+            </Button>
+          </ButtonGroup>
         </Col>
-      </Row>
+      </Row>}
     </div>);
   }
 }

@@ -105,4 +105,8 @@ const OracleDataSources = [
     }
   ];
 
+export function getDataSourceObj(source) {
+  return OracleDataSources.filter(sourceObj => source === sourceObj.name)[0];
+};
+
 export default OracleDataSources;

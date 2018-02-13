@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { Row, Col, Steps } from 'antd';
+import qs from 'query-string';
+
+import StepAnimation from '../StepAnimation';
 import { AboutOraclesStep, SelectDataSourceStep, SetQueryStep, QueryResultStep } from './Steps';
+
 
 const Step = Steps.Step;
 
@@ -22,6 +26,7 @@ class TestQueryForm extends Component {
 
     this.state = {
       step: 0,
+      transitionDirection: 'next',
       oracleDataSource: 'URL',
       oracleQuery: ''
     };
@@ -52,19 +57,27 @@ class TestQueryForm extends Component {
 
   toNextStep() {
     this.setState({
-      step: this.state.step + 1
+      step: this.state.step + 1,
+      transitionDirection: 'next'
     });
   }
 
   toPrevStep() {
     this.setState({
-      step: this.state.step - 1
+      step: this.state.step - 1,
+      transitionDirection: 'prev'
     });
   }
 
-  onRestart() {
-    this.setState({
-      step: 1 // <-- Select Datasource Step
+  navigateToDeployContract() {
+    const queryParams = {
+      oracleDataSource: this.state.oracleDataSource,
+      oracleQuery: this.state.oracleQuery
+    };
+
+    this.props.history.push({
+      pathname: '/contract/deploy',
+      search: `?${qs.stringify(queryParams)}`
     });
   }
 
@@ -94,7 +107,8 @@ class TestQueryForm extends Component {
         loading={this.props.loading}
         result={this.props.results}
         error={this.props.error} 
-        onRestartClicked={this.toPrevStep.bind(this)} />,
+        onPrevClicked={this.toPrevStep.bind(this)}
+        onCreateContactClicked={this.navigateToDeployContract.bind(this)} />,
     ];
     
     return (
@@ -107,7 +121,10 @@ class TestQueryForm extends Component {
               <Step title="Result" />
             </Steps>
             <br/>
-            {steps.filter((step, index) => currentStep === index )}
+            <StepAnimation 
+              direction={this.state.transitionDirection}>
+              {steps.filter((step, index) => currentStep === index )[0]}
+            </StepAnimation>
           </Col>
         </Row>
       

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Row, Col, Form, Button } from 'antd';
+import { Row, Col, Form, Button, Alert } from 'antd';
 
-import showMessage from './message';
-import Loader from './Loader';
+import showMessage from '../message';
+import Loader from '../Loader';
 import Field from './DeployContractField';
 import DeployContractSuccess from './DeployContractSuccess';
 
@@ -43,7 +43,11 @@ function ContractFormCol(props) {
   );
 }
 
-class DeployContractForm extends Component {
+/**
+ * Component for deploying Contracts Quickly.
+ * 
+ */
+class QuickDeployment extends Component {
   componentWillReceiveProps(nextProps) {
     if(this.props.loading && !nextProps.loading) {
       if(nextProps.error) {
@@ -89,56 +93,68 @@ class DeployContractForm extends Component {
     return Object.keys(errors).some(field => errors[field]);
   }
 
+  handleModeSwitching(e) {
+    e.preventDefault();
+    this.props.switchMode('guided');
+  }
+
   render() {
-    return (
+    const { initialValues } = this.props;
+    return (<div>
+      <div>
+        <Alert message={<span>
+          First time deploying a Contract? Try the <a href={this.props.guidedModeUrl} onClick={this.handleModeSwitching.bind(this)}>guided mode</a>.
+          </span>} type="info" showIcon />
+      </div>
+      <br/>
       <Form onSubmit={this.handleDeploy.bind(this)} layout="vertical">
         <ContractFormRow>
           <ContractFormCol>
-            <Field name='contractName' form={this.props.form} />
+            <Field name='contractName' form={this.props.form} showHint/>
           </ContractFormCol>
 
           <ContractFormCol>
-            <Field name='baseTokenAddress' form={this.props.form} />
-          </ContractFormCol>
-        </ContractFormRow>
-
-        <ContractFormRow>
-          <ContractFormCol>
-            <Field name='priceFloor' form={this.props.form} />
-          </ContractFormCol>
-
-          <ContractFormCol>
-            <Field name='priceCap' form={this.props.form} />
+            <Field name='baseTokenAddress' form={this.props.form} showHint/>
           </ContractFormCol>
         </ContractFormRow>
 
         <ContractFormRow>
           <ContractFormCol>
-            <Field name='priceDecimalPlaces' form={this.props.form} />
+            <Field name='priceFloor' form={this.props.form} showHint/>
           </ContractFormCol>
 
           <ContractFormCol>
-            <Field name="qtyMultiplier" form={this.props.form} />
-          </ContractFormCol>
-        </ContractFormRow>
-
-        <ContractFormRow>
-          <ContractFormCol>
-            <Field name='expirationTimeStamp' form={this.props.form} />
-          </ContractFormCol>
-
-          <ContractFormCol>
-            <Field name='oracleDataSource' form={this.props.form} />
+            <Field name='priceCap' form={this.props.form} showHint/>
           </ContractFormCol>
         </ContractFormRow>
 
         <ContractFormRow>
           <ContractFormCol>
-            <Field name='oracleQuery' form={this.props.form} />
+            <Field name='priceDecimalPlaces' form={this.props.form} showHint/>
           </ContractFormCol>
 
           <ContractFormCol>
-            <Field name='oracleQueryRepeatSeconds' form={this.props.form} />
+            <Field name="qtyMultiplier" form={this.props.form} showHint/>
+          </ContractFormCol>
+        </ContractFormRow>
+
+        <ContractFormRow>
+          <ContractFormCol>
+            <Field name='expirationTimeStamp' form={this.props.form} showHint/>
+          </ContractFormCol>
+
+          <ContractFormCol>
+            <Field name='oracleDataSource' initialValue={initialValues.oracleDataSource} form={this.props.form} showHint/>
+          </ContractFormCol>
+        </ContractFormRow>
+
+        <ContractFormRow>
+          <ContractFormCol>
+            <Field name='oracleQuery' initialValue={initialValues.oracleQuery} form={this.props.form} showHint/>
+          </ContractFormCol>
+
+          <ContractFormCol>
+            <Field name='oracleQueryRepeatSeconds' form={this.props.form} showHint/>
           </ContractFormCol>
         </ContractFormRow>
 
@@ -160,10 +176,8 @@ class DeployContractForm extends Component {
 
         <Loader loading={this.props.loading} />
       </Form>
-    );
+    </div>);
   }
 }
 
-const WrappedDeployContactForm = Form.create()(DeployContractForm);
-
-export default WrappedDeployContactForm;
+export default Form.create()(QuickDeployment);
