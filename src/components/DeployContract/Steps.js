@@ -273,12 +273,12 @@ class BaseStepComponent extends Component {
         <Col lg={{ span: 16 }} sm={{ span: 24 }} xs={{ span: 24 }}>
           <Card title="Deployment Status" style={{ width: '100%' }}>
             <Loader loading={this.props.loading} style={{ width: 80, height: 80 }}/>
-            {this.props.contract && <p className="result">
+            {this.props.contract && <div className="result">
                   <div>Congratulations!!! Your contract has been deployed </div>
                   <ul>
                     <li><b>Address</b>: {this.props.contract.address}</li>
                   </ul>
-            </p>}
+            </div>}
             {!this.props.loading && this.props.error && <Alert message={`${this.props.error}`} type="error"/>}
           </Card>
         </Col>
