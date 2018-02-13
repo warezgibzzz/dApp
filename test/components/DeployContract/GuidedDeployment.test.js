@@ -12,7 +12,7 @@ describe('GuidedDeployment', () => {
     guidedDeployment = shallow(<GuidedDeployment />);
   });
   
-  it('should render 4 steps', () => {
+  it('should render 5 steps', () => {
     expect(guidedDeployment.find(Steps.Step)).to.have.length(5);
   });
 });

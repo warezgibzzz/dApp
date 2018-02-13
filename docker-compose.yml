@@ -28,6 +28,7 @@ services:
       - ./config:/app/config
       - ./public:/app/public
       - ./src:/app/src
+      - ./test:/app/test
     ports:
       - "3000:3000"
     depends_on:

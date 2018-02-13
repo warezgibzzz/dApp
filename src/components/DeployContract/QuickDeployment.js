@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Row, Col, Form, Button, Alert } from 'antd';
-import qs from 'query-string';
 
 import showMessage from '../message';
 import Loader from '../Loader';
