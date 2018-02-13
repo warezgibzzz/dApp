@@ -35,10 +35,11 @@ export function testQuery(querySpecs) {
             return queryTestContractInstance.testOracleQuery(
               querySpecs.oracleDataSource,
               querySpecs.oracleQuery,
-              { 
-                gas: 200000, 
-                from: coinbase, 
-                value: web3.toWei('.006', 'ether') 
+              {
+                gas: 200000,
+                gasPrice: web3.toWei(1, 'gwei'),
+                from: coinbase,
+                value: web3.toWei('.006', 'ether')
               }
             );
           })

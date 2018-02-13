@@ -65,7 +65,7 @@ export function deployContract(contractSpecs) {
               {
                 gas: 6100000, // TODO : Remove hard-coded gas
                 value: web3.toWei('.2', 'ether'),
-                gasPrice: 100000000,
+                gasPrice: web3.toWei(1, 'gwei'),
                 from: coinbase
               }
             );
@@ -74,13 +74,16 @@ export function deployContract(contractSpecs) {
             marketContractInstanceDeployed = marketContractInstance;
             return marketCollateralPool.new(marketContractInstance.address, {
               gas: 5100000,
+              gasPrice: web3.toWei(1, 'gwei'),
               from: coinbase
             });
           })
           .then(function(marketCollateralPoolInstance) {
             return marketContractInstanceDeployed.setCollateralPoolContractAddress(
-              marketCollateralPoolInstance.address,
-              { from: coinbase }
+              marketCollateralPoolInstance.address, {
+                from: coinbase,
+                gasPrice: web3.toWei(1, 'gwei')
+              }
             );
           })
           .then(function() {
@@ -89,7 +92,10 @@ export function deployContract(contractSpecs) {
           .then(function(marketContractRegistryInstance) {
             marketContractRegistryInstance.addAddressToWhiteList(
               marketContractInstanceDeployed.address,
-              { from: web3.eth.accounts[0] }
+              {
+                from: web3.eth.accounts[0],
+                gasPrice: web3.toWei(1, 'gwei')
+              }
             );
 
             dispatch({ type: `${type}_FULFILLED`, payload: marketContractInstanceDeployed });

@@ -1,6 +1,9 @@
 import store from '../../store';
 import Web3 from 'web3';
 
+// showMessage if MetaMask is locked
+import showMessage from '../../components/message';
+
 export const WEB3_INITIALIZED = 'WEB3_INITIALIZED';
 
 function web3Initialized(results) {
@@ -17,10 +20,20 @@ let getWeb3 = new Promise(function(resolve, reject) {
     var web3 = window.web3;
 
     // Checking if Web3 has been injected by the browser (Mist/MetaMask)
-    if (false) {
-      // FIXME for now we are just using the local test rpc to avoid metamask
-      //if (typeof web3 !== 'undefined') {
-      // Use Mist/MetaMask's provider.
+    if (typeof web3 !== 'undefined' && web3.currentProvider && web3.currentProvider.isMetaMask) {
+      console.log("Mist/MetaMask's detected!");
+
+      if (web3.eth.accounts.length === 0) {
+        results = {
+          web3Instance: null
+        };
+
+        console.log("Please unlock MetaMask!");
+
+        showMessage('error', 'MetaMask is locked! Please unlock and refresh this page', 8);
+        resolve(store.dispatch(web3Initialized(results)));
+      }
+
       web3 = new Web3(web3.currentProvider);
 
       results = {
