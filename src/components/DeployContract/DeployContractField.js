@@ -211,7 +211,7 @@ const fieldSettingsByName = {
       return (
         <Select>
           {OracleDataSources.map(dataSource => 
-            <Option value={dataSource.name}>{dataSource.name}</Option>)}
+            <Option key={dataSource.name} value={dataSource.name}>{dataSource.name}</Option>)}
         </Select>
       );
     }

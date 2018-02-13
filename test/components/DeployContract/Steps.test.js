@@ -77,13 +77,14 @@ describe('DataSourceStep', () => {
   });
 });
 
-describe('DeplyStep', () => {
+describe('DeployStep', () => {
+  let deployContract = () => {};
   beforeEach(() => {
-    mount(<DeployStep />);
+    mount(<DeployStep deployContract={deployContract} />);
   });
 
   it('renders without crashing', () => {
     const div = document.createElement('div');
-    ReactDOM.render(<DeployStep />, div);
+    ReactDOM.render(<DeployStep deployContract={deployContract} />, div);
   });
 });

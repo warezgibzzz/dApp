@@ -226,7 +226,7 @@ class BaseStepComponent extends Component {
 
         <h2>Oracle Query</h2>
         <div>
-          Properly structured Oraclize.it query, Please use the <Link to="/test">test query page</Link> for clarification.
+          Properly structured Oraclize.it query, Please use the <a href="/test">test query page</a> for clarification.
         </div>
         <br/>
         <Field name='oracleQuery' 
@@ -267,7 +267,6 @@ class BaseStepComponent extends Component {
   }
 
   render() {
-    console.log('Contract', this.props);
     return (<div style={{ padding: '30px' }}>
       <Row type="flex" justify="center">
         <Col lg={{ span: 16 }} sm={{ span: 24 }} xs={{ span: 24 }}>
