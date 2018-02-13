@@ -37,7 +37,7 @@ class DeployContractForm extends Component {
     const switchMode = ((newMode) => {
       this.props.history.push({ ...location, search: `?${qs.stringify({ ...queryParams, mode: newMode })}`});
     });
-    return { mode, initialValues: { oracleDataSource, oracleQuery, guidedModeUrl, switchMode } };
+    return { mode, switchMode, guidedModeUrl, initialValues: { oracleDataSource, oracleQuery } };
   }
 
   render() {
