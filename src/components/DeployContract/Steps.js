@@ -6,7 +6,10 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { Row, Col, Icon, Form, Button, Alert, Card } from 'antd';
+
 import Loader from '../Loader';
+import showMessage from '../message';
+import DeployContractSuccess from './DeployContractSuccess';
 import Field, { FieldSettings } from './DeployContractField';
 
 const ButtonGroup = Button.Group;
@@ -262,6 +265,17 @@ class BaseStepComponent extends Component {
   *
   */
  class DeployStep extends BaseStepComponent {
+  componentWillReceiveProps(nextProps) {
+    if(this.props.loading && !nextProps.loading) {
+      if(nextProps.error) {
+        // We had an error
+        showMessage('error', `There was an error deploying the contract: ${nextProps.error}`, 8);
+      } else if (nextProps.contract) {
+        // Contract was deployed
+        showMessage('success', DeployContractSuccess({ contract: nextProps.contract }), 5);
+      }
+    }
+  }
 
   componentDidMount() {
     this.props.deployContract();
@@ -274,10 +288,11 @@ class BaseStepComponent extends Component {
           <Card title="Deployment Status" style={{ width: '100%' }}>
             <Loader loading={this.props.loading} style={{ width: 80, height: 80 }}/>
             {this.props.contract && <div className="result">
-                  <div>Congratulations!!! Your contract has been deployed </div>
-                  <ul>
-                    <li><b>Address</b>: {this.props.contract.address}</li>
-                  </ul>
+                  <div>
+                    Congratulations!!! Your contract has successfully deployed at: <a href={`https://etherscan.io/address/${this.props.contract.address}`} target="_blank">
+                      {this.props.contract.address}
+                    </a>
+                  </div>
             </div>}
             {!this.props.loading && this.props.error && <Alert message={`${this.props.error}`} type="error"/>}
           </Card>
@@ -287,7 +302,7 @@ class BaseStepComponent extends Component {
       <Row type="flex" justify="center">
         <Col>
           {this.props.contract && <Link to="/contract/explorer"><Button type="primary">
-              Explore Contracts
+              Explore All Contracts
             </Button>
           </Link>}
         </Col>
