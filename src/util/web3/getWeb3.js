@@ -30,7 +30,7 @@ let getWeb3 = new Promise(function(resolve, reject) {
 
         console.log("Please unlock MetaMask!");
 
-        showMessage('error', 'MetaMask is locked. Please unlock it and refresh!', 8);
+        showMessage('error', 'MetaMask is locked! Please unlock and refresh this page', 8);
         resolve(store.dispatch(web3Initialized(results)));
       }
 
