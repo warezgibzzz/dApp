@@ -1,6 +1,9 @@
 import store from '../../store';
 import Web3 from 'web3';
 
+// showMessage if MetaMask is locked
+import showMessage from '../../components/message';
+
 export const WEB3_INITIALIZED = 'WEB3_INITIALIZED';
 
 function web3Initialized(results) {
@@ -27,6 +30,7 @@ let getWeb3 = new Promise(function(resolve, reject) {
 
         console.log("Please unlock MetaMask!");
 
+        showMessage('error', 'MetaMask is locked. Please unlock it and refresh!', 8);
         resolve(store.dispatch(web3Initialized(results)));
       }
 
