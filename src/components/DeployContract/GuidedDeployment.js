@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col, Steps } from 'antd';
 
+import StepAnimation from '../StepAnimation';
 import { NameContractStep, PricingStep, ExpirationStep, DataSourceStep, DeployStep } from './Steps';
 
 const Step = Steps.Step;
@@ -27,6 +28,7 @@ class GuidedDeployment extends Component {
 
     this.state = {
       step: 0,
+      transitionDirection: 'next',
       contractName: '',
       baseTokenAddress: '',
       priceFloor: '',
@@ -42,13 +44,15 @@ class GuidedDeployment extends Component {
 
   toNextStep() {
     this.setState({
-      step: this.state.step + 1
+      step: this.state.step + 1,
+      transitionDirection: 'next'
     });
   }
 
   toPrevStep() {
     this.setState({
-      step: this.state.step - 1
+      step: this.state.step - 1,
+      transitionDirection: 'prev'
     });
   }
 
@@ -103,7 +107,10 @@ class GuidedDeployment extends Component {
             <Step title="Deploy" />
           </Steps>
           <br/>
-          {steps.filter((step, index) => currentStep === index )}
+          <StepAnimation
+            direction={this.state.transitionDirection}>
+            {steps.filter((step, index) => currentStep === index )}
+          </StepAnimation>
         </Col>
       </Row>
   );

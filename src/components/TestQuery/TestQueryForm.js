@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { Row, Col, Steps } from 'antd';
 import qs from 'query-string';
+
+import StepAnimation from '../StepAnimation';
 import { AboutOraclesStep, SelectDataSourceStep, SetQueryStep, QueryResultStep } from './Steps';
+
 
 const Step = Steps.Step;
 
@@ -23,6 +26,7 @@ class TestQueryForm extends Component {
 
     this.state = {
       step: 0,
+      transitionDirection: 'next',
       oracleDataSource: 'URL',
       oracleQuery: ''
     };
@@ -53,13 +57,15 @@ class TestQueryForm extends Component {
 
   toNextStep() {
     this.setState({
-      step: this.state.step + 1
+      step: this.state.step + 1,
+      transitionDirection: 'next'
     });
   }
 
   toPrevStep() {
     this.setState({
-      step: this.state.step - 1
+      step: this.state.step - 1,
+      transitionDirection: 'prev'
     });
   }
 
@@ -115,7 +121,10 @@ class TestQueryForm extends Component {
               <Step title="Result" />
             </Steps>
             <br/>
-            {steps.filter((step, index) => currentStep === index )}
+            <StepAnimation 
+              direction={this.state.transitionDirection}>
+              {steps.filter((step, index) => currentStep === index )[0]}
+            </StepAnimation>
           </Col>
         </Row>
       

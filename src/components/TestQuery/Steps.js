@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Row, Col, Form, Input, Select, Button, Icon, Card, Alert } from 'antd';
 import Loader from '../Loader';
 import OracleDataSources, { getDataSourceObj } from './OracleDataSources';
+import '../Step.css';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
