@@ -54,6 +54,7 @@ class GuidedDeployment extends Component {
 
   render() {
     const currentStep = this.state.step;
+    const initialValues = this.props.initialValues;
     const steps = [
       <NameContractStep 
         key="0"
@@ -80,6 +81,7 @@ class GuidedDeployment extends Component {
         onPrevClicked={this.toPrevStep.bind(this)}
         onNextClicked={this.toNextStep.bind(this)}
         updateDeploymentState={this.setState.bind(this)}
+        initialValues={initialValues}
         {...this.state} />,
 
       <DeployStep

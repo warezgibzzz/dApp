@@ -227,13 +227,19 @@ class QueryResultStep extends Component {
         </Col>
       </Row>
       <br/>
-      <Row type="flex" justify="end">
+      {!this.props.loading && !this.props.error &&
+      <Row type="flex" justify="center">
         <Col>
-          <Button type="primary" onClick={this.props.onRestartClicked} >
-            <Icon type="arrow-left" />Test another query
-          </Button>
+          <ButtonGroup>
+            <Button type="default" onClick={this.props.onPrevClicked} >
+              <Icon type="left" />Test another query
+            </Button>
+            <Button type="primary" onClick={this.props.onCreateContactClicked} >
+              Create contract with Query<Icon type="right" />
+            </Button>
+          </ButtonGroup>
         </Col>
-      </Row>
+      </Row>}
     </div>);
   }
 }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Row, Col, Form, Button } from 'antd';
+import { Row, Col, Form, Button, Alert } from 'antd';
+import qs from 'query-string';
 
 import showMessage from '../message';
 import Loader from '../Loader';
@@ -93,8 +94,20 @@ class QuickDeployment extends Component {
     return Object.keys(errors).some(field => errors[field]);
   }
 
+  handleModeSwitching(e) {
+    e.preventDefault();
+    this.props.switchMode('guided');
+  }
+
   render() {
-    return (
+    const { initialValues } = this.props;
+    return (<div>
+      <div>
+        <Alert message={<span>
+          First time deploying a Contract? Try the <a href={this.props.guidedModeUrl} onClick={this.handleModeSwitching.bind(this)}>guided mode</a>.
+          </span>} type="info" showIcon />
+      </div>
+      <br/>
       <Form onSubmit={this.handleDeploy.bind(this)} layout="vertical">
         <ContractFormRow>
           <ContractFormCol>
@@ -132,13 +145,13 @@ class QuickDeployment extends Component {
           </ContractFormCol>
 
           <ContractFormCol>
-            <Field name='oracleDataSource' form={this.props.form} showHint/>
+            <Field name='oracleDataSource' initialValue={initialValues.oracleDataSource} form={this.props.form} showHint/>
           </ContractFormCol>
         </ContractFormRow>
 
         <ContractFormRow>
           <ContractFormCol>
-            <Field name='oracleQuery' form={this.props.form} showHint/>
+            <Field name='oracleQuery' initialValue={initialValues.oracleQuery} form={this.props.form} showHint/>
           </ContractFormCol>
 
           <ContractFormCol>
@@ -164,7 +177,7 @@ class QuickDeployment extends Component {
 
         <Loader loading={this.props.loading} />
       </Form>
-    );
+    </div>);
   }
 }
 

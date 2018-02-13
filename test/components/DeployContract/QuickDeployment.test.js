@@ -5,6 +5,6 @@ import QuickDeployment from '../../../src/components/DeployContract/QuickDeploym
 
 describe('QuickDeployment', () => {
   it('should render', () => {
-    mount(<QuickDeployment />);
+    mount(<QuickDeployment initialValues={{}}/>);
   });
 });

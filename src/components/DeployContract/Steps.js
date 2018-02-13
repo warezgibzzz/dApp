@@ -208,6 +208,7 @@ class BaseStepComponent extends Component {
  class DataSourceStep extends BaseStepComponent {
 
   render() {
+    const { initialValues } = this.props;
     return (<div>
       <Form onSubmit={this.handleSubmit.bind(this)} layout="vertical">
         <h1>Set Oracle Data Source</h1>
@@ -221,7 +222,7 @@ class BaseStepComponent extends Component {
         </div>
         <br/>
         <Field name='oracleDataSource' 
-            initialValue={this.props.oracleDataSource}
+            initialValue={this.props.oracleDataSource || initialValues.oracleDataSource}
             form={this.props.form} />
 
         <h2>Oracle Query</h2>
@@ -230,7 +231,7 @@ class BaseStepComponent extends Component {
         </div>
         <br/>
         <Field name='oracleQuery' 
-            initialValue={this.props.oracleQuery}
+            initialValue={this.props.oracleQuery || initialValues.oracleQuery}
             form={this.props.form} />
         
         <h2>Query Repeat Interval</h2>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, Steps } from 'antd';
+import qs from 'query-string';
 import { AboutOraclesStep, SelectDataSourceStep, SetQueryStep, QueryResultStep } from './Steps';
 
 const Step = Steps.Step;
@@ -62,9 +63,15 @@ class TestQueryForm extends Component {
     });
   }
 
-  onRestart() {
-    this.setState({
-      step: 1 // <-- Select Datasource Step
+  navigateToDeployContract() {
+    const queryParams = {
+      oracleDataSource: this.state.oracleDataSource,
+      oracleQuery: this.state.oracleQuery
+    };
+    
+    this.props.history.push({
+      pathname: '/contract/deploy',
+      search: `?${qs.stringify(queryParams)}`
     });
   }
 
@@ -94,7 +101,8 @@ class TestQueryForm extends Component {
         loading={this.props.loading}
         result={this.props.results}
         error={this.props.error} 
-        onRestartClicked={this.toPrevStep.bind(this)} />,
+        onPrevClicked={this.toPrevStep.bind(this)}
+        onCreateContactClicked={this.navigateToDeployContract.bind(this)} />,
     ];
     
     return (

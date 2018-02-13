@@ -67,13 +67,9 @@ describe('ExpirationStep', () => {
 });
 
 describe('DataSourceStep', () => {
-  beforeEach(() => {
-    mount(<DataSourceStep />);
-  });
-
   it('renders without crashing', () => {
     const div = document.createElement('div');
-    ReactDOM.render(<DataSourceStep />, div);
+    ReactDOM.render(<DataSourceStep initialValues={{}} />, div);
   });
 });
 
