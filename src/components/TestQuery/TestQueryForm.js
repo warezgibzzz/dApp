@@ -68,7 +68,7 @@ class TestQueryForm extends Component {
       oracleDataSource: this.state.oracleDataSource,
       oracleQuery: this.state.oracleQuery
     };
-    
+
     this.props.history.push({
       pathname: '/contract/deploy',
       search: `?${qs.stringify(queryParams)}`
