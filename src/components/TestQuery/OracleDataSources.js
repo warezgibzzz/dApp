@@ -28,9 +28,18 @@ const OracleDataSources = [
             .test(query);
       },
       sampleQueries: [
-        'json(https://api.gdax.com/products/BTC-USD/ticker).price - Price of BTC-USD on GDAX',
-        'json(https://api.kraken.com/0/public/Ticker?pair=ETHUSD).result.XETHZUSD.p.1 - Volume Weight Average Price (24 hrs) of ETH-USD on Kraken',
-        'json(https://api.bitfinex.com/v1/pubticker/omgeth).mid - Mid Price of OMG-ETH',
+        {
+          query: 'json(https://api.gdax.com/products/BTC-USD/ticker).price',
+          title: 'Price of BTC-USD on GDAX',
+        },
+        {
+          query: 'json(https://api.kraken.com/0/public/Ticker?pair=ETHUSD).result.XETHZUSD.p.1',
+          title: 'Volume Weight Average Price (24 hrs) of ETH-USD on Kraken',
+        },
+        {
+          query: 'json(https://api.bitfinex.com/v1/pubticker/omgeth).mid',
+          title: 'Mid Price of OMG-ETH',
+        }
       ]
     },
     {
