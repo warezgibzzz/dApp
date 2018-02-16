@@ -107,7 +107,7 @@ class ContractsList extends Component {
     }, {
       title: 'Base Token',
       dataIndex: 'BASE_TOKEN',
-      width: 300,
+      width: 150,
       filterDropdown: (
         <div className="custom-filter-dropdown">
           <Input
@@ -118,6 +118,31 @@ class ContractsList extends Component {
             onPressEnter={() => this.onSearch('BASE_TOKEN', 'BASE_TOKEN_SEARCH_TEXT', 'tokenSearchVisible', 'tokenFiltered')}
           />
           <Button type="primary" onClick={() => this.onSearch('BASE_TOKEN', 'BASE_TOKEN_SEARCH_TEXT', 'tokenSearchVisible', 'tokenFiltered')}>
+            Search
+          </Button>
+        </div>
+      ),
+      filterIcon: <Icon type="search" style={{ color: this.state.tokenFiltered ? '#108ee9' : '#aaa' }} />,
+      tokenSearchVisible: this.state.tokenSearchVisible,
+      onFilterDropdownVisibleChange: (visible) => {
+        this.setState({
+          tokenSearchVisible: visible,
+        }, () => this.baseTokenSearchInput && this.baseTokenSearchInput.focus());
+      },
+    }, {
+      title: 'Base Token Symbol',
+      dataIndex: 'BASE_TOKEN_SYMBOL',
+      width: 150,
+      filterDropdown: (
+        <div className="custom-filter-dropdown">
+          <Input
+            ref={ele => this.baseTokenSearchInput = ele}
+            placeholder="Search Base Token Symbol"
+            value={this.state['BASE_TOKEN_SYMBOL_SEARCH_TEXT']}
+            onChange={(e) => this.onInputChange(e, 'BASE_TOKEN_SYMBOL_SEARCH_TEXT')}
+            onPressEnter={() => this.onSearch('BASE_TOKEN_SYMBOL', 'BASE_TOKEN_SYMBOL_SEARCH_TEXT', 'tokenSearchVisible', 'tokenFiltered')}
+          />
+          <Button type="primary" onClick={() => this.onSearch('BASE_TOKEN_SYMBOL', 'BASE_TOKEN_SYMBOL_SEARCH_TEXT', 'tokenSearchVisible', 'tokenFiltered')}>
             Search
           </Button>
         </div>
