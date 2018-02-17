@@ -1,6 +1,6 @@
 <img src="https://image.ibb.co/nANcyR/logo_MARKET_banner_2.png" align="middle">
 
-[![Build Status](https://api.travis-ci.org/MarketProject/Dapp.svg?branch=master)](https://travis-ci.org/MarketProject/Dapp)
+[![Build Status](https://api.travis-ci.org/MarketProject/Dapp.svg?branch=master)](https://travis-ci.org/MarketProject/Dapp) [![Coverage Status](https://coveralls.io/repos/github/MarketProject/Dapp/badge.svg?branch=master)](https://coveralls.io/github/MarketProject/Dapp?branch=master)
 
 # MarketProtocol Dapp
 Decentralized blockchain application utilizing [MARKET](https://github.com/MarketProject/MarketProtocol)
