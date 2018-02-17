@@ -2,25 +2,25 @@
  * Steps for use by GuidedDeployment.
  *
  */
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
 import moment from 'moment';
-import { Row, Col, Icon, Form, Button, Alert, Card } from 'antd';
+import {Row, Col, Icon, Form, Button, Alert, Card} from 'antd';
 
 import Loader from '../Loader';
 import showMessage from '../message';
 import DeployContractSuccess from './DeployContractSuccess';
-import Field, { FieldSettings } from './DeployContractField';
+import Field, {FieldSettings} from './DeployContractField';
 
 const ButtonGroup = Button.Group;
 
 function BiDirectionalNav(props) {
   return (<ButtonGroup>
     <Button type="default" onClick={props.onPrevClicked}>
-      <Icon type="left" />Back
+      <Icon type="left"/>Back
     </Button>
     <Button type="primary" htmlType="submit">
-      {props.text}<Icon type="right" />
+      {props.text}<Icon type="right"/>
     </Button>
   </ButtonGroup>);
 }
@@ -39,8 +39,8 @@ class BaseStepComponent extends Component {
         return;
       }
       const timestamp = fieldsValue['expirationTimeStamp'] ?
-          { expirationTimeStamp: Math.floor(fieldsValue['expirationTimeStamp'].valueOf() / 1000) }
-          : {};
+        {expirationTimeStamp: Math.floor(fieldsValue['expirationTimeStamp'].valueOf() / 1000)}
+        : {};
       this.props.updateDeploymentState({
         ...fieldsValue,
         ...timestamp
@@ -56,7 +56,7 @@ class BaseStepComponent extends Component {
  * second to collect the base address.
  *
  */
- class NameContractStep extends BaseStepComponent {
+class NameContractStep extends BaseStepComponent {
 
   render() {
     const contractNameSettings = FieldSettings.contractName;
@@ -85,13 +85,13 @@ class BaseStepComponent extends Component {
         </div>
         <br/>
         <Field name='contractName'
-          initialValue={this.props.contractName}
-          form={this.props.form} />
+               initialValue={this.props.contractName}
+               form={this.props.form}/>
         <h2>Collateral Token</h2>
         <div>
           Next, every contract should be backed by an ERC20 Token that will be used a collateral for the contract.
           Traders must deposit tokens to the smart contract prior to trading, and upon execution of a trade, the
-          appropriate amount of collateral becomes locked until that position is exited.  In this fashion, all open
+          appropriate amount of collateral becomes locked until that position is exited. In this fashion, all open
           positions always remain 100% collateralized removing counter party risk from the traders.
           Please specify a ERC20 Token address for this contract.
 
@@ -106,34 +106,41 @@ class BaseStepComponent extends Component {
         </div>
         <br/>
         <Field name='baseTokenAddress'
-          initialValue={this.props.baseTokenAddress}
-          form={this.props.form} />
+               initialValue={this.props.baseTokenAddress}
+               form={this.props.form}/>
         <Row type="flex" justify="end">
           <Col>
             <Button type="primary" htmlType="submit">
-              Set Pricing Range<Icon type="arrow-right" />
+              Set Pricing Range<Icon type="arrow-right"/>
             </Button>
           </Col>
         </Row>
       </Form>
     </div>);
   }
- }
- NameContractStep = Form.create()(NameContractStep);
+}
 
- /**
-  * Step for Setting Price Cap and floor
-  *
-  */
- class PricingStep extends BaseStepComponent {
+NameContractStep = Form.create()(NameContractStep);
+
+/**
+ * Step for Setting Price Cap and floor
+ *
+ */
+class PricingStep extends BaseStepComponent {
 
   render() {
-    return(<div>
+    return (<div>
       <Form onSubmit={this.handleSubmit.bind(this)} layout="vertical">
         <h1>Specify Pricing Rules</h1>
         <div>
-          The Price Floor and Price Cap defines the maximum loss or gain for participants in a market trade. It also defines
+          The Price Floor and Cap define the maximum loss or gain for participants. Therefore, it also determines
           the amount of collateral token each participant must post in order to take a short or a long position.
+          <br/>
+          <br/>
+          <h3>
+            All prices must be in an integer format, floating
+            point values are not currently supported by Ethereum.
+          </h3>
         </div>
         <br/>
 
@@ -144,8 +151,8 @@ class BaseStepComponent extends Component {
         </div>
         <br/>
         <Field name='priceFloor'
-            initialValue={this.props.priceFloor}
-            form={this.props.form} />
+               initialValue={this.props.priceFloor}
+               form={this.props.form}/>
 
         <h2>Price Cap</h2>
         <div>
@@ -154,33 +161,34 @@ class BaseStepComponent extends Component {
         </div>
         <br/>
         <Field name='priceCap'
-          initialValue={this.props.priceCap}
-          form={this.props.form} />
+               initialValue={this.props.priceCap}
+               form={this.props.form}/>
 
         <h2>Price Decimal Places</h2>
         <div>
-          Since all numbers must be represented as integers on the Ethereum blockchain, this is how many
+          Ethereum currently does not support floating points numbers. Therefore all prices reported by oracles must
+          be converted if they are represented as a floating point (decimal) number. This variable is how many
           decimal places one needs to move the decimal in order to go from the oracle query price to an integer.
           For instance if the oracle query results returned a value such as 190.22, we need to move the
-          decimal two(2) places to convert to an integer value of 19022.
+          decimal two (2) places to convert to an integer value of 19022.
         </div>
         <br/>
         <Field name='priceDecimalPlaces'
-          initialValue={this.props.priceDecimalPlaces}
-          form={this.props.form} />
+               initialValue={this.props.priceDecimalPlaces}
+               form={this.props.form}/>
 
         <h2>Price Quantity Multiplier</h2>
         <div>
-        The quantity multiplier allows the user to specify how many base units (for Ethereum, this would be wei) each
-        integer price movement changes the value of the contract.  If our integerized price was 19022 with a qty
-        multiplier of 1, and the price moved to 19023, then the value will have change by 1 wei.  If however the
-        multiplier was set at 1,000,000,000 the price movement of 1 unit would now
-        correspond to a value of 1 gwei (not wei).
+          The quantity multiplier allows the user to specify how many base units (for Ethereum, this would be wei) each
+          integer price movement changes the value of the contract. If our integerized price was 19022 with a qty
+          multiplier of 1, and the price moved to 19023, then the value will have change by 1 wei. If however the
+          multiplier was set at 1,000,000,000 the price movement of 1 unit would now
+          correspond to a value of 1 gwei (not wei).
         </div>
         <br/>
         <Field name='qtyMultiplier'
-          initialValue={this.props.qtyMultiplier}
-          form={this.props.form} />
+               initialValue={this.props.qtyMultiplier}
+               form={this.props.form}/>
         <Row type="flex" justify="end">
           <Col>
             <BiDirectionalNav text="Set Expiration Time" {...this.props} />
@@ -189,26 +197,28 @@ class BaseStepComponent extends Component {
       </Form>
     </div>);
   }
- }
- PricingStep = Form.create()(PricingStep);
+}
 
- /**
-  * Step for setting the expiration time for the contract
-  *
-  */
- class ExpirationStep extends BaseStepComponent {
+PricingStep = Form.create()(PricingStep);
+
+/**
+ * Step for setting the expiration time for the contract
+ *
+ */
+class ExpirationStep extends BaseStepComponent {
 
   render() {
     return (<div>
       <Form onSubmit={this.handleSubmit.bind(this)} layout="vertical">
         <h1>Set Expiration Time</h1>
         <div>
-          Upon reaching the expiration timestamp all open positions will settle to the defined oracle query.
+          Upon reaching the expiration timestamp all open positions will settle against the final price query
+          returned by the oracle.
         </div>
         <br/>
         <Field name='expirationTimeStamp'
-            initialValue={this.props.expirationTimeStamp ? moment(this.props.expirationTimeStamp * 1000) : ''}
-            form={this.props.form} />
+               initialValue={this.props.expirationTimeStamp ? moment(this.props.expirationTimeStamp * 1000) : ''}
+               form={this.props.form}/>
         <Row type="flex" justify="end">
           <Col>
             <BiDirectionalNav text="Select Oracle" {...this.props} />
@@ -217,23 +227,24 @@ class BaseStepComponent extends Component {
       </Form>
     </div>);
   }
- }
- ExpirationStep = Form.create()(ExpirationStep);
+}
 
- /**
-  * Step to select the Oracle Data source and the query frequency for the contract
-  *
-  */
- class DataSourceStep extends BaseStepComponent {
+ExpirationStep = Form.create()(ExpirationStep);
+
+/**
+ * Step to select the Oracle Data source and the query frequency for the contract
+ *
+ */
+class DataSourceStep extends BaseStepComponent {
 
   render() {
-    const { initialValues } = this.props;
+    const {initialValues} = this.props;
     return (<div>
       <Form onSubmit={this.handleSubmit.bind(this)} layout="vertical">
         <h1>Set Oracle Data Source</h1>
         <div>
-          An oracle-based solution is used to determine the final settlement price
-          of the contract, and is also used in profit and loss calculations.
+          Currently, Oraclize.it offers several different options for their data source. If you need help creating
+          a proper oracle query, or availabe data sources please refer to the <a href="/test">Test Query</a> page.
         </div>
         <h2>Select Data Source</h2>
         <div>
@@ -241,17 +252,17 @@ class BaseStepComponent extends Component {
         </div>
         <br/>
         <Field name='oracleDataSource'
-            initialValue={this.props.oracleDataSource || initialValues.oracleDataSource}
-            form={this.props.form} />
+               initialValue={this.props.oracleDataSource || initialValues.oracleDataSource}
+               form={this.props.form}/>
 
         <h2>Oracle Query</h2>
         <div>
-          Properly structured Oraclize.it query, Please use the <a href="/test">test query page</a> for clarification.
+          Properly structured Oraclize.it query, Please use the <a href="/test">Test Query</a> page for clarification.
         </div>
         <br/>
         <Field name='oracleQuery'
-            initialValue={this.props.oracleQuery || initialValues.oracleQuery}
-            form={this.props.form} />
+               initialValue={this.props.oracleQuery || initialValues.oracleQuery}
+               form={this.props.form}/>
 
         <h2>Query Repeat Interval</h2>
         <div>
@@ -261,8 +272,8 @@ class BaseStepComponent extends Component {
         </div>
         <br/>
         <Field name='oracleQueryRepeatSeconds'
-            initialValue={this.props.oracleQueryRepeatSeconds}
-            form={this.props.form} />
+               initialValue={this.props.oracleQueryRepeatSeconds}
+               form={this.props.form}/>
 
         <Row type="flex" justify="end">
           <Col>
@@ -272,23 +283,24 @@ class BaseStepComponent extends Component {
       </Form>
     </div>);
   }
- }
- DataSourceStep = Form.create()(DataSourceStep);
+}
 
- /**
-  * Final Step for showing deploy status of Contract
-  * and possible a summary of the deployed contract on success.
-  *
-  */
- class DeployStep extends BaseStepComponent {
+DataSourceStep = Form.create()(DataSourceStep);
+
+/**
+ * Final Step for showing deploy status of Contract
+ * and possible a summary of the deployed contract on success.
+ *
+ */
+class DeployStep extends BaseStepComponent {
   componentWillReceiveProps(nextProps) {
-    if(this.props.loading && !nextProps.loading) {
-      if(nextProps.error) {
+    if (this.props.loading && !nextProps.loading) {
+      if (nextProps.error) {
         // We had an error
         showMessage('error', `There was an error deploying the contract: ${nextProps.error}`, 8);
       } else if (nextProps.contract) {
         // Contract was deployed
-        showMessage('success', DeployContractSuccess({ contract: nextProps.contract }), 5);
+        showMessage('success', DeployContractSuccess({contract: nextProps.contract}), 5);
       }
     }
   }
@@ -298,17 +310,18 @@ class BaseStepComponent extends Component {
   }
 
   render() {
-    return (<div style={{ padding: '30px' }}>
+    return (<div style={{padding: '30px'}}>
       <Row type="flex" justify="center">
-        <Col lg={{ span: 16 }} sm={{ span: 24 }} xs={{ span: 24 }}>
-          <Card title="Deployment Status" style={{ width: '100%' }}>
-            <Loader loading={this.props.loading} style={{ width: 80, height: 80 }}/>
+        <Col lg={{span: 16}} sm={{span: 24}} xs={{span: 24}}>
+          <Card title="Deployment Status" style={{width: '100%'}}>
+            <Loader loading={this.props.loading} style={{width: 80, height: 80}}/>
             {this.props.contract && <div className="result">
-                  <div>
-                    Congratulations!!! Your contract has successfully deployed at: <a href={`https://etherscan.io/address/${this.props.contract.address}`} target="_blank">
-                      {this.props.contract.address}
-                    </a>
-                  </div>
+              <div>
+                Congratulations!!! Your contract has successfully deployed at: <a
+                href={`https://etherscan.io/address/${this.props.contract.address}`} target="_blank">
+                {this.props.contract.address}
+              </a>
+              </div>
             </div>}
             {!this.props.loading && this.props.error && <Alert message={`${this.props.error}`} type="error"/>}
           </Card>
@@ -318,13 +331,13 @@ class BaseStepComponent extends Component {
       <Row type="flex" justify="center">
         <Col>
           {this.props.contract && <Link to="/contract/explorer"><Button type="primary">
-              Explore All Contracts
-            </Button>
+            Explore All Contracts
+          </Button>
           </Link>}
         </Col>
       </Row>
     </div>);
   }
- }
+}
 
- export { NameContractStep, PricingStep, ExpirationStep, DataSourceStep, DeployStep };
+export {NameContractStep, PricingStep, ExpirationStep, DataSourceStep, DeployStep};

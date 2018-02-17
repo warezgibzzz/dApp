@@ -85,6 +85,9 @@ const fieldSettingsByName = {
           required: true, message: 'Please enter a price floor',
         },
         {
+          type: 'integer', message: 'Value must be an integer'
+        },
+        {
           validator: (rule, value, callback) => {
             priceFloorValidator(form, rule, value, callback);
           },
@@ -116,6 +119,9 @@ const fieldSettingsByName = {
       return [
         {
           required: true, message: 'Please enter a price cap',
+        },
+        {
+          type: 'integer', message: 'Value must be an integer'
         },
         {
           validator: (rule, value, callback) => {
