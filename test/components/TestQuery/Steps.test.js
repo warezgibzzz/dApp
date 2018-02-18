@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Button, Select } from 'antd';
+import { Button, Select, Input } from 'antd';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import { expect } from 'chai';
@@ -43,12 +43,15 @@ describe('SelectDataSourceStep', () => {
   let selectDataSourceStep;
   let onNextClickSpy;
   let onPrevClickSpy;
+  let onChangeSpy;
   beforeEach(() => {
     onNextClickSpy = sinon.spy();
     onPrevClickSpy = sinon.spy();
+    onChangeSpy = sinon.spy();
     selectDataSourceStep = shallow(<SelectDataSourceStep 
       onNextClicked={onNextClickSpy}
-      onPrevClicked={onPrevClickSpy} />);
+      onPrevClicked={onPrevClickSpy}
+      onChange={onChangeSpy} />);
   });
 
   it('renders without crashing', () => {
@@ -62,23 +65,75 @@ describe('SelectDataSourceStep', () => {
   });
 
   it('sets correct onNextClicked property', () => {
-    const nextButton = selectDataSourceStep.find(Button).last();
-    expect(nextButton.props().onClick).to.equal(onNextClickSpy);
+    selectDataSourceStep.find(Button).last().simulate('click');
+    expect(onNextClickSpy).to.have.property('callCount', 1);
   });
 
   it('sets correct onPrevClicked property', () => {
-    const nextButton = selectDataSourceStep.find(Button).first();
-    expect(nextButton.props().onClick).to.equal(onPrevClickSpy);
+    selectDataSourceStep.find(Button).first().simulate('click');
+    expect(onPrevClickSpy).to.have.property('callCount', 1);
+  });
+
+  it('should trigger onChange when data source changes', () => {
+    selectDataSourceStep.find(Select).simulate('change', 'URL');
+    expect(onChangeSpy).to.have.property('callCount', 1);
   });
 });
 
 describe('SetQueryStep', () => {
+  let setQueryStep;
+  let onSubmitSpy;
+  let onPrevClickSpy;
+  let onChangeSpy;
+  beforeEach(() => {
+    onSubmitSpy = sinon.spy();
+    onPrevClickSpy = sinon.spy();
+    onChangeSpy = sinon.spy();
+    setQueryStep = shallow(<SetQueryStep
+      dataSource={DataSources[0].name}
+      onSubmit={onSubmitSpy}
+      onPrevClicked={onPrevClickSpy}
+      onChange={onChangeSpy} />);
+  });
+
   it('renders without crashing', () => {
     const div = document.createElement('div');
     ReactDOM.render(<SetQueryStep dataSource={DataSources[0].name} />, div);
   });
 
-  // TODO: Add test to ensure data sources a properly validated
+  it('should update query state with changes in query input', () => {
+    const queryInput = '2+2';
+    setQueryStep.find(Input).simulate('change', { target: { value: queryInput } });
+    expect(setQueryStep.state('query')).to.equal(queryInput);
+    expect(onChangeSpy).to.have.property('callCount', 1);
+  });
+
+  it('sets correct onPrevClicked property', () => {
+    setQueryStep.find(Button).first().simulate('click');
+    expect(onPrevClickSpy).to.have.property('callCount', 1);
+  });
+
+  it('should submit with valid query', () => {
+    // this test assumes that datasource would not change
+    // ideal scenario should mock the getDataSourceObj() function.
+    setQueryStep.setProps({ dataSource: 'WolframAlpha' });
+    // a valid query
+    setQueryStep.setState({ query: '2+2' });
+
+    setQueryStep.find(Button).last().simulate('click');
+    expect(onSubmitSpy).to.have.property('callCount', 1);
+  });
+
+  it('should show error with invalid query', () => {
+    // this test assumes that datasource would not change
+    // ideal scenario should mock the getDataSourceObj() function.
+    setQueryStep.setProps({ dataSource: 'WolframAlpha' });
+    // an invalid query
+    setQueryStep.setState({ query: '' });
+
+    setQueryStep.find(Button).last().simulate('click');
+    expect(setQueryStep.state('error')).to.not.be.a('null');
+  });
 });
 
 describe('QueryResultStep', () => {

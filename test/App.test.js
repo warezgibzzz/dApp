@@ -1,5 +1,5 @@
 import App from '../src/App.js';
-import { renderComponent } from './test_helper';
+import { renderComponent } from './TestHelper';
 import { history } from '../src/store';
 
 jest.mock('../src/actions/deploy.js', () => {}, { virtual: true });

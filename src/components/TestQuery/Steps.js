@@ -235,7 +235,7 @@ class QueryResultStep extends Component {
             <Button type="default" onClick={this.props.onPrevClicked} >
               <Icon type="left" />Test another query
             </Button>
-            <Button type="primary" onClick={this.props.onCreateContactClicked} >
+            <Button type="primary" onClick={this.props.onCreateContractClicked} >
               Create contract with Query<Icon type="right" />
             </Button>
           </ButtonGroup>
