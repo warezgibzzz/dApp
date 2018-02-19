@@ -13,9 +13,12 @@ function web3Initialized(results) {
   };
 }
 
-let getWeb3 = new Promise(function(resolve, reject) {
+let getWeb3 = (
+  window,
+  showErrorMessage = showMessage.bind(showMessage, 'error'),
+  dispatch = store.dispatch.bind(store)) => (new Promise(function(resolve, reject) {
   // Wait for loading completion to avoid race conditions with web3 injection timing.
-  window.addEventListener('load', function(dispatch) {
+  window.addEventListener('load', function() {
     var results;
     var web3 = window.web3;
 
@@ -30,8 +33,8 @@ let getWeb3 = new Promise(function(resolve, reject) {
 
         console.log("Please unlock MetaMask!");
 
-        showMessage('error', 'MetaMask is locked! Please unlock and refresh this page', 8);
-        resolve(store.dispatch(web3Initialized(results)));
+        showErrorMessage('MetaMask is locked! Please unlock and refresh this page', 8);
+        resolve(dispatch(web3Initialized(results)));
       }
 
       web3 = new Web3(web3.currentProvider);
@@ -42,7 +45,7 @@ let getWeb3 = new Promise(function(resolve, reject) {
 
       console.log('Injected web3 detected.');
 
-      resolve(store.dispatch(web3Initialized(results)));
+      resolve(dispatch(web3Initialized(results)));
     } else {
       // Fallback to localhost if no web3 injection. We've configured this to
       // use the development console's port by default.
@@ -56,9 +59,9 @@ let getWeb3 = new Promise(function(resolve, reject) {
 
       console.log('No web3 instance injected, using Local web3.');
 
-      resolve(store.dispatch(web3Initialized(results)));
+      resolve(dispatch(web3Initialized(results)));
     }
   });
-});
+}));
 
 export default getWeb3;
