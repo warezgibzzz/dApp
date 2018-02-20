@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col, Steps } from 'antd';
 
+import showMessage from '../message';
 import StepAnimation from '../StepAnimation';
 import { NameContractStep, PricingStep, ExpirationStep, DataSourceStep, DeployStep } from './Steps';
 
@@ -91,6 +92,8 @@ class GuidedDeployment extends Component {
       <DeployStep
         key="4"
         deployContract={() => { this.props.onDeployContract(this.state); }}
+        showErrorMessage={showMessage.bind(showMessage, 'error')}
+        showSuccessMessage={showMessage.bind(showMessage, 'success')}
         loading={this.props.loading}
         contract={this.props.contract}
         error={this.props.error} />

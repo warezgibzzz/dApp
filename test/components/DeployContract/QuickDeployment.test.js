@@ -5,7 +5,6 @@ import sinon from 'sinon';
 import { Form } from 'antd';
 import moment from 'moment';
 
-import DeployContractSuccess from '../../../src/components/DeployContract/DeployContractSuccess';
 import QuickDeployment from '../../../src/components/DeployContract/QuickDeployment';
 
 describe('QuickDeployment', () => {

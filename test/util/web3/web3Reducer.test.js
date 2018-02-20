@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import sinon from 'sinon';
 
 import { WEB3_INITIALIZED } from '../../../src/util/web3/getWeb3';
 import web3Reducer from '../../../src/util/web3/web3Reducer';

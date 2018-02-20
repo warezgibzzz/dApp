@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import moment from 'moment';
 import { Alert, Form, Input, InputNumber, Button } from 'antd';
 import { mount, shallow } from 'enzyme';
 import { expect } from 'chai';
@@ -75,13 +76,9 @@ describe('ExpirationStep', () => {
     expirationStep.setProps({
       expirationTimeStamp: 1234567,
       form: {
-        validateFields(cb) {
-          cb(null, {});
-        },
+        validateFields(cb) { cb(null, {}); },
         getFieldDecorator(name, object) {
-          return (component) => {
-            return component;
-          };
+          return (component) => component;
         }
       }
     });
@@ -95,13 +92,9 @@ describe('ExpirationStep', () => {
     expirationStep.setProps({
       expirationTimeStamp: 1234567,
       form: {
-        validateFields(cb) {
-          cb(new Error('Test field fails'));
-        },
+        validateFields(cb) { cb(new Error('Test field fails')); },
         getFieldDecorator(name, object) {
-          return (component) => {
-            return component;
-          };
+          return (component) => component;
         }
       }
     });
@@ -109,6 +102,24 @@ describe('ExpirationStep', () => {
     expirationStep.find(Form).simulate('submit');
     expect(updateDeploymentStateSpy).to.have.property('callCount', 0);
     expect(onNextClickedSpy).to.have.property('callCount', 0);
+  });
+
+  it('should normalized expirationTimeStamp to seconds if value exists', () => {
+    const currentMoment = moment();
+    const expectedTimeStamp = Math.floor(currentMoment.valueOf() / 1000);
+    expirationStep.setProps({
+      form: {
+        validateFields(cb) {
+          cb(null, { expirationTimeStamp: currentMoment });
+        },
+        getFieldDecorator(name, object) {
+          return (component) => component;
+        }
+      }
+    });
+
+    expirationStep.find(Form).simulate('submit');
+    expect(updateDeploymentStateSpy.args[0][0].expirationTimeStamp).to.equals(expectedTimeStamp);
   });
 });
 
@@ -122,10 +133,17 @@ describe('DataSourceStep', () => {
 describe('DeployStep', () => {
   let deployContractSpy;
   let deployStep;
-  
+  let successMessageSpy;
+  let errorMessageSpy;
   beforeEach(() => {
     deployContractSpy = sinon.spy();
-    deployStep = shallow(<DeployStep deployContract={deployContractSpy} />);
+    successMessageSpy = sinon.spy();
+    errorMessageSpy = sinon.spy();
+
+    deployStep = shallow(<DeployStep 
+      deployContract={deployContractSpy}
+      showSuccessMessage={successMessageSpy}
+      showErrorMessage={errorMessageSpy} />);
   });
 
   it('renders without crashing', () => {
@@ -145,5 +163,19 @@ describe('DeployStep', () => {
       address: '0x00000'
     } });
     expect(deployStep.find('.result')).to.have.length(1);
+  });
+
+  it('should call showErrorMessage if new props is error', () => {
+    deployStep.setProps({ error: null, loading: true, contract: null });
+    deployStep.setProps({ error: new Error('Error message'), loading: false });
+    expect(errorMessageSpy).to.have.property('callCount', 1);
+  });
+
+  it('should call showSuccessMessage if new props has contract', () => {
+    deployStep.setProps({ error: null, loading: true, contract: null });
+    deployStep.setProps({ error: null, loading: false, contract: {
+      address: '0x00000'
+    } });
+    expect(successMessageSpy).to.have.property('callCount', 1);
   });
 });
