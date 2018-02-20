@@ -73,9 +73,13 @@ class ContractsList extends Component {
   };
 
   render() {
-    let { sort, filters } = this.state;
+    let { sort, filters, contracts } = this.state;
     sort = sort || {};
     filters = filters || {};
+    contracts = contracts || [];
+
+    let baseTokenSymbols = [...new Set(contracts.map(item => item.BASE_TOKEN_SYMBOL))]
+                           .map(item => { return { value: item, text: item }; });
 
     const columns = [{
       title: 'Name',
@@ -133,27 +137,13 @@ class ContractsList extends Component {
       title: 'Base Token Symbol',
       dataIndex: 'BASE_TOKEN_SYMBOL',
       width: 150,
-      filterDropdown: (
-        <div className="custom-filter-dropdown">
-          <Input
-            ref={ele => this.baseTokenSearchInput = ele}
-            placeholder="Search Base Token Symbol"
-            value={this.state['BASE_TOKEN_SYMBOL_SEARCH_TEXT']}
-            onChange={(e) => this.onInputChange(e, 'BASE_TOKEN_SYMBOL_SEARCH_TEXT')}
-            onPressEnter={() => this.onSearch('BASE_TOKEN_SYMBOL', 'BASE_TOKEN_SYMBOL_SEARCH_TEXT', 'tokenSearchVisible', 'tokenFiltered')}
-          />
-          <Button type="primary" onClick={() => this.onSearch('BASE_TOKEN_SYMBOL', 'BASE_TOKEN_SYMBOL_SEARCH_TEXT', 'tokenSearchVisible', 'tokenFiltered')}>
-            Search
-          </Button>
-        </div>
-      ),
-      filterIcon: <Icon type="search" style={{ color: this.state.tokenFiltered ? '#108ee9' : '#aaa' }} />,
-      tokenSearchVisible: this.state.tokenSearchVisible,
-      onFilterDropdownVisibleChange: (visible) => {
-        this.setState({
-          tokenSearchVisible: visible,
-        }, () => this.baseTokenSearchInput && this.baseTokenSearchInput.focus());
+      className: 'text-center',
+      render: (text, row, index) => {
+        return text;
       },
+      filters: baseTokenSymbols,
+      filteredValue: filters.BASE_TOKEN_SYMBOL || null,
+      onFilter: (value, record) => record.BASE_TOKEN_SYMBOL.includes(value),
     }, {
       title: 'Oracle Query',
       dataIndex: 'ORACLE_QUERY',
