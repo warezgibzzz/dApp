@@ -1,9 +1,20 @@
-import MarketContractRegistry from './build/contracts/MarketContractRegistry';
-import MarketContract from './build/contracts/MarketContractOraclize';
-import MarketCollateralPool from './build/contracts/MarketCollateralPool';
-import MarketToken from './build/contracts/MarketToken';
-import QueryTest from './build/contracts/OraclizeQueryTest';
 
+let MarketContractRegistry = {};
+let MarketContract = {};
+let MarketCollateralPool = {};
+let MarketToken = {};
+let QueryTest = {};
+
+if(process.env.NODE_ENV !== 'test') {
+  // only load contracts abi if build exists.
+  // useful when running tests
+
+  MarketContractRegistry = require('./build/contracts/MarketContractRegistry');
+  MarketContract = require('./build/contracts/MarketContractOraclize');
+  MarketCollateralPool = require('./build/contracts/MarketCollateralPool');
+  MarketToken = require('./build/contracts/MarketToken');
+  QueryTest = require('./build/contracts/OraclizeQueryTest');
+}
 
 export default {
   MarketContractRegistry,
