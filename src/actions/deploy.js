@@ -1,5 +1,4 @@
 import contract from 'truffle-contract';
-import store from '../store';
 
 export function deployContract(
   { web3, contractSpecs }, 

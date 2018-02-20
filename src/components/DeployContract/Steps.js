@@ -8,7 +8,6 @@ import moment from 'moment';
 import { Row, Col, Icon, Form, Button, Alert, Card } from 'antd';
 
 import Loader from '../Loader';
-import showMessage from '../message';
 import DeployContractSuccess from './DeployContractSuccess';
 import Field, { FieldSettings } from './DeployContractField';
 
