@@ -66,6 +66,14 @@ class GuidedDeployment extends Component {
         updateDeploymentState={this.setState.bind(this)}
         {...this.state} />,
 
+      <DataSourceStep
+        key="3"
+        onPrevClicked={this.toPrevStep.bind(this)}
+        onNextClicked={this.toNextStep.bind(this)}
+        updateDeploymentState={this.setState.bind(this)}
+        initialValues={initialValues}
+        {...this.state} />,
+
       <PricingStep 
         key="1"
         onPrevClicked={this.toPrevStep.bind(this)}
@@ -78,14 +86,6 @@ class GuidedDeployment extends Component {
         onPrevClicked={this.toPrevStep.bind(this)}
         onNextClicked={this.toNextStep.bind(this)}
         updateDeploymentState={this.setState.bind(this)} 
-        {...this.state} />,
-
-      <DataSourceStep
-        key="3"
-        onPrevClicked={this.toPrevStep.bind(this)}
-        onNextClicked={this.toNextStep.bind(this)}
-        updateDeploymentState={this.setState.bind(this)}
-        initialValues={initialValues}
         {...this.state} />,
 
       <DeployStep
@@ -101,9 +101,9 @@ class GuidedDeployment extends Component {
         <Col {...parentColLayout}>
           <Steps current={currentStep}>
             <Step title="Name"/>
+            <Step title="Data Source" />
             <Step title="Pricing" />
             <Step title="Expiration" />
-            <Step title="Data Source" />
             <Step title="Deploy" />
           </Steps>
           <br/>
