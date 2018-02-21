@@ -1,19 +1,11 @@
-import MarketContractRegistry from '../build/contracts/MarketContractRegistry';
-import MarketContract from '../build/contracts/MarketContractOraclize';
-import MarketCollateralPool from '../build/contracts/MarketCollateralPool';
+import contract from 'truffle-contract';
 
-import store from '../store';
-
-const contract = require('truffle-contract');
-
-export function loadContracts() {
+export function loadContracts({ web3 }, { MarketContractRegistry, MarketContract, MarketCollateralPool }) {
   const type = 'GET_CONTRACTS';
 
   return function(dispatch) {
     dispatch({ type: `${type}_PENDING` });
-
-    let web3 = store.getState().web3.web3Instance;
-
+    
     // Double-check web3's status
     if (web3 && typeof web3 !== 'undefined') {
       // Using truffle-contract create needed contract objects and set providers

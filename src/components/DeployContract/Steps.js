@@ -2,15 +2,14 @@
  * Steps for use by GuidedDeployment.
  *
  */
-import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
-import {Row, Col, Icon, Form, Button, Alert, Card} from 'antd';
+import { Row, Col, Icon, Form, Button, Alert, Card } from 'antd';
 
 import Loader from '../Loader';
-import showMessage from '../message';
 import DeployContractSuccess from './DeployContractSuccess';
-import Field, {FieldSettings} from './DeployContractField';
+import Field, { FieldSettings } from './DeployContractField';
 
 const ButtonGroup = Button.Group;
 
@@ -298,10 +297,10 @@ class DeployStep extends BaseStepComponent {
     if (this.props.loading && !nextProps.loading) {
       if (nextProps.error) {
         // We had an error
-        showMessage('error', `There was an error deploying the contract: ${nextProps.error}`, 8);
+        this.props.showErrorMessage(`There was an error deploying the contract: ${nextProps.error}`, 8);
       } else if (nextProps.contract) {
         // Contract was deployed
-        showMessage('success', DeployContractSuccess({contract: nextProps.contract}), 5);
+        this.props.showSuccessMessage(DeployContractSuccess({contract: nextProps.contract}), 5);
       }
     }
   }

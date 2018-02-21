@@ -17,7 +17,7 @@ ReactDOM.render(
 );
 
 // Initialize web3 and set in Redux
-getWeb3
+getWeb3(window)
   .then(results => {
     console.log('Web3 initialized!');
 

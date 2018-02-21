@@ -5,6 +5,7 @@
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "chai": "^4.1.2",
+    "coveralls": "^3.0.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "eslint": "^4.16.0",
@@ -79,12 +80,16 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
+    "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
     "lint": "eslint src/ --ext .js",
     "precommit": "npm run lint"
   },
   "jest": {
     "collectCoverageFrom": [
-      "src/**/*.{js,jsx,mjs}"
+      "src/**/*.{js,jsx,mjs}",
+      "!src/containers/*.js",
+      "!src/index.js",
+      "!src/registerServiceWorker.js"
     ],
     "setupFiles": [
       "<rootDir>/config/polyfills.js"

@@ -12,18 +12,17 @@ const msgHandlers = {};
 function showMessage(type, content, duration) {
   const msgKey = new Date();
 
+  const handleClose = () => {
+    // Clean-up and remove the dismiss handler from the object
+    delete msgHandlers[msgKey];
+  };
+
   const handleDismiss = () => {
     if(msgHandlers[msgKey]) {
       msgHandlers[msgKey]();
 
-      delete msgHandlers[msgKey];
+      handleClose();
     }
-  };
-
-  const handleClose = () => {
-    // Clean-up and remove the dismiss handler from the object
-    // This is NOT called if dismissed manually
-    delete msgHandlers[msgKey];
   };
 
   const msgBody = (
@@ -36,6 +35,7 @@ function showMessage(type, content, duration) {
   // antd's message API returns a function to manually dismiss messages
   const m = message[type](msgBody, duration, handleClose);
   msgHandlers[msgKey] = m;
+  return handleDismiss;
 }
 
 export default showMessage;
