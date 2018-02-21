@@ -15,9 +15,9 @@ import GuidedDeployment from '../../../src/components/DeployContract/GuidedDeplo
 
 describe('GuidedDeployment', () => {
   const nameStep = 0;
-  const pricingStep = 1;
-  const expirationStep = 2;
-  const dataSourceStep = 3;
+  const dataSourceStep = 1;
+  const pricingStep = 2;
+  const expirationStep = 3;
   const deployStep = 4;
 
   let guidedDeployment;
@@ -26,7 +26,7 @@ describe('GuidedDeployment', () => {
     onDeployContractSpy = sinon.spy();
     guidedDeployment = shallow(<GuidedDeployment onDeployContract={onDeployContractSpy}/>);
   });
-  
+
   it('should render 5 steps', () => {
     expect(guidedDeployment.find(Steps.Step)).to.have.length(5);
   });
