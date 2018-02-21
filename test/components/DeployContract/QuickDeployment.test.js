@@ -7,8 +7,24 @@ import moment from 'moment';
 
 import QuickDeployment from '../../../src/components/DeployContract/QuickDeployment';
 
+function validContractFields() {
+  return { 
+    contractName: { value: 'ABA' },
+    baseTokenAddress: { value: '0x33333' },
+    priceFloor: { value: 0 },
+    priceCap: { value: 50 },
+    priceDecimalPlaces: { value: 2 },
+    qtyMultiplier: { value: 2 },
+    expirationTimeStamp: { value: moment().add(1, 'days') }, // always in the future
+    oracleDataSource: { value: 'URL' },
+    oracleQuery: { value: 'json(https://api.gdax.com/products/BTC-USD/ticker).price' },
+    oracleQueryRepeatSeconds: { value: 86400 }
+  };
+}
+
 describe('QuickDeployment', () => {
   let quickDeployment;
+  let wrappedFormRef;
   let switchModeSpy;
   let onDeploySpy;
   let successMessageSpy;
@@ -24,7 +40,8 @@ describe('QuickDeployment', () => {
       switchMode={switchModeSpy} 
       showErrorMessage={errorMessageSpy}
       showSuccessMessage={successMessageSpy}
-      onDeployContract={onDeploySpy} />);
+      onDeployContract={onDeploySpy}
+      wrappedComponentRef={(inst) => wrappedFormRef = inst} />);
   });
 
   it('should render', () => {
@@ -60,40 +77,22 @@ describe('QuickDeployment', () => {
     expect(submitButton.prop('disabled')).to.equal(true);
   });
 
-  it('should disable submit if component is loading', () => {
+  it('should disable submit if fields have errors', () => {
+    wrappedFormRef.props.form.setFields({ contractName: {
+      value: '',
+      errors: [ new Error('No name') ]
+    } });
     quickDeployment.setProps({
-      loading: false,
-      form: {
-        getFieldsError() {
-          return {
-            contractName: 'Error' // return error
-          };
-        },
-        getFieldDecorator(name, object) {
-          return (component) => {
-            return component;
-          };
-        }
-      }
+      loading: false
     });
-    
     const submitButton = quickDeployment.find('.submit-button').first();
     expect(submitButton.prop('disabled')).to.equal(true);
   });
 
   it('should enable submit button if component is not loading and no errors', () => {
+    // no errors are set by default on the form
     quickDeployment.setProps({
-      loading: false,
-      form: {
-        getFieldsError() {
-          return {};
-        },
-        getFieldDecorator(name, object) {
-          return (component) => {
-            return component;
-          };
-        }
-      }
+      loading: false
     });
 
     const submitButton = quickDeployment.find('.submit-button').first();
@@ -110,65 +109,32 @@ describe('QuickDeployment', () => {
   });
 
   it('should reset form when .reset-button is clicked', () => {
-    const resetSpy = sinon.spy();
+    const defaultFieldValues = wrappedFormRef.props.form.getFieldsValue();
+    wrappedFormRef.props.form.setFields(validContractFields());    
     quickDeployment.setProps({
-      loading: false,
-      form: {
-        getFieldsError() {
-          return {};
-        },
-        getFieldDecorator(name, object) {
-          return (component) => {
-            return component;
-          };
-        },
-        resetFields: resetSpy
-      }
+      loading: false
     });
 
     const resetButton = quickDeployment.find('.reset-button').first();
     resetButton.simulate('click', { preventDefault() {} });
-    expect(resetSpy).to.have.property('callCount', 1);
+
+    const valuesAfterReset = wrappedFormRef.props.form.getFieldsValue();
+    expect(valuesAfterReset).to.deep.equals(defaultFieldValues);
   });
 
   it('should call onDeployContract with form values when submitted', () => {
-    quickDeployment.setProps({
-      form: {
-        getFieldsError() {
-          return {};
-        },
-        getFieldDecorator(name, object) {
-          return (component) => {
-            return component;
-          };
-        },
-        validateFields(cb) {
-          cb(null, { expirationTimeStamp: moment() });
-        }
-      }
-    });
-
+    wrappedFormRef.props.form.setFields(validContractFields());
+    
     quickDeployment.find(Form).first().simulate('submit', { preventDefault() {} });
     expect(onDeploySpy).to.have.property('callCount', 1);
     // TODO: Test the values passed to onDeployContract
   });
 
   it('should not call onDeployContract when form is invalid.', () => {
-    quickDeployment.setProps({
-      form: {
-        getFieldsError() {
-          return {};
-        },
-        getFieldDecorator(name, object) {
-          return (component) => {
-            return component;
-          };
-        },
-        validateFields(cb) {
-          cb(new Error('Invalid value'));  // error
-        }
-      }
-    });
+    wrappedFormRef.props.form.setFields({ contractName: {
+      value: '',
+      errors: [ new Error('No name set') ]
+    } });
 
     quickDeployment.find(Form).first().simulate('submit', { preventDefault() {} });
     expect(onDeploySpy).to.have.property('callCount', 0);

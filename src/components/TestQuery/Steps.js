@@ -179,9 +179,9 @@ class SetQueryStep extends Component {
           <div>
             <h2>Some examples of {dataSource} Queries</h2>
             <div className="sample-query-list">
-              {getDataSourceObj(dataSource).sampleQueries.map(sample => {
+              {getDataSourceObj(dataSource).sampleQueries.map((sample, idx) => {
                 return (
-                  <div className="sample-query-item">
+                  <div className="sample-query-item" key={idx}>
                     { sample.title && <div className="sample-query-title">{sample.title}:</div> }
                     <div className="sample-query">{sample.query}</div>
                   </div>
