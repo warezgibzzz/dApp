@@ -110,9 +110,8 @@ class NameContractStep extends BaseStepComponent {
                form={this.props.form}/>
         <Row type="flex" justify="end">
           <Col>
-            <Button type="primary" htmlType="submit">
-              Set Pricing Range<Icon type="arrow-right"/>
-            </Button>
+            <BiDirectionalNav text="Select Oracle" {...this.props} />
+            {/* <BiDirectionalNav text="Deploy Contract" {...this.props} /> */}
           </Col>
         </Row>
       </Form>
@@ -221,7 +220,7 @@ class ExpirationStep extends BaseStepComponent {
                form={this.props.form}/>
         <Row type="flex" justify="end">
           <Col>
-            <BiDirectionalNav text="Select Oracle" {...this.props} />
+            <BiDirectionalNav text="Deploy Contract" {...this.props} />
           </Col>
         </Row>
       </Form>
@@ -277,7 +276,9 @@ class DataSourceStep extends BaseStepComponent {
 
         <Row type="flex" justify="end">
           <Col>
-            <BiDirectionalNav text="Deploy Contract" {...this.props} />
+            <Button type="primary" htmlType="submit">
+              Set Pricing Range<Icon type="arrow-right"/>
+            </Button>
           </Col>
         </Row>
       </Form>
