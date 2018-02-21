@@ -39,7 +39,7 @@ const oracleQueryValidator = (form, rule, value, callback) => {
 
   if (dataSourceObj) {
     callback(dataSourceObj.isQueryValid(oracleQuery) ? undefined
-    : `Invalid Query for '${oracleDataSource}' Data Source. A valid example is: ${dataSourceObj.sampleQueries[0]}`);
+    : `Invalid Query for '${oracleDataSource}' Data Source. A valid example is: ${dataSourceObj.sampleQueries[0].query}`);
   } else {
     callback(undefined);
   }

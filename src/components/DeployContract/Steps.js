@@ -2,15 +2,14 @@
  * Steps for use by GuidedDeployment.
  *
  */
-import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
-import {Row, Col, Icon, Form, Button, Alert, Card} from 'antd';
+import { Row, Col, Icon, Form, Button, Alert, Card } from 'antd';
 
 import Loader from '../Loader';
-import showMessage from '../message';
 import DeployContractSuccess from './DeployContractSuccess';
-import Field, {FieldSettings} from './DeployContractField';
+import Field, { FieldSettings } from './DeployContractField';
 
 const ButtonGroup = Button.Group;
 
@@ -110,9 +109,8 @@ class NameContractStep extends BaseStepComponent {
                form={this.props.form}/>
         <Row type="flex" justify="end">
           <Col>
-            <Button type="primary" htmlType="submit">
-              Set Pricing Range<Icon type="arrow-right"/>
-            </Button>
+            <BiDirectionalNav text="Select Oracle" {...this.props} />
+            {/* <BiDirectionalNav text="Deploy Contract" {...this.props} /> */}
           </Col>
         </Row>
       </Form>
@@ -221,7 +219,7 @@ class ExpirationStep extends BaseStepComponent {
                form={this.props.form}/>
         <Row type="flex" justify="end">
           <Col>
-            <BiDirectionalNav text="Select Oracle" {...this.props} />
+            <BiDirectionalNav text="Deploy Contract" {...this.props} />
           </Col>
         </Row>
       </Form>
@@ -277,7 +275,9 @@ class DataSourceStep extends BaseStepComponent {
 
         <Row type="flex" justify="end">
           <Col>
-            <BiDirectionalNav text="Deploy Contract" {...this.props} />
+            <Button type="primary" htmlType="submit">
+              Set Pricing Range<Icon type="arrow-right"/>
+            </Button>
           </Col>
         </Row>
       </Form>
@@ -297,10 +297,10 @@ class DeployStep extends BaseStepComponent {
     if (this.props.loading && !nextProps.loading) {
       if (nextProps.error) {
         // We had an error
-        showMessage('error', `There was an error deploying the contract: ${nextProps.error}`, 8);
+        this.props.showErrorMessage(`There was an error deploying the contract: ${nextProps.error}`, 8);
       } else if (nextProps.contract) {
         // Contract was deployed
-        showMessage('success', DeployContractSuccess({contract: nextProps.contract}), 5);
+        this.props.showSuccessMessage(DeployContractSuccess({contract: nextProps.contract}), 5);
       }
     }
   }

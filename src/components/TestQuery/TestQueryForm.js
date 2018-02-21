@@ -32,12 +32,6 @@ class TestQueryForm extends Component {
     };
   }
 
-  onInputChange(event) {
-    this.setState({
-      [event.target.id]: event.target.value
-    });
-  }
-
   onDataSourceChange(dataSources) {
     this.setState({
       oracleDataSource: dataSources
@@ -108,7 +102,7 @@ class TestQueryForm extends Component {
         result={this.props.results}
         error={this.props.error} 
         onPrevClicked={this.toPrevStep.bind(this)}
-        onCreateContactClicked={this.navigateToDeployContract.bind(this)} />,
+        onCreateContractClicked={this.navigateToDeployContract.bind(this)} />,
     ];
     
     return (

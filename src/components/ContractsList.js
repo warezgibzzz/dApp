@@ -13,7 +13,7 @@ import './ContractsList.css';
   "PRICE_CAP": "60465",
   "PRICE_DECIMAL_PLACES": "2",
   "PRICE_FLOOR": "20155",
-  "QTY_DECIMAL_PLACES": "10",
+  "QTY_MULTIPLIER": "10",
   "collateralPoolBalance": "0",
   "isSettled": true,
   "lastPrice": "105700"
@@ -33,7 +33,6 @@ class ContractsList extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.contracts !== this.state.contracts) {
       this.setState({ contracts: nextProps.contracts });
-      console.log(nextProps.contracts);
     }
   }
 

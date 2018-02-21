@@ -178,9 +178,16 @@ class SetQueryStep extends Component {
           <br/>
           <div>
             <h2>Some examples of {dataSource} Queries</h2>
-            <ul>
-              {getDataSourceObj(dataSource).sampleQueries.map(sample => <li key={sample}>{sample}</li>)}
-            </ul>
+            <div className="sample-query-list">
+              {getDataSourceObj(dataSource).sampleQueries.map(sample => {
+                return (
+                  <div className="sample-query-item">
+                    { sample.title && <div className="sample-query-title">{sample.title}:</div> }
+                    <div className="sample-query">{sample.query}</div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
           <FormItem
             label="Enter a query to text">
@@ -235,7 +242,7 @@ class QueryResultStep extends Component {
             <Button type="default" onClick={this.props.onPrevClicked} >
               <Icon type="left" />Test another query
             </Button>
-            <Button type="primary" onClick={this.props.onCreateContactClicked} >
+            <Button type="primary" onClick={this.props.onCreateContractClicked} >
               Create contract with Query<Icon type="right" />
             </Button>
           </ButtonGroup>

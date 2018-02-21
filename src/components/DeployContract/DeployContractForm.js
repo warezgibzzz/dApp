@@ -1,25 +1,28 @@
 import React, { Component } from 'react';
 import qs from 'query-string';
 
+import showMessage from '../message';
 import QuickDeployment from './QuickDeployment';
 import GuidedDeployment from './GuidedDeployment';
 
 class DeployContractForm extends Component {
 
-  handleDeploy(values) {
+  handleDeploy = (values) => {
     this.props.onDeployContract(values);
   }
 
   getQuickDeploymentComponent(props) {
-    return <QuickDeployment 
-              onDeployContract={this.handleDeploy.bind(this)}
-              {...props} {...this.props} />;
+    return <QuickDeployment
+              {...props} {...this.props}
+              showErrorMessage={showMessage.bind(showMessage, 'error')}
+              showSuccessMessage={showMessage.bind(showMessage, 'success')}
+              onDeployContract={this.handleDeploy} />;
   }
 
   getGuidedDeploymentComponent(props) {
     return <GuidedDeployment 
-              onDeployContract={this.handleDeploy.bind(this)}
-              {...props}  {...this.props} />;
+              {...props}  {...this.props}
+              onDeployContract={this.handleDeploy} />;
   }
 
   computeChildrenProps() {
