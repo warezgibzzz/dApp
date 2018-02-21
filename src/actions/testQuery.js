@@ -44,6 +44,7 @@ export function testQuery(querySpecs) {
             );
           })
           .then(function(queryTransactionResults) {
+            dispatch({ type: `${type}_TRANSACTION_PENDING`, payload: queryTransactionResults.tx });
             let queryEventIds = queryTransactionResults.logs
               .filter(({ event }) => event === 'QueryScheduled')
               .map(log => log.args.queryIDScheduled);
