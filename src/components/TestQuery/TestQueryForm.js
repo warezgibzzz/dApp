@@ -142,7 +142,7 @@ class TestQueryForm extends Component {
         result={this.props.results}
         error={this.props.error} 
         onPrevClicked={this.toPrevStep.bind(this)}
-        onCreateContactClicked={this.navigateToDeployContract.bind(this)} />,
+        onCreateContractClicked={this.navigateToDeployContract.bind(this)} />,
     ];
     
     return (

@@ -1,6 +1,8 @@
 import { connect } from 'react-redux';
 import TestQueryForm from '../components/TestQuery/TestQueryForm';
 import { testQuery } from '../actions/testQuery';
+import store from "../store";
+import Contracts from '../Contracts.js';
 
 const mapStateToProps = (state, ownProps) => {
   const { error, loading, results, transaction } = state.testQuery;
@@ -11,7 +13,10 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => {
   return {
     onTestQuery: querySpecs => {
-      dispatch(testQuery(querySpecs));
+      dispatch(testQuery({
+        web3: store.getState().web3.web3Instance,
+        querySpecs
+      }, Contracts));
     }
   };
 };

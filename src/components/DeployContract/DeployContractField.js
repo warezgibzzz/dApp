@@ -11,9 +11,11 @@ const ethAddressValidator = (rule, value, callback) => {
   const web3 = window.web3;
 
   // If web3 isn't set up for some reason, we probably shouldn't block validation
-  if(!web3) callback();
-
-  callback(web3.isAddress(value) ? undefined : 'Invalid ETH address');
+  if(!web3) {
+    callback();
+  } else {
+    callback(web3.isAddress(value) ? undefined : 'Invalid ETH address');
+  }
 };
 
 const timestampValidator = (rule, value, callback) => {
@@ -39,7 +41,7 @@ const oracleQueryValidator = (form, rule, value, callback) => {
 
   if (dataSourceObj) {
     callback(dataSourceObj.isQueryValid(oracleQuery) ? undefined
-    : `Invalid Query for '${oracleDataSource}' Data Source. A valid example is: ${dataSourceObj.sampleQueries[0]}`);
+    : `Invalid Query for '${oracleDataSource}' Data Source. A valid example is: ${dataSourceObj.sampleQueries[0].query}`);
   } else {
     callback(undefined);
   }
@@ -85,6 +87,9 @@ const fieldSettingsByName = {
           required: true, message: 'Please enter a price floor',
         },
         {
+          type: 'integer', message: 'Value must be an integer'
+        },
+        {
           validator: (rule, value, callback) => {
             priceFloorValidator(form, rule, value, callback);
           },
@@ -116,6 +121,9 @@ const fieldSettingsByName = {
       return [
         {
           required: true, message: 'Please enter a price cap',
+        },
+        {
+          type: 'integer', message: 'Value must be an integer'
         },
         {
           validator: (rule, value, callback) => {

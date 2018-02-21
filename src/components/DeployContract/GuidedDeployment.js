@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col, Steps } from 'antd';
 
+import showMessage from '../message';
 import StepAnimation from '../StepAnimation';
 import { NameContractStep, PricingStep, ExpirationStep, DataSourceStep, DeployStep } from './Steps';
 
@@ -66,6 +67,14 @@ class GuidedDeployment extends Component {
         updateDeploymentState={this.setState.bind(this)}
         {...this.state} />,
 
+      <DataSourceStep
+        key="3"
+        onPrevClicked={this.toPrevStep.bind(this)}
+        onNextClicked={this.toNextStep.bind(this)}
+        updateDeploymentState={this.setState.bind(this)}
+        initialValues={initialValues}
+        {...this.state} />,
+
       <PricingStep 
         key="1"
         onPrevClicked={this.toPrevStep.bind(this)}
@@ -80,17 +89,11 @@ class GuidedDeployment extends Component {
         updateDeploymentState={this.setState.bind(this)} 
         {...this.state} />,
 
-      <DataSourceStep
-        key="3"
-        onPrevClicked={this.toPrevStep.bind(this)}
-        onNextClicked={this.toNextStep.bind(this)}
-        updateDeploymentState={this.setState.bind(this)}
-        initialValues={initialValues}
-        {...this.state} />,
-
       <DeployStep
         key="4"
         deployContract={() => { this.props.onDeployContract(this.state); }}
+        showErrorMessage={showMessage.bind(showMessage, 'error')}
+        showSuccessMessage={showMessage.bind(showMessage, 'success')}
         loading={this.props.loading}
         contract={this.props.contract}
         error={this.props.error} />
@@ -101,9 +104,9 @@ class GuidedDeployment extends Component {
         <Col {...parentColLayout}>
           <Steps current={currentStep}>
             <Step title="Name"/>
+            <Step title="Data Source" />
             <Step title="Pricing" />
             <Step title="Expiration" />
-            <Step title="Data Source" />
             <Step title="Deploy" />
           </Steps>
           <br/>

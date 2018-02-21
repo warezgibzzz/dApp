@@ -28,9 +28,18 @@ const OracleDataSources = [
             .test(query);
       },
       sampleQueries: [
-        'json(https://api.gdax.com/products/BTC-USD/ticker).price - Price of BTC-USD on GDAX',
-        'json(https://api.kraken.com/0/public/Ticker?pair=ETHUSD).result.XETHZUSD.p.1 - Volume Weight Average Price (24 hrs) of ETH-USD on Kraken',
-        'json(https://api.bitfinex.com/v1/pubticker/omgeth).mid - Mid Price of OMG-ETH',
+        {
+          query: 'json(https://api.gdax.com/products/BTC-USD/ticker).price',
+          title: 'Price of BTC-USD on GDAX',
+        },
+        {
+          query: 'json(https://api.kraken.com/0/public/Ticker?pair=ETHUSD).result.XETHZUSD.p.1',
+          title: 'Volume Weight Average Price (24 hrs) of ETH-USD on Kraken',
+        },
+        {
+          query: 'json(https://api.bitfinex.com/v1/pubticker/omgeth).mid',
+          title: 'Mid Price of OMG-ETH',
+        }
       ]
     },
     {
@@ -46,9 +55,15 @@ const OracleDataSources = [
         return query.length !== 0;
       },
       sampleQueries: [
-        'AAPL Price',
-        'Temperature in Boulder, CO',
-        'S&P 500 Index Price'
+        {
+          query: 'AAPL PRICE',
+        },
+        {
+          query: 'Temperature in Boulder, CO',
+        },
+        {
+          query: 'S&P 500 Index Price',
+        }
       ]
     },
     {
@@ -69,7 +84,9 @@ const OracleDataSources = [
         return isIPFS.multihash(query);
       },
       sampleQueries: [
-        'QmT78zSuBmuS4z925WZfrqQ1qHaJ56DQaTfyMUF7F8ff5o'
+        {
+          query: 'QmT78zSuBmuS4z925WZfrqQ1qHaJ56DQaTfyMUF7F8ff5o',
+        }
       ]
     },
     {
@@ -100,7 +117,9 @@ const OracleDataSources = [
         return query.length !== 0;
       },
       sampleQueries: [
-        'QmRxtL9K2de7v7QBYCCrwcjZHjYmuKggZ8xaqZ6UUWvd1s'
+        {
+          query: 'QmRxtL9K2de7v7QBYCCrwcjZHjYmuKggZ8xaqZ6UUWvd1s',
+        }
       ]
     }
   ];

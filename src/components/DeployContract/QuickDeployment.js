@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, Form, Button, Alert } from 'antd';
 
-import showMessage from '../message';
 import Loader from '../Loader';
 import Field from './DeployContractField';
 import DeployContractSuccess from './DeployContractSuccess';
@@ -52,20 +51,16 @@ class QuickDeployment extends Component {
     if(this.props.loading && !nextProps.loading) {
       if(nextProps.error) {
         // We had an error
-        showMessage('error', `There was an error deploying the contract: ${nextProps.error}`, 8);
+        this.props.showErrorMessage(`There was an error deploying the contract: ${nextProps.error}`, 8);
       } else if (nextProps.contract) {
         // Contract was deployed
-        showMessage('success', DeployContractSuccess({ contract: nextProps.contract }), 5);
+        this.props.showSuccessMessage(DeployContractSuccess({ contract: nextProps.contract }), 5);
       }
     }
   }
 
   handleReset(event) {
     event.preventDefault();
-
-    // Don't allow reset if we're submitting
-    if(this.props.loading) return;
-
     this.props.form.resetFields();
   }
 
@@ -103,7 +98,7 @@ class QuickDeployment extends Component {
     return (<div>
       <div>
         <Alert message={<span>
-          First time deploying a Contract? Try the <a href={this.props.guidedModeUrl} onClick={this.handleModeSwitching.bind(this)}>guided mode</a>.
+          First time deploying a Contract? Try the <a className="switch-mode-link" href={this.props.guidedModeUrl} onClick={this.handleModeSwitching.bind(this)}>guided mode</a>.
           </span>} type="info" showIcon />
       </div>
       <br/>
@@ -160,7 +155,7 @@ class QuickDeployment extends Component {
 
         <Row type="flex" justify="center">
           <Col {...formButtonLayout}>
-            <Button type="primary" htmlType="submit" loading={this.props.loading} disabled={this.isSubmitDisabled()} style={{width: '100%'}}>
+            <Button className="submit-button" type="primary" htmlType="submit" loading={this.props.loading} disabled={this.isSubmitDisabled()} style={{width: '100%'}}>
               Deploy Contract
             </Button>
           </Col>
@@ -168,7 +163,7 @@ class QuickDeployment extends Component {
 
         <Row type="flex" justify="center" style={{ marginTop: '16px' }}>
           <Col {...formButtonLayout}>
-            <Button type="secondary" style={{width: '100%'}} disabled={this.props.loading} onClick={this.handleReset.bind(this)}>
+            <Button className="reset-button" type="secondary" style={{width: '100%'}} disabled={this.props.loading} onClick={this.handleReset.bind(this)}>
               Reset Form
             </Button>
           </Col>
