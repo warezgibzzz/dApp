@@ -13,6 +13,14 @@ function web3Initialized(results) {
   };
 }
 
+const networkMap = {
+  1: 'mainnet',
+  2: 'morden',
+  3: 'ropsten',
+  4: 'rinkeby',
+  42: 'kovan',
+};
+
 let getWeb3 = new Promise(function(resolve, reject) {
   // Wait for loading completion to avoid race conditions with web3 injection timing.
   window.addEventListener('load', function(dispatch) {
@@ -25,7 +33,8 @@ let getWeb3 = new Promise(function(resolve, reject) {
 
       if (web3.eth.accounts.length === 0) {
         results = {
-          web3Instance: null
+          web3Instance: null,
+          network: networkMap[web3.version.network] || 'unknown',
         };
 
         console.log("Please unlock MetaMask!");
@@ -37,7 +46,8 @@ let getWeb3 = new Promise(function(resolve, reject) {
       web3 = new Web3(web3.currentProvider);
 
       results = {
-        web3Instance: web3
+        web3Instance: web3,
+        network: networkMap[web3.version.network] || 'unknown',
       };
 
       console.log('Injected web3 detected.');
