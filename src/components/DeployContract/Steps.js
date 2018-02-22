@@ -187,7 +187,8 @@ class PricingStep extends BaseStepComponent {
           multiplier of 1, and the price moved to 19023, then the value will have change by 1 wei. If however the
           multiplier was set at 1,000,000,000 the price movement of 1 unit would now
           correspond to a value of 1 gwei (not wei).
-          Please see <a href="https://etherconverter.online/" target="_blank"> here </a> for an ethereum unit converter.
+          Please see <a href="https://etherconverter.online/" target="_blank" rel="noopener noreferrer"> here </a> for
+          an ethereum unit converter.
         </div>
         <br/>
         <Field name='qtyMultiplier'
