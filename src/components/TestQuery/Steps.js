@@ -190,7 +190,7 @@ class SetQueryStep extends Component {
             </div>
           </div>
           <FormItem
-            label="Enter a query to text">
+            label="Enter a query to test">
             {this.state.error && <Alert message={this.state.error} type="error" />}
             <Input placeholder="Query" onChange={this.onInputChange.bind(this)}/>
           </FormItem>
