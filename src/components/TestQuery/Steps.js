@@ -31,7 +31,7 @@ class AboutOraclesStep extends Component {
             <div>
               <h2>Which Oracle are we using?</h2>
               Our proof of concept has been built using
-              <a href="http://www.oraclize.it/" target="_blank"> Oraclize.it</a>,
+              <a href="http://www.oraclize.it/" target="_blank" rel="noopener noreferrer"> Oraclize.it</a>,
               the leading oracle service for smart contracts and blockchain applications, serving
               thousands of requests every day on Ethereum, Bitcoin and Rootstock.
             </div>
@@ -95,7 +95,7 @@ class SelectDataSourceStep extends Component {
           <br/>
           <div>
             Below are the data sources you can choose from when using
-            <a href="http://www.oraclize.it/" target="_blank"> Oraclize.it</a>.
+            <a href="http://www.oraclize.it/" target="_blank" rel="noopener noreferrer"> Oraclize.it</a>.
             Select one and proceed to test out a query.
           </div>
         </Col>
@@ -198,7 +198,8 @@ class SetQueryStep extends Component {
           </FormItem>
           <div>
             NOTE: You can specify your
-            <a href="http://docs.oraclize.it/#general-concepts-parsing-helpers" target="_blank"> parsing helpers </a>
+            <a href="http://docs.oraclize.it/#general-concepts-parsing-helpers"
+               target="_blank" rel="noopener noreferrer"> parsing helpers </a>
             with the query too.
           </div>
           <br/>
