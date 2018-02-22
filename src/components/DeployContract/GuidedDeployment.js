@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { Row, Col, Steps } from 'antd';
+import React, {Component} from 'react';
+import {Row, Col, Steps} from 'antd';
 
 import showMessage from '../message';
 import StepAnimation from '../StepAnimation';
-import { NameContractStep, PricingStep, ExpirationStep, DataSourceStep, DeployStep } from './Steps';
+import {NameContractStep, PricingStep, ExpirationStep, DataSourceStep, DeployStep} from './Steps';
 
 const Step = Steps.Step;
 
@@ -21,7 +21,7 @@ const parentColLayout = {
 
 /**
  * Component for Guided Deployment of Contracts
- * 
+ *
  */
 class GuidedDeployment extends Component {
   constructor(props) {
@@ -39,7 +39,7 @@ class GuidedDeployment extends Component {
       expirationTimeStamp: '',
       oracleDataSource: '',
       oracleQuery: '',
-      oracleQueryRepeatSeconds: ''
+      oracleQueryRepeatSeconds: '86400' //default to daily queries.
     };
   }
 
@@ -61,7 +61,7 @@ class GuidedDeployment extends Component {
     const currentStep = this.state.step;
     const initialValues = this.props.initialValues;
     const steps = [
-      <NameContractStep 
+      <NameContractStep
         key="0"
         onNextClicked={this.toNextStep.bind(this)}
         updateDeploymentState={this.setState.bind(this)}
@@ -75,28 +75,30 @@ class GuidedDeployment extends Component {
         initialValues={initialValues}
         {...this.state} />,
 
-      <PricingStep 
+      <PricingStep
         key="1"
         onPrevClicked={this.toPrevStep.bind(this)}
         onNextClicked={this.toNextStep.bind(this)}
-        updateDeploymentState={this.setState.bind(this)} 
+        updateDeploymentState={this.setState.bind(this)}
         {...this.state} />,
 
       <ExpirationStep
         key="2"
         onPrevClicked={this.toPrevStep.bind(this)}
         onNextClicked={this.toNextStep.bind(this)}
-        updateDeploymentState={this.setState.bind(this)} 
+        updateDeploymentState={this.setState.bind(this)}
         {...this.state} />,
 
       <DeployStep
         key="4"
-        deployContract={() => { this.props.onDeployContract(this.state); }}
+        deployContract={() => {
+          this.props.onDeployContract(this.state);
+        }}
         showErrorMessage={showMessage.bind(showMessage, 'error')}
         showSuccessMessage={showMessage.bind(showMessage, 'success')}
         loading={this.props.loading}
         contract={this.props.contract}
-        error={this.props.error} />
+        error={this.props.error}/>
     ];
 
     return (
@@ -104,19 +106,19 @@ class GuidedDeployment extends Component {
         <Col {...parentColLayout}>
           <Steps current={currentStep}>
             <Step title="Name"/>
-            <Step title="Data Source" />
-            <Step title="Pricing" />
-            <Step title="Expiration" />
-            <Step title="Deploy" />
+            <Step title="Data Source"/>
+            <Step title="Pricing"/>
+            <Step title="Expiration"/>
+            <Step title="Deploy"/>
           </Steps>
           <br/>
           <StepAnimation
             direction={this.state.transitionDirection}>
-            {steps.filter((step, index) => currentStep === index )}
+            {steps.filter((step, index) => currentStep === index)}
           </StepAnimation>
         </Col>
       </Row>
-  );
+    );
   }
 }
 
