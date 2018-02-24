@@ -64,7 +64,8 @@ let getWeb3 = (
       web3 = new Web3(provider);
 
       results = {
-        web3Instance: web3
+        web3Instance: web3,
+        network: networkMap[web3.version.network] || 'unknown',
       };
 
       console.log('No web3 instance injected, using Local web3.');

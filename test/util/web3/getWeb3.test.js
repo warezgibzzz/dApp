@@ -50,7 +50,8 @@ describe('getWeb3', () => {
     Object.assign(mockWindow, {
       web3: {
         currentProvider: { isMetaMask: true },
-        eth: { accounts: [] } // no accounts mean provider is locked.
+        eth: { accounts: [] }, // no accounts mean provider is locked.
+        version: { network: '' },
       }
     });
     await getWeb3(mockWindow, showErrorMessageSpy, dispatchSpy);
