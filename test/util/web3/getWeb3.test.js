@@ -5,6 +5,7 @@ import FakeProvider from 'web3-fake-provider';
 import getWeb3 from '../../../src/util/web3/getWeb3';
 
 const defaultProviderHost = 'http://127.0.0.1:9545';
+const defaultNetwork = '4447';
 
 describe('getWeb3', () => {
   let dispatchSpy;
@@ -18,6 +19,15 @@ describe('getWeb3', () => {
         if (event === 'load') { cb(); }
       },
     };
+  });
+
+  it('should dispatch with web3.version.network as Truffle Develop Network', async () => {
+    await getWeb3(mockWindow, showErrorMessageSpy, dispatchSpy);
+
+    const dispatchCall = dispatchSpy.getCall(0);
+    const web3Instance = dispatchCall.args[0].payload.web3Instance;
+    console.log('Current Network', web3Instance.version.network);
+    expect(web3Instance.version.network).to.equals(defaultNetwork);
   });
   
   it('should call dispatch with localhost web3 instance if web3 provider does not exist', async () => {
@@ -57,7 +67,7 @@ describe('getWeb3', () => {
       web3: {
         currentProvider: mockProvider,
         eth: { accounts: [] }, // no accounts mean provider is locked.
-        version: { network: '' },
+        version: { network: defaultNetwork },
       }
     });
     await getWeb3(mockWindow, showErrorMessageSpy, dispatchSpy);
