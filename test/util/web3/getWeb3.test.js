@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
+import FakeProvider from 'web3-fake-provider';
 
 import getWeb3 from '../../../src/util/web3/getWeb3';
 
@@ -15,7 +16,7 @@ describe('getWeb3', () => {
     mockWindow = {
       addEventListener(event, cb) {
         if (event === 'load') { cb(); }
-      }
+      },
     };
   });
   
@@ -29,13 +30,14 @@ describe('getWeb3', () => {
   });
 
   it('should dispatch web3.currentProvider as web3Instance', async () => {
-    const expectedProvider = {
-      isMetaMask: true,
-      host: 'ws://remotenode.com:8546'
-    };
+    const mockProvider = new FakeProvider();
+
+    mockProvider.isMetaMask = true;
+    mockProvider.host = 'ws://remotenode.com:8546';
+
     Object.assign(mockWindow, {
       web3: {
-        currentProvider: expectedProvider,
+        currentProvider: mockProvider,
         eth: { accounts: [ { } ] } // accounts must not be empty else it would show error 
       }
     });
@@ -43,7 +45,7 @@ describe('getWeb3', () => {
 
     const dispatchCall = dispatchSpy.getCall(0);
     const web3Instance = dispatchCall.args[0].payload.web3Instance;
-    expect(web3Instance.currentProvider).to.equals(expectedProvider);
+    expect(web3Instance.currentProvider).to.equals(mockProvider);
   });
 
   it('should show Error message when default provider is locked', async () => {

@@ -44,6 +44,7 @@ let getWeb3 = (
 
         showErrorMessage('MetaMask is locked! Please unlock and refresh this page', 8);
         resolve(dispatch(web3Initialized(results)));
+        return;
       }
 
       web3 = new Web3(web3.currentProvider);
