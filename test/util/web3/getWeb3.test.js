@@ -49,9 +49,13 @@ describe('getWeb3', () => {
   });
 
   it('should show Error message when default provider is locked', async () => {
+    const mockProvider = new FakeProvider();
+
+    mockProvider.isMetaMask = true;
+
     Object.assign(mockWindow, {
       web3: {
-        currentProvider: { isMetaMask: true },
+        currentProvider: mockProvider,
         eth: { accounts: [] }, // no accounts mean provider is locked.
         version: { network: '' },
       }
