@@ -39,6 +39,28 @@ describe('getWeb3', () => {
     expect(web3Instance.currentProvider.host).to.equals(defaultProviderHost);
   });
 
+  it('should have proper results', async () => {
+    const mockProvider = new FakeProvider();
+
+    mockProvider.isMetaMask = true;
+    mockProvider.host = 'ws://remotenode.com:8546';
+
+    Object.assign(mockWindow, {
+      web3: {
+        currentProvider: mockProvider,
+        eth: { accounts: [ { } ] }, // accounts must not be empty else it would show error 
+      },
+      network: defaultNetwork,
+    });
+    await getWeb3(mockWindow, showErrorMessageSpy, dispatchSpy);
+
+    const dispatchCall = dispatchSpy.getCall(0);
+    const { payload } = dispatchCall.args[0];
+
+    expect(payload).to.have.property('web3Instance');
+    expect(payload).to.have.property('network');
+  });
+
   it('should dispatch web3.currentProvider as web3Instance', async () => {
     const mockProvider = new FakeProvider();
 
