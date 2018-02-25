@@ -11,9 +11,11 @@ const ethAddressValidator = (rule, value, callback) => {
   const web3 = window.web3;
 
   // If web3 isn't set up for some reason, we probably shouldn't block validation
-  if(!web3) callback();
-
-  callback(web3.isAddress(value) ? undefined : 'Invalid ETH address');
+  if(!web3) {
+    callback();
+  } else {
+    callback(web3.isAddress(value) ? undefined : 'Invalid ETH address');
+  }
 };
 
 const timestampValidator = (rule, value, callback) => {

@@ -29,8 +29,8 @@ describe('NameContractStep', () => {
     expect(nameContractStep.find(Input)).to.have.length(2);
   });
 
-  it('should have a next button', () => {
-    expect(nameContractStep.find(Button)).to.have.length(1);
+  it('should have a prev and next button', () => {
+    expect(nameContractStep.find(Button)).to.have.length(2);
   });
 });
 

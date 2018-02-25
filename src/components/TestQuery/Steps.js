@@ -30,7 +30,8 @@ class AboutOraclesStep extends Component {
             <br/>
             <div>
               <h2>Which Oracle are we using?</h2>
-              Our proof of concept has been built using <a href="http://www.oraclize.it/">Oraclize.it</a>,
+              Our proof of concept has been built using
+              <a href="http://www.oraclize.it/" target="_blank" rel="noopener noreferrer"> Oraclize.it</a>,
               the leading oracle service for smart contracts and blockchain applications, serving
               thousands of requests every day on Ethereum, Bitcoin and Rootstock.
             </div>
@@ -93,7 +94,8 @@ class SelectDataSourceStep extends Component {
           </div>
           <br/>
           <div>
-            Below are the data sources you can choose from when using <a href="http://www.oraclize.it/">Oraclize.it</a>.
+            Below are the data sources you can choose from when using
+            <a href="http://www.oraclize.it/" target="_blank" rel="noopener noreferrer"> Oraclize.it</a>.
             Select one and proceed to test out a query.
           </div>
         </Col>
@@ -179,9 +181,9 @@ class SetQueryStep extends Component {
           <div>
             <h2>Some examples of {dataSource} Queries</h2>
             <div className="sample-query-list">
-              {getDataSourceObj(dataSource).sampleQueries.map(sample => {
+              {getDataSourceObj(dataSource).sampleQueries.map((sample, idx) => {
                 return (
-                  <div className="sample-query-item">
+                  <div className="sample-query-item" key={idx}>
                     { sample.title && <div className="sample-query-title">{sample.title}:</div> }
                     <div className="sample-query">{sample.query}</div>
                   </div>
@@ -190,13 +192,15 @@ class SetQueryStep extends Component {
             </div>
           </div>
           <FormItem
-            label="Enter a query to text">
+            label="Enter a query to test">
             {this.state.error && <Alert message={this.state.error} type="error" />}
             <Input placeholder="Query" onChange={this.onInputChange.bind(this)}/>
           </FormItem>
           <div>
-            NOTE: You can specify your <a href="http://docs.oraclize.it/#general-concepts-parsing-helpers">parsing helpers</a> with
-            the query too.
+            NOTE: You can specify your
+            <a href="http://docs.oraclize.it/#general-concepts-parsing-helpers"
+               target="_blank" rel="noopener noreferrer"> parsing helpers </a>
+            with the query too.
           </div>
           <br/>
         </Col>

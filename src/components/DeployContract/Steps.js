@@ -2,14 +2,14 @@
  * Steps for use by GuidedDeployment.
  *
  */
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
 import moment from 'moment';
-import { Row, Col, Icon, Form, Button, Alert, Card } from 'antd';
+import {Row, Col, Icon, Form, Button, Alert, Card} from 'antd';
 
 import Loader from '../Loader';
 import DeployContractSuccess from './DeployContractSuccess';
-import Field, { FieldSettings } from './DeployContractField';
+import Field, {FieldSettings} from './DeployContractField';
 
 const ButtonGroup = Button.Group;
 
@@ -131,21 +131,38 @@ class PricingStep extends BaseStepComponent {
       <Form onSubmit={this.handleSubmit.bind(this)} layout="vertical">
         <h1>Specify Pricing Rules</h1>
         <div>
-          The Price Floor and Cap define the maximum loss or gain for participants. Therefore, it also determines
-          the amount of collateral token each participant must post in order to take a short or a long position.
+          The Price Floor and Cap define the range of a contract.  If an oracle reports a price
+          above a Cap or below a Floor the contract will enter settlement and no longer trade. Additionally, these
+          parameters define a participants maximum loss when entering a trade and therefore the amount collateral that
+          must be posted.
           <br/>
           <br/>
           <h3>
-            All prices must be in an integer format, floating
-            point values are not currently supported by Ethereum.
+            All prices must in an integer format (e.g 1245, not 12.45),
+            floating point values (decimals), are not currently supported by Ethereum.
           </h3>
         </div>
         <br/>
 
+        <h2>Price Decimal Places</h2>
+        <div>
+          Ethereum currently does not support floating points numbers. Therefore all prices reported by oracles must
+          be converted to a whole number (integer). This variable is how many decimal places one needs to move the
+          decimal in order to go from the oracle query price to an integer. For example,
+          if the oracle query results returned a value of 190.22, we need to move the
+          decimal two (2) places to convert to a whole number of 19022, so we would enter 2 below.
+        </div>
+        <br/>
+        <Field name='priceDecimalPlaces'
+               initialValue={this.props.priceDecimalPlaces}
+               form={this.props.form}/>
+
         <h2>Price Floor</h2>
         <div>
           This is the lower bound of price exposure this contract will trade. If the oracle reports a price below this
-          value the contract will enter into settlement.
+          value the contract will enter into settlement. This should also be represented as a whole number. If we take
+          the example above of a price of 190.22 and decide the Floor for our contract
+          should be 150.00, we would enter 15000 here.
         </div>
         <br/>
         <Field name='priceFloor'
@@ -155,24 +172,12 @@ class PricingStep extends BaseStepComponent {
         <h2>Price Cap</h2>
         <div>
           This is the upper bound of price exposure this contract will trade. If the oracle reports a price above this
-          value the contract will enter into settlement.
+          value the contract will enter into settlement. Following our example, if we decide the Cap for our contract
+          should be 230.00, we would enter 23000 as our Cap.
         </div>
         <br/>
         <Field name='priceCap'
                initialValue={this.props.priceCap}
-               form={this.props.form}/>
-
-        <h2>Price Decimal Places</h2>
-        <div>
-          Ethereum currently does not support floating points numbers. Therefore all prices reported by oracles must
-          be converted if they are represented as a floating point (decimal) number. This variable is how many
-          decimal places one needs to move the decimal in order to go from the oracle query price to an integer.
-          For instance if the oracle query results returned a value such as 190.22, we need to move the
-          decimal two (2) places to convert to an integer value of 19022.
-        </div>
-        <br/>
-        <Field name='priceDecimalPlaces'
-               initialValue={this.props.priceDecimalPlaces}
                form={this.props.form}/>
 
         <h2>Price Quantity Multiplier</h2>
@@ -182,6 +187,8 @@ class PricingStep extends BaseStepComponent {
           multiplier of 1, and the price moved to 19023, then the value will have change by 1 wei. If however the
           multiplier was set at 1,000,000,000 the price movement of 1 unit would now
           correspond to a value of 1 gwei (not wei).
+          Please see <a href="https://etherconverter.online/" target="_blank" rel="noopener noreferrer"> here </a> for
+          an ethereum unit converter.
         </div>
         <br/>
         <Field name='qtyMultiplier'
@@ -242,8 +249,10 @@ class DataSourceStep extends BaseStepComponent {
         <h1>Set Oracle Data Source</h1>
         <div>
           Currently, Oraclize.it offers several different options for their data source. If you need help creating
-          a proper oracle query, or availabe data sources please refer to the <a href="/test">Test Query</a> page.
+          a proper oracle query, or availabe data sources please refer
+          to the <a href="/test" target="_blank">Test Query</a> page.
         </div>
+        <br/>
         <h2>Select Data Source</h2>
         <div>
           Available data sources from Oraclize.it
@@ -255,7 +264,8 @@ class DataSourceStep extends BaseStepComponent {
 
         <h2>Oracle Query</h2>
         <div>
-          Properly structured Oraclize.it query, Please use the <a href="/test">Test Query</a> page for clarification.
+          Properly structured Oraclize.it query, Please use
+          the <a href="/test" target="_blank">Test Query</a> page for clarification.
         </div>
         <br/>
         <Field name='oracleQuery'
@@ -264,7 +274,8 @@ class DataSourceStep extends BaseStepComponent {
 
         <h2>Query Repeat Interval</h2>
         <div>
-          Number of seconds in between repeating the oracle query. Typically this only need be once per day.
+          Number of seconds in between repeating the oracle query.
+          Typically this only need be once per day (86,400 seconds).
           Additional frequency can be beneficial in some circumstances but will increase the needed amount of ETH that
           is needs to be pre-funded to the contract in order to pay for the query gas costs.
         </div>
