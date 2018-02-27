@@ -19,6 +19,7 @@ const networkMap = {
   3: 'ropsten',
   4: 'rinkeby',
   42: 'kovan',
+  4447: 'truffle',
 };
 
 let getWeb3 = (
@@ -37,7 +38,7 @@ let getWeb3 = (
       if (web3.eth.accounts.length === 0) {
         results = {
           web3Instance: null,
-          network: networkMap[web3.version.network] || 'unknown',
+          network: 'unknown',
         };
 
         console.log("Please unlock MetaMask!");
@@ -66,7 +67,7 @@ let getWeb3 = (
 
       results = {
         web3Instance: web3,
-        network: networkMap[web3.version.network] || 'unknown',
+        network: 'truffle'
       };
 
       console.log('No web3 instance injected, using Local web3.');
