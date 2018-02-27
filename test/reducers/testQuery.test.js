@@ -8,10 +8,19 @@ describe('TestQuery Reducer', () => {
     pending: 'TEST_QUERY_PENDING',
     fulfilled: 'TEST_QUERY_FULFILLED',
     rejected: 'TEST_QUERY_REJECTED',
+    pendingTransaction: 'TEST_QUERY_TRANSACTION_PENDING',
   };
 
   it('should return loading state with PENDING action', () => {
     const newState = testQuery({}, { type: actions.pending });
+    expect(newState.loading).to.equal(true);
+    expect(newState.error).to.equal(null);
+  });
+
+  it('should return result state with QUERY TRANSACTION PENDING action', () => {
+    const expectedTransaction = 'Result of query';
+    const newState = testQuery({}, { type: actions.pendingTransaction, payload: expectedTransaction });
+    expect(newState.transaction).to.equal(expectedTransaction);
     expect(newState.loading).to.equal(true);
     expect(newState.error).to.equal(null);
   });
