@@ -3,6 +3,7 @@ let MarketContractRegistry = {};
 let MarketContract = {};
 let MarketCollateralPool = {};
 let MarketToken = {};
+let CollateralToken = {};
 let QueryTest = {};
 
 if(process.env.NODE_ENV !== 'test') {
@@ -13,6 +14,7 @@ if(process.env.NODE_ENV !== 'test') {
   MarketContract = require('./build/contracts/MarketContractOraclize');
   MarketCollateralPool = require('./build/contracts/MarketCollateralPool');
   MarketToken = require('./build/contracts/MarketToken');
+  CollateralToken = require('./build/contracts/CollateralToken');
   QueryTest = require('./build/contracts/OraclizeQueryTest');
 }
 
@@ -21,5 +23,6 @@ export default {
   MarketContract,
   MarketCollateralPool,
   MarketToken,
+  CollateralToken,
   QueryTest
 };
