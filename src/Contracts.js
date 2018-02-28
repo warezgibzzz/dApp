@@ -1,4 +1,3 @@
-
 let MarketContractRegistry = {};
 let MarketContract = {};
 let MarketCollateralPool = {};
@@ -6,7 +5,7 @@ let MarketToken = {};
 let CollateralToken = {};
 let QueryTest = {};
 
-if(process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'test') {
   // only load contracts abi if build exists.
   // useful when running tests
 

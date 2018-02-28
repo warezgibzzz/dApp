@@ -119,7 +119,6 @@ const createNewOrders = async function (web3,
 };
 
 
-
 class Order {
 
   constructor(contractAddress,
@@ -131,8 +130,7 @@ class Order {
               price,
               expirationTimeStamp,
               salt,
-              orderQty,
-  ) {
+              orderQty) {
     this.contractAddress = contractAddress;
     this.maker = maker;
     this.taker = taker;
@@ -143,6 +141,7 @@ class Order {
     this.expirationTimeStamp = expirationTimeStamp;
     this.salt = salt;
     this.orderQty = orderQty;
+    this.remainingQty = orderQty;
     this.orderHash = null;
     this.orderAddresses = [maker, taker, feeRecipient];
     this.unsignedOrderValues = [makerFee, takerFee, price, expirationTimeStamp, salt];
@@ -153,23 +152,22 @@ class Order {
   }
 
   async getOrderHash(orderLib) {
-    if(this.orderHash != null)
+    if (this.orderHash != null)
       return this.orderHash;
 
-    let orderHash = await orderLib.createOrderHash.call(
+    this.orderHash = await orderLib.createOrderHash.call(
       this.contractAddress,
       this.orderAddresses,
       this.unsignedOrderValues,
       this.orderQty
     );
 
-    this.orderHash = orderHash;
     return this.orderHash;
   }
 
   signOrder(web3, makerAccount) {
-    if(this.isSigned)
-      return;
+    if (this.isSigned) return;
+
     const signature = signMessage(web3, makerAccount, this.orderHash);
     this.v = signature[0];
     this.r = signature[1];

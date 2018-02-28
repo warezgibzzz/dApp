@@ -19,11 +19,13 @@ class SimExchange extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.contracts && !nextProps.contract) {
       this.props.selectContract(nextProps.contracts[0]);
+      this.props.getAsks();
+      this.props.getBids();
     }
   }
 
   render() {
-    const { contract, contracts, location } = this.props;
+    const { asks, bids, contract, contracts, location } = this.props;
 
     return (
       <Layout>
@@ -55,7 +57,13 @@ class SimExchange extends Component {
               <Route
                 path="/exchange/trades/"
                 exact
-                render={() => <Trades tradeOrder={this.props.tradeOrder} /> }
+                render={() =>
+                  <Trades
+                    asks={asks}
+                    bids={bids}
+                    tradeOrder={this.props.tradeOrder}
+                  />
+                }
               />
               <Route path="/exchange/wallet/" exact component={Wallet} />
               <Redirect to="/exchange/trades/" />

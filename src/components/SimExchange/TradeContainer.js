@@ -63,28 +63,34 @@ class Buy extends Component {
             market={this.props.market}
             onSubmit={this.onSubmit}
             showModal={this.showModal}
-            order={order} />
-          </div>
+            order={order}
+          />
+        </div>
 
-          <Table
-            title={`${this.props.title}s`}
-            onRowSelect={this.onRowSelect} />
+        <Table
+          data={this.props.data}
+          title={`${this.props.title}s`}
+          onRowSelect={this.onRowSelect}
+        />
 
-          <Modal
-            title="Confirmation required"
-            visible={this.state.modal}
-            onOk={this.handleOk}
-            onCancel={this.handleCancel}>
-            <h3>Are you sure you want to {title} {order.amount} {order.market} at {order.price} ETX/ETH for a maximum of {order.total} ETH?</h3>
-            <AntTable
-              rowKey={() => _.uniqueId('row')}
-              pagination={false}
-              size="small"
-              columns={columns}
-              dataSource={[order]}>
-            </AntTable>
+        <Modal
+          title="Confirmation required"
+          visible={this.state.modal}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+        >
 
-          </Modal>
+          <h3>Are you sure you want to {title} {order.amount} {order.market} at {order.price} ETX/ETH for a maximum of {order.total} ETH?</h3>
+
+          <AntTable
+            rowKey={() => _.uniqueId('row')}
+            pagination={false}
+            size="small"
+            columns={columns}
+            dataSource={[order]}>
+          </AntTable>
+
+        </Modal>
       </Fragment>
     );
   }

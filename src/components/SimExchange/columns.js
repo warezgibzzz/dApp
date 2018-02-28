@@ -1,23 +1,13 @@
 export default [
   {
     title: 'Amount',
-    dataIndex: 'amount',
-    key: 'amount',
-  }, {
-    title: 'Market',
-    dataIndex: 'market',
-    key: 'market',
-  }, {
+    dataIndex: 'orderQty',
+    key: 'orderQty',
+    render: (text) => Math.abs(text),
+  },
+  {
     title: 'Price',
     dataIndex: 'price',
     key: 'price',
-  }, {
-    title: 'Total',
-    dataIndex: 'total',
-    key: 'total',
-  }, {
-    title: '',
-    dataIndex: 'action',
-    key: 'action',
   }
 ];

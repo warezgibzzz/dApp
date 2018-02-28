@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { 
+import {
   Form,
   Input,
   Card,
@@ -9,8 +9,8 @@ import {
 const FormItem = Form.Item;
 
 const title = {
-  ask: "Buy",
-  bid: "Sell",
+  ask: "Sell",
+  bid: "Buy",
 };
 
 class BuyForm extends Component {
@@ -28,13 +28,18 @@ class BuyForm extends Component {
   }
 
   handleSubmit(e) {
-    const { market, form } = this.props;
+    const { form, market, order } = this.props;
     e.preventDefault();
 
     form.validateFields((err, values) => {
-      if (!err) {
+      if (!err && order.orderHash) {
         this.props.showModal();
-        this.props.onSubmit({...values, market, title: title[this.props.title] });
+        this.props.onSubmit({
+          ...values,
+          market,
+          title: title[this.props.title],
+          ...order
+        });
       }
     });
   };
@@ -48,13 +53,12 @@ class BuyForm extends Component {
     const {
       getFieldDecorator,
       getFieldError,
-      isFieldTouched, 
-      getFieldsError 
+      isFieldTouched,
+      getFieldsError
     } = form;
 
     const amountError = isFieldTouched('amount') && getFieldError('amount');
     const priceError = isFieldTouched('price') && getFieldError('price');
-    const totalError = isFieldTouched('total') && getFieldError('total');
 
     return (
       <Card title={`${title[this.props.title]} ${this.props.market}`}>
@@ -71,14 +75,7 @@ class BuyForm extends Component {
             help={priceError  || ''}>
             {getFieldDecorator('price', {
               rules: [{ required: true, message: 'Please enter a price'}]
-            })(<Input addonAfter="ETX" type="number" placeholder="Price" />)}
-          </FormItem>
-          <FormItem
-            validateStatus={totalError ? 'error' : ''}
-            help={totalError  || ''}>
-            {getFieldDecorator('total', {
-              rules: [{ required: true, message: 'Please enter the total'}]
-            })(<Input addonAfter="ETH" type="number" placeholder="Total" />)}
+            })(<Input addonAfter="ETX" disabled={true} type="number" placeholder="Price" />)}
           </FormItem>
           <FormItem>
             <Button
@@ -93,26 +90,23 @@ class BuyForm extends Component {
       </Card>
     );
   }
-};
+}
 
 const WrappedForm = Form.create({
   mapPropsToFields({ order }) {
     return {
       amount: Form.createFormField({
-        value: order.amount, 
+        value: order.orderQty ? Math.abs(order.orderQty) : '',
       }),
       price: Form.createFormField({
         value: order.price,
-      }),
-      total: Form.createFormField({
-        value: order.total,
       }),
       market: Form.createFormField({
         value: order.market,
       }),
       type: Form.createFormField({
         value: order.type,
-      }),
+      })
     };
   },
 })(BuyForm);

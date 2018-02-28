@@ -3,8 +3,6 @@ import React, { Component } from 'react';
 import { Table } from 'antd';
 
 import columns from '../columns';
-import asks from '../data/asks';
-import bids from '../data/bids';
 
 import './table.css';
 
@@ -28,8 +26,10 @@ class OrdersTable extends Component {
         pagination={false}
         title={() => this.props.title}
         size="small"
-        dataSource={this.props.title === 'asks' ? asks : bids}
-        columns={columns} />
+        dataSource={this.props.data}
+        columns={columns}
+        rowKey="orderHash"
+      />
     );
   }
 }
