@@ -10,7 +10,8 @@ import ContractsList from '../../src/components/ContractsList';
 const mockContract = {
   key: '0xaaa0099',
   CONTRACT_NAME: 'ETHXBT',
-  BASE_TOKEN: '0xa4392264a2d8c998901d10c154c91725b1bf0158',
+  BASE_TOKEN: 'FakeDollars',
+  BASE_TOKEN_SYMBOL: 'FUSD',
   PRICE_FLOOR: '60465',
   PRICE_CAP: '20155',
   PRICE_DECIMAL_PLACES: '2',

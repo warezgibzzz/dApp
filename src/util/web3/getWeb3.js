@@ -13,6 +13,15 @@ function web3Initialized(results) {
   };
 }
 
+const networkMap = {
+  1: 'mainnet',
+  2: 'morden',
+  3: 'ropsten',
+  4: 'rinkeby',
+  42: 'kovan',
+  4447: 'truffle',
+};
+
 let getWeb3 = (
   window,
   showErrorMessage = showMessage.bind(showMessage, 'error'),
@@ -28,19 +37,22 @@ let getWeb3 = (
 
       if (web3.eth.accounts.length === 0) {
         results = {
-          web3Instance: null
+          web3Instance: null,
+          network: 'unknown',
         };
 
         console.log("Please unlock MetaMask!");
 
         showErrorMessage('MetaMask is locked! Please unlock and refresh this page', 8);
         resolve(dispatch(web3Initialized(results)));
+        return;
       }
 
       web3 = new Web3(web3.currentProvider);
 
       results = {
-        web3Instance: web3
+        web3Instance: web3,
+        network: networkMap[web3.version.network] || 'unknown',
       };
 
       console.log('Injected web3 detected.');
@@ -54,7 +66,8 @@ let getWeb3 = (
       web3 = new Web3(provider);
 
       results = {
-        web3Instance: web3
+        web3Instance: web3,
+        network: 'truffle'
       };
 
       console.log('No web3 instance injected, using Local web3.');
