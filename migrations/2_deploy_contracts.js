@@ -12,18 +12,18 @@ const MarketContractRegistry = artifacts.require("market-solidity/contracts/Mark
 const MarketToken = artifacts.require("market-solidity/contracts/tokens/MarketToken.sol");
 
 
-module.exports = function(deployer, network) {
-  if(network !== "live") {
+module.exports = function (deployer, network) {
+  if (network !== "live") {
     deployer.deploy(Ownable);
     deployer.link(Ownable, Destructible);
     deployer.deploy(Destructible);
     deployer.link(Destructible, Authentication);
     deployer.deploy(Authentication);
-    deployer.deploy(QueryTest);
+
 
     deployer.deploy(MathLib);
     deployer.deploy(OrderLib);
-    deployer.deploy(MarketContractRegistry)
+    deployer.deploy(MarketContractRegistry);
 
     deployer.link(MathLib, MarketContractOraclize);
     deployer.link(OrderLib, MarketContractOraclize);
@@ -34,7 +34,7 @@ module.exports = function(deployer, network) {
     const marketContractExpiration = Math.floor(Date.now() / 1000) + 86400 * daysToExpiration; // expires in 28 days
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + daysToExpiration);
-    const expirationString = expirationDate.toISOString().substring(0,10);
+    const expirationString = expirationDate.toISOString().substring(0, 10);
 
     // deploy primary instance of market contract
     deployer.deploy(
@@ -49,7 +49,7 @@ module.exports = function(deployer, network) {
           gasLimit = block.gasLimit;
         }
 
-        let quickExpirationTimeStamp =  Math.floor(Date.now() / 1000) + 60 * 60; // expires in an hour
+        let quickExpirationTimeStamp = Math.floor(Date.now() / 1000) + 60 * 60; // expires in an hour
         return deployer.deploy(
           MarketContractOraclize,
           "ETHUSD_" + new Date().toISOString().substring(0, 10),
@@ -60,7 +60,7 @@ module.exports = function(deployer, network) {
           "json(https://api.kraken.com/0/public/Ticker?pair=ETHUSD).result.XETHZUSD.c.0",
           600,
           {gas: gasLimit, value: web3.toWei('.1', 'ether'), from: web3.eth.accounts[0]}
-        )
+        );
       }).then(function () {
         return deployer.deploy(
           MarketCollateralPool,
@@ -69,13 +69,13 @@ module.exports = function(deployer, network) {
           return MarketContractOraclize.deployed();
         }).then(function (instance) {
           return instance.setCollateralPoolContractAddress(MarketCollateralPool.address);
-        })
+        });
       }).then(function () {
         return MarketContractRegistry.deployed();
       }).then(function (instance) {
         instance.addAddressToWhiteList(MarketContractOraclize.address);
       });
-    }).then(async function() {
+    }).then(async function () {
       // we want to create a few basic contracts to allow users to use the simulated trading experience
       // as well as for testing some of the needed visual elements
       const gasLimit = 6500000;
@@ -160,6 +160,17 @@ module.exports = function(deployer, network) {
       );
       await marketContractRegistry.addAddressToWhiteList(deployedMarketContract.address);
 
+    });
+
+    deployer.deploy(QueryTest).then(async function () {
+      // by forcing the first query when we deploy we can make sure all the prices are accurate since
+      // the first query is free with oraclize.
+      let queryTestContract = await QueryTest.deployed();
+      await queryTestContract.testOracleQuery(
+        "URL",
+        "json(https://api.kraken.com/0/public/Ticker?pair=BCHUSD).result.BCHUSD.c.0",
+        {value: web3.toWei('.0001', 'ether'), from: web3.eth.accounts[0]}
+      );
     });
   }
 };
