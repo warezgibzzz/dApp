@@ -46,7 +46,7 @@ export function loadContracts({ web3 }, { MarketContractRegistry, MarketContract
   };
 }
 
-async function processContractsList(deployedContracts, marketContract, marketCollateralPool, baseToken) {
+export async function processContractsList(deployedContracts, marketContract, marketCollateralPool, baseToken) {
   let promises = deployedContracts.map(async (contract) => {
     return await marketContract
       .at(contract)
