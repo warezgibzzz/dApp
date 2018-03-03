@@ -26,6 +26,7 @@ class Header extends Component {
                   <NavItem to="/contract/deploy?mode=guided">Guided Deploy</NavItem>
                 </SubMenu>
                 <NavItem to="/contract/explorer">Explore Contracts</NavItem>
+                <NavItem to="/contract/find">Find Contracts</NavItem>
                 <NavItem to="/test">Test Query</NavItem>
                 <NavItem to="/exchange">Sim Exchange</NavItem>
                 <MenuItem>
