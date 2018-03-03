@@ -1,6 +1,6 @@
 import contract from 'truffle-contract';
 
-export function loadContracts({ web3 }, { MarketContractRegistry, MarketContract, MarketCollateralPool }) {
+export function loadContracts({ web3 }, { MarketContractRegistry, MarketContract, MarketCollateralPool, CollateralToken }) {
   const type = 'GET_CONTRACTS';
 
   return function(dispatch) {
@@ -18,6 +18,9 @@ export function loadContracts({ web3 }, { MarketContractRegistry, MarketContract
       const marketCollateralPool = contract(MarketCollateralPool);
       marketCollateralPool.setProvider(web3.currentProvider);
 
+      const collateralToken = contract(CollateralToken);
+      collateralToken.setProvider(web3.currentProvider);
+
       // Declaring this for later so we can chain functions.
       let marketContractRegistryInstance;
       marketContractRegistry.deployed().then(function(instance) {
@@ -27,10 +30,10 @@ export function loadContracts({ web3 }, { MarketContractRegistry, MarketContract
         // Attempt to find deployed contracts and get metadata
         marketContractRegistryInstance.getAddressWhiteList
           .call()
-          .then(function(deployedContracts) {
+          .then(async function(deployedContracts) {
             console.log('Found ' + deployedContracts.length + ' contracts deployed');
-
-            processContractsList(deployedContracts, marketContract, marketCollateralPool)
+            await collateralToken.deployed();
+            processContractsList(deployedContracts, marketContract, marketCollateralPool, collateralToken)
               .then(function (data) {
                 console.log('Dispatch Contracts');
                 dispatch({ type: `${type}_FULFILLED`, payload: data });
@@ -43,7 +46,7 @@ export function loadContracts({ web3 }, { MarketContractRegistry, MarketContract
   };
 }
 
-async function processContractsList(deployedContracts, marketContract, marketCollateralPool) {
+async function processContractsList(deployedContracts, marketContract, marketCollateralPool, baseToken) {
   let promises = deployedContracts.map(async (contract) => {
     return await marketContract
       .at(contract)
@@ -51,7 +54,16 @@ async function processContractsList(deployedContracts, marketContract, marketCol
         const contractJSON = {};
         contractJSON['key'] = instance.address;
         contractJSON['CONTRACT_NAME'] = await instance.CONTRACT_NAME.call();
-        contractJSON['BASE_TOKEN'] = await instance.BASE_TOKEN.call();
+        let baseTokenContractAddress = await instance.BASE_TOKEN.call();
+        contractJSON['BASE_TOKEN'] = baseTokenContractAddress;
+
+        await baseToken
+          .at(baseTokenContractAddress)
+          .then(async function(baseTokenInstance) {
+            contractJSON['BASE_TOKEN'] = await baseTokenInstance.name();
+            contractJSON['BASE_TOKEN_SYMBOL'] = await baseTokenInstance.symbol();
+          });
+
         contractJSON['PRICE_FLOOR'] = await instance.PRICE_FLOOR.call().then(data => data.toNumber());
         contractJSON['PRICE_CAP'] = await instance.PRICE_CAP.call().then(data => data.toNumber());
         contractJSON['PRICE_DECIMAL_PLACES'] = await instance.PRICE_DECIMAL_PLACES.call().then(data => data.toNumber());

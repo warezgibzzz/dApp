@@ -3,6 +3,7 @@ export default function reducer(
     results: null,
     loading: false,
     error: null,
+    transaction: null,
   },
   action,
 ) {
@@ -12,6 +13,15 @@ export default function reducer(
       return {
         ...state,
         loading: true,
+        error: null,
+      };
+
+
+    case `${actionType}_TRANSACTION_PENDING`:
+      return {
+        ...state,
+        loading: true,
+        transaction: action.payload,
         error: null,
       };
 

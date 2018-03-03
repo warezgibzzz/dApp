@@ -73,9 +73,13 @@ class ContractsList extends Component {
   };
 
   render() {
-    let { sort, filters } = this.state;
+    let { sort, filters, contracts } = this.state;
     sort = sort || {};
     filters = filters || {};
+    contracts = contracts || [];
+
+    let baseTokenSymbols = [...new Set(contracts.map(item => item.BASE_TOKEN_SYMBOL))]
+                           .map(item => { return { value: item, text: item }; });
 
     const columns = [{
       title: 'Name',
@@ -107,7 +111,7 @@ class ContractsList extends Component {
     }, {
       title: 'Base Token',
       dataIndex: 'BASE_TOKEN',
-      width: 300,
+      width: 150,
       filterDropdown: (
         <div className="custom-filter-dropdown">
           <Input
@@ -129,6 +133,17 @@ class ContractsList extends Component {
           tokenSearchVisible: visible,
         }, () => this.baseTokenSearchInput && this.baseTokenSearchInput.focus());
       },
+    }, {
+      title: 'Base Token Symbol',
+      dataIndex: 'BASE_TOKEN_SYMBOL',
+      width: 150,
+      className: 'text-center',
+      render: (text, row, index) => {
+        return text;
+      },
+      filters: baseTokenSymbols,
+      filteredValue: filters.BASE_TOKEN_SYMBOL || null,
+      onFilter: (value, record) => record.BASE_TOKEN_SYMBOL.includes(value),
     }, {
       title: 'Oracle Query',
       dataIndex: 'ORACLE_QUERY',

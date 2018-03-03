@@ -1,4 +1,4 @@
-<img src="https://image.ibb.co/nANcyR/logo_MARKET_banner_2.png" align="middle">
+<img src="https://image.ibb.co/mzSFa7/MARKET_logo_URL.png" align="middle">
 
 [![Build Status](https://api.travis-ci.org/MarketProject/Dapp.svg?branch=master)](https://travis-ci.org/MarketProject/Dapp) [![Coverage Status](https://coveralls.io/repos/github/MarketProject/Dapp/badge.svg?branch=master)](https://coveralls.io/github/MarketProject/Dapp?branch=master)
 
