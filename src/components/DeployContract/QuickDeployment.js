@@ -115,21 +115,21 @@ class QuickDeployment extends Component {
 
         <ContractFormRow>
           <ContractFormCol>
-            <Field name='priceFloor' initialValue={initialValues.priceFloor} form={this.props.form} showHint/>
+            <Field name='priceFloor' initialValue={parseInt(initialValues.priceFloor, 10)} form={this.props.form} showHint/>
           </ContractFormCol>
 
           <ContractFormCol>
-            <Field name='priceCap' initialValue={initialValues.priceCap} form={this.props.form} showHint/>
+            <Field name='priceCap' initialValue={parseInt(initialValues.priceCap, 10)} form={this.props.form} showHint/>
           </ContractFormCol>
         </ContractFormRow>
 
         <ContractFormRow>
           <ContractFormCol>
-            <Field name='priceDecimalPlaces' initialValue={initialValues.priceDecimalPlaces} form={this.props.form} showHint/>
+            <Field name='priceDecimalPlaces' initialValue={parseInt(initialValues.priceDecimalPlaces, 10)} form={this.props.form} showHint/>
           </ContractFormCol>
 
           <ContractFormCol>
-            <Field name="qtyMultiplier" initialValue={initialValues.qtyMultiplier} form={this.props.form} showHint/>
+            <Field name="qtyMultiplier" initialValue={parseInt(initialValues.qtyMultiplier, 10)} form={this.props.form} showHint/>
           </ContractFormCol>
         </ContractFormRow>
 
@@ -149,7 +149,7 @@ class QuickDeployment extends Component {
           </ContractFormCol>
 
           <ContractFormCol>
-            <Field name='oracleQueryRepeatSeconds' initialValue={initialValues.oracleQueryRepeatSeconds} form={this.props.form} showHint/>
+            <Field name='oracleQueryRepeatSeconds' initialValue={parseInt(initialValues.oracleQueryRepeatSeconds, 10)} form={this.props.form} showHint/>
           </ContractFormCol>
         </ContractFormRow>
 
