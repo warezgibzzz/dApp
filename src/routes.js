@@ -12,6 +12,10 @@ export const routes = [
     path: '/contract/deploy',
   },
   {
+    component: Containers.FindContainer,
+    path: '/contract/find',
+  },
+  {
     component: Containers.ExplorerContainer,
     path: '/contract/explorer',
   },

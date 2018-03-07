@@ -1,5 +1,5 @@
-import React from 'react';
 import { Icon, message } from 'antd';
+import React from 'react';
 
 const iconStyle = {
   marginLeft: '16px',

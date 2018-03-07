@@ -1,8 +1,7 @@
-import store from '../../store';
 import Web3 from 'web3';
 
-// showMessage if MetaMask is locked
 import showMessage from '../../components/message';
+import store from '../../store';
 
 export const WEB3_INITIALIZED = 'WEB3_INITIALIZED';
 

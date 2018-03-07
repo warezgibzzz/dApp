@@ -1,9 +1,9 @@
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 
-import ContractsList from "../components/ContractsList";
-import { loadContracts } from "../actions/explorer";
-import store from "../store";
 import Contracts from '../Contracts.js';
+import { loadContracts } from '../actions/explorer';
+import ContractsList from '../components/ContractsList';
+import store from '../store';
 
 const mapStateToProps = state => ({
   ...state.explorer,

@@ -1,5 +1,5 @@
-import React from 'react';
 import isIPFS from 'is-ipfs';
+import React from 'react';
 
 /**
  * Name, description and validation logics for each of the oracle data sources
@@ -126,6 +126,6 @@ const OracleDataSources = [
 
 export function getDataSourceObj(source) {
   return OracleDataSources.filter(sourceObj => source === sourceObj.name)[0];
-};
+}
 
 export default OracleDataSources;

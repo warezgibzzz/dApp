@@ -1,10 +1,10 @@
+import { Menu } from 'antd';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu } from 'antd';
 
-import NavItem from './NavItem';
-import './Header.css';
 import logo from '../img/market-logo-small.png';
+import './Header.css';
+import NavItem from './NavItem';
 
 const SubMenu = Menu.SubMenu;
 const MenuItem = Menu.Item;
@@ -26,6 +26,7 @@ class Header extends Component {
                   <NavItem to="/contract/deploy?mode=guided">Guided Deploy</NavItem>
                 </SubMenu>
                 <NavItem to="/contract/explorer">Explore Contracts</NavItem>
+                <NavItem to="/contract/find">Find Contracts</NavItem>
                 <NavItem to="/test">Test Query</NavItem>
                 <NavItem to="/exchange">Sim Exchange</NavItem>
                 <MenuItem>

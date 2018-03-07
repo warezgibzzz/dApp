@@ -2,14 +2,14 @@
  * Steps for use by GuidedDeployment.
  *
  */
-import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
+import { Alert, Button, Card, Col, Form, Icon, Row } from 'antd';
 import moment from 'moment';
-import {Row, Col, Icon, Form, Button, Alert, Card} from 'antd';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 import Loader from '../Loader';
+import Field, { FieldSettings } from './DeployContractField';
 import DeployContractSuccess from './DeployContractSuccess';
-import Field, {FieldSettings} from './DeployContractField';
 
 const ButtonGroup = Button.Group;
 

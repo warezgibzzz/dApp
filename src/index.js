@@ -1,14 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import getWeb3 from './util/web3/getWeb3';
 
-// Layouts
-import Splash from './Splash';
 import App from './App';
-
-// Redux Store
+import Splash from './Splash';
 import store, { history } from './store';
+import getWeb3 from './util/web3/getWeb3';
 
 // Display Splash until web3 is initialized
 ReactDOM.render(

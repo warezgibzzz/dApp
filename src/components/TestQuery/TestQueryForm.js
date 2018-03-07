@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { Row, Col, Steps } from 'antd';
+import { Col, Row, Steps } from 'antd';
 import qs from 'query-string';
+import React, { Component } from 'react';
 
-import showMessage from '../message';
 import StepAnimation from '../StepAnimation';
-import { AboutOraclesStep, SelectDataSourceStep, SetQueryStep, QueryResultStep } from './Steps';
+import showMessage from '../message';
+import { AboutOraclesStep, QueryResultStep, SelectDataSourceStep, SetQueryStep } from './Steps';
 
 
 const Step = Steps.Step;
