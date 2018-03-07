@@ -29,9 +29,7 @@ class DeployContractForm extends Component {
     const location = this.props.location;
     const queryParams = qs.parse(location.search);
     const { 
-      mode = '',
-      oracleDataSource = '',
-      oracleQuery = '' 
+      mode = 'quick' // defaults to QuickDeployment
     } = queryParams;
     
     // for linking to quick/guided mode inside children components
@@ -40,7 +38,7 @@ class DeployContractForm extends Component {
     const switchMode = ((newMode) => {
       this.props.history.push({ ...location, search: `?${qs.stringify({ ...queryParams, mode: newMode })}`});
     });
-    return { mode, switchMode, guidedModeUrl, initialValues: { oracleDataSource, oracleQuery } };
+    return { mode, switchMode, guidedModeUrl, initialValues: queryParams };
   }
 
   render() {

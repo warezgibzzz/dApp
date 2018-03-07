@@ -105,37 +105,37 @@ class QuickDeployment extends Component {
       <Form onSubmit={this.handleDeploy.bind(this)} layout="vertical">
         <ContractFormRow>
           <ContractFormCol>
-            <Field name='contractName' form={this.props.form} showHint/>
+            <Field name='contractName' initialValue={initialValues.contractName} form={this.props.form} showHint/>
           </ContractFormCol>
 
           <ContractFormCol>
-            <Field name='baseTokenAddress' form={this.props.form} showHint/>
-          </ContractFormCol>
-        </ContractFormRow>
-
-        <ContractFormRow>
-          <ContractFormCol>
-            <Field name='priceFloor' form={this.props.form} showHint/>
-          </ContractFormCol>
-
-          <ContractFormCol>
-            <Field name='priceCap' form={this.props.form} showHint/>
+            <Field name='baseTokenAddress' initialValue={initialValues.baseTokenAddress} form={this.props.form} showHint/>
           </ContractFormCol>
         </ContractFormRow>
 
         <ContractFormRow>
           <ContractFormCol>
-            <Field name='priceDecimalPlaces' form={this.props.form} showHint/>
+            <Field name='priceFloor' initialValue={parseInt(initialValues.priceFloor, 10)} form={this.props.form} showHint/>
           </ContractFormCol>
 
           <ContractFormCol>
-            <Field name="qtyMultiplier" form={this.props.form} showHint/>
+            <Field name='priceCap' initialValue={parseInt(initialValues.priceCap, 10)} form={this.props.form} showHint/>
           </ContractFormCol>
         </ContractFormRow>
 
         <ContractFormRow>
           <ContractFormCol>
-            <Field name='expirationTimeStamp' form={this.props.form} showHint/>
+            <Field name='priceDecimalPlaces' initialValue={parseInt(initialValues.priceDecimalPlaces, 10)} form={this.props.form} showHint/>
+          </ContractFormCol>
+
+          <ContractFormCol>
+            <Field name="qtyMultiplier" initialValue={parseInt(initialValues.qtyMultiplier, 10)} form={this.props.form} showHint/>
+          </ContractFormCol>
+        </ContractFormRow>
+
+        <ContractFormRow>
+          <ContractFormCol>
+            <Field name='expirationTimeStamp' initialValue={initialValues.expirationTimeStamp} form={this.props.form} showHint/>
           </ContractFormCol>
 
           <ContractFormCol>
@@ -149,7 +149,7 @@ class QuickDeployment extends Component {
           </ContractFormCol>
 
           <ContractFormCol>
-            <Field name='oracleQueryRepeatSeconds' form={this.props.form} showHint/>
+            <Field name='oracleQueryRepeatSeconds' initialValue={parseInt(initialValues.oracleQueryRepeatSeconds, 10)} form={this.props.form} showHint/>
           </ContractFormCol>
         </ContractFormRow>
 
