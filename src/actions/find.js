@@ -1,4 +1,5 @@
 import contract from 'truffle-contract';
+
 import { processContractsList } from './explorer';
 
 export function findContract({ web3 }, marketContractAddress,

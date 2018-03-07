@@ -1,18 +1,13 @@
-import React, {Component} from 'react';
-import {Router, Route} from 'react-router';
-
-import {routes} from './routes';
-
-// Components
-import Header from './components/Header';
-
-// Styles
-import './css/oswald.css';
-import './css/open-sans.css';
+import { Layout } from 'antd';
 import 'antd/dist/antd.min.css';
-import './App.css';
+import React, { Component } from 'react';
+import { Route, Router } from 'react-router';
 
-import {Layout} from 'antd';
+import './App.css';
+import Header from './components/Header';
+import './css/open-sans.css';
+import './css/oswald.css';
+import { routes } from './routes';
 
 const {Footer, Content} = Layout;
 

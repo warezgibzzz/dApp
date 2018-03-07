@@ -1,7 +1,7 @@
-import React from 'react';
+import { DatePicker, Form, Icon, Input, InputNumber, Select, Tooltip } from 'antd';
 import moment from 'moment';
+import React from 'react';
 
-import { Form, Input, Select, InputNumber, DatePicker, Icon, Tooltip } from 'antd';
 import OracleDataSources, { getDataSourceObj } from '../TestQuery/OracleDataSources';
 
 const FormItem = Form.Item;

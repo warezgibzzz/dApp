@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
-import {Row, Col, Steps} from 'antd';
+import { Col, Row, Steps } from 'antd';
+import React, { Component } from 'react';
 
-import showMessage from '../message';
 import StepAnimation from '../StepAnimation';
-import {NameContractStep, PricingStep, ExpirationStep, DataSourceStep, DeployStep} from './Steps';
+import showMessage from '../message';
+import { DataSourceStep, DeployStep, ExpirationStep, NameContractStep, PricingStep } from './Steps';
 
 const Step = Steps.Step;
 

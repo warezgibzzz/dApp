@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { Table, Input, Button, Icon, Row, Col } from 'antd';
+import { Button, Col, Icon, Input, Row, Table } from 'antd';
 import moment from 'moment';
-import Loader from './Loader';
+import React, { Component } from 'react';
 
 import './ContractsList.css';
+import Loader from './Loader';
 
 // Example Contract
 /* {

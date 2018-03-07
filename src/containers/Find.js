@@ -1,9 +1,9 @@
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 
-import { findContract } from "../actions/find";
-import store from "../store";
 import Contracts from '../Contracts.js';
+import { findContract } from '../actions/find';
 import FindContractForm from '../components/FindContract/FindContractForm';
+import store from '../store';
 
 const mapStateToProps = state => {
   const { loading, error, contract } = state.find;

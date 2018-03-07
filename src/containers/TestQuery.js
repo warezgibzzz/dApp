@@ -1,8 +1,9 @@
 import { connect } from 'react-redux';
-import TestQueryForm from '../components/TestQuery/TestQueryForm';
-import { testQuery } from '../actions/testQuery';
-import store from "../store";
+
 import Contracts from '../Contracts.js';
+import { testQuery } from '../actions/testQuery';
+import TestQueryForm from '../components/TestQuery/TestQueryForm';
+import store from '../store';
 
 const mapStateToProps = (state, ownProps) => {
   const { error, loading, results, transaction } = state.testQuery;

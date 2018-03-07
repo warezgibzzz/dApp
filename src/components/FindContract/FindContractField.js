@@ -1,6 +1,5 @@
+import { Form, Icon, Input, Tooltip } from 'antd';
 import React from 'react';
-
-import { Form, Input, Icon, Tooltip } from 'antd';
 
 const FormItem = Form.Item;
 

@@ -1,5 +1,5 @@
+import { Alert, Button, Col, Form, Row } from 'antd';
 import React, { Component } from 'react';
-import { Row, Col, Form, Button, Alert } from 'antd';
 
 import Loader from '../Loader';
 import Field from './DeployContractField';

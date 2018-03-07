@@ -1,8 +1,9 @@
+import { Alert, Button, Card, Col, Form, Icon, Input, Row, Select } from 'antd';
 import React, { Component } from 'react';
-import { Row, Col, Form, Input, Select, Button, Icon, Card, Alert } from 'antd';
+
 import Loader from '../Loader';
-import OracleDataSources, { getDataSourceObj } from './OracleDataSources';
 import '../Step.css';
+import OracleDataSources, { getDataSourceObj } from './OracleDataSources';
 
 const FormItem = Form.Item;
 const Option = Select.Option;

@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
 import qs from 'query-string';
+import React, { Component } from 'react';
 
 import showMessage from '../message';
-import QuickDeployment from './QuickDeployment';
 import GuidedDeployment from './GuidedDeployment';
+import QuickDeployment from './QuickDeployment';
 
 class DeployContractForm extends Component {
 
