@@ -1,11 +1,11 @@
 <img src="https://image.ibb.co/mzSFa7/MARKET_logo_URL.png" align="middle">
 
-[![Build Status](https://api.travis-ci.org/MarketProject/Dapp.svg?branch=master)](https://travis-ci.org/MarketProject/Dapp) [![Coverage Status](https://coveralls.io/repos/github/MarketProject/Dapp/badge.svg?branch=master)](https://coveralls.io/github/MarketProject/Dapp?branch=master)
+[![Build Status](https://api.travis-ci.org/MARKETProtocol/Dapp.svg?branch=master)](https://travis-ci.org/MARKETProtocol/Dapp) [![Coverage Status](https://coveralls.io/repos/github/MARKETProtocol/Dapp/badge.svg?branch=master)](https://coveralls.io/github/MARKETProtocol/Dapp?branch=master)
 
-# MarketProtocol Dapp
-Decentralized blockchain application utilizing [MARKET](https://github.com/MarketProject/MarketProtocol)
+# MARKET Protocol Dapp
+Decentralized blockchain application utilizing [MARKET](https://github.com/MARKETProtocol/MARKETProtocol)
 
-Take a look at our [FAQ](https://github.com/MarketProject/MarketProtocol/wiki/Frequently-Asked-Questions) for a little more explanation.
+Take a look at our [FAQ](https://github.com/MARKETProtocol/MARKETProtocol/wiki/Frequently-Asked-Questions) for a little more explanation.
 
 ## Getting Started
 Assuming you have npm already, Install truffle
@@ -14,7 +14,7 @@ $ npm install -g truffle
 ```
 Clone this repository and use npm to install needed dependencies
 ```
-$ git clone https://github.com/MarketProject/Dapp.git
+$ git clone https://github.com/MARKETProtocol/Dapp.git
 $ cd Dapp
 $ npm install
 ```
@@ -23,7 +23,7 @@ At this point you can start the truffle development environment
 $ truffle develop
 ```
 
-From here, you now need to bring up the ethereum bridge for the Oraclize.it service.  Instructions for installation can be found [here](https://github.com/MarketProject/ethereum-bridge) 
+From here, you now need to bring up the ethereum bridge for the Oraclize.it service.  Instructions for installation can be found [here](https://github.com/MARKETProtocol/ethereum-bridge) 
 
 start the ethereum bridge (in a separate console) to run connected
 to the truffle development environment you have created
