@@ -1,9 +1,9 @@
 body {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Raleway', sans-serif;
 }
 
 h1, h2, h3 {
-    font-family: 'Oswald', 'Arial Narrow', sans-serif;
+    font-family: 'Raleway', 'Arial Narrow', sans-serif;
 }
 
 code {
@@ -13,10 +13,23 @@ code {
     background: #eee;
 }
 
-.text-center {
-  text-align: center !important;
+.landing {
+    padding-bottom: 50px;
+    background: #fff;
+}
+
+.dapp {
+    padding: 50px 0;
+    background: #fff;
+}
+
+.footer {
+    color: #fff;
+    text-align: center;
+    background-color: #363636;
 }
 
 .clearfix {
   zoom: 1;
 }
+

@@ -1,9 +1,10 @@
 import * as Containers from './containers';
+import Landing from './components/Landing';
 
 
 export const routes = [
   {
-    component: Containers.HomeContainer,
+    component: Landing,
     exact: true,
     path: '/',
   },
