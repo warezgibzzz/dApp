@@ -19,7 +19,7 @@ const formItemColLayout = {
     span: 8
   },
   sm: {
-    span: 12
+    span: 11
   },
   xs: {
     span: 24
@@ -95,83 +95,92 @@ class QuickDeployment extends Component {
 
   render() {
     const { initialValues } = this.props;
-    return (<div>
+    return (
       <div>
-        <Alert message={<span>
-          First time deploying a Contract? Try the <a className="switch-mode-link" href={this.props.guidedModeUrl} onClick={this.handleModeSwitching.bind(this)}>guided mode</a>.
-          </span>} type="info" showIcon />
+        <Alert
+          style={{textAlign: 'center'}}
+          banner
+          type="info"
+          showIcon={false}
+          message={
+            <span>
+              First time deploying a Contract? Try the <a className="switch-mode-link" href={this.props.guidedModeUrl} onClick={this.handleModeSwitching.bind(this)}>guided mode</a>.
+            </span>
+          }
+        />
+        <div class="page">
+          <Form onSubmit={this.handleDeploy.bind(this)} layout="vertical">
+            <ContractFormRow>
+              <ContractFormCol>
+                <Field name='contractName' initialValue={initialValues.contractName} form={this.props.form} showHint/>
+              </ContractFormCol>
+
+              <ContractFormCol>
+                <Field name='baseTokenAddress' initialValue={initialValues.baseTokenAddress} form={this.props.form} showHint/>
+              </ContractFormCol>
+            </ContractFormRow>
+
+            <ContractFormRow>
+              <ContractFormCol>
+                <Field name='priceFloor' initialValue={parseInt(initialValues.priceFloor, 10)} form={this.props.form} showHint/>
+              </ContractFormCol>
+
+              <ContractFormCol>
+                <Field name='priceCap' initialValue={parseInt(initialValues.priceCap, 10)} form={this.props.form} showHint/>
+              </ContractFormCol>
+            </ContractFormRow>
+
+            <ContractFormRow>
+              <ContractFormCol>
+                <Field name='priceDecimalPlaces' initialValue={parseInt(initialValues.priceDecimalPlaces, 10)} form={this.props.form} showHint/>
+              </ContractFormCol>
+
+              <ContractFormCol>
+                <Field name="qtyMultiplier" initialValue={parseInt(initialValues.qtyMultiplier, 10)} form={this.props.form} showHint/>
+              </ContractFormCol>
+            </ContractFormRow>
+
+            <ContractFormRow>
+              <ContractFormCol>
+                <Field name='expirationTimeStamp' initialValue={initialValues.expirationTimeStamp} form={this.props.form} showHint/>
+              </ContractFormCol>
+
+              <ContractFormCol>
+                <Field name='oracleDataSource' initialValue={initialValues.oracleDataSource} form={this.props.form} showHint/>
+              </ContractFormCol>
+            </ContractFormRow>
+
+            <ContractFormRow>
+              <ContractFormCol>
+                <Field name='oracleQuery' initialValue={initialValues.oracleQuery} form={this.props.form} showHint/>
+              </ContractFormCol>
+
+              <ContractFormCol>
+                <Field name='oracleQueryRepeatSeconds' initialValue={parseInt(initialValues.oracleQueryRepeatSeconds, 10)} form={this.props.form} showHint/>
+              </ContractFormCol>
+            </ContractFormRow>
+
+            <Row type="flex" justify="center">
+              <Col {...formButtonLayout}>
+                <Button className="submit-button" type="primary" htmlType="submit" loading={this.props.loading} disabled={this.isSubmitDisabled()} style={{width: '100%'}}>
+                  Deploy Contract
+                </Button>
+              </Col>
+            </Row>
+
+            <Row type="flex" justify="center" style={{ marginTop: '16px' }}>
+              <Col {...formButtonLayout}>
+                <Button className="reset-button" type="secondary" style={{width: '100%'}} disabled={this.props.loading} onClick={this.handleReset.bind(this)}>
+                  Reset Form
+                </Button>
+              </Col>
+            </Row>
+
+            <Loader loading={this.props.loading} />
+          </Form>
+        </div>
       </div>
-      <br/>
-      <Form onSubmit={this.handleDeploy.bind(this)} layout="vertical">
-        <ContractFormRow>
-          <ContractFormCol>
-            <Field name='contractName' initialValue={initialValues.contractName} form={this.props.form} showHint/>
-          </ContractFormCol>
-
-          <ContractFormCol>
-            <Field name='baseTokenAddress' initialValue={initialValues.baseTokenAddress} form={this.props.form} showHint/>
-          </ContractFormCol>
-        </ContractFormRow>
-
-        <ContractFormRow>
-          <ContractFormCol>
-            <Field name='priceFloor' initialValue={parseInt(initialValues.priceFloor, 10)} form={this.props.form} showHint/>
-          </ContractFormCol>
-
-          <ContractFormCol>
-            <Field name='priceCap' initialValue={parseInt(initialValues.priceCap, 10)} form={this.props.form} showHint/>
-          </ContractFormCol>
-        </ContractFormRow>
-
-        <ContractFormRow>
-          <ContractFormCol>
-            <Field name='priceDecimalPlaces' initialValue={parseInt(initialValues.priceDecimalPlaces, 10)} form={this.props.form} showHint/>
-          </ContractFormCol>
-
-          <ContractFormCol>
-            <Field name="qtyMultiplier" initialValue={parseInt(initialValues.qtyMultiplier, 10)} form={this.props.form} showHint/>
-          </ContractFormCol>
-        </ContractFormRow>
-
-        <ContractFormRow>
-          <ContractFormCol>
-            <Field name='expirationTimeStamp' initialValue={initialValues.expirationTimeStamp} form={this.props.form} showHint/>
-          </ContractFormCol>
-
-          <ContractFormCol>
-            <Field name='oracleDataSource' initialValue={initialValues.oracleDataSource} form={this.props.form} showHint/>
-          </ContractFormCol>
-        </ContractFormRow>
-
-        <ContractFormRow>
-          <ContractFormCol>
-            <Field name='oracleQuery' initialValue={initialValues.oracleQuery} form={this.props.form} showHint/>
-          </ContractFormCol>
-
-          <ContractFormCol>
-            <Field name='oracleQueryRepeatSeconds' initialValue={parseInt(initialValues.oracleQueryRepeatSeconds, 10)} form={this.props.form} showHint/>
-          </ContractFormCol>
-        </ContractFormRow>
-
-        <Row type="flex" justify="center">
-          <Col {...formButtonLayout}>
-            <Button className="submit-button" type="primary" htmlType="submit" loading={this.props.loading} disabled={this.isSubmitDisabled()} style={{width: '100%'}}>
-              Deploy Contract
-            </Button>
-          </Col>
-        </Row>
-
-        <Row type="flex" justify="center" style={{ marginTop: '16px' }}>
-          <Col {...formButtonLayout}>
-            <Button className="reset-button" type="secondary" style={{width: '100%'}} disabled={this.props.loading} onClick={this.handleReset.bind(this)}>
-              Reset Form
-            </Button>
-          </Col>
-        </Row>
-
-        <Loader loading={this.props.loading} />
-      </Form>
-    </div>);
+    );
   }
 }
 

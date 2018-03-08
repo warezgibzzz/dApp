@@ -31,3 +31,7 @@
   line-height: 64px;
   margin-right: 50px;
 }
+
+.ant-menu {
+  font-weight: 600;
+}

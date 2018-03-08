@@ -15,10 +15,9 @@ class App extends Component {
   render() {
     return (
       <Router history={this.props.history}>
-        <Layout style={{minHeight: '100vh'}}>
+        <Layout style={{minHeight: '100vh', backgroundColor: '#F8F8F8'}}>
           <Header/>
-          <Content
-            style={{ background: '#fff'}}>
+          <Content>
             {routes.map((route) => (
               <Route key={route.path} {...route} />
             ))}

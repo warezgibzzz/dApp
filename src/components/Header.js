@@ -1,7 +1,6 @@
-import { Menu } from 'antd';
+import {Affix, Menu } from 'antd';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Affix, Menu } from 'antd';
 
 
 import logo from '../img/market-logo-small.png';
@@ -19,7 +18,7 @@ class Header extends Component {
           <div className="ant-row">
             <div className="ant-col-xs-24 ant-col-sm-24 ant-col-md-6 ant-col-lg-5 ant-col-xl-5 ant-col-xxl-4">
               <Link to="http://www.marketprotocol.io" target="_blank" id="logo">
-                <img src={logo} alt="Market Protocol Logo" />
+                <img src={logo} alt="Market Protocol Logo"/>
               </Link>
             </div>
             <div className="ant-col-xs-0 ant-col-sm-0 ant-col-md-18 ant-col-lg-19 ant-col-xl-19 ant-col-xxl-20">

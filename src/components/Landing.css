@@ -23,6 +23,7 @@
   margin-top: 30px;
   font-size: 12px;
   font-weight: 600;
+  color: #fff;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -38,6 +39,7 @@
 .feature-text-container button {
   font-size: 12px;
   font-weight: 600;
+  color: #fff;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -47,7 +49,6 @@
 }
 
 .feature-main-text {
-  font-weight: 600;
   margin-bottom: 20px;
 }
 

@@ -16,13 +16,13 @@ import './Landing.css';
 class Landing extends Component {
   render() {
     return (
-      <div>
+      <div style={{backgroundColor: '#fff'}}>
         <Row type="flex" className="hero" align="middle">
           <Col span={10}>
             <div className="hero-text">
               <h1>Deploy Contracts - Guided</h1>
               <h4>Step by step guide for first time MARKET Smart Contract deployment</h4>
-              <Button type="primary" size="large"> Get Started </Button>
+              <Button type="primary" size="large"><a href="/contract/deploy?mode=guided">Get Started <Icon type="right" /></a></Button>
             </div>
           </Col>
           <Col span={14}>
@@ -42,7 +42,7 @@ class Landing extends Component {
               <img alt="Explore contracts icons" className="feature-icons" src={exploreIcons}/>
               <h1 className="feature-main-text">Explore Contracts</h1>
               <h4 className="feature-sub-text">Search, filter, and select from already deployed MARKET Smart Contracts that meet your needs.</h4>
-              <Button type="primary" size="large">Get Started <Icon type="right" /></Button>
+              <Button type="primary" size="large"><a href="/contract/explorer">Get Started <Icon type="right" /></a></Button>
             </div>
           </Col>
         </Row>
@@ -52,7 +52,7 @@ class Landing extends Component {
               <img alt="Test Queries icons" className="feature-icons" src={testIcons}/>
               <h1 className="feature-main-text">Test Queries</h1>
               <h4 className="feature-sub-text">Test your queries before you deploy, save gas and time with our on-chain query testing contract.</h4>
-              <Button type="primary" size="large">Get Started <Icon type="right" /></Button>
+              <Button type="primary" size="large"><a href="/test">Get Started <Icon type="right" /></a></Button>
             </div>
           </Col>
           <Col span={14} style={{textAlign: 'right'}}>
@@ -72,7 +72,7 @@ class Landing extends Component {
               <img alt="Simulated exchange icons" className="feature-icons" src={simulateIcons}/>
               <h1 className="feature-main-text">Simulated Exchange</h1>
               <h4 className="feature-sub-text">What is it like to trade a MARKET Smart Contract? Find out here. Leaderboards for trading and competitions all coming soon.</h4>
-              <Button type="primary" size="large">Get Started <Icon type="right" /></Button>
+              <Button type="primary" size="large"><a href="/exchange">Get Started <Icon type="right" /></a></Button>
             </div>
           </Col>
         </Row>
