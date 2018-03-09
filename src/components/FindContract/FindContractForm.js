@@ -73,7 +73,7 @@ class FindContractForm extends Component {
   }
 
   render() {
-    return (<div>
+    return (<div className="page">
       <br/>
       <Form onSubmit={this.handleFind.bind(this)} layout="vertical">
         <ContractFormRow>
