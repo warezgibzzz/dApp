@@ -8,6 +8,7 @@ import store from '../store';
 const mapStateToProps = (state, ownProps) => {
   const { error, loading, results, transaction } = state.testQuery;
   const { network } = state.web3;
+
   return { error, loading, results, transaction, network };
 };
 

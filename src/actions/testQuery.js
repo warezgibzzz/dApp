@@ -18,7 +18,7 @@ export function testQuery(
       web3.eth.getCoinbase((error, coinbase) => {
         if (error) {
           console.error(error);
-          return dispatch({ type: `${type}_REJECTED`, payload: { error } });
+          return dispatch({ type: `${type}_REJECTED`, payload: error });
         }
 
         console.log('Attempting to submit test query from ' + coinbase);
@@ -46,7 +46,7 @@ export function testQuery(
               .map(log => log.args.queryIDScheduled);
 
             if (queryEventIds.length === 0) {
-              return dispatch({ type: `${type}_REJECTED`, payload: { error: 'Could not find `QueryScheduled` event.'} });
+              return dispatch({ type: `${type}_REJECTED`, payload: 'Could not find `QueryScheduled` event.' });
             }
             const queryID = queryEventIds[0];
 
@@ -60,14 +60,18 @@ export function testQuery(
                       dispatch({ type: `${type}_FULFILLED`, payload: queryResults });
                     })
                     .catch(err => {
-                      dispatch({ type: `${type}_REJECTED`, payload: { error: err } });
+                      dispatch({ type: `${type}_REJECTED`, payload: err });
                     });
                 }
               });
+          })
+          .catch(err => {
+            // catch errors during query submission
+            return dispatch({ type: `${type}_REJECTED`, payload: err.message });
           });
       });
     } else {
-      dispatch({ type: `${type}_REJECTED`, payload: { error: 'Web3 not initialised'} });
+      dispatch({ type: `${type}_REJECTED`, payload: 'Web3 not initialised' });
     }
   };
 }
