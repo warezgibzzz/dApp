@@ -146,7 +146,7 @@ class TestQueryForm extends Component {
     ];
     
     return (
-      <div class="page">
+      <div className="page">
         <Row type="flex" justify="center">
           <Col {...parentColLayout}>
             <Steps current={currentStep} style={{marginBottom: '40px'}}>

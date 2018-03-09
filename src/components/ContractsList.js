@@ -201,7 +201,7 @@ class ContractsList extends Component {
 
     if (!this.state.contracts) {
       return (
-        <div><Loader loading style={{ width: 80, height: 80 }}/></div>
+        <Loader loading/>
       );
     }
 
@@ -212,7 +212,7 @@ class ContractsList extends Component {
     }
 
     return (
-      <div class="page" style={{margin: '0 5%'}}>
+      <div className="page" style={{margin: '0 5%'}}>
         <Row style={{padding: '0px 20px'}}>
           <Table columns={columns}
                 dataSource={this.state.contracts}

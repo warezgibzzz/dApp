@@ -38,3 +38,13 @@ code {
 .clearfix {
   zoom: 1;
 }
+
+.market-loader {
+    width: 80px;
+    margin: auto;
+    position: absolute;
+    top: -60px; /* To negate the footer height to make it visually centered */
+    left: 0; 
+    bottom: 0; 
+    right: 0;
+}

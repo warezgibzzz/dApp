@@ -108,7 +108,7 @@ class QuickDeployment extends Component {
             </span>
           }
         />
-        <div class="page">
+        <div className="page">
           <Form onSubmit={this.handleDeploy.bind(this)} layout="vertical">
             <ContractFormRow>
               <ContractFormCol>
