@@ -1,9 +1,13 @@
 body {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Raleway', sans-serif;
 }
 
 h1, h2, h3 {
-    font-family: 'Oswald', 'Arial Narrow', sans-serif;
+    font-family: 'Raleway', 'Arial Narrow', sans-serif;
+}
+
+h1, h2 {
+    font-weight: 600;
 }
 
 code {
@@ -13,10 +17,34 @@ code {
     background: #eee;
 }
 
-.text-center {
-  text-align: center !important;
+.page {
+    background: #fff;
+    padding: 40px 0;
+    margin: 0 10%;
+    min-height: calc(100vh - 134px);
+}
+
+.dapp {
+    padding: 50px 0;
+    background: #fff;
+}
+
+.footer {
+    color: #fff;
+    text-align: center;
+    background-color: #363636;
 }
 
 .clearfix {
   zoom: 1;
+}
+
+.market-loader {
+    width: 80px;
+    margin: auto;
+    position: absolute;
+    top: -60px; /* To negate the footer height to make it visually centered */
+    left: 0; 
+    bottom: 0; 
+    right: 0;
 }

@@ -14,7 +14,7 @@ const parentColLayout = {
     span: 16
   },
   sm: {
-    span: 24
+    span: 22
   },
   xs: {
     span: 24
@@ -146,22 +146,22 @@ class TestQueryForm extends Component {
     ];
     
     return (
+      <div className="page">
         <Row type="flex" justify="center">
           <Col {...parentColLayout}>
-            <Steps current={currentStep}>
+            <Steps current={currentStep} style={{marginBottom: '40px'}}>
               <Step title="Introduction"/>
               <Step title="Oracle Data Source" />
               <Step title="Oracle Query" />
               <Step title="Result" />
             </Steps>
-            <br/>
             <StepAnimation 
               direction={this.state.transitionDirection}>
               {steps.filter((step, index) => currentStep === index )[0]}
             </StepAnimation>
           </Col>
         </Row>
-      
+      </div>
     );
   }
 }

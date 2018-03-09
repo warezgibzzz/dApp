@@ -12,7 +12,7 @@ const parentColLayout = {
     span: 16
   },
   sm: {
-    span: 24
+    span: 22
   },
   xs: {
     span: 24
@@ -102,22 +102,23 @@ class GuidedDeployment extends Component {
     ];
 
     return (
-      <Row type="flex" justify="center">
-        <Col {...parentColLayout}>
-          <Steps current={currentStep}>
-            <Step title="Name"/>
-            <Step title="Data Source"/>
-            <Step title="Pricing"/>
-            <Step title="Expiration"/>
-            <Step title="Deploy"/>
-          </Steps>
-          <br/>
-          <StepAnimation
-            direction={this.state.transitionDirection}>
-            {steps.filter((step, index) => currentStep === index)}
-          </StepAnimation>
-        </Col>
-      </Row>
+      <div className="page">
+        <Row type="flex" justify="center">
+          <Col {...parentColLayout}>
+            <Steps current={currentStep} style={{marginBottom: '40px'}}>
+              <Step title="Name"/>
+              <Step title="Data Source"/>
+              <Step title="Pricing"/>
+              <Step title="Expiration"/>
+              <Step title="Deploy"/>
+            </Steps>
+            <StepAnimation
+              direction={this.state.transitionDirection}>
+              {steps.filter((step, index) => currentStep === index)}
+            </StepAnimation>
+          </Col>
+        </Row>
+      </div>
     );
   }
 }

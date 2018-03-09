@@ -9,7 +9,7 @@ import getWeb3 from './util/web3/getWeb3';
 
 // Display Splash until web3 is initialized
 ReactDOM.render(
-  <Splash width='500px' height='500px' alt='Initializing Web3...' />,
+  <Splash alt='Initializing Web3...' />,
   document.getElementById('dapp')
 );
 

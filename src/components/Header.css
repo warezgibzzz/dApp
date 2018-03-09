@@ -2,8 +2,8 @@
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
   background: #fff;
-  -webkit-box-shadow: 0 2px 8px #f0f1f2;
-  box-shadow: 0 2px 8px #f0f1f2;
+  -webkit-box-shadow: 0 2px 0px #f0f1f2;
+  box-shadow: 0 2px 0px #f0f1f2;
   position: relative;
   z-index: 10;
   max-width: 100%;
@@ -30,4 +30,8 @@
   box-shadow: none;
   line-height: 64px;
   margin-right: 50px;
+}
+
+.ant-menu {
+  font-weight: 600;
 }

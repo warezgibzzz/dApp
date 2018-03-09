@@ -15,16 +15,15 @@ class App extends Component {
   render() {
     return (
       <Router history={this.props.history}>
-        <Layout>
+        <Layout style={{minHeight: '100vh', backgroundColor: '#F8F8F8'}}>
           <Header/>
-          <Content
-            style={{height: 'calc(100vh - 134px)', overflowY: 'scroll', padding: '20px 30px', background: '#FFF'}}>
+          <Content>
             {routes.map((route) => (
               <Route key={route.path} {...route} />
             ))}
           </Content>
 
-          <Footer className="text-center">
+          <Footer className="footer">
             dApp ©2018 Created by <a href="https://marketprotocol.io" target="_blank" rel="noopener noreferrer">MARKET
             Protocol</a>
           </Footer>

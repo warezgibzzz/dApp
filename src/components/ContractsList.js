@@ -201,7 +201,7 @@ class ContractsList extends Component {
 
     if (!this.state.contracts) {
       return (
-        <div><Loader loading/></div>
+        <Loader loading/>
       );
     }
 
@@ -212,37 +212,39 @@ class ContractsList extends Component {
     }
 
     return (
-      <div>
-        <Table columns={columns}
-               dataSource={this.state.contracts}
-               onChange={this.handleChange}
-               pagination={{ pageSize: 25 }}
-               scroll={{ y: '60vh' }}
-               bordered
-               title={() => 'Contracts'}
-               expandedRowRender={record => {
-                 return <Row>
-                   <Col xs={{ span: 24 }} lg={{ span: 12 }}>
-                     <strong>Address :</strong> { record.key }
-                   </Col>
-                   <Col xs={{ span: 12 }} lg={{ span: 6 }}>
-                     <strong>Price Cap :</strong> { record.PRICE_CAP }
-                   </Col>
-                   <Col xs={{ span: 12 }} lg={{ span: 6 }}>
-                     <strong>Price Decimal Places :</strong> { record.PRICE_DECIMAL_PLACES }
-                   </Col>
-                   <Col xs={{ span: 12 }} lg={{ span: 6 }}>
-                     <strong>Price Floor :</strong> { record.PRICE_FLOOR }
-                   </Col>
-                   <Col xs={{ span: 12 }} lg={{ span: 6 }}>
-                     <strong>Qty Multiplier :</strong> { record.QTY_MULTIPLIER }
-                   </Col>
-                   <Col xs={{ span: 12 }} lg={{ span: 6 }}>
-                     <strong>Last Price :</strong> { record.lastPrice }
-                   </Col>
-                 </Row>;
-               }}
-        />
+      <div className="page" style={{margin: '0 5%'}}>
+        <Row style={{padding: '0px 20px'}}>
+          <Table columns={columns}
+                dataSource={this.state.contracts}
+                onChange={this.handleChange}
+                pagination={{ pageSize: 25 }}
+                scroll={{ y: '60vh' }}
+                bordered
+                title={() => 'Contracts'}
+                expandedRowRender={record => {
+                  return <Row>
+                    <Col xs={{ span: 24 }} lg={{ span: 12 }}>
+                      <strong>Address :</strong> { record.key }
+                    </Col>
+                    <Col xs={{ span: 12 }} lg={{ span: 6 }}>
+                      <strong>Price Cap :</strong> { record.PRICE_CAP }
+                    </Col>
+                    <Col xs={{ span: 12 }} lg={{ span: 6 }}>
+                      <strong>Price Decimal Places :</strong> { record.PRICE_DECIMAL_PLACES }
+                    </Col>
+                    <Col xs={{ span: 12 }} lg={{ span: 12 }}>
+                      <strong>Qty Multiplier :</strong> { record.QTY_MULTIPLIER }
+                    </Col>
+                    <Col xs={{ span: 12 }} lg={{ span: 6 }}>
+                      <strong>Price Floor :</strong> { record.PRICE_FLOOR }
+                    </Col>
+                    <Col xs={{ span: 12 }} lg={{ span: 6 }}>
+                      <strong>Last Price :</strong> { record.lastPrice }
+                    </Col>
+                  </Row>;
+                }}
+          />
+        </Row>
       </div>
     );
   }
