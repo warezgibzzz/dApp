@@ -20,7 +20,7 @@ class Landing extends Component {
         <Row type="flex" className="hero" align="middle">
           <Col span={10}>
             <div className="hero-text">
-              <h1>Deploy Contracts - Guided</h1>
+              <h1>Guided Contract Deployment</h1>
               <h4>Step by step guide for first time MARKET Smart Contract deployment</h4>
               <Button type="primary" size="large"><a href="/contract/deploy?mode=guided">Get Started <Icon type="right" /></a></Button>
             </div>
