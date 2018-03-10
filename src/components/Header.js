@@ -35,9 +35,7 @@ class Header extends Component {
                 <MenuItem>
                   <Link to="/test">Test Query</Link>
                 </MenuItem>
-                <MenuItem>
-                  <Link to="/exchange">Sim Exchange</Link>
-                </MenuItem>
+                {/*<MenuItem><Link to="/exchange">Sim Exchange</Link></MenuItem>*/}
                 <MenuItem>
                   <Link to="http://docs.marketprotocol.io" target="_blank">Documentation</Link>
                 </MenuItem>

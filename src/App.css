@@ -20,7 +20,7 @@ code {
 .page {
     background: #fff;
     padding: 40px 0;
-    margin: 0 10%;
+    margin: 0;
     min-height: calc(100vh - 134px);
 }
 
@@ -42,21 +42,20 @@ code {
 .market-loader {
     width: 80px;
     margin: auto;
-    position: relative;
 }
 .page-loader {
     width: 80px;
     margin: auto;
     position: absolute; /* To negate the footer height to make it visually centered */
     top: -60px;
-    left: 0; 
-    bottom: 0; 
+    left: 0;
+    bottom: 0;
     right: 0;
 }
 
 .ant-popover {
     max-width: 350px;
-    line-height: 25px;    
+    line-height: 25px;
     font-size: 13px;
     font-weight: 500;
 }
@@ -71,4 +70,4 @@ code {
         padding: 40px;
         margin: 0;
     }
-} 
+}

@@ -9,7 +9,7 @@ const Step = Steps.Step;
 
 const parentColLayout = {
   lg: {
-    span: 16
+    span: 18
   },
   sm: {
     span: 22

@@ -29,7 +29,7 @@ class SimExchange extends Component {
 
     return (
       <Layout>
-        <Header style={{ paddingLeft: '224px', background: '#fff'}}>
+        <Header style={{ paddingLeft: '224px', background: '#fff' }}>
           <TopBar
             contract={contract}
             contracts={contracts}
@@ -51,7 +51,7 @@ class SimExchange extends Component {
               </Menu.Item>
             </Menu>
           </Sider>
-          <Content style={{ padding: '0 24px', minHeight: 250 }}>
+          <Content style={{ padding: '0 24px', minHeight: 250, marginBottom: '20px' }}>
             <Switch>
               <Route path="/:url*" exact strict render={props => <Redirect to={`${props.location.pathname}/`}/>}/>
               <Route

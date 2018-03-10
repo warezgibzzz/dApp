@@ -52,6 +52,7 @@ export const getBids = function (web3, marketContract, orderLib) {
   // that are around an price pulled from an active API that mimics the oracle solution
   const contractMidPrice = (marketContract.PRICE_FLOOR.call().toNumber() +
     marketContract.PRICE_CAP.call().toNumber()) / 2;
+
   // we will need to fix this, the server will need to have an unlocked account created the order for the user to match
   // here we are just using an account that we only have access to in the dev environment, but wont be able
   // to use when we attempt to deploy to a test net (rinkeby)
@@ -72,6 +73,7 @@ export const getAsks = function (web3, marketContract, orderLib) {
   // that are around an price pulled from an active API that mimics the oracle solution
   const contractMidPrice = (marketContract.PRICE_FLOOR.call().toNumber() +
     marketContract.PRICE_CAP.call().toNumber()) / 2;
+
   // we will need to fix this, the server will need to have an unlocked account created the order for the user to match
   // here we are just using an account that we only have access to in the dev environment, but wont be able
   // to use when we attempt to deploy to a test net (rinkeby)
@@ -80,7 +82,7 @@ export const getAsks = function (web3, marketContract, orderLib) {
     marketContract,
     orderLib,
     web3.eth.accounts[9],
-    contractMidPrice - SELL_SIGN, // subtract our sign so our market are not crossed.
+    contractMidPrice - BUY_SIGN, // subtract our sign so our market are not crossed.
     SELL_SIGN,
     5
   );
