@@ -63,6 +63,10 @@ code {
     background-color: #f7f6f6;
 }
 
+.text-center {
+    text-align: center;
+}
+
 
 /* Mobile screens */
 @media only screen and (max-width: 40em) {
