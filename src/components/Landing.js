@@ -18,26 +18,26 @@ class Landing extends Component {
     return (
       <div style={{backgroundColor: '#fff'}}>
         <Row type="flex" className="hero" align="middle">
-          <Col span={10}>
+          <Col xs={20} sm={20} md={10} lg={10} xl={10}>
             <div className="hero-text">
               <h1>Guided Contract Deployment</h1>
               <h4>Step by step guide for first time MARKET Smart Contract deployment</h4>
               <Button type="primary" size="large"><a href="/contract/deploy?mode=guided">Get Started <Icon type="right" /></a></Button>
             </div>
           </Col>
-          <Col span={14}>
+          <Col span={14} className="hide-mobile">
             <div className="hero-image">
               <img alt="Header Illustration" src={main} width="600"/>
             </div>
           </Col>
         </Row>
         <Row type="flex" align="middle" id="explore-section" className="feature-section">
-          <Col span={14}>
+          <Col xs={22} sm={22} md={14} lg={14} xl={14}>
             <div className="feature-image">
               <img alt="Explore contracts Illustration" src={explore} width="90%"/>
             </div>
           </Col>
-          <Col span={6}>
+          <Col xs={22} sm={22} md={10} lg={10} xl={6}>
             <div className="feature-text-container">
               <img alt="Explore contracts icons" className="feature-icons" src={exploreIcons}/>
               <h1 className="feature-main-text">Explore Contracts</h1>
@@ -46,8 +46,13 @@ class Landing extends Component {
             </div>
           </Col>
         </Row>
-        <Row type="flex" justify="end" align="middle" id="test-section" className="feature-section">
-          <Col span={6}>
+        <Row type="flex" align="middle" id="test-section" className="feature-section">
+          <Col xs={24} sm={24} md={{span: 14, push: 10}} lg={{span: 14, push: 10}} xl={{span: 14, push: 10}} style={{textAlign: 'right'}}>
+            <div className="feature-image">
+              <img alt="Test Queries Illustration" src={test} width="90%"/>
+            </div>
+          </Col>
+          <Col xs={24} sm={24} md={{span: 10, pull: 12}} lg={{span: 10, pull: 12}} xl={{span: 6, pull: 10}}>
             <div className="feature-text-container">
               <img alt="Test Queries icons" className="feature-icons" src={testIcons}/>
               <h1 className="feature-main-text">Test Queries</h1>
@@ -55,19 +60,14 @@ class Landing extends Component {
               <Button type="primary" size="large"><a href="/test">Get Started <Icon type="right" /></a></Button>
             </div>
           </Col>
-          <Col span={14} style={{textAlign: 'right'}}>
-            <div className="feature-image">
-              <img alt="Test Queries Illustration" src={test} width="90%"/>
-            </div>
-          </Col>
         </Row>
         <Row type="flex" align="middle" id="simulated-section" className="feature-section">
-          <Col span={14}>
+          <Col xs={22} sm={22} md={14} lg={14} xl={14}>
             <div className="feature-image">
               <img alt="Simulated exchange Illustration" src={simulate} width="90%"/>
             </div>
           </Col>
-          <Col span={6}>
+          <Col xs={22} sm={22} md={10} lg={10} xl={6}>
             <div className="feature-text-container">
               <img alt="Simulated exchange icons" className="feature-icons" src={simulateIcons}/>
               <h1 className="feature-main-text">Simulated Exchange</h1>

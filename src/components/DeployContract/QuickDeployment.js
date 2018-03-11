@@ -122,21 +122,21 @@ class QuickDeployment extends Component {
 
             <ContractFormRow>
               <ContractFormCol>
-                <Field name='priceFloor' initialValue={parseInt(initialValues.priceFloor, 10)} form={this.props.form} showHint/>
+                <Field name='priceFloor' initialValue={parseInt(initialValues.priceFloor, 10) ? parseInt(initialValues.priceFloor, 10) : ''} form={this.props.form} showHint/>
               </ContractFormCol>
 
               <ContractFormCol>
-                <Field name='priceCap' initialValue={parseInt(initialValues.priceCap, 10)} form={this.props.form} showHint/>
+                <Field name='priceCap' initialValue={parseInt(initialValues.priceCap, 10) ? parseInt(initialValues.priceCap, 10) : '' } form={this.props.form} showHint/>
               </ContractFormCol>
             </ContractFormRow>
 
             <ContractFormRow>
               <ContractFormCol>
-                <Field name='priceDecimalPlaces' initialValue={parseInt(initialValues.priceDecimalPlaces, 10)} form={this.props.form} showHint/>
+                <Field name='priceDecimalPlaces' initialValue={parseInt(initialValues.priceDecimalPlaces, 10) ? parseInt(initialValues.priceDecimalPlaces, 10) : ''} form={this.props.form} showHint/>
               </ContractFormCol>
 
               <ContractFormCol>
-                <Field name="qtyMultiplier" initialValue={parseInt(initialValues.qtyMultiplier, 10)} form={this.props.form} showHint/>
+                <Field name="qtyMultiplier" initialValue={parseInt(initialValues.qtyMultiplier, 10) ? parseInt(initialValues.qtyMultiplier, 10): ''} form={this.props.form} showHint/>
               </ContractFormCol>
             </ContractFormRow>
 
@@ -176,7 +176,7 @@ class QuickDeployment extends Component {
               </Col>
             </Row>
 
-            <Loader loading={this.props.loading} />
+            <Loader loading={this.props.loading} showInCenterOfPage />
           </Form>
         </div>
       </div>

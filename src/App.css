@@ -42,9 +42,33 @@ code {
 .market-loader {
     width: 80px;
     margin: auto;
-    position: absolute;
-    top: -60px; /* To negate the footer height to make it visually centered */
+    position: relative;
+}
+.page-loader {
+    width: 80px;
+    margin: auto;
+    position: absolute; /* To negate the footer height to make it visually centered */
+    top: -60px;
     left: 0; 
     bottom: 0; 
     right: 0;
 }
+
+.ant-popover {
+    max-width: 350px;
+    line-height: 25px;    
+    font-size: 13px;
+    font-weight: 500;
+}
+.ant-popover-title {
+    background-color: #f7f6f6;
+}
+
+
+/* Mobile screens */
+@media only screen and (max-width: 40em) {
+    .page {
+        padding: 40px;
+        margin: 0;
+    }
+} 

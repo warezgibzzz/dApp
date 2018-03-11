@@ -8,7 +8,7 @@ function Loader(props) {
   };
 
   return (
-    <img alt="Market Loader" className="market-loader" src={splash} style={{ ...style }} />
+    <img alt="Market Loader" className={props.showInCenterOfPage ? 'page-loader' : 'market-loader'} src={splash} style={{ ...style }} />
   );
 }
 
