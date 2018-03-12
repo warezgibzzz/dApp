@@ -33,6 +33,9 @@ class Header extends Component {
                   <Link to="/contract/explorer">Explore Contracts</Link>
                 </MenuItem>
                 <MenuItem>
+                  <Link to="/contract/find">Find Contracts</Link>
+                </MenuItem>
+                <MenuItem>
                   <Link to="/test">Test Query</Link>
                 </MenuItem>
                 {/*<MenuItem><Link to="/exchange">Sim Exchange</Link></MenuItem>*/}

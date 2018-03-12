@@ -58,10 +58,8 @@ class FindContractForm extends Component {
       if (err) {
         return;
       }
-      const values = {
-        ...fieldsValue,
-      };
-      this.props.onFindContract(values);
+
+      this.props.onFindContract({ ...fieldsValue });
     });
   }
 

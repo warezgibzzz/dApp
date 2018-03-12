@@ -59,6 +59,10 @@ export async function processContractsList(deployedContracts, marketContract, ma
           .then(async function(baseTokenInstance) {
             contractJSON['BASE_TOKEN'] = await baseTokenInstance.name();
             contractJSON['BASE_TOKEN_SYMBOL'] = await baseTokenInstance.symbol();
+          })
+          .catch(function (err) {
+            contractJSON['BASE_TOKEN'] = 'NA';
+            contractJSON['BASE_TOKEN_SYMBOL'] = 'NA';
           });
 
         contractJSON['PRICE_FLOOR'] = await instance.PRICE_FLOOR.call().then(data => data.toNumber());
