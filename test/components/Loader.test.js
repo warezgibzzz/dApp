@@ -6,7 +6,7 @@ import Loader from '../../src/components/Loader';
 
 describe('Loader', () => {
   it('should be visible with loading set', () => {
-    const loader = mount(<Loader loading/>);
+    const loader = mount(<Loader loading={true}/>);
     expect(loader.find('div').prop('style').display).to.not.equal('none');
   });
 
