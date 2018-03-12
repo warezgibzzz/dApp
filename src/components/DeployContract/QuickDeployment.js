@@ -176,7 +176,7 @@ class QuickDeployment extends Component {
               </Col>
             </Row>
 
-            <Loader loading={this.props.loading} showInCenterOfPage />
+            <Loader loading={this.props.loading} center/>
           </Form>
         </div>
       </div>
