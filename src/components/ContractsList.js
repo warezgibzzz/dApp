@@ -201,7 +201,7 @@ class ContractsList extends Component {
 
     if (!this.state.contracts) {
       return (
-        <Loader loading/>
+        <Loader loading={true} center={true}/>
       );
     }
 

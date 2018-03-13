@@ -1,4 +1,4 @@
-import { DatePicker, Form, Icon, Input, InputNumber, Select, Tooltip } from 'antd';
+import { DatePicker, Form, Icon, Input, InputNumber, Select, Popover } from 'antd';
 import moment from 'moment';
 import React from 'react';
 
@@ -47,9 +47,10 @@ const oracleQueryValidator = (form, rule, value, callback) => {
   }
 };
 
-const Hint = (props) => (<Tooltip title={props.hint} >
-                          <Icon type="question-circle-o" />
-                        </Tooltip>);
+
+const Hint = (props) => (<Popover content={props.hint} title={"More about `" + props.hintTitle + "`"} trigger="click">
+                          <Icon type="question-circle-o" style={{cursor: 'pointer'}} />
+                        </Popover>);
 
 const fieldSettingsByName = {
   contractName: {
@@ -266,7 +267,7 @@ function DeployContractField(props) {
   const fieldSettings = fieldSettingsByName[name];
 
   const rules = typeof fieldSettings.rules === 'function' ? fieldSettings.rules(form) : fieldSettings.rules;
-  const label = (<span>{fieldSettings.label} {showHint && <Hint hint={fieldSettings.extra}/>}</span>);
+  const label = (<span>{fieldSettings.label} {showHint && <Hint hint={fieldSettings.extra} hintTitle= {fieldSettings.label}/>}</span>);
   return (
     <FormItem
       label={label}

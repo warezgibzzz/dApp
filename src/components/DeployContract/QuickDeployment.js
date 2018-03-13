@@ -122,21 +122,21 @@ class QuickDeployment extends Component {
 
             <ContractFormRow>
               <ContractFormCol>
-                <Field name='priceFloor' initialValue={parseInt(initialValues.priceFloor, 10)} form={this.props.form} showHint/>
+                <Field name='priceFloor' initialValue={isNaN(initialValues.priceFloor) ? '' : parseInt(initialValues.priceFloor, 10)} form={this.props.form} showHint/>
               </ContractFormCol>
 
               <ContractFormCol>
-                <Field name='priceCap' initialValue={parseInt(initialValues.priceCap, 10)} form={this.props.form} showHint/>
+                <Field name='priceCap' initialValue={isNaN(initialValues.priceCap) ? '' : parseInt(initialValues.priceCap, 10)} form={this.props.form} showHint/>
               </ContractFormCol>
             </ContractFormRow>
 
             <ContractFormRow>
               <ContractFormCol>
-                <Field name='priceDecimalPlaces' initialValue={parseInt(initialValues.priceDecimalPlaces, 10)} form={this.props.form} showHint/>
+                <Field name='priceDecimalPlaces' initialValue={isNaN(initialValues.priceDecimalPlaces) ? '' : parseInt(initialValues.priceDecimalPlaces, 10)} form={this.props.form} showHint/>
               </ContractFormCol>
 
               <ContractFormCol>
-                <Field name="qtyMultiplier" initialValue={parseInt(initialValues.qtyMultiplier, 10)} form={this.props.form} showHint/>
+                <Field name="qtyMultiplier" initialValue={isNaN(initialValues.qtyMultiplier) ? '' : parseInt(initialValues.qtyMultiplier, 10)} form={this.props.form} showHint/>
               </ContractFormCol>
             </ContractFormRow>
 
@@ -156,7 +156,7 @@ class QuickDeployment extends Component {
               </ContractFormCol>
 
               <ContractFormCol>
-                <Field name='oracleQueryRepeatSeconds' initialValue={parseInt(initialValues.oracleQueryRepeatSeconds, 10)} form={this.props.form} showHint/>
+                <Field name='oracleQueryRepeatSeconds' initialValue={isNaN(initialValues.oracleQueryRepeatSeconds) ? '' : parseInt(initialValues.oracleQueryRepeatSeconds, 10)} form={this.props.form} showHint/>
               </ContractFormCol>
             </ContractFormRow>
 
@@ -176,7 +176,7 @@ class QuickDeployment extends Component {
               </Col>
             </Row>
 
-            <Loader loading={this.props.loading} />
+            <Loader loading={this.props.loading} center={true}/>
           </Form>
         </div>
       </div>
