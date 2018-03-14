@@ -48,7 +48,7 @@ describe('SelectDataSourceStep', () => {
     onNextClickSpy = sinon.spy();
     onPrevClickSpy = sinon.spy();
     onChangeSpy = sinon.spy();
-    selectDataSourceStep = shallow(<SelectDataSourceStep 
+    selectDataSourceStep = shallow(<SelectDataSourceStep
       onNextClicked={onNextClickSpy}
       onPrevClicked={onPrevClickSpy}
       onChange={onChangeSpy} />);
@@ -150,7 +150,7 @@ describe('QueryResultStep', () => {
 
   it('should hide loading correctly', () => {
     queryResultStep.setProps({ loading: false });
-    expect(queryResultStep.find(Loader).props().loading).to.equal(false);
+    expect(queryResultStep.find(Loader).length).to.equals(0);
   });
 
   it('should display results when not loading', () => {
