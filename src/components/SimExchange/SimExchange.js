@@ -12,20 +12,26 @@ const { Content, Header, Sider } = Layout;
 class SimExchange extends Component {
   componentWillMount() {
     if (!this.props.contracts) {
-      this.props.getContracts();
+      // this.props.getContracts();
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.contracts && !nextProps.contract) {
-      this.props.selectContract(nextProps.contracts[0]);
-      this.props.getAsks();
-      this.props.getBids();
+      // this.props.selectContract(nextProps.contracts[0]);
+      // this.props.getAsks();
+      // this.props.getBids();
     }
   }
 
   render() {
     const { asks, bids, contract, contracts, location } = this.props;
+
+    return (
+      <div className="text-center" style={{ fontSize: '18px', padding: '4em' }}>
+        <strong>Coming soon...</strong>
+      </div>
+    );
 
     return (
       <Layout>
