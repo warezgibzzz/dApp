@@ -233,7 +233,11 @@ class QueryResultStep extends Component {
       <Row type="flex" justify="center">
         <Col lg={{ span: 16 }} sm={{ span: 24 }} xs={{ span: 24 }}>
           <Card title="Query Result" style={{ width: '100%' }}>
-            <Loader loading={this.props.loading}/>
+            {this.props.loading && (
+              <div style={{ position: 'relative', height: '100px' }}>
+                <Loader loading={this.props.loading} top={'0'} />
+              </div>
+            )}
             {!this.props.loading && !this.props.error && <p className="result">{this.props.result}</p>}
             {!this.props.loading && this.props.error && <Alert message={`${this.props.error}`} type="error" />}
           </Card>

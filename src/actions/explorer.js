@@ -5,7 +5,7 @@ export function loadContracts({ web3 }, { MarketContractRegistry, MarketContract
 
   return function(dispatch) {
     dispatch({ type: `${type}_PENDING` });
-    
+
     // Double-check web3's status
     if (web3 && typeof web3 !== 'undefined') {
       // Using truffle-contract create needed contract objects and set providers
@@ -25,17 +25,14 @@ export function loadContracts({ web3 }, { MarketContractRegistry, MarketContract
       let marketContractRegistryInstance;
       marketContractRegistry.deployed().then(function(instance) {
         marketContractRegistryInstance = instance;
-        console.log('Found the Market Contract Registry at' + instance.address);
 
         // Attempt to find deployed contracts and get metadata
         marketContractRegistryInstance.getAddressWhiteList
           .call()
           .then(async function(deployedContracts) {
-            console.log('Found ' + deployedContracts.length + ' contracts deployed');
             await collateralToken.deployed();
             processContractsList(deployedContracts, marketContract, marketCollateralPool, collateralToken)
               .then(function (data) {
-                console.log('Dispatch Contracts');
                 dispatch({ type: `${type}_FULFILLED`, payload: data });
               });
           });
@@ -62,6 +59,10 @@ export async function processContractsList(deployedContracts, marketContract, ma
           .then(async function(baseTokenInstance) {
             contractJSON['BASE_TOKEN'] = await baseTokenInstance.name();
             contractJSON['BASE_TOKEN_SYMBOL'] = await baseTokenInstance.symbol();
+          })
+          .catch(function (err) {
+            contractJSON['BASE_TOKEN'] = 'NA';
+            contractJSON['BASE_TOKEN_SYMBOL'] = 'NA';
           });
 
         contractJSON['PRICE_FLOOR'] = await instance.PRICE_FLOOR.call().then(data => data.toNumber());

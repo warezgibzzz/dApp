@@ -27,7 +27,9 @@ class ContractsList extends Component {
   };
 
   componentWillMount() {
-    this.props.onLoad();
+    if (!this.props.contracts) {
+      this.props.onLoad();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -218,9 +220,8 @@ class ContractsList extends Component {
                 dataSource={this.state.contracts}
                 onChange={this.handleChange}
                 pagination={{ pageSize: 25 }}
-                scroll={{ y: '60vh' }}
+                // scroll={{ y: '60vh' }}
                 bordered
-                title={() => 'Contracts'}
                 expandedRowRender={record => {
                   return <Row>
                     <Col xs={{ span: 24 }} lg={{ span: 12 }}>

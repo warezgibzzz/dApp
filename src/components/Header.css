@@ -35,3 +35,7 @@
 .ant-menu {
   font-weight: 600;
 }
+
+.ant-menu-item-selected {
+  pointer-events: none;
+}

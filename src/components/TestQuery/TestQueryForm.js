@@ -11,7 +11,7 @@ const Step = Steps.Step;
 
 const parentColLayout = {
   lg: {
-    span: 16
+    span: 20
   },
   sm: {
     span: 22
@@ -25,7 +25,7 @@ const message = (network, hash) => {
   let message = 'Transaction has been submitted: ';
 
   switch(network) {
-    case 'rinkeby': 
+    case 'rinkeby':
       message = message + `https://rinkeby.etherscan.io/tx/${hash}`;
       break;
     case 'mainnet':
@@ -118,14 +118,14 @@ class TestQueryForm extends Component {
   render() {
     const currentStep = this.state.step;
     const steps = [
-      <AboutOraclesStep 
+      <AboutOraclesStep
         key="0"
         onNextClicked={this.toNextStep.bind(this)} />,
 
-      <SelectDataSourceStep 
+      <SelectDataSourceStep
         key="1"
-        dataSource={this.state.oracleDataSource} 
-        onChange={this.onDataSourceChange.bind(this)} 
+        dataSource={this.state.oracleDataSource}
+        onChange={this.onDataSourceChange.bind(this)}
         onPrevClicked={this.toPrevStep.bind(this)}
         onNextClicked={this.toNextStep.bind(this)} />,
 
@@ -140,11 +140,11 @@ class TestQueryForm extends Component {
         key="3"
         loading={this.props.loading}
         result={this.props.results}
-        error={this.props.error} 
+        error={this.props.error}
         onPrevClicked={this.toPrevStep.bind(this)}
         onCreateContractClicked={this.navigateToDeployContract.bind(this)} />,
     ];
-    
+
     return (
       <div className="page">
         <Row type="flex" justify="center">
@@ -155,7 +155,7 @@ class TestQueryForm extends Component {
               <Step title="Oracle Query" />
               <Step title="Result" />
             </Steps>
-            <StepAnimation 
+            <StepAnimation
               direction={this.state.transitionDirection}>
               {steps.filter((step, index) => currentStep === index )[0]}
             </StepAnimation>

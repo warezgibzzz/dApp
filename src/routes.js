@@ -21,6 +21,10 @@ export const routes = [
     path: '/contract/explorer',
   },
   {
+    component: Containers.SimExchangeContainer,
+    path: '/exchange',
+  },
+  {
     component: Containers.TestQueryContainer,
     path: '/test',
   }
