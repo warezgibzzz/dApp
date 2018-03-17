@@ -1,5 +1,6 @@
 import contract from 'truffle-contract';
 
+
 export function loadContracts({ web3 }, { MarketContractRegistry, MarketContract, MarketCollateralPool, CollateralToken }) {
   const type = 'GET_CONTRACTS';
 
@@ -43,6 +44,38 @@ export function loadContracts({ web3 }, { MarketContractRegistry, MarketContract
   };
 }
 
+/**
+ * Basic ABI for contract ERC20 TOKEN for fetching Name and Symbol
+ * @type {*[]}
+ */
+const abi = [{
+  "constant": true,
+  "inputs": [],
+  "name": "name",
+  "outputs": [
+    {
+      "name": "",
+      "type": "string"
+    }
+  ],
+  "payable": false,
+  "type": "function"
+},
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "symbol",
+    "outputs": [
+      {
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  }
+];
+
 export async function processContractsList(deployedContracts, marketContract, marketCollateralPool, baseToken) {
   let promises = deployedContracts.map(async (contract) => {
     return await marketContract
@@ -59,10 +92,12 @@ export async function processContractsList(deployedContracts, marketContract, ma
           .then(async function(baseTokenInstance) {
             contractJSON['BASE_TOKEN'] = await baseTokenInstance.name();
             contractJSON['BASE_TOKEN_SYMBOL'] = await baseTokenInstance.symbol();
+            contractJSON['BASE_TOKEN_ADDRESS'] = await baseTokenInstance.address;
           })
           .catch(function (err) {
-            contractJSON['BASE_TOKEN'] = 'NA';
-            contractJSON['BASE_TOKEN_SYMBOL'] = 'NA';
+            const token = contract(abi).at(baseTokenContractAddress);
+            contractJSON['BASE_TOKEN'] = token.name();
+            contractJSON['BASE_TOKEN_SYMBOL'] = token.symbol();
           });
 
         contractJSON['PRICE_FLOOR'] = await instance.PRICE_FLOOR.call().then(data => data.toNumber());

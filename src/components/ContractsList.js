@@ -227,6 +227,9 @@ class ContractsList extends Component {
                     <Col xs={{ span: 24 }} lg={{ span: 12 }}>
                       <strong>Address :</strong> { record.key }
                     </Col>
+                    <Col xs={{ span: 24 }} lg={{ span: 12 }}>
+                      <strong>Token Address :</strong> { record.BASE_TOKEN_ADDRESS }
+                    </Col>
                     <Col xs={{ span: 12 }} lg={{ span: 6 }}>
                       <strong>Price Cap :</strong> { record.PRICE_CAP }
                     </Col>
