@@ -7,6 +7,8 @@ Decentralized blockchain application utilizing [MARKET](https://github.com/MARKE
 
 Take a look at our [FAQ](https://github.com/MARKETProtocol/MARKETProtocol/wiki/Frequently-Asked-Questions) for a little more explanation.
 
+Join our [discord](https://www.marketprotocol.io/discord) to interact with members of our dev staff.
+
 ## Getting Started
 Assuming you have npm already, Install truffle
 ```
