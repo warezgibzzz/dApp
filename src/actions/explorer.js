@@ -1,5 +1,5 @@
 import contract from 'truffle-contract';
-
+import abi from '../util/ERC20TokenABI.json';
 
 export function loadContracts({ web3 }, { MarketContractRegistry, MarketContract, MarketCollateralPool, CollateralToken }) {
   const type = 'GET_CONTRACTS';
@@ -44,37 +44,6 @@ export function loadContracts({ web3 }, { MarketContractRegistry, MarketContract
   };
 }
 
-/**
- * Basic ABI for contract ERC20 TOKEN for fetching Name and Symbol
- * @type {*[]}
- */
-const abi = [{
-  "constant": true,
-  "inputs": [],
-  "name": "name",
-  "outputs": [
-    {
-      "name": "",
-      "type": "string"
-    }
-  ],
-  "payable": false,
-  "type": "function"
-},
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "symbol",
-    "outputs": [
-      {
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "payable": false,
-    "type": "function"
-  }
-];
 
 export async function processContractsList(deployedContracts, marketContract, marketCollateralPool, baseToken) {
   let promises = deployedContracts.map(async (contract) => {
