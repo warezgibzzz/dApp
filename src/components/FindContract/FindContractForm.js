@@ -21,6 +21,7 @@ class FindContractForm extends Component {
           "key": "Address",
           "CONTRACT_NAME": "Contract Name",
           "BASE_TOKEN": "Base Token",
+          "BASE_TOKEN_ADDRESS": "Token Address",
           "BASE_TOKEN_SYMBOL": "Base Token Symbol",
           "PRICE_FLOOR": "Price Floor",
           "PRICE_CAP": "Price Cap",
