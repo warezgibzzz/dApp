@@ -55,11 +55,9 @@ export function deployContract(
               contractConstructorArray,
               contractSpecs.oracleDataSource,
               contractSpecs.oracleQuery,
-              contractSpecs.oracleQueryRepeatSeconds,
               {
-                gas: 6500000, // TODO : Remove hard-coded gas
-                value: web3.toWei('.2', 'ether'),
-                gasPrice: web3.toWei(1, 'gwei'),
+                gas: 5800000, // TODO : Remove hard-coded gas
+                gasPrice: web3.toWei(2, 'gwei'),
                 from: coinbase
               }
             );
@@ -68,7 +66,7 @@ export function deployContract(
             marketContractInstanceDeployed = marketContractInstance;
             return marketCollateralPool.new(marketContractInstance.address, {
               gas: 5100000,
-              gasPrice: web3.toWei(1, 'gwei'),
+              gasPrice: web3.toWei(2, 'gwei'),
               from: coinbase
             });
           })
@@ -76,7 +74,7 @@ export function deployContract(
             return marketContractInstanceDeployed.setCollateralPoolContractAddress(
               marketCollateralPoolInstance.address, {
                 from: coinbase,
-                gasPrice: web3.toWei(1, 'gwei')
+                gasPrice: web3.toWei(2, 'gwei')
               }
             );
           })
@@ -88,7 +86,7 @@ export function deployContract(
               marketContractInstanceDeployed.address,
               {
                 from: web3.eth.accounts[0],
-                gasPrice: web3.toWei(1, 'gwei')
+                gasPrice: web3.toWei(2, 'gwei')
               }
             );
 

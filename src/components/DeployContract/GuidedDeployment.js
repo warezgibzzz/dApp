@@ -39,7 +39,6 @@ class GuidedDeployment extends Component {
       expirationTimeStamp: '',
       oracleDataSource: '',
       oracleQuery: '',
-      oracleQueryRepeatSeconds: 86400, //default to daily queries.
     };
   }
 
