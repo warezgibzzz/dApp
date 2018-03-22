@@ -77,7 +77,7 @@ module.exports = function (deployer, network) {
     }).then(async function () {
       // we want to create a few basic contracts to allow users to use the simulated trading experience
       // as well as for testing some of the needed visual elements
-      const gasLimit = 5800000;
+      const gasLimit = 5900000;
       await MarketToken.deployed();
       await CollateralToken.deployed();
       let marketContractRegistry = await MarketContractRegistry.deployed();
