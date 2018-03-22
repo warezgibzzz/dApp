@@ -243,22 +243,6 @@ const fieldSettingsByName = {
 
     component: () => (<Input />)
   },
-
-  oracleQueryRepeatSeconds: {
-    label: 'Query Repeat Seconds',
-    initialValue: 86400,
-    rules: [
-      {
-        required: true, message: 'Please enter the number of seconds before repeating the query',
-      },
-      {
-        type: 'integer', message: 'Value must be an integer'
-      }
-    ],
-    extra: `Number of seconds in between repeating the oracle query.`,
-
-    component: () => (<InputNumber min={0} style={{ width: '100%' }}/>)
-  },
 };
 
 function DeployContractField(props) {

@@ -272,18 +272,6 @@ class DataSourceStep extends BaseStepComponent {
                initialValue={this.props.oracleQuery || initialValues.oracleQuery}
                form={this.props.form}/>
 
-        <h2>Query Repeat Interval</h2>
-        <div>
-          Number of seconds in between repeating the oracle query.
-          Typically this only need be once per day (86,400 seconds).
-          Additional frequency can be beneficial in some circumstances but will increase the needed amount of ETH that
-          is needs to be pre-funded to the contract in order to pay for the query gas costs.
-        </div>
-        <br/>
-        <Field name='oracleQueryRepeatSeconds'
-               initialValue={this.props.oracleQueryRepeatSeconds}
-               form={this.props.form}/>
-
         <Row type="flex" justify="end">
           <Col>
             <Button type="primary" htmlType="submit">

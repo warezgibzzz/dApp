@@ -58,8 +58,7 @@ module.exports = function (deployer, network) {
           [50000, 150000, 2, 1e+18, quickExpirationTimeStamp],
           "URL",
           "json(https://api.kraken.com/0/public/Ticker?pair=ETHUSD).result.XETHZUSD.c.0",
-          600,
-          {gas: gasLimit, value: web3.toWei('.1', 'ether'), from: web3.eth.accounts[0]}
+          {gas: gasLimit, value: web3.toWei('.001', 'ether'), from: web3.eth.accounts[0]}
         );
       }).then(function () {
         return deployer.deploy(
@@ -90,8 +89,7 @@ module.exports = function (deployer, network) {
         [50000, 150000, 2, 1e+18, marketContractExpiration],
         "URL",
         "json(https://api.kraken.com/0/public/Ticker?pair=ETHUSD).result.XETHZUSD.c.0",
-        86400,
-        {gas: gasLimit, value: web3.toWei('.2', 'ether'), from: web3.eth.accounts[0]}
+        {gas: gasLimit, value: web3.toWei('.001', 'ether'), from: web3.eth.accounts[0]}
       );
 
       let deployedCollateralPool = await MarketCollateralPool.new(
@@ -109,8 +107,7 @@ module.exports = function (deployer, network) {
         [500000, 2000000, 2, 1e+18, marketContractExpiration],
         "URL",
         "json(https://api.kraken.com/0/public/Ticker?pair=XBTUSD).result.XXBTZUSD.c.0",
-        86400,
-        {gas: gasLimit, value: web3.toWei('.3', 'ether'), from: web3.eth.accounts[0]}
+        {gas: gasLimit, value: web3.toWei('.001', 'ether'), from: web3.eth.accounts[0]}
       );
 
       deployedCollateralPool = await MarketCollateralPool.new(
@@ -128,8 +125,7 @@ module.exports = function (deployer, network) {
         [7500, 20000, 2, 1e+18, marketContractExpiration],
         "URL",
         "json(https://api.kraken.com/0/public/Ticker?pair=LTCUSD).result.XLTCZUSD.c.0",
-        86400,
-        {gas: gasLimit, value: web3.toWei('.3', 'ether'), from: web3.eth.accounts[0]}
+        {gas: gasLimit, value: web3.toWei('.001', 'ether'), from: web3.eth.accounts[0]}
       );
 
       deployedCollateralPool = await MarketCollateralPool.new(
@@ -148,8 +144,7 @@ module.exports = function (deployer, network) {
         [50000, 200000, 2, 1e+18, marketContractExpiration],
         "URL",
         "json(https://api.kraken.com/0/public/Ticker?pair=BCHUSD).result.BCHUSD.c.0",
-        86400,
-        {gas: gasLimit, value: web3.toWei('.3', 'ether'), from: web3.eth.accounts[0]}
+        {gas: gasLimit, value: web3.toWei('.001', 'ether'), from: web3.eth.accounts[0]}
       );
 
       deployedCollateralPool = await MarketCollateralPool.new(
