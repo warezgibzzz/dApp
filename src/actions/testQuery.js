@@ -60,14 +60,14 @@ export function testQuery(
                       dispatch({ type: `${type}_FULFILLED`, payload: queryResults });
                     })
                     .catch(err => {
-                      dispatch({ type: `${type}_REJECTED`, payload: err });
+                      dispatch({ type: `${type}_REJECTED`, payload: err.message.split('\n')[0] });
                     });
                 }
               });
           })
           .catch(err => {
             // catch errors during query submission
-            return dispatch({ type: `${type}_REJECTED`, payload: err.message });
+            return dispatch({ type: `${type}_REJECTED`, payload: err.message.split('\n')[0] });
           });
       });
     } else {
