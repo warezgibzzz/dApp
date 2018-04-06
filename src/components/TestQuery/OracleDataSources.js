@@ -1,5 +1,5 @@
-import isIPFS from 'is-ipfs';
 import React from 'react';
+import isIPFS from 'is-ipfs';
 
 /**
  * Name, description and validation logics for each of the oracle data sources

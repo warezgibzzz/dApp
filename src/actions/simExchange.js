@@ -1,7 +1,7 @@
 import store from '../store';
 import abi from '../util/MarketContractABI';
 import { getBids, getAsks} from '../util/utils';
-import OrderLib from '../build/contracts/OrderLib';
+import OrderLib from '../../build/contracts/OrderLib';
 
 const contract = require('truffle-contract');
 

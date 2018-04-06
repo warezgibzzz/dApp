@@ -9,12 +9,12 @@ if (process.env.NODE_ENV !== 'test') {
   // only load contracts abi if build exists.
   // useful when running tests
 
-  MarketContractRegistry = require('./build/contracts/MarketContractRegistry');
-  MarketContract = require('./build/contracts/MarketContractOraclize');
-  MarketCollateralPool = require('./build/contracts/MarketCollateralPool');
-  MarketToken = require('./build/contracts/MarketToken');
-  CollateralToken = require('./build/contracts/CollateralToken');
-  QueryTest = require('./build/contracts/OraclizeQueryTest');
+  MarketContractRegistry = require('../build/contracts/MarketContractRegistry');
+  MarketContract = require('../build/contracts/MarketContractOraclize');
+  MarketCollateralPool = require('../build/contracts/MarketCollateralPool');
+  MarketToken = require('../build/contracts/MarketToken');
+  CollateralToken = require('../build/contracts/CollateralToken');
+  QueryTest = require('../build/contracts/OraclizeQueryTest');
 }
 
 export default {
