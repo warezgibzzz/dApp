@@ -2,7 +2,7 @@ import { Alert, Button, Card, Col, Form, Icon, Input, Row, Select } from 'antd';
 import React, { Component } from 'react';
 
 import Loader from '../Loader';
-import '../Step.css';
+import '../../less/Step.less';
 import OracleDataSources, { getDataSourceObj } from './OracleDataSources';
 
 const FormItem = Form.Item;

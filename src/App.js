@@ -1,12 +1,8 @@
 import { Layout } from 'antd';
-import 'antd/dist/antd.min.css';
 import React, { Component } from 'react';
 import { Route, Router } from 'react-router';
-
-import './App.css';
+import './less/App.less';
 import Header from './components/Header';
-import './css/open-sans.css';
-import './css/oswald.css';
 import { routes } from './routes';
 
 const {Footer, Content} = Layout;
@@ -15,7 +11,7 @@ class App extends Component {
   render() {
     return (
       <Router history={this.props.history}>
-        <Layout style={{minHeight: '100vh', backgroundColor: '#F8F8F8'}}>
+        <Layout style={{minHeight: '100vh'}}>
           <Header/>
           <Content>
             {routes.map((route) => (

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import './Step.css';
+import '../less/Step.less';
 
 const validDirections = ['next', 'prev'];
 

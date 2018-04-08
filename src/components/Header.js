@@ -2,8 +2,8 @@ import {Affix, Menu } from 'antd';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import logo from '../img/market-logo-small.png';
-import './Header.css';
+import logo from '../img/market-logo-white.png';
+import '../less/Header.less';
 
 const SubMenu = Menu.SubMenu;
 const MenuItem = Menu.Item;
