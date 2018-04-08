@@ -53,7 +53,7 @@ export async function processContractsList(deployedContracts, marketContract, ma
         const contractJSON = {};
         contractJSON['key'] = instance.address;
         contractJSON['CONTRACT_NAME'] = await instance.CONTRACT_NAME.call();
-        let baseTokenContractAddress = await instance.BASE_TOKEN.call();
+        let baseTokenContractAddress = await instance.BASE_TOKEN_ADDRESS.call();
         contractJSON['BASE_TOKEN'] = baseTokenContractAddress;
 
         await baseToken
