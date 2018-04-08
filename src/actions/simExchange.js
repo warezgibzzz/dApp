@@ -1,5 +1,5 @@
 import store from '../store';
-import abi from '../util/MarketContractABI';
+import MarketContract from '../../build/contracts/MarketContract';
 import { getBids, getAsks} from '../util/utils';
 import OrderLib from '../../build/contracts/OrderLib';
 
@@ -23,7 +23,7 @@ export function getContractBids() {
 
     if (web3 && typeof web3 !== 'undefined') {
       const contract_address = store.getState().simExchange.contract.key;
-      const marketContract = web3.eth.contract(abi).at(contract_address);
+      const marketContract = web3.eth.contract(MarketContract).at(contract_address);
 
       const orderLib = contract(OrderLib);
       orderLib.setProvider(web3.currentProvider);
@@ -49,7 +49,7 @@ export function getContractAsks() {
 
     if (web3 && typeof web3 !== 'undefined') {
       const contract_address = store.getState().simExchange.contract.key;
-      const marketContract = web3.eth.contract(abi).at(contract_address);
+      const marketContract = web3.eth.contract(MarketContract).at(contract_address);
 
       const orderLib = contract(OrderLib);
       orderLib.setProvider(web3.currentProvider);
@@ -74,7 +74,7 @@ export function tradeOrder(order) {
 
     if (web3 && typeof web3 !== 'undefined') {
       const contract_address = store.getState().simExchange.contract.key;
-      const marketContract = web3.eth.contract(abi).at(contract_address);
+      const marketContract = web3.eth.contract(MarketContract).at(contract_address);
 
       console.log(order);
       await marketContract.tradeOrder(
