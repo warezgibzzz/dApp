@@ -54,14 +54,13 @@ export async function processContractsList(deployedContracts, marketContract, ma
         contractJSON['key'] = instance.address;
         contractJSON['CONTRACT_NAME'] = await instance.CONTRACT_NAME.call();
         let baseTokenContractAddress = await instance.BASE_TOKEN_ADDRESS.call();
-        contractJSON['BASE_TOKEN'] = baseTokenContractAddress;
+        contractJSON['BASE_TOKEN_ADDRESS'] = baseTokenContractAddress;
 
         await baseToken
           .at(baseTokenContractAddress)
           .then(async function(baseTokenInstance) {
             contractJSON['BASE_TOKEN'] = await baseTokenInstance.name();
             contractJSON['BASE_TOKEN_SYMBOL'] = await baseTokenInstance.symbol();
-            contractJSON['BASE_TOKEN_ADDRESS'] = await baseTokenInstance.address;
           })
           .catch(function (err) {
             const token = contract(abi).at(baseTokenContractAddress);
