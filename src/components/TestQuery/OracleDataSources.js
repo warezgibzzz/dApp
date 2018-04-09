@@ -1,5 +1,5 @@
 import React from 'react';
-import isIPFS from 'is-ipfs';
+// import isIPFS from 'is-ipfs';
 
 /**
  * Name, description and validation logics for each of the oracle data sources
@@ -66,7 +66,7 @@ const OracleDataSources = [
         }
       ]
     },
-    {
+    /*{
       name: 'IPFS',
       descriptionComponent() {
         return (<div>The IPFS data source type can be used to retrieve the content of a file on the IPFS network.
@@ -88,7 +88,7 @@ const OracleDataSources = [
           query: 'QmT78zSuBmuS4z925WZfrqQ1qHaJ56DQaTfyMUF7F8ff5o',
         }
       ]
-    },
+    },*/
     {
       name: 'computation',
       descriptionComponent() {
