@@ -56,7 +56,7 @@ export function deployContract(
               contractSpecs.oracleDataSource,
               contractSpecs.oracleQuery,
               {
-                gas: 5800000, // TODO : Remove hard-coded gas
+                gas: 5700000, // TODO : Remove hard-coded gas
                 gasPrice: web3.toWei(2, 'gwei'),
                 from: coinbase
               }
@@ -65,7 +65,7 @@ export function deployContract(
           .then(function(marketContractInstance) {
             marketContractInstanceDeployed = marketContractInstance;
             return marketCollateralPool.new(marketContractInstance.address, {
-              gas: 5100000,
+              gas: 2100000,
               gasPrice: web3.toWei(2, 'gwei'),
               from: coinbase
             });

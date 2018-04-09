@@ -43,7 +43,7 @@ module.exports = function (deployer, network) {
       marketTokenAmountForContractCreation
     ).then(function () {
       return deployer.deploy(CollateralToken, "FakeDollars", "FUSD", 1e+9, 18).then(function () {
-        let gasLimit = 5800000;  // gas limit for development network
+        let gasLimit = 5700000;  // gas limit for development network
         let block = web3.eth.getBlock("latest");
         if (block.gasLimit > 7000000) {  // coverage network
           gasLimit = block.gasLimit;
@@ -63,7 +63,8 @@ module.exports = function (deployer, network) {
       }).then(function () {
         return deployer.deploy(
           MarketCollateralPool,
-          MarketContractOraclize.address
+          MarketContractOraclize.address,
+          {gas: 2100000},
         ).then(function () {
           return MarketContractOraclize.deployed();
         }).then(function (instance) {
@@ -77,7 +78,7 @@ module.exports = function (deployer, network) {
     }).then(async function () {
       // we want to create a few basic contracts to allow users to use the simulated trading experience
       // as well as for testing some of the needed visual elements
-      const gasLimit = 5900000;
+      const gasLimit = 5700000;
       await MarketToken.deployed();
       await CollateralToken.deployed();
       let marketContractRegistry = await MarketContractRegistry.deployed();
