@@ -19,11 +19,10 @@ const networkMap = {
   1: 'mainnet',
   2: 'morden',
   3: 'ropsten',
-  RINKEBY: 'rinkeby',
+  4: 'rinkeby',
   42: 'kovan',
-  TRUFFLE: 'truffle',
+  4447: 'truffle',
 };
-
 
 let getWeb3 = (window,
                showErrorMessage = showMessage.bind(showMessage, 'error'),
@@ -50,28 +49,28 @@ let getWeb3 = (window,
         return;
       }
 
-      if (web3.version.network !== RINKEBY &&
-        web3.version.network !== TRUFFLE) { // ensure beta users don't spend real ether.
+      if (typeof web3.version !== 'undefined') {
+        if (web3.version.network !== RINKEBY &&
+          web3.version.network !== TRUFFLE) { // ensure beta users don't spend real ether.
 
-        results = {
-          web3Instance: null,
-          network: 'unknown',
-        };
+          results = {
+            web3Instance: null,
+            network: 'unknown',
+          };
 
-        console.log("dApp beta only compatible with Rinkeby or Truffle");
+          console.log("dApp beta only compatible with Rinkeby or Truffle");
 
-        showErrorMessage('Please select Rinkeby Test Network in MetaMask and then restart browser', 8);
-        resolve(dispatch(web3Initialized(results)));
-        return;
+          showErrorMessage('Please select Rinkeby Test Network in MetaMask and then restart browser', 8);
+          resolve(dispatch(web3Initialized(results)));
+          return;
+        }
       }
-
       web3 = new Web3(web3.currentProvider);
 
       results = {
         web3Instance: web3,
         network: networkMap[web3.version.network] || 'unknown',
       };
-
 
       console.log('Injected web3 detected.');
 
