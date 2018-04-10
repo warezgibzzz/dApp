@@ -1,7 +1,8 @@
 import contract from 'truffle-contract';
-import abi from '../util/ERC20TokenABI.json';
 
-export function loadContracts({ web3 }, { MarketContractRegistry, MarketContract, MarketCollateralPool, CollateralToken }) {
+export function loadContracts(
+  { web3 },
+  { MarketContractRegistry, MarketContract, MarketCollateralPool, CollateralToken, ERC20Interface }) {
   const type = 'GET_CONTRACTS';
 
   return function(dispatch) {
@@ -22,6 +23,9 @@ export function loadContracts({ web3 }, { MarketContractRegistry, MarketContract
       const collateralToken = contract(CollateralToken);
       collateralToken.setProvider(web3.currentProvider);
 
+      const ERC20 = contract(ERC20Interface);
+      ERC20.setProvider(web3.currentProvider);
+
       // Declaring this for later so we can chain functions.
       let marketContractRegistryInstance;
       marketContractRegistry.deployed().then(function(instance) {
@@ -32,7 +36,7 @@ export function loadContracts({ web3 }, { MarketContractRegistry, MarketContract
           .call()
           .then(async function(deployedContracts) {
             await collateralToken.deployed();
-            processContractsList(deployedContracts, marketContract, marketCollateralPool, collateralToken)
+            processContractsList(deployedContracts, marketContract, marketCollateralPool, collateralToken, ERC20)
               .then(function (data) {
                 dispatch({ type: `${type}_FULFILLED`, payload: data });
               });
@@ -45,7 +49,7 @@ export function loadContracts({ web3 }, { MarketContractRegistry, MarketContract
 }
 
 
-export async function processContractsList(deployedContracts, marketContract, marketCollateralPool, baseToken) {
+export async function processContractsList(deployedContracts, marketContract, marketCollateralPool, baseToken, ERC20) {
   let promises = deployedContracts.map(async (contract) => {
     return await marketContract
       .at(contract)
@@ -63,7 +67,7 @@ export async function processContractsList(deployedContracts, marketContract, ma
             contractJSON['BASE_TOKEN_SYMBOL'] = await baseTokenInstance.symbol();
           })
           .catch(function (err) {
-            const token = contract(abi).at(baseTokenContractAddress);
+            const token = contract(ERC20).at(baseTokenContractAddress);
             contractJSON['BASE_TOKEN'] = token.name();
             contractJSON['BASE_TOKEN_SYMBOL'] = token.symbol();
           });

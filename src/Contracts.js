@@ -4,6 +4,7 @@ let MarketCollateralPool = {};
 let MarketToken = {};
 let CollateralToken = {};
 let QueryTest = {};
+let ERC20 ={};
 
 if (process.env.NODE_ENV !== 'test') {
   // only load contracts abi if build exists.
@@ -15,6 +16,7 @@ if (process.env.NODE_ENV !== 'test') {
   MarketToken = require('../build/contracts/MarketToken');
   CollateralToken = require('../build/contracts/CollateralToken');
   QueryTest = require('../build/contracts/OraclizeQueryTest');
+  ERC20 = require('market-solidity/build/contracts/ERC20');
 }
 
 export default {
@@ -23,5 +25,6 @@ export default {
   MarketCollateralPool,
   MarketToken,
   CollateralToken,
-  QueryTest
+  QueryTest,
+  ERC20
 };
