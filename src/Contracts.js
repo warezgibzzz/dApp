@@ -16,7 +16,7 @@ if (process.env.NODE_ENV !== 'test') {
   MarketToken = require('../build/contracts/MarketToken');
   CollateralToken = require('../build/contracts/CollateralToken');
   QueryTest = require('../build/contracts/OraclizeQueryTest');
-  ERC20 = require('../node_modules/market-solidity/build/contracts/ERC20');
+  ERC20 = require('market-solidity/build/contracts/ERC20');
 }
 
 export default {
