@@ -12,6 +12,9 @@ function web3Initialized(results) {
   };
 }
 
+const TRUFFLE = '4447';
+const RINKEBY = '4';
+
 const networkMap = {
   1: 'mainnet',
   2: 'morden',
@@ -21,12 +24,11 @@ const networkMap = {
   4447: 'truffle',
 };
 
-let getWeb3 = (
-  window,
-  showErrorMessage = showMessage.bind(showMessage, 'error'),
-  dispatch = store.dispatch.bind(store)) => (new Promise(function(resolve, reject) {
+let getWeb3 = (window,
+               showErrorMessage = showMessage.bind(showMessage, 'error'),
+               dispatch = store.dispatch.bind(store)) => (new Promise(function (resolve, reject) {
   // Wait for loading completion to avoid race conditions with web3 injection timing.
-  window.addEventListener('load', function() {
+  window.addEventListener('load', function () {
     var results;
     var web3 = window.web3;
 
@@ -34,7 +36,7 @@ let getWeb3 = (
     if (typeof web3 !== 'undefined' && web3.currentProvider && web3.currentProvider.isMetaMask) {
       console.log("Mist/MetaMask's detected!");
 
-      if (web3.eth.accounts.length === 0) {
+      if (web3.eth.accounts.length === 0) { // check for unlocked metamask state
         results = {
           web3Instance: null,
           network: 'unknown',
@@ -47,6 +49,22 @@ let getWeb3 = (
         return;
       }
 
+      if (typeof web3.version !== 'undefined') {
+        if (web3.version.network !== RINKEBY &&
+          web3.version.network !== TRUFFLE) { // ensure beta users don't spend real ether.
+
+          results = {
+            web3Instance: null,
+            network: 'unknown',
+          };
+
+          console.log("dApp beta only compatible with Rinkeby or Truffle");
+
+          showErrorMessage('Please select Rinkeby Test Network in MetaMask and then restart browser', 8);
+          resolve(dispatch(web3Initialized(results)));
+          return;
+        }
+      }
       web3 = new Web3(web3.currentProvider);
 
       results = {
