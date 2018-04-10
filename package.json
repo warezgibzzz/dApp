@@ -2,6 +2,7 @@
   "name": "market-dapp",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://marketprotocol.github.io/Dapp/",
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "chai": "^4.1.2",
@@ -15,6 +16,7 @@
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.5.1",
+    "gh-pages": "^1.1.0",
     "sinon": "^4.2.2",
     "web3-fake-provider": "^0.1.0"
   },
@@ -82,7 +84,9 @@
     "test": "node scripts/test.js --env=jsdom",
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
     "lint": "eslint src/ --ext .js",
-    "precommit": "npm run lint"
+    "precommit": "npm run lint",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "jest": {
     "collectCoverageFrom": [
