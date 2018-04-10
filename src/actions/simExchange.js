@@ -1,5 +1,5 @@
 import store from '../store';
-import MarketContract from '../../build/contracts/MarketContract';
+import MarketContract from '../../node_modules/market-solidity/build/contracts/MarketContract';
 import { getBids, getAsks} from '../util/utils';
 import OrderLib from '../../build/contracts/OrderLib';
 
