@@ -1,3 +1,7 @@
+body {
+    font-weight: 300;
+}
+
 code {
     display: block;
     margin: 20px 0 15px 0;
@@ -18,7 +22,7 @@ code {
 .footer {
     color: #fff;
     text-align: center;
-    background-color: #363636;
+    background-color: #11161C;
 }
 
 .clearfix {
@@ -39,20 +43,42 @@ code {
     right: 0;
 }
 
+.text-center {
+    text-align: center;
+}
+
+/* Ant overrides */
 .ant-popover {
     max-width: 350px;
     line-height: 25px;
     font-size: 13px;
     font-weight: 500;
 }
+.ant-select-arrow, .ant-calendar-picker-icon:after {
+    color: #fff !important;
+}
+.custom-filter-dropdown input {
+    color: @body-background;
+}
 .ant-popover-title {
-    background-color: #f7f6f6;
+    color: @body-background !important;
+    border-bottom: 1px solid #adaeaf !important;
 }
-
-.text-center {
-    text-align: center;
+.ant-alert-error {
+    background-color: #611e19 !important;
 }
-
+.ant-alert-info {
+    background-color: #263a44 !important;
+}
+.ant-steps-item-wait .ant-steps-item-icon {
+    border-color: @primary-color !important;
+}
+.ant-steps-item-wait .ant-steps-item-icon > .ant-steps-icon {
+    color: @primary-color !important;
+}
+.ant-steps-item-process .ant-steps-item-icon > .ant-steps-icon {
+    color: #000 !important;
+}
 
 /* Mobile screens */
 @media only screen and (max-width: 40em) {
