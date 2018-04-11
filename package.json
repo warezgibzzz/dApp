@@ -2,7 +2,7 @@
   "name": "market-dapp",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://marketprotocol.github.io/dApp/",
+  "homepage": "http://dapp.marketprotocol.io/",
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "chai": "^4.1.2",
