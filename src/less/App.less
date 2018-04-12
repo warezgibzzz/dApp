@@ -48,36 +48,45 @@ code {
 }
 
 /* Ant overrides */
-.ant-popover {
-    max-width: 350px;
-    line-height: 25px;
-    font-size: 13px;
-    font-weight: 500;
+#dapp {
+    .ant-popover {
+        max-width: 350px;
+        line-height: 25px;
+        font-size: 13px;
+        font-weight: 500;
+    }
+    .ant-select-arrow, .ant-calendar-picker-icon:after {
+        color: #fff;
+    }
+    .custom-filter-dropdown input {
+        color: @body-background;
+    }
+    .ant-popover-title {
+        color: @body-background;
+        border-bottom: 1px solid #adaeaf;
+    }
+    .ant-alert-error {
+        background-color: #611e19;
+    }
+    .ant-alert-info {
+        background-color: @background-color-base;
+    }
+    .ant-steps-item-wait .ant-steps-item-icon {
+        border-color: @primary-color;
+    }
+    .ant-steps-item-wait .ant-steps-item-icon > .ant-steps-icon {
+        color: @primary-color;
+    }
+    .ant-steps-item-process .ant-steps-item-icon > .ant-steps-icon {
+        color: #000;
+    }
 }
-.ant-select-arrow, .ant-calendar-picker-icon:after {
-    color: #fff !important;
+
+.ant-message-notice-content {
+    background: #fff !important;
 }
-.custom-filter-dropdown input {
-    color: @body-background;
-}
-.ant-popover-title {
+.ant-message {
     color: @body-background !important;
-    border-bottom: 1px solid #adaeaf !important;
-}
-.ant-alert-error {
-    background-color: #611e19 !important;
-}
-.ant-alert-info {
-    background-color: #263a44 !important;
-}
-.ant-steps-item-wait .ant-steps-item-icon {
-    border-color: @primary-color !important;
-}
-.ant-steps-item-wait .ant-steps-item-icon > .ant-steps-icon {
-    color: @primary-color !important;
-}
-.ant-steps-item-process .ant-steps-item-icon > .ant-steps-icon {
-    color: #000 !important;
 }
 
 /* Mobile screens */
