@@ -5,5 +5,4 @@ coverage.json
 coverage/
 dapp/
 node_modules/
-src/css
 .DS_Store
