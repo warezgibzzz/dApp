@@ -44,7 +44,7 @@ start_dapp:
 
 # start dApp with rinkeby abi's
 start_dapp_rinkeby:
-	cp -r rinkeby-build build # copy prebuilt abi's to build 
+	cp -r rinkeby-build/ build/ # copy prebuilt abi's to build
 	npm run start		  # run npm - should point metamask browser at rinkeby
 
 
