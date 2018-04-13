@@ -38,9 +38,14 @@ start_bridge:
 #   test
 #
 
-# start Dapp
+# start dApp
 start_dapp:
 	npm run start
+
+# start dApp with rinkeby abi's
+start_dapp_rinkeby:
+	cp -r rinkeby-build/ build/ # copy prebuilt abi's to build
+	npm run start		  # run npm - should point metamask browser at rinkeby
 
 
 # docker migrate
