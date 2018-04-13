@@ -12,6 +12,9 @@ const eslintFormatter = require('react-dev-utils/eslintFormatter');
 // const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
+const fs  = require("fs");
+const lessToJs = require('less-vars-to-js');
+const themeVariables = lessToJs(fs.readFileSync(path.join(__dirname, '../src/less/MarketTheme.less'), 'utf8'));
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -151,6 +154,15 @@ module.exports = {
             options: {
 
               compact: true,
+              plugins: [
+                // ...
+                // Importing Ant here is not needed if you are using a .babelrc file
+                ['import', { 
+                  libraryName: "antd",
+                  libraryDirectory: 'lib',
+                  style: true
+                }],
+              ]
             },
           },
           // The notation here is somewhat confusing.
@@ -166,7 +178,7 @@ module.exports = {
           // use the "style" loader inside the async code so CSS from them won't be
           // in the main CSS file.
           {
-            test: /\.css$/,
+            test: /\.less$/,
             loader: ExtractTextPlugin.extract(
               Object.assign(
                 {
@@ -204,6 +216,15 @@ module.exports = {
                           }),
                         ],
                       },
+                    },
+                    {
+                      loader: require.resolve("less-loader"),
+                      options: {
+                        sourcemap: true,
+                        modifyVars: themeVariables,
+                        javascriptEnabled: true,
+                        root: path.resolve(__dirname, "./")
+                      }
                     },
                   ],
                 },
