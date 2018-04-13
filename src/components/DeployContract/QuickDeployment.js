@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import Loader from '../Loader';
 import Field from './DeployContractField';
 import DeployContractSuccess from './DeployContractSuccess';
+import GasPriceField from '../TestQuery/GasPriceField';
 
 const formButtonLayout = {
   xs: {
@@ -153,6 +154,12 @@ class QuickDeployment extends Component {
             <ContractFormRow>
               <ContractFormCol>
                 <Field name='oracleQuery' initialValue={initialValues.oracleQuery} form={this.props.form} showHint/>
+              </ContractFormCol>
+            </ContractFormRow>
+
+            <ContractFormRow>
+              <ContractFormCol>
+                <GasPriceField location={this.props.location} form={this.props.form} />
               </ContractFormCol>
             </ContractFormRow>
 
