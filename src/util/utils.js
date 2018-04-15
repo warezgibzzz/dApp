@@ -120,7 +120,7 @@ const createNewOrders = async function (web3,
   return orders;
 };
 
-export async function processContractsList(marketContract, marketCollateralPool, baseToken, deployedContracts, ERC20) {
+export async function processContractsList(marketContract, marketCollateralPool, baseToken, ERC20, deployedContracts) {
   let promises = deployedContracts.map(async (contract) => {
     return await marketContract
       .at(contract)

@@ -24,9 +24,7 @@ const mapDispatchToProps = dispatch => ({
       contracts.ERC20
     );
     
-    dispatch(loadContracts(
-      { web3, processContracts },
-      {
+    dispatch(loadContracts({ web3, processContracts }, {
         MarketContractRegistry: contracts.MarketContractRegistry, 
         CollateralToken: contracts.CollateralToken 
       }
