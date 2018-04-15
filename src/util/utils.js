@@ -120,6 +120,7 @@ const createNewOrders = async function (web3,
   return orders;
 };
 
+// TODO(perfectmak): This should be moves to a more cohesive helper package
 export async function processContractsList(marketContract, marketCollateralPool, baseToken, ERC20, deployedContracts) {
   let promises = deployedContracts.map(async (contract) => {
     return await marketContract

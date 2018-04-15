@@ -1,7 +1,7 @@
 import store from '../store';
 import MarketContract from 'market-solidity/build/contracts/MarketContract';
 import { getBids, getAsks} from '../util/utils';
-import OrderLib from '../../build/contracts/OrderLib';
+import Contracts from '../Contracts';
 
 const contract = require('truffle-contract');
 
@@ -25,7 +25,7 @@ export function getContractBids() {
       const contract_address = store.getState().simExchange.contract.key;
       const marketContract = web3.eth.contract(MarketContract).at(contract_address);
 
-      const orderLib = contract(OrderLib);
+      const orderLib = contract(Contracts.OrderLib);
       orderLib.setProvider(web3.currentProvider);
       let orderLibInstance = await orderLib.deployed();
 
@@ -51,7 +51,7 @@ export function getContractAsks() {
       const contract_address = store.getState().simExchange.contract.key;
       const marketContract = web3.eth.contract(MarketContract).at(contract_address);
 
-      const orderLib = contract(OrderLib);
+      const orderLib = contract(Contracts.OrderLib);
       orderLib.setProvider(web3.currentProvider);
       let orderLibInstance = await orderLib.deployed();
 
