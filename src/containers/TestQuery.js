@@ -21,7 +21,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(testQuery({
         web3,
         querySpecs
-      }, initializeContracts({ TestQuery: Contracts.TestQuery })));
+      }, initializeContracts({ QueryTest: Contracts.QueryTest })));
     }
   };
 };
