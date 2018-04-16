@@ -47,6 +47,9 @@ start_dapp_rinkeby:
 	cp -r rinkeby-build/ build/ # copy prebuilt abi's to build
 	npm run start		  # run npm - should point metamask browser at rinkeby
 
+# run tests
+run_tests:
+  npm run test --coverage
 
 # docker migrate
 docker_migrate:
