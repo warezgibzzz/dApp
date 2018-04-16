@@ -15,7 +15,9 @@ import truffleContract from 'truffle-contract';
   */
 export function contractConstructor(web3, contract) {
   const contractObj = truffleContract(contract);
-  contractObj.setProvider(web3.currentProvider);
+  if (web3 != null && web3.currentProvider != null) {
+    contractObj.setProvider(web3.currentProvider);
+  }
   return contractObj;
 }
 
