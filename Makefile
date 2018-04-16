@@ -49,7 +49,7 @@ start_dapp_rinkeby:
 
 # run tests
 run_tests:
-  npm run test --coverage
+	npm run test --coverage # run automated test suite.
 
 # docker migrate
 docker_migrate:
