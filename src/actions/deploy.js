@@ -1,5 +1,11 @@
-import contract from 'truffle-contract';
 
+/**
+ * 
+ * @param {web3} web3
+ * @param {*} contractSpecs  Specs of new contract to be deployed
+ * @param {*} MarketContractRegistry marketContractRegistryProvider
+ * @param {*}
+ */
 export function deployContract(
   { web3, contractSpecs },
   { MarketContractRegistry, MarketContract, MarketCollateralPool, MarketToken },
@@ -7,97 +13,89 @@ export function deployContract(
   const type = 'DEPLOY_CONTRACT';
 
   return function(dispatch) {
-    dispatch({ type: `${type}_PENDING` });
+    return new Promise((resolve, reject) => {
+      dispatch({ type: `${type}_PENDING` });
+      // Double-check web3's status
+      if (web3 && typeof web3 !== 'undefined') {
+        // create array to pass to MARKET contract constructor
+        const contractConstructorArray = [
+          contractSpecs.priceFloor,
+          contractSpecs.priceCap,
+          contractSpecs.priceDecimalPlaces,
+          contractSpecs.qtyMultiplier,
+          contractSpecs.expirationTimeStamp
+        ];
 
-    // Double-check web3's status
-    if (web3 && typeof web3 !== 'undefined') {
-      // Using truffle-contract create needed contract objects and set providers
-      const marketContractRegistry = contract(MarketContractRegistry);
-      marketContractRegistry.setProvider(web3.currentProvider);
+        // Get current ethereum wallet.
+        web3.eth.getCoinbase((error, coinbase) => {
+          // Log errors, if any
+          // TODO(perfectmak): handle this error
+          if (error) {
+            console.error(error);
+          }
 
-      const marketContract = contract(MarketContract);
-      marketContract.setProvider(web3.currentProvider);
+          console.log('Attempting to deploy contract from ' + coinbase);
 
-      const marketCollateralPool = contract(MarketCollateralPool);
-      marketCollateralPool.setProvider(web3.currentProvider);
+          // find the address of the MKT token so we can link to our deployed contract
+          let marketContractInstanceDeployed;
 
-      const marketToken = contract(MarketToken);
-      marketToken.setProvider(web3.currentProvider);
-
-      // create array to pass to MARKET contract constructor
-      const contractConstructorArray = [
-        contractSpecs.priceFloor,
-        contractSpecs.priceCap,
-        contractSpecs.priceDecimalPlaces,
-        contractSpecs.qtyMultiplier,
-        contractSpecs.expirationTimeStamp
-      ];
-
-      // Get current ethereum wallet.
-      web3.eth.getCoinbase((error, coinbase) => {
-        // Log errors, if any
-        if (error) {
-          console.error(error);
-        }
-
-        console.log('Attempting to deploy contract from ' + coinbase);
-
-        // find the address of the MKT token so we can link to our deployed contract
-        let marketContractInstanceDeployed;
-
-        marketToken
-          .deployed()
-          .then(function(marketTokenInstance) {
-            return marketContract.new(
-              contractSpecs.contractName,
-              marketTokenInstance.address,
-              contractSpecs.baseTokenAddress,
-              contractConstructorArray,
-              contractSpecs.oracleDataSource,
-              contractSpecs.oracleQuery,
-              {
-                gas: 5700000, // TODO : Remove hard-coded gas
+          MarketToken
+            .deployed()
+            .then(function(marketTokenInstance) {
+              return MarketContract.new(
+                contractSpecs.contractName,
+                marketTokenInstance.address,
+                contractSpecs.baseTokenAddress,
+                contractConstructorArray,
+                contractSpecs.oracleDataSource,
+                contractSpecs.oracleQuery,
+                {
+                  gas: 5700000, // TODO : Remove hard-coded gas
+                  gasPrice: web3.toWei(2, 'gwei'),
+                  from: coinbase
+                }
+              );
+            })
+            .then(function(marketContractInstance) {
+              marketContractInstanceDeployed = marketContractInstance;
+              return MarketCollateralPool.new(marketContractInstance.address, {
+                gas: 2100000,
                 gasPrice: web3.toWei(2, 'gwei'),
                 from: coinbase
-              }
-            );
-          })
-          .then(function(marketContractInstance) {
-            marketContractInstanceDeployed = marketContractInstance;
-            return marketCollateralPool.new(marketContractInstance.address, {
-              gas: 2100000,
-              gasPrice: web3.toWei(2, 'gwei'),
-              from: coinbase
-            });
-          })
-          .then(function(marketCollateralPoolInstance) {
-            return marketContractInstanceDeployed.setCollateralPoolContractAddress(
-              marketCollateralPoolInstance.address, {
-                from: coinbase,
-                gasPrice: web3.toWei(2, 'gwei')
-              }
-            );
-          })
-          .then(function() {
-            return marketContractRegistry.deployed();
-          })
-          .then(function(marketContractRegistryInstance) {
-            marketContractRegistryInstance.addAddressToWhiteList(
-              marketContractInstanceDeployed.address,
-              {
-                from: web3.eth.accounts[0],
-                gasPrice: web3.toWei(2, 'gwei')
-              }
-            );
+              });
+            })
+            .then(function(marketCollateralPoolInstance) {
+              return marketContractInstanceDeployed.setCollateralPoolContractAddress(
+                marketCollateralPoolInstance.address, {
+                  from: coinbase,
+                  gasPrice: web3.toWei(2, 'gwei')
+                }
+              );
+            })
+            .then(function() {
+              return MarketContractRegistry.deployed();
+            })
+            .then(function(marketContractRegistryInstance) {
+              marketContractRegistryInstance.addAddressToWhiteList(
+                marketContractInstanceDeployed.address,
+                {
+                  from: web3.eth.accounts[0],
+                  gasPrice: web3.toWei(2, 'gwei')
+                }
+              );
 
-            dispatch({ type: `${type}_FULFILLED`, payload: marketContractInstanceDeployed });
-          })
-          .catch(err => {
-            dispatch({ type: `${type}_REJECTED`, payload: err });
-          });
-      });
-    } else {
-      dispatch({ type: `${type}_REJECTED`, payload: {'error': 'Web3 not initialised'} });
-    }
+              dispatch({ type: `${type}_FULFILLED`, payload: marketContractInstanceDeployed });
+              resolve(marketContractInstanceDeployed);
+            })
+            .catch(err => {
+              dispatch({ type: `${type}_REJECTED`, payload: err });
+              reject(err);
+            });
+        });
+      } else {
+        dispatch({ type: `${type}_REJECTED`, payload: {'error': 'Web3 not initialised'} });
+        reject('Web3 not initialised');
+      }
+    });
   };
 }
