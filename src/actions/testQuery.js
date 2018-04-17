@@ -28,6 +28,9 @@ export function testQuery(
           .deployed()
           .then(function(queryTestContract) {
             queryTestContractInstance = queryTestContract;
+            return queryTestContractInstance.getQueryCost(querySpecs.oracleDataSource);
+          })          
+          .then(function(queryCost) {
             return queryTestContractInstance.testOracleQuery(
               querySpecs.oracleDataSource,
               querySpecs.oracleQuery,
@@ -35,7 +38,7 @@ export function testQuery(
                 gas: 200000,
                 gasPrice: web3.toWei(1, 'gwei'),
                 from: coinbase,
-                value: web3.toWei('.006', 'ether')
+                value: queryCost
               }
             );
           })
