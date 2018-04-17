@@ -2,6 +2,8 @@
 
 [![Build Status](https://api.travis-ci.org/MARKETProtocol/dApp.svg?branch=master)](https://travis-ci.org/MARKETProtocol/dApp) [![Coverage Status](https://coveralls.io/repos/github/MARKETProtocol/dApp/badge.svg?branch=master)](https://coveralls.io/github/MARKETProtocol/dApp?branch=master)
 
+MARKET Protocol has been created to provide a secure, flexible, open source foundation for decentralized trading on the Ethereum blockchain. We provide the pieces necessary to create a decentralized exchange, including the requisite clearing and collateral pool infrastructure, enabling third parties to build applications for trading.
+
 # dApp
 [MARKET Protocol's](https://github.com/MARKETProtocol/MARKETProtocol) main decentralized application. 
 
