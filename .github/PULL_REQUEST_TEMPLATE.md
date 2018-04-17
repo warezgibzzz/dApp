@@ -2,7 +2,7 @@
   Thank you for your pull request. Please provide a description above and review
   the requirements below.
 
-  Contributors guide: hhttps://github.com/MARKETProtocol/meta/blob/master/CONTRIBUTING.md
+  Contributors guide: https://github.com/MARKETProtocol/meta/blob/master/CONTRIBUTING.md
 -->
 
 ##### Description
