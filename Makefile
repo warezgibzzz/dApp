@@ -1,10 +1,10 @@
-# make targets for MARKETProtocol/Dapp
+# make targets for MARKETProtocol/dApp
 #
 
 # prerequisites
 #   mkdir $(DEV)/MARKETProtocol
 #   cd $(DEV)/MARKETProtocol
-#   git clone https://github.com/MARKETProtocol/Dapp.git
+#   git clone https://github.com/MARKETProtocol/dApp.git
 #   git clone https://github.com/MARKETProtocol/ethereum-bridge.git
 
 # path to oraclize/ethereum-bridge
@@ -49,7 +49,7 @@ start_dapp_rinkeby:
 
 # run tests
 run_tests:
-	npm run test --coverage # run automated test suite.
+	npm run test -- --coverage # run automated test suite
 
 # docker migrate
 docker_migrate:
