@@ -25,16 +25,12 @@ function showMessage(type, content, duration) {
     }
   };
 
-
-
-
   const msgBody = (
       <span>
       {content}
         <Icon type="close-circle" onClick={handleDismiss} style={iconStyle} />
     </span>
   );
-
 
   const msgBodywithLink = (
     <span>
@@ -43,15 +39,14 @@ function showMessage(type, content, duration) {
       </span>
   );
 
+
   if (content.link){
     let  m = message[type](msgBodywithLink, duration, handleClose);
     msgHandlers[msgKey] = m;
   }else {
     const  m = message[type](msgBody, duration, handleClose);
-    // antd's message API returns a function to manually dismiss messages
     msgHandlers[msgKey] = m;
   }
-
   return handleDismiss;
 }
 
