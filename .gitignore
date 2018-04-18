@@ -3,6 +3,6 @@
 build/
 coverage.json
 coverage/
-dapp/
+dApp/
 node_modules/
 .DS_Store
