@@ -25,16 +25,33 @@ function showMessage(type, content, duration) {
     }
   };
 
+
+
+
   const msgBody = (
-    <span>
+      <span>
       {content}
-      <Icon type="close-circle" onClick={handleDismiss} style={iconStyle} />
+        <Icon type="close-circle" onClick={handleDismiss} style={iconStyle} />
     </span>
   );
 
-  // antd's message API returns a function to manually dismiss messages
-  const m = message[type](msgBody, duration, handleClose);
-  msgHandlers[msgKey] = m;
+
+  const msgBodywithLink = (
+    <span>
+      {content.message} <a href={content.link}> View on Etherscan</a>
+        <Icon type="close-circle" onClick={handleDismiss} style={iconStyle} />
+      </span>
+  );
+
+  if (content.link){
+    let  m = message[type](msgBodywithLink, duration, handleClose);
+    msgHandlers[msgKey] = m;
+  }else {
+    const  m = message[type](msgBody, duration, handleClose);
+    // antd's message API returns a function to manually dismiss messages
+    msgHandlers[msgKey] = m;
+  }
+
   return handleDismiss;
 }
 

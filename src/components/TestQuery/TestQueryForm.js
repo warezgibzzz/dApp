@@ -26,16 +26,16 @@ const message = (network, hash) => {
 
   switch(network) {
     case 'rinkeby':
-      message = message + `https://rinkeby.etherscan.io/tx/${hash}`;
+      message = { message: message , link: `https://rinkeby.etherscan.io/tx/${hash}` };
       break;
     case 'mainnet':
-      message = message + `https://etherscan.io/tx/${hash}`;
+      message = { message: message , link: `https://etherscan.io/tx/${hash}` };
       break;
     case 'unknown':
-      message = message + `${hash}`;
+      message = { message: message , hash: `${hash}`};
       break;
     default:
-      message = 'Transaction has been submitted';
+      message = { message: message };
   }
 
   return message;
