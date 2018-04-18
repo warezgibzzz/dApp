@@ -13,8 +13,8 @@ export function testQuery(
         web3.eth.getCoinbase((error, coinbase) => {
           if (error) {
             console.error(error);
-            dispatch({ type: `${type}_REJECTED`, payload: error });
-            return reject(error);
+            dispatch({ type: `${type}_REJECTED`, payload: error.message.split('\n')[0] });
+            return reject(error.message.split('\n')[0]);
           }
 
           console.log('Attempting to submit test query from ' + coinbase);
