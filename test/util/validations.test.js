@@ -10,7 +10,7 @@ const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:9545'));
 describe('CheckContractAction', () => {
 
   it('should validate contract based on the valid address provided', () => {
-    const address = '0xfb88de099e13c3ed21f80a7a1e49f8caecf10df6'; // Market Token Address 
+    const address = '0xfb88de099e13c3ed21f80a7a1e49f8caecf10df6'; // Market Token Address
     checkContract(web3, address, function(result) {
       expect(result).to.equals(undefined);
     });
