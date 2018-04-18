@@ -38,23 +38,21 @@ let getWeb3 = (window,
     if (typeof web3 !== 'undefined' && web3.currentProvider && web3.currentProvider.isMetaMask) {
       console.log("Mist/MetaMask's detected!");
 
-      if (web3.eth.accounts.length === 0) { // check for unlocked metamask state
-        results = {
-          web3Instance: null,
-          network: 'unknown',
-        };
+      web3.eth.getAccounts((err, accounts) => {
+        if (accounts.length === 0) { // check for unlocked metamask state
+          results = {
+            web3Instance: null,
+            network: 'unknown',
+          };
 
         console.log("Please unlock MetaMask!");
 
         showErrorMessage('MetaMask is locked! Please unlock and refresh this page', 8);
         resolve(dispatch(web3Initialized(results)));
-        return;
-      }
+      }});
 
-      if (typeof web3.version !== 'undefined') {
-        if (web3.version.network !== GANACHE &&
-          web3.version.network !== RINKEBY &&
-          web3.version.network !== TRUFFLE) { // ensure beta users don't spend real ether.
+      const network = web3.version.getNetwork((error, network) => {
+        if (network !== RINKEBY && network !== TRUFFLE && network !== GANACHE) { // ensure beta users don't spend real ether.
 
           results = {
             web3Instance: null,
@@ -65,15 +63,13 @@ let getWeb3 = (window,
 
           showErrorMessage('Please select Rinkeby Test Network in MetaMask and then restart browser', 8);
           resolve(dispatch(web3Initialized(results)));
-          return;
-        }
-      }
-
+        } else return network;
+      });
       web3 = new Web3(web3.currentProvider);
 
       results = {
         web3Instance: web3,
-        network: networkMap[web3.version.network] || 'unknown',
+        network: networkMap[network] || 'unknown',
       };
 
       console.log('Injected web3 detected.');
