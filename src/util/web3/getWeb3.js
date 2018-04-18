@@ -12,8 +12,9 @@ function web3Initialized(results) {
   };
 }
 
-const TRUFFLE = '4447';
+const GANACHE = '5777';
 const RINKEBY = '4';
+const TRUFFLE = '4447';
 
 const networkMap = {
   1: 'mainnet',
@@ -22,6 +23,7 @@ const networkMap = {
   4: 'rinkeby',
   42: 'kovan',
   4447: 'truffle',
+  5777: 'ganache',
 };
 
 let getWeb3 = (window,
@@ -50,7 +52,8 @@ let getWeb3 = (window,
       }
 
       if (typeof web3.version !== 'undefined') {
-        if (web3.version.network !== RINKEBY &&
+        if (web3.version.network !== GANACHE &&
+          web3.version.network !== RINKEBY &&
           web3.version.network !== TRUFFLE) { // ensure beta users don't spend real ether.
 
           results = {
@@ -58,13 +61,14 @@ let getWeb3 = (window,
             network: 'unknown',
           };
 
-          console.log("dApp beta only compatible with Rinkeby or Truffle");
+          console.log("dApp beta only compatible with Ganache or Rinkeby or Truffle");
 
           showErrorMessage('Please select Rinkeby Test Network in MetaMask and then restart browser', 8);
           resolve(dispatch(web3Initialized(results)));
           return;
         }
       }
+
       web3 = new Web3(web3.currentProvider);
 
       results = {

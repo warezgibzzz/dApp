@@ -1,5 +1,4 @@
 # make targets for MARKETProtocol/dApp
-#
 
 # prerequisites
 #   mkdir $(DEV)/MARKETProtocol
@@ -14,13 +13,13 @@ EB_PATH=../ethereum-bridge
 default:
 	pwd
 
-# install truffle
+# install truffle 4.1.3 as latest versions throw error while migrate
 install_truffle:
-	npm install -g truffle
+	npm i -g truffle@4.1.3
 
 # install required dependencies
 install_deps:
-	npm install # for MARKETPRotocol
+	npm i # for dApp
 	cd $(EB_PATH) ; npm install # for ethereum-bridge
 
 # open truffle console with a local development blockchain
@@ -40,12 +39,12 @@ start_bridge:
 
 # start dApp
 start_dapp:
-	npm run start
+	npm start
 
 # start dApp with rinkeby abi's
 start_dapp_rinkeby:
 	cp -r rinkeby-build/ build/ # copy prebuilt abi's to build
-	npm run start		  # run npm - should point metamask browser at rinkeby
+	npm start		  # run npm - should point metamask browser at rinkeby
 
 # run tests
 run_tests:

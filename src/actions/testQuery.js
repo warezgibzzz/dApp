@@ -1,5 +1,5 @@
 export function testQuery(
-  { web3, querySpecs }, 
+  { web3, querySpecs },
   { QueryTest }
 ) {
   const type = 'TEST_QUERY';
@@ -7,7 +7,7 @@ export function testQuery(
   return function(dispatch) {
     return new Promise((resolve, reject) => {
       dispatch({ type: `${type}_PENDING` });
-      
+
       if (web3 && typeof web3 !== 'undefined') {
         // Get current ethereum wallet.
         web3.eth.getCoinbase((error, coinbase) => {
@@ -24,8 +24,8 @@ export function testQuery(
             .deployed()
             .then(function(queryTestContract) {
               queryTestContractInstance = queryTestContract;
-              return queryTestContractInstance.getQueryCost(querySpecs.oracleDataSource);
-            })          
+              return queryTestContractInstance.getQueryCost.call(querySpecs.oracleDataSource);
+            })
             .then(function(queryCost) {
               return queryTestContractInstance.testOracleQuery(
                 querySpecs.oracleDataSource,
@@ -40,6 +40,7 @@ export function testQuery(
             })
             .then(function(queryTransactionResults) {
               dispatch({ type: `${type}_TRANSACTION_PENDING`, payload: queryTransactionResults.tx });
+
               let queryEventIds = queryTransactionResults.logs
                 .filter(({ event }) => event === 'QueryScheduled')
                 .map(log => log.args.queryIDScheduled);
@@ -48,6 +49,7 @@ export function testQuery(
                 dispatch({ type: `${type}_REJECTED`, payload: 'Could not find `QueryScheduled` event.' });
                 return reject({ message: 'Could not find `QueryScheduled` event.' });
               }
+
               const queryID = queryEventIds[0];
 
               // Listen for query completed
@@ -69,6 +71,7 @@ export function testQuery(
             })
             .catch(err => {
               // catch errors during query submission
+              console.error(err);
               dispatch({ type: `${type}_REJECTED`, payload: err.message.split('\n')[0] });
               return reject(err.message.split('\n')[0]);
             });
