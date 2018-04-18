@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-
+import WebFont from 'webfontloader';
 import App from './App';
 import Splash from './Splash';
 import store, { history } from './store';
@@ -26,3 +26,9 @@ getWeb3(window)
   .catch(() => {
     console.log('Error in web3 initialization.');
   });
+
+WebFont.load({
+  google: {
+    families: ['Work Sans:300,400,500,600,700', 'sans-serif']
+  }
+});

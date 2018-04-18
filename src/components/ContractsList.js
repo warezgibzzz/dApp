@@ -2,7 +2,7 @@ import { Button, Col, Icon, Input, Row, Table } from 'antd';
 import moment from 'moment';
 import React, { Component } from 'react';
 
-import './ContractsList.css';
+import '../less/ContractsList.less';
 import Loader from './Loader';
 
 // Example Contract

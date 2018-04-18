@@ -11,6 +11,9 @@ const eslintFormatter = require('react-dev-utils/eslintFormatter');
 // const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
+const fs = require("fs");
+const lessToJs = require('less-vars-to-js');
+const themeVariables = lessToJs(fs.readFileSync(path.join(__dirname, '../src/less/MarketTheme.less'), 'utf8'));
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -82,7 +85,7 @@ module.exports = {
     // https://github.com/facebookincubator/create-react-app/issues/290
     // `web` extension prefixes have been added for better support
     // for React Native Web.
-    extensions: ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx'],
+    extensions: ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx', '.less'],
     alias: {
 
       // Support React Native Web
@@ -143,12 +146,20 @@ module.exports = {
             test: /\.(js|jsx|mjs)$/,
             include: paths.appSrc,
             loader: require.resolve('babel-loader'),
-            options: {
-
+            options: { 
               // This is a feature of `babel-loader` for webpack (not Babel itself).
               // It enables caching results in ./node_modules/.cache/babel-loader/
               // directory for faster rebuilds.
               cacheDirectory: true,
+              plugins: [
+                // ...
+                // Importing Ant here is not needed if you are using a .babelrc file
+                ['import', { 
+                  libraryName: "antd",
+                  libraryDirectory: 'lib',
+                  style: true
+                }],
+              ]
             },
           },
           // "postcss" loader applies autoprefixer to our CSS.
@@ -157,36 +168,19 @@ module.exports = {
           // In production, we use a plugin to extract that CSS to a file, but
           // in development "style" loader enables hot editing of CSS.
           {
-            test: /\.css$/,
+            test: /\.less$/,
             use: [
-              require.resolve('style-loader'),
-              {
-                loader: require.resolve('css-loader'),
+              {loader: "style-loader"},
+              {loader: "css-loader"},
+              {loader: "less-loader",
                 options: {
-                  importLoaders: 1,
-                },
-              },
-              {
-                loader: require.resolve('postcss-loader'),
-                options: {
-                  // Necessary for external CSS imports to work
-                  // https://github.com/facebookincubator/create-react-app/issues/2677
-                  ident: 'postcss',
-                  plugins: () => [
-                    require('postcss-flexbugs-fixes'),
-                    autoprefixer({
-                      browsers: [
-                        '>1%',
-                        'last 4 versions',
-                        'Firefox ESR',
-                        'not ie < 9', // React doesn't support IE8 anyway
-                      ],
-                      flexbox: 'no-2009',
-                    }),
-                  ],
-                },
-              },
-            ],
+                  sourcemap: true,
+                  modifyVars: themeVariables,
+                  javascriptEnabled: true,
+                  root: path.resolve(__dirname, "./")
+                }
+              }
+            ]
           },
           // "file" loader makes sure those assets get served by WebpackDevServer.
           // When you `import` an asset, you get its (virtual) filename.

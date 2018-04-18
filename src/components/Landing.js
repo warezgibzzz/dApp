@@ -11,12 +11,12 @@ import testIcons from '../img/test-icons.svg';
 import simulateIcons from '../img/simulated-icons.svg';
 
 // Styles
-import './Landing.css';
+import '../less/Landing.less';
 
 class Landing extends Component {
   render() {
     return (
-      <div style={{backgroundColor: '#fff'}}>
+      <div>
         <Row type="flex" className="hero" align="middle">
           <Col xs={20} sm={20} md={10} lg={10} xl={10}>
             <div className="hero-text">
