@@ -3,21 +3,25 @@ import Web3 from 'web3';
 
 import { checkContract } from "../../src/util/validations";
 
-
-const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:9545'));
+//Use Rinkey testnet  in case of test on travis or else use localhost:9545
+const web3Url = process.env.NODE_ENV === 'test'
+  ? 'https://rinkeby.infura.io/3632KD8OP9iixQqYbSjj'
+  : 'http://localhost:9545';
+// set the provider you want from Web3.providers
+const web3 = new Web3(new Web3.providers.HttpProvider(web3Url));
 
 
 describe('CheckContractAction', () => {
 
   it('should validate contract based on the valid address provided', () => {
-    const address = '0xfb88de099e13c3ed21f80a7a1e49f8caecf10df6'; // Market Token Address
+    const address = '0x29317b796510afc25794e511e7b10659ca18048b'; // Market Token Address
     checkContract(web3, address, function(result) {
       expect(result).to.equals(undefined);
     });
   });
 
   it('should invalidate the contract based on the invalid address provided', () => {
-    const address = '0x1234567890098765432112345678900987654321';
+      const address = '0x1234567890098765432112345678900987654321';
     checkContract(web3, address, function(result) {
       expect(result).to.equals('Not a valid smart contract address');
     });
