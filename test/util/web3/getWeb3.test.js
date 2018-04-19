@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
+import Web3 from 'web3';
 import FakeProvider from 'web3-fake-provider';
 
 import getWeb3 from '../../../src/util/web3/getWeb3';
@@ -26,7 +27,7 @@ describe('getWeb3', () => {
     fakeProvider.injectResult(accounts);
     web3.eth.getCoinbase = (callback) => { callback(callbackError, coinbaseAddress); };
     web3.eth.getAccounts = (callback) => { callback(callbackError, accounts); };
-    web3.eth.getNetwork = (callback) => { callback(callbackError, '4447'); };
+    web3.version.getNetwork = (callback) => { callback(callbackError, '4447'); };
     web3.currentProvider.isMetaMask = true;
     return web3;
   }

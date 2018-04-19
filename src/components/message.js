@@ -26,27 +26,15 @@ function showMessage(type, content, duration) {
   };
 
   const msgBody = (
-      <span>
+    <span>
       {content}
-        <Icon type="close-circle" onClick={handleDismiss} style={iconStyle} />
+      <Icon type="close-circle" onClick={handleDismiss} style={iconStyle} />
     </span>
   );
 
-  const msgBodywithLink = (
-    <span>
-      {content.message} <a href={content.link}> View on Etherscan</a>
-        <Icon type="close-circle" onClick={handleDismiss} style={iconStyle} />
-      </span>
-  );
+  // AntD's message API returns a function to manually dismiss messages
+  msgHandlers[msgKey] = message[type](msgBody, duration, handleClose);
 
-
-  if (content.link){
-    let  m = message[type](msgBodywithLink, duration, handleClose);
-    msgHandlers[msgKey] = m;
-  }else {
-    const  m = message[type](msgBody, duration, handleClose);
-    msgHandlers[msgKey] = m;
-  }
   return handleDismiss;
 }
 

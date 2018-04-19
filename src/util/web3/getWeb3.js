@@ -23,62 +23,65 @@ const networkMap = {
   4: 'rinkeby',
   42: 'kovan',
   4447: 'truffle',
-  5777: 'ganache',
+  5777: 'ganache'
 };
 
 let getWeb3 = (window,
                showErrorMessage = showMessage.bind(showMessage, 'error'),
-               dispatch = store.dispatch.bind(store)) => (new Promise(function (resolve, reject) {
+               dispatch = store.dispatch.bind(store)) => (new Promise(function(resolve, reject) {
   // Wait for loading completion to avoid race conditions with web3 injection timing.
-  window.addEventListener('load', function () {
-    var results;
-    var web3 = window.web3;
+  window.addEventListener('load', function() {
+    let results;
+    let web3 = window.web3;
 
     // Checking if Web3 has been injected by the browser (Mist/MetaMask)
     if (typeof web3 !== 'undefined' && web3.currentProvider && web3.currentProvider.isMetaMask) {
-      console.log("Mist/MetaMask's detected!");
+      console.log('Mist/MetaMask\'s detected!');
 
       web3.eth.getAccounts((err, accounts) => {
         if (accounts.length === 0) { // check for unlocked metamask state
           results = {
             web3Instance: null,
-            network: 'unknown',
+            network: 'unknown'
           };
 
-        console.log("Please unlock MetaMask!");
+          console.log('Please unlock MetaMask!');
 
-        showErrorMessage('MetaMask is locked! Please unlock and refresh this page', 8);
-        resolve(dispatch(web3Initialized(results)));
-      }});
+          showErrorMessage('MetaMask is locked! Please unlock and refresh this page', 8);
+          resolve(dispatch(web3Initialized(results)));
+        }
+      });
 
-      const network = web3.version.getNetwork((error, network) => {
-        if (network !== RINKEBY && network !== TRUFFLE && network !== GANACHE) { // ensure beta users don't spend real ether.
+      web3.version.getNetwork((error, network) => {
+        // Ensure beta users don't spend real ETH
+        if (network !== RINKEBY && network !== TRUFFLE && network !== GANACHE) {
 
           results = {
             web3Instance: null,
-            network: 'unknown',
+            network: 'unknown'
           };
 
-          console.log("dApp beta only compatible with Ganache or Rinkeby or Truffle");
+          console.log('dApp beta only compatible with Ganache or Rinkeby or Truffle');
 
           showErrorMessage('Please select Rinkeby Test Network in MetaMask and then restart browser', 8);
           resolve(dispatch(web3Initialized(results)));
-        } else return network;
+        } else {
+          web3 = new Web3(web3.currentProvider);
+
+          results = {
+            web3Instance: web3,
+            network: networkMap[network] || 'unknown'
+          };
+
+          console.log('Injected web3 detected.');
+
+          resolve(dispatch(web3Initialized(results)));
+        }
       });
-      web3 = new Web3(web3.currentProvider);
-
-      results = {
-        web3Instance: web3,
-        network: networkMap[network] || 'unknown',
-      };
-
-      console.log('Injected web3 detected.');
-
-      resolve(dispatch(web3Initialized(results)));
     } else {
       // Fallback to localhost if no web3 injection. We've configured this to
       // use the development console's port by default.
-      var provider = new Web3.providers.HttpProvider('http://127.0.0.1:9545');
+      const provider = new Web3.providers.HttpProvider('http://127.0.0.1:9545');
 
       web3 = new Web3(provider);
 
