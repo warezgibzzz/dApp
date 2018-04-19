@@ -1,5 +1,10 @@
 # make targets for MARKETProtocol/dApp
 
+# name of the AWS profile for deployment of the site to dev
+DEV_PROFILE_NAME=dev-dapp-rw
+# target AWS bucket for dev deployment
+DEV_BUCKET=s3://dev.dapp.marketprotocol.io
+
 # prerequisites
 #   mkdir $(DEV)/MARKETProtocol
 #   cd $(DEV)/MARKETProtocol
@@ -54,3 +59,18 @@ run_tests:
 # docker migrate
 docker_migrate:
 	docker-compose exec truffle truffle migrate --network=development
+
+# DEV - display contents of deployed site
+ls_dev:
+	aws s3 --profile $(DEV_PROFILE_NAME) ls $(DEV_BUCKET)
+
+# DEV - remove deployed site from s3 bucket
+rm_dev:
+	aws s3 --profile $(DEV_PROFILE_NAME) rm $(DEV_BUCKET)/dev --recursive
+
+# DEV - deploy rinkeby site to s3 bucket
+deploy_dev:
+	rm -rf build/
+	cp -r rinkeby-build/ build/ # copy prebuilt abi's to build
+	npm run build
+	aws s3 --profile $(DEV_PROFILE_NAME) cp dApp/ $(DEV_BUCKET) --recursive
