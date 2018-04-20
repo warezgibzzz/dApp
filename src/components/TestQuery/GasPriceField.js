@@ -18,9 +18,8 @@ class GasPriceField extends Component {
     this.state = {
       gaslimit: gasLimitEstimate,
       gasprice: 2,
-      time: -1,
-      cost: gasLimitEstimate / 1000000000,
-      condition: null
+      condition: null,
+      message: this.getMessage(null, gasLimitEstimate, 2)
     };
     this.updateNetworkCondition = this.updateNetworkCondition.bind(this);
   }
@@ -30,8 +29,7 @@ class GasPriceField extends Component {
     const price = parseFloat(e.target.value);
     this.setState({
       gasprice: price,
-      cost: this.state.gaslimit * price / 1000000000,
-      time: this.getTime(this.state.condition, price)
+      message: this.getMessage(this.state.condition, this.state.gaslimit, price)
     });
     if (this.props.onChange) {
       this.props.onChange(price);
@@ -41,7 +39,7 @@ class GasPriceField extends Component {
   updateNetworkCondition(data) {
     this.setState({
       condition: data,
-      time: this.getTime(data, this.state.gasprice)
+      message: this.getMessage(data, this.state.gaslimit, this.state.gasprice)
     });
   }
 
@@ -60,6 +58,18 @@ class GasPriceField extends Component {
     return time;
   }
 
+  getMessage(condition, gasLimit, gasPrice) {
+    const time = this.getTime(condition, gasPrice);
+    const cost = gasLimit * gasPrice / 1000000000;
+    var message = !condition
+      ? `The following MetaMask settings will cost ${cost} ETH, the confirmation time depends on the overall network traffic`
+      : (time >= 0
+        ? `The following MetaMask settings should give a ${time} min confirmation for ${cost} ETH`
+        : `The gas price is below the market low safe price (currently about ${condition.safeLow / 10} gwei), your transaction might take forever to get confirmed`
+      );
+    return message;
+  }
+
   componentDidMount() {
     const gasInfoUrl = "https://ethgasstation.info/json/ethgasAPI.json";
     Rx.Observable.ajax({ url: gasInfoUrl, method: 'GET', responseType: 'json', crossDomain: true })
@@ -72,11 +82,7 @@ class GasPriceField extends Component {
       <Row>
         <Col>
           <h2>Gas Setting</h2>
-          {!this.state.condition
-            ? <div>The following MetaMask settings will cost {this.state.cost} ETH</div>
-            : (this.state.time >= 0
-              ? <div>The following MetaMask settings should give a {this.state.time} min confirmation for {this.state.cost} ETH</div>
-              : <div>The gas price is below the market low safe price (currently about {this.state.condition.safeLow / 10} gwei), your transaction might take forever to get confirmed</div>)}
+          <div>{this.state.message}</div>
           <br />
           <Row gutter={16}>
             <Col lg={8} sm={11} xs={24}>
