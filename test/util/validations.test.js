@@ -7,6 +7,7 @@ import { checkContract } from "../../src/util/validations";
 const web3Url = process.env.NODE_ENV === 'test'
   ? 'https://rinkeby.infura.io/3632KD8OP9iixQqYbSjj'
   : 'http://localhost:9545';
+
 // set the provider you want from Web3.providers
 const web3 = new Web3(new Web3.providers.HttpProvider(web3Url));
 
