@@ -7,7 +7,7 @@ MARKET Protocol has been created to provide a secure, flexible, open source foun
 # dApp
 [MARKET Protocol's](https://github.com/MARKETProtocol/MARKETProtocol) main decentralized application. 
 
-Take a look at our [FAQ](https://github.com/MARKETProtocol/MARKETProtocol/wiki/Frequently-Asked-Questions) for a little more explanation.
+Take a look at our [docs](https://docs.marketprotocol.io) for a little more explanation.
 
 Join our [Discord Community](https://www.marketprotocol.io/discord) to interact with members of our dev staff and other contributors.
 
