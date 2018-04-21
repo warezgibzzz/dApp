@@ -56,6 +56,13 @@ class GuidedDeployment extends Component {
     });
   }
 
+  onFailSubmit() {
+    this.setState({
+      step: 0,
+      transitionDirection: 'prev'
+    });
+  }
+
   render() {
     const currentStep = this.state.step;
     const initialValues = this.props.initialValues;
@@ -95,9 +102,11 @@ class GuidedDeployment extends Component {
         }}
         showErrorMessage={showMessage.bind(showMessage, 'error')}
         showSuccessMessage={showMessage.bind(showMessage, 'success')}
+        onFailSubmit={this.onFailSubmit.bind(this)}
         loading={this.props.loading}
         contract={this.props.contract}
-        error={this.props.error}/>
+        error={this.props.error}
+        />
     ];
 
     return (
