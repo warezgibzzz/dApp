@@ -239,7 +239,18 @@ class QueryResultStep extends Component {
               </div>
             )}
             {!this.props.loading && !this.props.error && <p className="result">{this.props.result}</p>}
-            {!this.props.loading && this.props.error && <Alert message={`${this.props.error}`} type="error" />}
+            {!this.props.loading && this.props.error && (
+              <div>
+              <Alert message={`${this.props.error}`} type="error" />
+              <Row style={{ padding: '30px'}} type="flex" justify="center">
+                <Col>
+                  <Button type="primary" onClick={this.props.onFailSubmit} >
+                    Try again
+                  </Button>
+                </Col>
+              </Row>
+              </div>
+          )}
           </Card>
         </Col>
       </Row>
