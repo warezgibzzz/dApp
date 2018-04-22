@@ -1,3 +1,4 @@
+import { dAppErrorMessage } from '../util/utils';
 
 /**
  *
@@ -88,8 +89,9 @@ export function deployContract(
               resolve(marketContractInstanceDeployed);
             })
             .catch(err => {
-              dispatch({ type: `${type}_REJECTED`, payload: err.message.split('\n')[0] });
-              reject(err.message.split('\n')[0]);
+              dispatch({ type: `${type}_REJECTED`,
+                         payload: dAppErrorMessage(err.message.split('\n')[0]) });
+              reject(dAppErrorMessage(err.message.split('\n')[0]));
             });
         });
       } else {
