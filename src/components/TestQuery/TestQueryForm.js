@@ -2,6 +2,7 @@ import { Col, Row, Steps } from 'antd';
 import qs from 'query-string';
 import React, { Component } from 'react';
 
+import TestQuerySuccess from './TestQuerySuccess';
 import StepAnimation from '../StepAnimation';
 import showMessage from '../message';
 import { AboutOraclesStep, QueryResultStep, SelectDataSourceStep, SetQueryStep } from './Steps';
@@ -21,26 +22,6 @@ const parentColLayout = {
   }
 };
 
-const message = (network, hash) => {
-  let message = 'Transaction has been submitted: ';
-
-  switch(network) {
-    case 'rinkeby':
-      message = message + `https://rinkeby.etherscan.io/tx/${hash}`;
-      break;
-    case 'mainnet':
-      message = message + `https://etherscan.io/tx/${hash}`;
-      break;
-    case 'unknown':
-      message = message + `${hash}`;
-      break;
-    default:
-      message = 'Transaction has been submitted';
-  }
-
-  return message;
-};
-
 class TestQueryForm extends Component {
   constructor(props) {
     super(props);
@@ -54,15 +35,15 @@ class TestQueryForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(this.props.loading && !nextProps.loading) {
-      if(nextProps.error) {
+    if (this.props.loading && !nextProps.loading) {
+      if (nextProps.error) {
         // We had an error
         showMessage('error', `There was an error deploying the contract: ${nextProps.error}`, 8);
       }
     }
 
     if (this.props.transaction !== nextProps.transaction) {
-        showMessage('info', message(this.props.network, nextProps.transaction), 8);
+        showMessage('info', TestQuerySuccess(this.props.network, nextProps.transaction), 8);
     }
   }
 

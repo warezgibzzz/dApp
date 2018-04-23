@@ -32,9 +32,9 @@ function showMessage(type, content, duration) {
     </span>
   );
 
-  // antd's message API returns a function to manually dismiss messages
-  const m = message[type](msgBody, duration, handleClose);
-  msgHandlers[msgKey] = m;
+  // AntD's message API returns a function to manually dismiss messages
+  msgHandlers[msgKey] = message[type](msgBody, duration, handleClose);
+
   return handleDismiss;
 }
 
