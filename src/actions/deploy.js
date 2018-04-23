@@ -1,6 +1,7 @@
+import { getMetamaskError } from '../util/utils';
 
 /**
- * 
+ *
  * @param {web3} web3
  * @param {*} contractSpecs  Specs of new contract to be deployed
  * @param {*} MarketContractRegistry marketContractRegistryProvider
@@ -88,8 +89,9 @@ export function deployContract(
               resolve(marketContractInstanceDeployed);
             })
             .catch(err => {
-              dispatch({ type: `${type}_REJECTED`, payload: err });
-              reject(err);
+              dispatch({ type: `${type}_REJECTED`,
+                         payload: getMetamaskError(err.message.split('\n')[0]) });
+              reject(getMetamaskError(err.message.split('\n')[0]));
             });
         });
       } else {

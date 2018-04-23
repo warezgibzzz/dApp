@@ -1,3 +1,5 @@
+import { getMetamaskError } from '../util/utils';
+
 export function testQuery(
   { web3, querySpecs },
   { QueryTest }
@@ -13,8 +15,8 @@ export function testQuery(
         web3.eth.getCoinbase((error, coinbase) => {
           if (error) {
             console.error(error);
-            dispatch({ type: `${type}_REJECTED`, payload: error });
-            return reject(error);
+            dispatch({ type: `${type}_REJECTED`, payload: getMetamaskError(error.message.split('\n')[0]) });
+            return reject(getMetamaskError(error.message.split('\n')[0]));
           }
 
           console.log('Attempting to submit test query from ' + coinbase);
@@ -63,8 +65,8 @@ export function testQuery(
                         resolve(queryResults);
                       })
                       .catch(err => {
-                        dispatch({ type: `${type}_REJECTED`, payload: err.message.split('\n')[0] });
-                        reject(err.message.split('\n')[0]);
+                        dispatch({ type: `${type}_REJECTED`, payload: getMetamaskError(err.message.split('\n')[0]) });
+                        reject(getMetamaskError(err.message.split('\n')[0]));
                       });
                   }
                 });
@@ -72,8 +74,8 @@ export function testQuery(
             .catch(err => {
               // catch errors during query submission
               console.error(err);
-              dispatch({ type: `${type}_REJECTED`, payload: err.message.split('\n')[0] });
-              return reject(err.message.split('\n')[0]);
+              dispatch({ type: `${type}_REJECTED`, payload: getMetamaskError(err.message.split('\n')[0]) });
+              return reject(getMetamaskError(err.message.split('\n')[0]));
             });
         });
       } else {

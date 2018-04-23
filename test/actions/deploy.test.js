@@ -7,7 +7,7 @@ import { MarketContractRegistry, MarketContract, MarketCollateralPool, MarketTok
 import { deployContract } from '../../src/actions/deploy';
 
 function validContractSpecs() {
-  return { 
+  return {
     contractName: 'UNIT/TEST',
     priceFloor: 200,
     priceCap: 300,
@@ -39,11 +39,11 @@ describe('DeployAction', () => {
   }
 
   beforeEach(() => {
-    contractParams = { 
+    contractParams = {
       MarketContractRegistry: MarketContractRegistry(),
-      MarketContract: MarketContract(), 
-      MarketCollateralPool: MarketCollateralPool(), 
-      MarketToken: MarketToken() 
+      MarketContract: MarketContract(),
+      MarketCollateralPool: MarketCollateralPool(),
+      MarketToken: MarketToken()
     };
     deployParams = { contractSpecs: validContractSpecs(), web3: mockedCoinbaseWeb3() };
     dispatchSpy = sinon.spy();
@@ -74,7 +74,7 @@ describe('DeployAction', () => {
         expect(dispatchSpy).to.have.property('callCount', 2);
         expect(dispatchSpy.args[0][0].type).to.equals('DEPLOY_CONTRACT_PENDING');
         expect(dispatchSpy.args[1][0].type).to.equals('DEPLOY_CONTRACT_REJECTED');
-        expect(dispatchSpy.args[1][0].payload).to.equals(notDeployedError);
+        expect(dispatchSpy.args[1][0].payload).to.equals('MarketToken not deployed');
       });
   });
 

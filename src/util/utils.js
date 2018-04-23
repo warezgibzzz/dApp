@@ -224,3 +224,16 @@ class Order {
 
 }
 
+/**
+ * Convert MetaMask error message to dApp error message.
+ * Fallback: return original message.
+ *
+ * @param errorMessage
+ * @return getMetamaskError
+ */
+export const getMetamaskError = function (message) {
+  if (message.indexOf('User denied transaction') !== -1)
+    return 'User denied transaction';
+  else
+    return message;
+};
