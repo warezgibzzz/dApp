@@ -1,4 +1,4 @@
-import { Alert, Button, Col, Form, Row } from 'antd';
+import { Alert, Button, Col, Form, Row, Spin } from 'antd';
 import React, { Component } from 'react';
 
 import Loader from '../Loader';
@@ -8,11 +8,11 @@ import GasPriceField from '../GasPriceField';
 
 const formButtonLayout = {
   xs: {
-    span: 24,
+    span: 24
   },
   sm: {
     span: 8
-  },
+  }
 };
 
 const formItemColLayout = {
@@ -48,9 +48,10 @@ function ContractFormCol(props) {
  *
  */
 class QuickDeployment extends Component {
+
   componentWillReceiveProps(nextProps) {
-    if(this.props.loading && !nextProps.loading) {
-      if(nextProps.error) {
+    if (this.props.loading && !nextProps.loading) {
+      if (nextProps.error) {
         // We had an error
         this.props.showErrorMessage(`There was an error deploying the contract: ${nextProps.error}`, 8);
       } else if (nextProps.contract) {
@@ -83,7 +84,7 @@ class QuickDeployment extends Component {
   }
 
   isSubmitDisabled() {
-    if(this.props.loading) return true;
+    if (this.props.loading) return true;
 
     const errors = this.props.form.getFieldsError();
     return Object.keys(errors).some(field => errors[field]);
@@ -96,16 +97,18 @@ class QuickDeployment extends Component {
 
   render() {
     const { initialValues } = this.props;
-    return (
+
+    const quickForm = (
       <div>
         <Alert
-          style={{textAlign: 'center'}}
+          style={{ textAlign: 'center' }}
           banner
           type="info"
           showIcon={false}
           message={
             <span>
-              First time deploying a Contract? Try the <a className="switch-mode-link" href={this.props.guidedModeUrl} onClick={this.handleModeSwitching.bind(this)}>guided mode</a>.
+              First time deploying a Contract? Try the <a className="switch-mode-link" href={this.props.guidedModeUrl}
+                                                          onClick={this.handleModeSwitching.bind(this)}>guided mode</a>.
             </span>
           }
         />
@@ -117,37 +120,48 @@ class QuickDeployment extends Component {
               </ContractFormCol>
 
               <ContractFormCol>
-                <Field name='baseTokenAddress' initialValue={initialValues.baseTokenAddress} form={this.props.form} showHint/>
+                <Field name='baseTokenAddress' initialValue={initialValues.baseTokenAddress} form={this.props.form}
+                       showHint/>
               </ContractFormCol>
             </ContractFormRow>
 
             <ContractFormRow>
               <ContractFormCol>
-                <Field name='priceFloor' initialValue={isNaN(initialValues.priceFloor) ? '' : parseInt(initialValues.priceFloor, 10)} form={this.props.form} showHint/>
+                <Field name='priceFloor'
+                       initialValue={isNaN(initialValues.priceFloor) ? '' : parseInt(initialValues.priceFloor, 10)}
+                       form={this.props.form} showHint/>
               </ContractFormCol>
 
               <ContractFormCol>
-                <Field name='priceCap' initialValue={isNaN(initialValues.priceCap) ? '' : parseInt(initialValues.priceCap, 10)} form={this.props.form} showHint/>
-              </ContractFormCol>
-            </ContractFormRow>
-
-            <ContractFormRow>
-              <ContractFormCol>
-                <Field name='priceDecimalPlaces' initialValue={isNaN(initialValues.priceDecimalPlaces) ? '' : parseInt(initialValues.priceDecimalPlaces, 10)} form={this.props.form} showHint/>
-              </ContractFormCol>
-
-              <ContractFormCol>
-                <Field name="qtyMultiplier" initialValue={isNaN(initialValues.qtyMultiplier) ? '' : parseInt(initialValues.qtyMultiplier, 10)} form={this.props.form} showHint/>
+                <Field name='priceCap'
+                       initialValue={isNaN(initialValues.priceCap) ? '' : parseInt(initialValues.priceCap, 10)}
+                       form={this.props.form} showHint/>
               </ContractFormCol>
             </ContractFormRow>
 
             <ContractFormRow>
               <ContractFormCol>
-                <Field name='expirationTimeStamp' initialValue={initialValues.expirationTimeStamp} form={this.props.form} showHint/>
+                <Field name='priceDecimalPlaces'
+                       initialValue={isNaN(initialValues.priceDecimalPlaces) ? '' : parseInt(initialValues.priceDecimalPlaces, 10)}
+                       form={this.props.form} showHint/>
               </ContractFormCol>
 
               <ContractFormCol>
-                <Field name='oracleDataSource' initialValue={initialValues.oracleDataSource} form={this.props.form} showHint/>
+                <Field name="qtyMultiplier"
+                       initialValue={isNaN(initialValues.qtyMultiplier) ? '' : parseInt(initialValues.qtyMultiplier, 10)}
+                       form={this.props.form} showHint/>
+              </ContractFormCol>
+            </ContractFormRow>
+
+            <ContractFormRow>
+              <ContractFormCol>
+                <Field name='expirationTimeStamp' initialValue={initialValues.expirationTimeStamp}
+                       form={this.props.form} showHint/>
+              </ContractFormCol>
+
+              <ContractFormCol>
+                <Field name='oracleDataSource' initialValue={initialValues.oracleDataSource} form={this.props.form}
+                       showHint/>
               </ContractFormCol>
             </ContractFormRow>
 
@@ -159,13 +173,14 @@ class QuickDeployment extends Component {
 
             <ContractFormRow>
               <ContractFormCol>
-                <GasPriceField location={this.props.location} form={this.props.form} />
+                <GasPriceField location={this.props.location} form={this.props.form}/>
               </ContractFormCol>
             </ContractFormRow>
 
             <Row type="flex" justify="center">
               <Col {...formButtonLayout}>
-                <Button className="submit-button" type="primary" htmlType="submit" loading={this.props.loading} disabled={this.isSubmitDisabled()} style={{width: '100%'}}>
+                <Button className="submit-button" type="primary" htmlType="submit" loading={this.props.loading}
+                        disabled={this.isSubmitDisabled()} style={{ width: '100%' }}>
                   Deploy Contract
                 </Button>
               </Col>
@@ -173,18 +188,26 @@ class QuickDeployment extends Component {
 
             <Row type="flex" justify="center" style={{ marginTop: '16px' }}>
               <Col {...formButtonLayout}>
-                <Button className="reset-button" type="secondary" style={{width: '100%'}} disabled={this.props.loading} onClick={this.handleReset.bind(this)}>
+                <Button className="reset-button" type="secondary" style={{ width: '100%' }}
+                        disabled={this.props.loading} onClick={this.handleReset.bind(this)}>
                   Reset Form
                 </Button>
               </Col>
             </Row>
-
-            <Loader loading={this.props.loading} center={true}/>
           </Form>
         </div>
       </div>
     );
+
+    const loader = (<Loader loading={this.props.loading} center={true}/>);
+
+    return (this.props.loading ?
+        <Spin indicator={loader} style={{ maxHeight: '100%', height: '100%' }}>
+          {quickForm}
+        </Spin> : quickForm
+    );
   }
+
 }
 
 export default Form.create()(QuickDeployment);
