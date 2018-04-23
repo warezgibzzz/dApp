@@ -1,21 +1,16 @@
 import { DatePicker, Form, Icon, Input, InputNumber, Select, Popover } from 'antd';
 import moment from 'moment';
 import React from 'react';
-
+import { checkContract } from "../../util/validations";
+import store from '../../store';
 import OracleDataSources, { getDataSourceObj } from '../TestQuery/OracleDataSources';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
 const ethAddressValidator = (rule, value, callback) => {
-  const web3 = window.web3;
-
-  // If web3 isn't set up for some reason, we probably shouldn't block validation
-  if(!web3) {
-    callback();
-  } else {
-    callback(web3.isAddress(value) ? undefined : 'Invalid ETH address');
-  }
+  const web3 = store.getState().web3.web3Instance;
+  checkContract(web3, value, callback);
 };
 
 const timestampValidator = (rule, value, callback) => {

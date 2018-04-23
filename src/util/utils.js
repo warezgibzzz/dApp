@@ -129,7 +129,8 @@ export async function processContractsList(marketContract, marketCollateralPool,
         const contractJSON = {};
         contractJSON['key'] = instance.address;
         contractJSON['CONTRACT_NAME'] = await instance.CONTRACT_NAME.call();
-        let baseTokenContractAddress = await instance.BASE_TOKEN_ADDRESS.call();
+
+        const baseTokenContractAddress = await instance.BASE_TOKEN_ADDRESS.call();
         contractJSON['BASE_TOKEN_ADDRESS'] = baseTokenContractAddress;
 
         await baseToken
@@ -139,9 +140,15 @@ export async function processContractsList(marketContract, marketCollateralPool,
             contractJSON['BASE_TOKEN_SYMBOL'] = await baseTokenInstance.symbol();
           })
           .catch(function (err) {
-            const token = contract(ERC20).at(baseTokenContractAddress);
-            contractJSON['BASE_TOKEN'] = token.name();
-            contractJSON['BASE_TOKEN_SYMBOL'] = token.symbol();
+            try {
+              const token = contract(ERC20).at(baseTokenContractAddress);
+              contractJSON['BASE_TOKEN'] = token.name();
+              contractJSON['BASE_TOKEN_SYMBOL'] = token.symbol();
+            } catch (e) {
+              console.error(e);
+              contractJSON['BASE_TOKEN'] = 'NA';
+              contractJSON['BASE_TOKEN_SYMBOL'] = 'NA';
+            }
           });
 
         contractJSON['PRICE_FLOOR'] = await instance.PRICE_FLOOR.call().then(data => data.toNumber());
