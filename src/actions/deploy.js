@@ -1,4 +1,4 @@
-import { dAppErrorMessage } from '../util/utils';
+import { getMetamaskError } from '../util/utils';
 
 /**
  *
@@ -90,8 +90,8 @@ export function deployContract(
             })
             .catch(err => {
               dispatch({ type: `${type}_REJECTED`,
-                         payload: dAppErrorMessage(err.message.split('\n')[0]) });
-              reject(dAppErrorMessage(err.message.split('\n')[0]));
+                         payload: getMetamaskError(err.message.split('\n')[0]) });
+              reject(getMetamaskError(err.message.split('\n')[0]));
             });
         });
       } else {

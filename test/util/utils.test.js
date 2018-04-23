@@ -1,14 +1,14 @@
 import { expect } from 'chai';
 
-import { dAppErrorMessage } from '../../src/util/utils';
+import { getMetamaskError } from '../../src/util/utils';
 
-describe('dAppErrorMessage', () => {
+describe('getMetamaskError', () => {
 
   it('should return "User denied transaction" for declined MetaMask transactions', async () => {
     const expectedErrorMessage = 'User denied transaction';
 
     const actualErrorMessage =
-      dAppErrorMessage('Error: MetaMask Tx Signature: User denied transaction signature.');
+      getMetamaskError('Error: MetaMask Tx Signature: User denied transaction signature.');
 
     expect(actualErrorMessage).to.equals(expectedErrorMessage);
   });
@@ -17,7 +17,7 @@ describe('dAppErrorMessage', () => {
     const expectedErrorMessage = 'Error: MetaMask Tx Signature: User denied signature.';
 
     const actualErrorMessage =
-      dAppErrorMessage('Error: MetaMask Tx Signature: User denied signature.');
+      getMetamaskError('Error: MetaMask Tx Signature: User denied signature.');
 
     expect(actualErrorMessage).to.equals(expectedErrorMessage);
   });

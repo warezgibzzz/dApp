@@ -229,9 +229,9 @@ class Order {
  * Fallback: return original message.
  *
  * @param errorMessage
- * @return dAppErrorMessage
+ * @return getMetamaskError
  */
-export const dAppErrorMessage = function (message) {
+export const getMetamaskError = function (message) {
   if (message.indexOf('User denied transaction') !== -1)
     return 'User denied transaction';
   else
