@@ -322,24 +322,19 @@ class DeployStep extends BaseStepComponent {
               </a>
               </div>
             </div>}
-            {!this.props.loading && this.props.error && (
-              <div>
-              <Alert message={`${this.props.error}`} type="error" />
-              <Row style={{ padding: '30px'}} type="flex" justify="center">
-                <Col>
-                  <Button type="primary" onClick={this.props.onFailSubmit} >
-                    Try again
-                  </Button>
-                </Col>
-              </Row>
-              </div>
-          )}
+            {!this.props.loading && this.props.error &&
+              <Alert message={`${this.props.error}`} type="error" /> }
           </Card>
         </Col>
       </Row>
       <br/>
       <Row type="flex" justify="center">
         <Col>
+          {!this.props.loading && this.props.error && (
+            <Button type="primary" onClick={this.props.onFailSubmit} >
+              Try again
+            </Button>
+          )}
           {this.props.contract && <Link to="/contract/explorer"><Button type="primary">
             Explore All Contracts
           </Button>
