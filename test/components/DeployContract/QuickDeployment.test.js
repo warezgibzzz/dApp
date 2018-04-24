@@ -8,7 +8,7 @@ import moment from 'moment';
 import QuickDeployment from '../../../src/components/DeployContract/QuickDeployment';
 
 function validContractFields() {
-  return { 
+  return {
     contractName: { value: 'ABA' },
     baseTokenAddress: { value: '0x33333' },
     priceFloor: { value: 0 },
@@ -35,9 +35,9 @@ describe('QuickDeployment', () => {
     onDeploySpy = sinon.spy();
     successMessageSpy = sinon.spy();
     errorMessageSpy = sinon.spy();
-    quickDeployment = mount(<QuickDeployment 
-      initialValues={{}} 
-      switchMode={switchModeSpy} 
+    quickDeployment = mount(<QuickDeployment
+      initialValues={{}}
+      switchMode={switchModeSpy}
       showErrorMessage={errorMessageSpy}
       showSuccessMessage={successMessageSpy}
       onDeployContract={onDeploySpy}
@@ -108,9 +108,38 @@ describe('QuickDeployment', () => {
     expect(resetButton.prop('disabled')).to.equal(true);
   });
 
+  it('should show the overlay when loading', () => {
+    quickDeployment.setProps({
+      loading: true
+    });
+
+    const overlay = quickDeployment.find('.ant-spin');
+    expect(overlay).to.have.length(1);
+  });
+
+  it('should overlay dont hide on click', () => {
+    quickDeployment.setProps({
+      loading: true
+    });
+
+    quickDeployment.find('.ant-spin').simulate('click');
+
+    expect(quickDeployment.find('.ant-spin')).to.have.length(1);
+  });
+
+  it('should hide the overlay when is not loading', () => {
+    quickDeployment.setProps({
+      loading: false
+    });
+
+    const overlay = quickDeployment.find('.ant-spin');
+    expect(overlay).to.have.length(0);
+
+  });
+
   it('should reset form when .reset-button is clicked', () => {
     const defaultFieldValues = wrappedFormRef.props.form.getFieldsValue();
-    wrappedFormRef.props.form.setFields(validContractFields());    
+    wrappedFormRef.props.form.setFields(validContractFields());
     quickDeployment.setProps({
       loading: false
     });
@@ -124,7 +153,7 @@ describe('QuickDeployment', () => {
 
   it('should call onDeployContract with form values when submitted', () => {
     wrappedFormRef.props.form.setFields(validContractFields());
-    
+
     quickDeployment.find(Form).first().simulate('submit', { preventDefault() {} });
     expect(onDeploySpy).to.have.property('callCount', 1);
     // TODO: Test the values passed to onDeployContract
