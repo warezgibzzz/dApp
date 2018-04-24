@@ -63,6 +63,13 @@ describe('TestQueryForm', () => {
     expect(testQueryForm.state('oracleDataSource')).to.equal(dataSource);
   });
 
+  it('should change gas price with SetQueryStep.onGasPriceChange', () => {
+    const gasPrice = 3;
+    testQueryForm.setState({ step: setQueryStep });
+    testQueryForm.find(SetQueryStep).simulate('gasPriceChange', gasPrice);
+    expect(testQueryForm.state('gasPrice')).to.equal(gasPrice);
+  });
+
   it('should render SetQueryStep as third step', () => {
     testQueryForm.setState({ step: setQueryStep });
     expect(testQueryForm.find(SetQueryStep)).to.have.length(1);

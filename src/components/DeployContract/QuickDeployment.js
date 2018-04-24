@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import Loader from '../Loader';
 import Field from './DeployContractField';
 import DeployContractSuccess from './DeployContractSuccess';
-import GasPriceField from '../TestQuery/GasPriceField';
+import GasPriceField from '../GasPriceField';
 
 const formButtonLayout = {
   xs: {

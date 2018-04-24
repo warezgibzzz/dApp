@@ -85,7 +85,7 @@ class GasPriceField extends Component {
           <div>{this.state.message}</div>
           <br />
           <Row gutter={16}>
-            <Col lg={8} sm={11} xs={24}>
+            <Col lg={12} xs={24}>
               <FormItem
                 label={<span>Gas Limit (units) <Popover content="Gas limit is how many cycles (think opcodes) your transaction will take" title="More about `Gas Limit`" trigger="click">
                   <Icon type="question-circle-o" style={{ cursor: 'pointer' }} />
@@ -93,7 +93,7 @@ class GasPriceField extends Component {
                 <Input type="number" min="0" id="gasLimit" placeholder="Gas Limit (units)" value={this.state.gaslimit} disabled />
               </FormItem>
             </Col>
-            <Col lg={8} sm={11} xs={24}>
+            <Col lg={12} xs={24}>
               <FormItem
                 label={<span>Gas Price (gwei) <Popover content="Gas price is how much ETH you’re willing to pay per cycle" title="More about `Gas Price`" trigger="click">
                   <Icon type="question-circle-o" style={{ cursor: 'pointer' }} />

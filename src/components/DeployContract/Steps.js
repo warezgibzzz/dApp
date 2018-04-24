@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import Loader from '../Loader';
 import Field, { FieldSettings } from './DeployContractField';
 import DeployContractSuccess from './DeployContractSuccess';
-import GasPriceField from '../TestQuery/GasPriceField';
+import GasPriceField from '../GasPriceField';
 
 const ButtonGroup = Button.Group;
 

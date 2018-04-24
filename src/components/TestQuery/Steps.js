@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import Loader from '../Loader';
 import '../../less/Step.less';
 import OracleDataSources, { getDataSourceObj } from './OracleDataSources';
-import GasPriceField from './GasPriceField';
+import GasPriceField from '../GasPriceField';
 
 const FormItem = Form.Item;
 const Option = Select.Option;

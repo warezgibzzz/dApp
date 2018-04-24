@@ -5,7 +5,7 @@ import { mount, shallow } from 'enzyme';
 import sinon from 'sinon';
 import { expect } from 'chai';
 
-import GasPriceField from '../../../src/components/TestQuery/GasPriceField';
+import GasPriceField from '../../src/components/GasPriceField';
 
 describe('GasPriceField', () => {
   let gasPriceField;
