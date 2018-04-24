@@ -245,14 +245,20 @@ class QueryResultStep extends Component {
               </div>
             )}
             {!this.props.loading && !this.props.error && <p className="result">{this.props.result}</p>}
-            {!this.props.loading && this.props.error && <Alert message={`${this.props.error}`} type="error" />}
+            {!this.props.loading && this.props.error &&
+              <Alert message={`${this.props.error}`} type="error" /> }
           </Card>
         </Col>
       </Row>
       <br/>
-      {!this.props.loading && !this.props.error &&
       <Row type="flex" justify="center">
         <Col>
+          {!this.props.loading && this.props.error && (
+            <Button type="primary" onClick={this.props.onFailSubmit} >
+              Try again
+            </Button>
+          )}
+          {!this.props.loading && !this.props.error &&
           <ButtonGroup>
             <Button type="default" onClick={this.props.onPrevClicked} >
               <Icon type="left" />Test another query
@@ -260,9 +266,9 @@ class QueryResultStep extends Component {
             <Button type="primary" onClick={this.props.onCreateContractClicked} >
               Create contract with Query<Icon type="right" />
             </Button>
-          </ButtonGroup>
+          </ButtonGroup>}
         </Col>
-      </Row>}
+      </Row>
     </div>);
   }
 }

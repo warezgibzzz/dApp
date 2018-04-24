@@ -62,6 +62,13 @@ describe('GuidedDeployment', () => {
     expect(guidedDeployment.find(DataSourceStep)).to.have.length(1);
   });
 
+  it('should reset to inital step', () => {
+    guidedDeployment.setState({step: deployStep});
+    guidedDeployment.setProps({error: "Without data"});
+    guidedDeployment.find(DeployStep).simulate('failSubmit');
+    expect(guidedDeployment.state('step')).to.equal(0);
+  });
+
   it('should called onDeployContract when DeployStep.deployContract', () => {
     guidedDeployment.setState({ step: deployStep });
     guidedDeployment.find(DeployStep).props().deployContract();

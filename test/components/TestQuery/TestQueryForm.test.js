@@ -94,9 +94,17 @@ describe('TestQueryForm', () => {
     expect(testQueryForm.find(QueryResultStep)).to.have.length(1);
   });
 
+  it('should reset to inital step', () => {
+    testQueryForm.setState({ step: queryResultStep});
+    testQueryForm.setProps({error: "Without data"});
+    testQueryForm.find(QueryResultStep).simulate('failSubmit');
+    expect(testQueryForm.state('step')).to.equal(0);
+
+  });
+
   it('should navigate to /contract/deploy onCreateContractClicked', () => {
     const navSpy = sinon.spy();
-    testQueryForm.setState({ 
+    testQueryForm.setState({
       step: queryResultStep,
       oracleDataSource: 'WolframAlpha',
       oracleQuery: '2+2'

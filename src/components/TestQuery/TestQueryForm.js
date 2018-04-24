@@ -91,6 +91,13 @@ class TestQueryForm extends Component {
     });
   }
 
+  onFailSubmit() {
+    this.setState({
+      step: 0,
+      transitionDirection: 'prev'
+    });
+  }
+
   navigateToDeployContract() {
     const queryParams = {
       oracleDataSource: this.state.oracleDataSource,
@@ -132,7 +139,9 @@ class TestQueryForm extends Component {
         result={this.props.results}
         error={this.props.error}
         onPrevClicked={this.toPrevStep.bind(this)}
-        onCreateContractClicked={this.navigateToDeployContract.bind(this)} />,
+        onCreateContractClicked={this.navigateToDeployContract.bind(this)}
+        onFailSubmit={this.onFailSubmit.bind(this)}
+        />,
     ];
 
     return (
