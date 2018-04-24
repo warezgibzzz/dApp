@@ -7,7 +7,7 @@ import { expect } from 'chai';
 
 import DataSources from '../../../src/components/TestQuery/OracleDataSources';
 import Loader from '../../../src/components/Loader';
-import GasPriceField from '../../../src/components/GasPriceField'
+import GasPriceField from '../../../src/components/GasPriceField';
 import {
   AboutOraclesStep,
   QueryResultStep,
