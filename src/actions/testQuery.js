@@ -34,7 +34,7 @@ export function testQuery(
                 querySpecs.oracleQuery,
                 {
                   gas: 200000,
-                  gasPrice: web3.toWei(1, 'gwei'),
+                  gasPrice: web3.toWei(querySpecs.gasPrice, 'gwei'),
                   from: coinbase,
                   value: queryCost
                 }
@@ -50,6 +50,7 @@ export function testQuery(
               if (queryEventIds.length === 0) {
                 dispatch({ type: `${type}_REJECTED`, payload: 'Could not find `QueryScheduled` event.' });
                 return reject({ message: 'Could not find `QueryScheduled` event.' });
+
               }
 
               const queryID = queryEventIds[0];

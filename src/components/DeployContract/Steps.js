@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import Loader from '../Loader';
 import Field, { FieldSettings } from './DeployContractField';
 import DeployContractSuccess from './DeployContractSuccess';
+import GasPriceField from '../GasPriceField';
 
 const ButtonGroup = Button.Group;
 
@@ -224,6 +225,9 @@ class ExpirationStep extends BaseStepComponent {
         <Field name='expirationTimeStamp'
                initialValue={this.props.expirationTimeStamp ? moment(this.props.expirationTimeStamp * 1000) : ''}
                form={this.props.form}/>
+        <br/>
+        <GasPriceField location={this.props.location} form={this.props.form} />
+
         <Row type="flex" justify="end">
           <Col>
             <BiDirectionalNav text="Deploy Contract" {...this.props} />
@@ -271,7 +275,7 @@ class DataSourceStep extends BaseStepComponent {
         <Field name='oracleQuery'
                initialValue={this.props.oracleQuery || initialValues.oracleQuery}
                form={this.props.form}/>
-
+        
         <Row type="flex" justify="end">
           <Col>
             <Button type="primary" htmlType="submit">

@@ -30,7 +30,8 @@ class TestQueryForm extends Component {
       step: 0,
       transitionDirection: 'next',
       oracleDataSource: 'URL',
-      oracleQuery: ''
+      oracleQuery: '',
+      gasPrice: 2
     };
   }
 
@@ -68,6 +69,12 @@ class TestQueryForm extends Component {
   onQuerySubmit() {
     this.toNextStep();
     this.props.onTestQuery(this.state);
+  }
+
+  onGasPriceChange(price) {
+    this.setState({
+      gasPrice: price
+    });
   }
 
   toNextStep() {
@@ -113,6 +120,8 @@ class TestQueryForm extends Component {
       <SetQueryStep
         key="2"
         dataSource={this.state.oracleDataSource}
+        location={this.props.location}
+        onGasPriceChange={this.onGasPriceChange.bind(this)}
         onPrevClicked={this.toPrevStep.bind(this)}
         onChange={this.onQueryChange.bind(this)}
         onSubmit={this.onQuerySubmit.bind(this)} />,

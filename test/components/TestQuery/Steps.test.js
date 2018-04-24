@@ -7,6 +7,7 @@ import { expect } from 'chai';
 
 import DataSources from '../../../src/components/TestQuery/OracleDataSources';
 import Loader from '../../../src/components/Loader';
+import GasPriceField from '../../../src/components/GasPriceField';
 import {
   AboutOraclesStep,
   QueryResultStep,
@@ -85,14 +86,17 @@ describe('SetQueryStep', () => {
   let onSubmitSpy;
   let onPrevClickSpy;
   let onChangeSpy;
+  let onGasPriceSpy;
   beforeEach(() => {
     onSubmitSpy = sinon.spy();
     onPrevClickSpy = sinon.spy();
     onChangeSpy = sinon.spy();
+    onGasPriceSpy = sinon.spy();
     setQueryStep = shallow(<SetQueryStep
       dataSource={DataSources[0].name}
       onSubmit={onSubmitSpy}
       onPrevClicked={onPrevClickSpy}
+      onGasPriceChange={onGasPriceSpy}
       onChange={onChangeSpy} />);
   });
 
@@ -106,6 +110,12 @@ describe('SetQueryStep', () => {
     setQueryStep.find(Input).simulate('change', { target: { value: queryInput } });
     expect(setQueryStep.state('query')).to.equal(queryInput);
     expect(onChangeSpy).to.have.property('callCount', 1);
+  });
+
+  it('should call onGasPriceChange with changes in gas price input', () => {
+    const price = 3;
+    setQueryStep.find(GasPriceField).simulate('change', price);
+    expect(onGasPriceSpy).to.have.property('callCount', 1);
   });
 
   it('sets correct onPrevClicked property', () => {

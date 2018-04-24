@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import Loader from '../Loader';
 import '../../less/Step.less';
 import OracleDataSources, { getDataSourceObj } from './OracleDataSources';
+import GasPriceField from '../GasPriceField';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -160,6 +161,10 @@ class SetQueryStep extends Component {
     this.props.onChange(text);
   }
 
+  onGasPriceChange(price) {
+    this.props.onGasPriceChange(price);
+  }
+
   validateAndSubmit() {
     const dataSourceObj = getDataSourceObj(this.props.dataSource);
     if (dataSourceObj.isQueryValid(this.state.query)) {
@@ -206,6 +211,7 @@ class SetQueryStep extends Component {
           <br/>
         </Col>
       </Row>
+      <GasPriceField location={this.props.location} onChange={this.onGasPriceChange.bind(this)} />
       <Row type="flex" justify="end">
         <Col>
           <ButtonGroup>

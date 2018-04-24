@@ -83,6 +83,7 @@ class GuidedDeployment extends Component {
 
       <ExpirationStep
         key="2"
+        location={this.props.location}
         onPrevClicked={this.toPrevStep.bind(this)}
         onNextClicked={this.toNextStep.bind(this)}
         updateDeploymentState={this.setState.bind(this)}
