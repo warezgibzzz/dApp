@@ -1,67 +1,37 @@
-import { Form, Icon, Input, Tooltip } from 'antd';
+import { Form, Input } from 'antd';
 import React from 'react';
-
-import store from '../../store';
 
 const FormItem = Form.Item;
 
-const ethAddressValidator = (rule, value, callback) => {
-  const web3 = store.getState().web3.web3Instance;
-
-  if (!web3) {
-    callback();
-  } else {
-    callback(web3.isAddress(value) ? undefined : 'Invalid ETH address');
-  }
-};
-
-const Hint = (props) => (<Tooltip title={props.hint} ><Icon type="question-circle-o" /></Tooltip>);
-
-const fieldSettingsByName = {
-  marketContractAddress: {
-    label: 'MARKET Contract Address',
-    initialValue: '0x12345678123456781234567812345678',
-    rules: [
-      {
-        required: true, message: 'Please enter MARKET contract address',
-      },
-      {
-        validator: ethAddressValidator
-      }
-    ],
-    extra: 'Please enter deployed and whitelisted MARKET contract address',
-
-    component: () => (<Input />)
-  },
-};
+const getFieldSettings = (validators) => ({
+  rules: [
+    {
+      required: true, message: 'Please enter MARKET contract address',
+    },
+    {
+      validator: validators.ethAddressValidator
+    }
+  ]
+});
 
 function FindContractField(props) {
-  const { name, form, initialValue, showHint } = props;
+  const { name, form, validators } = props;
   const { getFieldDecorator } = form;
 
-  const fieldSettings = fieldSettingsByName[name];
+  const fieldSettings = getFieldSettings(validators);
 
-  const rules = typeof fieldSettings.rules === 'function' ? fieldSettings.rules(form) : fieldSettings.rules;
-  const label = (<span>{fieldSettings.label} {showHint && <Hint hint={fieldSettings.extra}/>}</span>);
+  const rules = fieldSettings.rules;
+  const label = 'MARKET Contract Address';
 
   return (
     <FormItem
-      label={label}
+      label={(<span>{label}</span>)}
     >
-
       {getFieldDecorator(name, {
-        initialValue,
         rules,
-      })(
-        fieldSettings.component({
-          form,
-          fieldSettings,
-          showHint
-        })
-      )}
+      })(<Input />)}
     </FormItem>
   );
 }
 
-export const FieldSettings = fieldSettingsByName;
 export default FindContractField;

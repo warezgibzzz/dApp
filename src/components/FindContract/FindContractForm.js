@@ -2,7 +2,6 @@ import { Button, Card, Col, Form, List, Row } from 'antd';
 import React, { Component } from 'react';
 
 import Loader from '../Loader';
-import showMessage from '../message';
 import Field from './FindContractField';
 import FindContractSuccess from './FindContractSuccess';
 
@@ -10,9 +9,6 @@ import FindContractSuccess from './FindContractSuccess';
 class FindContractForm extends Component {
   constructor(props) {
     super(props);
-
-    this.showErrorMessage=showMessage.bind(showMessage, 'error');
-    this.showSuccessMessage=showMessage.bind(showMessage, 'success');
 
     this.state = {
       marketContractAddress: '',
@@ -39,9 +35,9 @@ class FindContractForm extends Component {
   componentWillReceiveProps(nextProps) {
     if(this.props.loading && !nextProps.loading) {
       if(nextProps.error) {
-        this.showErrorMessage("Contract not found at this address!", 8);
+        this.props.showErrorMessage("Contract not found at this address!", 8);
       } else if (nextProps.contract) {
-        this.showSuccessMessage(FindContractSuccess({ contract: nextProps.contract }), 3);
+        this.props.showSuccessMessage(FindContractSuccess({ contract: nextProps.contract }), 3);
       }
     }
   }
@@ -77,7 +73,7 @@ class FindContractForm extends Component {
       <Form onSubmit={this.handleFind.bind(this)} layout="vertical">
         <ContractFormRow>
           <ContractFormCol>
-            <Field name='marketContractAddress' form={this.props.form} showHint/>
+            <Field name='marketContractAddress' validators={this.props.validators} form={this.props.form}/>
           </ContractFormCol>
         </ContractFormRow>
 
