@@ -5,9 +5,9 @@ export default function reducer(
     error: null,
     loading: false,
     contract: null,
-    trades: null,
+    trades: null
   },
-  action,
+  action
 ) {
   const getAsksAction = 'GET_ASKS';
   const getBidsAction = 'GET_BIDS';
@@ -18,7 +18,7 @@ export default function reducer(
       return {
         ...state,
         loading: true,
-        error: null,
+        error: null
       };
 
     case `${getAsksAction}_FULFILLED`:
@@ -26,7 +26,7 @@ export default function reducer(
         ...state,
         loading: false,
         asks: action.payload,
-        error: null,
+        error: null
       };
 
     case `${getAsksAction}_REJECTED`:
@@ -34,14 +34,14 @@ export default function reducer(
         ...state,
         loading: false,
         asks: null,
-        error: action.payload,
+        error: action.payload
       };
 
     case `${getBidsAction}_PENDING`:
       return {
         ...state,
         loading: true,
-        error: null,
+        error: null
       };
 
     case `${getBidsAction}_FULFILLED`:
@@ -49,7 +49,7 @@ export default function reducer(
         ...state,
         loading: false,
         bids: action.payload,
-        error: null,
+        error: null
       };
 
     case `${getBidsAction}_REJECTED`:
@@ -57,14 +57,14 @@ export default function reducer(
         ...state,
         loading: false,
         bids: null,
-        error: action.payload,
+        error: action.payload
       };
 
     case `${tradeOrderAction}_PENDING`:
       return {
         ...state,
         loading: true,
-        error: null,
+        error: null
       };
 
     case `${tradeOrderAction}_FULFILLED`:
@@ -72,7 +72,7 @@ export default function reducer(
         ...state,
         loading: false,
         trades: action.payload,
-        error: null,
+        error: null
       };
 
     case `${tradeOrderAction}_REJECTED`:
@@ -80,7 +80,7 @@ export default function reducer(
         ...state,
         loading: false,
         trades: null,
-        error: action.payload,
+        error: action.payload
       };
 
     case 'SELECTED_CONTRACT':

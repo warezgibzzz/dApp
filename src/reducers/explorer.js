@@ -2,9 +2,9 @@ export default function reducer(
   state = {
     contracts: null,
     loading: false,
-    error: null,
+    error: null
   },
-  action,
+  action
 ) {
   const actionType = 'GET_CONTRACTS';
   switch (action.type) {
@@ -12,7 +12,7 @@ export default function reducer(
       return {
         ...state,
         loading: true,
-        error: null,
+        error: null
       };
 
     case `${actionType}_FULFILLED`:
@@ -20,7 +20,7 @@ export default function reducer(
         ...state,
         loading: false,
         contracts: action.payload,
-        error: null,
+        error: null
       };
 
     case `${actionType}_REJECTED`:
@@ -28,7 +28,7 @@ export default function reducer(
         ...state,
         loading: false,
         contracts: null,
-        error: action.payload,
+        error: action.payload
       };
 
     default:

@@ -2,7 +2,9 @@ import { connect } from 'react-redux';
 
 import Contracts from '../Contracts.js';
 import { testQuery } from '../actions/testQuery';
-import CreateInitializer, { contractConstructor } from '../util/web3/contractInitializer';
+import CreateInitializer, {
+  contractConstructor
+} from '../util/web3/contractInitializer';
 import TestQueryForm from '../components/TestQuery/TestQueryForm';
 import store from '../store';
 
@@ -17,15 +19,24 @@ const mapDispatchToProps = dispatch => {
   return {
     onTestQuery: querySpecs => {
       const web3 = store.getState().web3.web3Instance;
-      const initializeContracts = CreateInitializer(contractConstructor.bind(null, web3));
-      dispatch(testQuery({
-        web3,
-        querySpecs
-      }, initializeContracts({ QueryTest: Contracts.QueryTest })));
+      const initializeContracts = CreateInitializer(
+        contractConstructor.bind(null, web3)
+      );
+      dispatch(
+        testQuery(
+          {
+            web3,
+            querySpecs
+          },
+          initializeContracts({ QueryTest: Contracts.QueryTest })
+        )
+      );
     }
   };
 };
 
-const TestQueryFormContainer = connect(mapStateToProps, mapDispatchToProps)(TestQueryForm);
+const TestQueryFormContainer = connect(mapStateToProps, mapDispatchToProps)(
+  TestQueryForm
+);
 
 export default TestQueryFormContainer;

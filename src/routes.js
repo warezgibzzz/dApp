@@ -1,31 +1,30 @@
 import * as Containers from './containers';
 import Landing from './components/Landing';
 
-
 export const routes = [
   {
     component: Landing,
     exact: true,
-    path: '/',
+    path: '/'
   },
   {
     component: Containers.DeployContainer,
-    path: '/contract/deploy',
+    path: '/contract/deploy'
   },
   {
     component: Containers.FindContainer,
-    path: '/contract/find',
+    path: '/contract/find'
   },
   {
     component: Containers.ExplorerContainer,
-    path: '/contract/explorer',
+    path: '/contract/explorer'
   },
   {
     component: Containers.SimExchangeContainer,
-    path: '/exchange',
+    path: '/exchange'
   },
   {
     component: Containers.TestQueryContainer,
-    path: '/test',
+    path: '/test'
   }
 ];

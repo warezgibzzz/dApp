@@ -9,7 +9,7 @@ import { getMetamaskError } from '../util/utils';
  */
 export function deployContract(
   { web3, contractSpecs },
-  { MarketContractRegistry, MarketContract, MarketCollateralPool, MarketToken },
+  { MarketContractRegistry, MarketContract, MarketCollateralPool, MarketToken }
 ) {
   const type = 'DEPLOY_CONTRACT';
 
@@ -40,8 +40,7 @@ export function deployContract(
           // find the address of the MKT token so we can link to our deployed contract
           let marketContractInstanceDeployed;
 
-          MarketToken
-            .deployed()
+          MarketToken.deployed()
             .then(function(marketTokenInstance) {
               return MarketContract.new(
                 contractSpecs.contractName,
@@ -67,7 +66,8 @@ export function deployContract(
             })
             .then(function(marketCollateralPoolInstance) {
               return marketContractInstanceDeployed.setCollateralPoolContractAddress(
-                marketCollateralPoolInstance.address, {
+                marketCollateralPoolInstance.address,
+                {
                   from: coinbase,
                   gasPrice: web3.toWei(contractSpecs.gasPrice, 'gwei')
                 }
@@ -85,17 +85,25 @@ export function deployContract(
                 }
               );
 
-              dispatch({ type: `${type}_FULFILLED`, payload: marketContractInstanceDeployed });
+              dispatch({
+                type: `${type}_FULFILLED`,
+                payload: marketContractInstanceDeployed
+              });
               resolve(marketContractInstanceDeployed);
             })
             .catch(err => {
-              dispatch({ type: `${type}_REJECTED`,
-                         payload: getMetamaskError(err.message.split('\n')[0]) });
+              dispatch({
+                type: `${type}_REJECTED`,
+                payload: getMetamaskError(err.message.split('\n')[0])
+              });
               reject(getMetamaskError(err.message.split('\n')[0]));
             });
         });
       } else {
-        dispatch({ type: `${type}_REJECTED`, payload: {'error': 'Web3 not initialised'} });
+        dispatch({
+          type: `${type}_REJECTED`,
+          payload: { error: 'Web3 not initialised' }
+        });
         reject('Web3 not initialised');
       }
     });

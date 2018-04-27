@@ -18,9 +18,12 @@
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.5.1",
     "gh-pages": "^1.1.0",
+    "husky": "^0.14.3",
     "less": "^3.0.1",
     "less-loader": "^4.1.0",
     "less-vars-to-js": "^1.2.1",
+    "lint-staged": "^7.0.5",
+    "prettier": "^1.12.1",
     "sinon": "^4.2.2",
     "web3-fake-provider": "^0.1.0"
   },
@@ -41,15 +44,12 @@
     "file-loader": "1.1.5",
     "fs-extra": "3.0.1",
     "html-webpack-plugin": "2.29.0",
-    "husky": "^0.14.3",
     "jest": "20.0.4",
-    "lint-staged": "^6.0.1",
     "market-solidity": "0.0.23",
     "moment": "^2.20.1",
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "3.2.0",
     "postcss-loader": "2.0.8",
-    "prettier": "^1.10.2",
     "promise": "8.0.1",
     "query-string": "^5.0.1",
     "raf": "3.4.0",
@@ -78,12 +78,6 @@
     "whatwg-fetch": "2.0.3",
     "zeppelin-solidity": "1.8.0"
   },
-  "lint-staged": {
-    "src/**/*.{js,jsx,json,css}": [
-      "prettier --single-quote --write",
-      "git add"
-    ]
-  },
   "scripts": {
     "start": "node scripts/start.js",
     "start:rinkeby": "npm run copy:rinkeby && node scripts/start.js",
@@ -92,11 +86,27 @@
     "test": "node scripts/test.js --env=jsdom",
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
     "lint": "eslint src/ --ext .js",
-    "precommit": "npm run lint",
+    "precommit": "lint-staged",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dApp",
     "clean": "rm -rf ./dApp/",
-    "copy:rinkeby": "rm -rf ./build/ && cp -r rinkeby-build/ build/"
+    "copy:rinkeby": "rm -rf ./build/ && cp -r rinkeby-build/ build/",
+    "prettier-less": "prettier --single-quote --parser less --write \"./src/**/*.less\""
+  },
+  "lint-staged": {
+    "./src/**/*.{js,jsx}": [
+      "prettier --single-quote --write",
+      "eslint --fix",
+      "git add"
+    ],
+    "./src/**/*.less": [
+      "npm run prettier-less",
+      "git add"
+    ],
+    "src/**/*.json": [
+      "prettier --single-quote --write",
+      "git add"
+    ]
   },
   "jest": {
     "collectCoverageFrom": [

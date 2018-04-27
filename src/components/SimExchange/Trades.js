@@ -14,10 +14,20 @@ class Trades extends Component {
         <Content style={{ background: '#FFF' }}>
           <Row type="flex" justify="space-around" gutter={24}>
             <Col span={12}>
-              <TradeContainer title="bid" market="ETX" tradeOrder={this.props.tradeOrder} data={this.props.bids} />
+              <TradeContainer
+                title="bid"
+                market="ETX"
+                tradeOrder={this.props.tradeOrder}
+                data={this.props.bids}
+              />
             </Col>
             <Col span={12}>
-              <TradeContainer title="ask" market="ETX" tradeOrder={this.props.tradeOrder} data={this.props.asks} />
+              <TradeContainer
+                title="ask"
+                market="ETX"
+                tradeOrder={this.props.tradeOrder}
+                data={this.props.asks}
+              />
             </Col>
           </Row>
         </Content>

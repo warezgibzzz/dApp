@@ -12,7 +12,7 @@ class HeaderMenu extends Component {
 
     this.state = {
       amount: {},
-      transaction: {},
+      transaction: {}
     };
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -37,7 +37,6 @@ class HeaderMenu extends Component {
     this.setState({ modal: false });
   }
 
-
   render() {
     const { amount } = this.state;
 
@@ -48,29 +47,34 @@ class HeaderMenu extends Component {
             <Form
               onSubmit={this.onSubmit}
               showModal={this.showModal}
-                type="deposit" 
-                amount={amount} />
+              type="deposit"
+              amount={amount}
+            />
           </Card>
         </Col>
         <Col span={12}>
           <Card title="Withdraw ETX">
             <Form
-            onSubmit={this.onSubmit}
-            showModal={this.showModal}
-            type="withdraw"
-            amount={amount} />
+              onSubmit={this.onSubmit}
+              showModal={this.showModal}
+              type="withdraw"
+              amount={amount}
+            />
           </Card>
         </Col>
         <Modal
           title="Confirmation required"
           visible={this.state.modal}
-          onOk={this.handleOk} 
-          onCancel={this.handleCancel}>
-          <h3>Are you sure you want to {amount.type} {amount.number} ETX?</h3>
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+        >
+          <h3>
+            Are you sure you want to {amount.type} {amount.number} ETX?
+          </h3>
         </Modal>
       </Row>
     );
   }
-};
+}
 
 export default HeaderMenu;

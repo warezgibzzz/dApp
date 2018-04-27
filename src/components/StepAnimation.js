@@ -6,7 +6,7 @@ import '../less/Step.less';
 const validDirections = ['next', 'prev'];
 
 function isValidDirection(direction) {
-  return validDirections.find((it) => it === direction);
+  return validDirections.find(it => it === direction);
 }
 
 function StepAnimation(props) {
@@ -17,16 +17,18 @@ function StepAnimation(props) {
     Valid direction are 'next' and 'prev'`);
   }
 
-  return (<ReactCSSTransitionGroup 
-          transitionName={{
-            enter: `${direction}-enter`,
-            leave: 'step-leave'
-          }}
-          transitionEnterTimeout={300}
-          transitionLeaveTimeout={300}>
-            {props.children}
-          </ReactCSSTransitionGroup>);
+  return (
+    <ReactCSSTransitionGroup
+      transitionName={{
+        enter: `${direction}-enter`,
+        leave: 'step-leave'
+      }}
+      transitionEnterTimeout={300}
+      transitionLeaveTimeout={300}
+    >
+      {props.children}
+    </ReactCSSTransitionGroup>
+  );
 }
-
 
 export default StepAnimation;

@@ -20,7 +20,7 @@ class OrdersTable extends Component {
   render() {
     return (
       <Table
-        onRow={(order) => ({
+        onRow={order => ({
           onClick: () => this.onRowSelect(order)
         })}
         pagination={false}

@@ -3,9 +3,9 @@ export default function reducer(
     results: null,
     loading: false,
     error: null,
-    transaction: null,
+    transaction: null
   },
-  action,
+  action
 ) {
   const actionType = 'TEST_QUERY';
   switch (action.type) {
@@ -13,16 +13,15 @@ export default function reducer(
       return {
         ...state,
         loading: true,
-        error: null,
+        error: null
       };
-
 
     case `${actionType}_TRANSACTION_PENDING`:
       return {
         ...state,
         loading: true,
         transaction: action.payload,
-        error: null,
+        error: null
       };
 
     case `${actionType}_FULFILLED`:
@@ -30,7 +29,7 @@ export default function reducer(
         ...state,
         loading: false,
         results: action.payload,
-        error: null,
+        error: null
       };
 
     case `${actionType}_REJECTED`:
@@ -38,7 +37,7 @@ export default function reducer(
         ...state,
         loading: false,
         results: null,
-        error: action.payload,
+        error: action.payload
       };
 
     default:

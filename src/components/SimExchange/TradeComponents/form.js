@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
-import {
-  Form,
-  Input,
-  Card,
-  Button,
-} from 'antd';
+import { Form, Input, Card, Button } from 'antd';
 
 const FormItem = Form.Item;
 
 const title = {
-  ask: "Sell",
-  bid: "Buy",
+  ask: 'Sell',
+  bid: 'Buy'
 };
 
 class BuyForm extends Component {
@@ -42,11 +37,11 @@ class BuyForm extends Component {
         });
       }
     });
-  };
+  }
 
   hasErrors(fieldsError) {
     return Object.keys(fieldsError).some(field => fieldsError[field]);
-  };
+  }
 
   render() {
     const { form } = this.props;
@@ -65,24 +60,34 @@ class BuyForm extends Component {
         <Form onSubmit={this.handleSubmit}>
           <FormItem
             validateStatus={amountError ? 'error' : ''}
-            help={amountError || ''}>
+            help={amountError || ''}
+          >
             {getFieldDecorator('amount', {
-              rules: [{ required: true, message: 'Please enter an amount'}]
+              rules: [{ required: true, message: 'Please enter an amount' }]
             })(<Input addonAfter="ETH" type="number" placeholder="Amount" />)}
           </FormItem>
           <FormItem
             validateStatus={priceError ? 'error' : ''}
-            help={priceError  || ''}>
+            help={priceError || ''}
+          >
             {getFieldDecorator('price', {
-              rules: [{ required: true, message: 'Please enter a price'}]
-            })(<Input addonAfter="ETX" disabled={true} type="number" placeholder="Price" />)}
+              rules: [{ required: true, message: 'Please enter a price' }]
+            })(
+              <Input
+                addonAfter="ETX"
+                disabled={true}
+                type="number"
+                placeholder="Price"
+              />
+            )}
           </FormItem>
           <FormItem>
             <Button
               disabled={this.hasErrors(getFieldsError())}
               type="primary"
               htmlType="submit"
-              style={{ width: '100%' }}>
+              style={{ width: '100%' }}
+            >
               {title[this.props.title]}
             </Button>
           </FormItem>
@@ -96,20 +101,19 @@ const WrappedForm = Form.create({
   mapPropsToFields({ order }) {
     return {
       amount: Form.createFormField({
-        value: order.orderQty ? Math.abs(order.orderQty) : '',
+        value: order.orderQty ? Math.abs(order.orderQty) : ''
       }),
       price: Form.createFormField({
-        value: order.price,
+        value: order.price
       }),
       market: Form.createFormField({
-        value: order.market,
+        value: order.market
       }),
       type: Form.createFormField({
-        value: order.type,
+        value: order.type
       })
     };
-  },
+  }
 })(BuyForm);
 
 export default WrappedForm;
-

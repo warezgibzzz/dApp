@@ -48,15 +48,20 @@ function ContractFormCol(props) {
  *
  */
 class QuickDeployment extends Component {
-
   componentWillReceiveProps(nextProps) {
     if (this.props.loading && !nextProps.loading) {
       if (nextProps.error) {
         // We had an error
-        this.props.showErrorMessage(`There was an error deploying the contract: ${nextProps.error}`, 8);
+        this.props.showErrorMessage(
+          `There was an error deploying the contract: ${nextProps.error}`,
+          8
+        );
       } else if (nextProps.contract) {
         // Contract was deployed
-        this.props.showSuccessMessage(DeployContractSuccess({ contract: nextProps.contract }), 5);
+        this.props.showSuccessMessage(
+          DeployContractSuccess({ contract: nextProps.contract }),
+          5
+        );
       }
     }
   }
@@ -76,7 +81,9 @@ class QuickDeployment extends Component {
 
       const values = {
         ...fieldsValue,
-        expirationTimeStamp: Math.floor(fieldsValue['expirationTimeStamp'].valueOf() / 1000)
+        expirationTimeStamp: Math.floor(
+          fieldsValue['expirationTimeStamp'].valueOf() / 1000
+        )
       };
 
       this.props.onDeployContract(values);
@@ -107,8 +114,14 @@ class QuickDeployment extends Component {
           showIcon={false}
           message={
             <span>
-              First time deploying a Contract? Try the <a className="switch-mode-link" href={this.props.guidedModeUrl}
-                                                          onClick={this.handleModeSwitching.bind(this)}>guided mode</a>.
+              First time deploying a Contract? Try the{' '}
+              <a
+                className="switch-mode-link"
+                href={this.props.guidedModeUrl}
+                onClick={this.handleModeSwitching.bind(this)}
+              >
+                guided mode
+              </a>.
             </span>
           }
         />
@@ -116,71 +129,130 @@ class QuickDeployment extends Component {
           <Form onSubmit={this.handleDeploy.bind(this)} layout="vertical">
             <ContractFormRow>
               <ContractFormCol>
-                <Field name='contractName' initialValue={initialValues.contractName} form={this.props.form} showHint/>
+                <Field
+                  name="contractName"
+                  initialValue={initialValues.contractName}
+                  form={this.props.form}
+                  showHint
+                />
               </ContractFormCol>
 
               <ContractFormCol>
-                <Field name='baseTokenAddress' initialValue={initialValues.baseTokenAddress} form={this.props.form}
-                       showHint/>
-              </ContractFormCol>
-            </ContractFormRow>
-
-            <ContractFormRow>
-              <ContractFormCol>
-                <Field name='priceFloor'
-                       initialValue={isNaN(initialValues.priceFloor) ? '' : parseInt(initialValues.priceFloor, 10)}
-                       form={this.props.form} showHint/>
-              </ContractFormCol>
-
-              <ContractFormCol>
-                <Field name='priceCap'
-                       initialValue={isNaN(initialValues.priceCap) ? '' : parseInt(initialValues.priceCap, 10)}
-                       form={this.props.form} showHint/>
+                <Field
+                  name="baseTokenAddress"
+                  initialValue={initialValues.baseTokenAddress}
+                  form={this.props.form}
+                  showHint
+                />
               </ContractFormCol>
             </ContractFormRow>
 
             <ContractFormRow>
               <ContractFormCol>
-                <Field name='priceDecimalPlaces'
-                       initialValue={isNaN(initialValues.priceDecimalPlaces) ? '' : parseInt(initialValues.priceDecimalPlaces, 10)}
-                       form={this.props.form} showHint/>
+                <Field
+                  name="priceFloor"
+                  initialValue={
+                    isNaN(initialValues.priceFloor)
+                      ? ''
+                      : parseInt(initialValues.priceFloor, 10)
+                  }
+                  form={this.props.form}
+                  showHint
+                />
               </ContractFormCol>
 
               <ContractFormCol>
-                <Field name="qtyMultiplier"
-                       initialValue={isNaN(initialValues.qtyMultiplier) ? '' : parseInt(initialValues.qtyMultiplier, 10)}
-                       form={this.props.form} showHint/>
-              </ContractFormCol>
-            </ContractFormRow>
-
-            <ContractFormRow>
-              <ContractFormCol>
-                <Field name='expirationTimeStamp' initialValue={initialValues.expirationTimeStamp}
-                       form={this.props.form} showHint/>
-              </ContractFormCol>
-
-              <ContractFormCol>
-                <Field name='oracleDataSource' initialValue={initialValues.oracleDataSource} form={this.props.form}
-                       showHint/>
-              </ContractFormCol>
-            </ContractFormRow>
-
-            <ContractFormRow>
-              <ContractFormCol>
-                <Field name='oracleQuery' initialValue={initialValues.oracleQuery} form={this.props.form} showHint/>
+                <Field
+                  name="priceCap"
+                  initialValue={
+                    isNaN(initialValues.priceCap)
+                      ? ''
+                      : parseInt(initialValues.priceCap, 10)
+                  }
+                  form={this.props.form}
+                  showHint
+                />
               </ContractFormCol>
             </ContractFormRow>
 
             <ContractFormRow>
               <ContractFormCol>
-                <GasPriceField location={this.props.location} form={this.props.form}/>
+                <Field
+                  name="priceDecimalPlaces"
+                  initialValue={
+                    isNaN(initialValues.priceDecimalPlaces)
+                      ? ''
+                      : parseInt(initialValues.priceDecimalPlaces, 10)
+                  }
+                  form={this.props.form}
+                  showHint
+                />
+              </ContractFormCol>
+
+              <ContractFormCol>
+                <Field
+                  name="qtyMultiplier"
+                  initialValue={
+                    isNaN(initialValues.qtyMultiplier)
+                      ? ''
+                      : parseInt(initialValues.qtyMultiplier, 10)
+                  }
+                  form={this.props.form}
+                  showHint
+                />
+              </ContractFormCol>
+            </ContractFormRow>
+
+            <ContractFormRow>
+              <ContractFormCol>
+                <Field
+                  name="expirationTimeStamp"
+                  initialValue={initialValues.expirationTimeStamp}
+                  form={this.props.form}
+                  showHint
+                />
+              </ContractFormCol>
+
+              <ContractFormCol>
+                <Field
+                  name="oracleDataSource"
+                  initialValue={initialValues.oracleDataSource}
+                  form={this.props.form}
+                  showHint
+                />
+              </ContractFormCol>
+            </ContractFormRow>
+
+            <ContractFormRow>
+              <ContractFormCol>
+                <Field
+                  name="oracleQuery"
+                  initialValue={initialValues.oracleQuery}
+                  form={this.props.form}
+                  showHint
+                />
+              </ContractFormCol>
+            </ContractFormRow>
+
+            <ContractFormRow>
+              <ContractFormCol>
+                <GasPriceField
+                  location={this.props.location}
+                  form={this.props.form}
+                />
               </ContractFormCol>
             </ContractFormRow>
 
             <Row type="flex" justify="center">
               <Col {...formButtonLayout}>
-                <Button className="submit-button" type="primary" htmlType="submit" loading={this.props.loading}
-                        disabled={this.isSubmitDisabled()} style={{ width: '100%' }}>
+                <Button
+                  className="submit-button"
+                  type="primary"
+                  htmlType="submit"
+                  loading={this.props.loading}
+                  disabled={this.isSubmitDisabled()}
+                  style={{ width: '100%' }}
+                >
                   Deploy Contract
                 </Button>
               </Col>
@@ -188,8 +260,13 @@ class QuickDeployment extends Component {
 
             <Row type="flex" justify="center" style={{ marginTop: '16px' }}>
               <Col {...formButtonLayout}>
-                <Button className="reset-button" type="secondary" style={{ width: '100%' }}
-                        disabled={this.props.loading} onClick={this.handleReset.bind(this)}>
+                <Button
+                  className="reset-button"
+                  type="secondary"
+                  style={{ width: '100%' }}
+                  disabled={this.props.loading}
+                  onClick={this.handleReset.bind(this)}
+                >
                   Reset Form
                 </Button>
               </Col>
@@ -199,15 +276,16 @@ class QuickDeployment extends Component {
       </div>
     );
 
-    const loader = (<Loader loading={this.props.loading} center={true}/>);
+    const loader = <Loader loading={this.props.loading} center={true} />;
 
-    return (this.props.loading ?
-        <Spin indicator={loader} style={{ maxHeight: '100%', height: '100%' }}>
-          {quickForm}
-        </Spin> : quickForm
+    return this.props.loading ? (
+      <Spin indicator={loader} style={{ maxHeight: '100%', height: '100%' }}>
+        {quickForm}
+      </Spin>
+    ) : (
+      quickForm
     );
   }
-
 }
 
 export default Form.create()(QuickDeployment);

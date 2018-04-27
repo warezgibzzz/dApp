@@ -5,7 +5,6 @@ import Loader from '../Loader';
 import Field from './FindContractField';
 import FindContractSuccess from './FindContractSuccess';
 
-
 class FindContractForm extends Component {
   constructor(props) {
     super(props);
@@ -14,30 +13,33 @@ class FindContractForm extends Component {
       marketContractAddress: '',
       contract: [],
       keyMap: {
-          "key": "Address",
-          "CONTRACT_NAME": "Contract Name",
-          "BASE_TOKEN": "Base Token",
-          "BASE_TOKEN_ADDRESS": "Token Address",
-          "BASE_TOKEN_SYMBOL": "Base Token Symbol",
-          "PRICE_FLOOR": "Price Floor",
-          "PRICE_CAP": "Price Cap",
-          "PRICE_DECIMAL_PLACES": "Price Decimal Places",
-          "QTY_MULTIPLIER": "Quantity Multiplier",
-          "ORACLE_QUERY": "Oracle Query",
-          "EXPIRATION": "Expiration time",
-          "lastPrice": "Last Price",
-          "isSettled": "Is Settled",
-          "collateralPoolBalance": "Collateral Pool Balance",
-      },
+        key: 'Address',
+        CONTRACT_NAME: 'Contract Name',
+        BASE_TOKEN: 'Base Token',
+        BASE_TOKEN_ADDRESS: 'Token Address',
+        BASE_TOKEN_SYMBOL: 'Base Token Symbol',
+        PRICE_FLOOR: 'Price Floor',
+        PRICE_CAP: 'Price Cap',
+        PRICE_DECIMAL_PLACES: 'Price Decimal Places',
+        QTY_MULTIPLIER: 'Quantity Multiplier',
+        ORACLE_QUERY: 'Oracle Query',
+        EXPIRATION: 'Expiration time',
+        lastPrice: 'Last Price',
+        isSettled: 'Is Settled',
+        collateralPoolBalance: 'Collateral Pool Balance'
+      }
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    if(this.props.loading && !nextProps.loading) {
-      if(nextProps.error) {
-        this.props.showErrorMessage("Contract not found at this address!", 8);
+    if (this.props.loading && !nextProps.loading) {
+      if (nextProps.error) {
+        this.props.showErrorMessage('Contract not found at this address!', 8);
       } else if (nextProps.contract) {
-        this.props.showSuccessMessage(FindContractSuccess({ contract: nextProps.contract }), 3);
+        this.props.showSuccessMessage(
+          FindContractSuccess({ contract: nextProps.contract }),
+          3
+        );
       }
     }
   }
@@ -45,7 +47,6 @@ class FindContractForm extends Component {
   handleReset(event) {
     event.preventDefault();
     this.props.form.resetFields();
-
   }
 
   handleFind(event) {
@@ -61,53 +62,74 @@ class FindContractForm extends Component {
   }
 
   isSubmitDisabled() {
-    if(this.props.loading) return true;
+    if (this.props.loading) return true;
 
     const errors = this.props.form.getFieldsError();
     return Object.keys(errors).some(field => errors[field]);
   }
 
   render() {
-    return (<div className="page">
-      <br/>
-      <Form onSubmit={this.handleFind.bind(this)} layout="vertical">
-        <ContractFormRow>
-          <ContractFormCol>
-            <Field name='marketContractAddress' validators={this.props.validators} form={this.props.form}/>
-          </ContractFormCol>
-        </ContractFormRow>
+    return (
+      <div className="page">
+        <br />
+        <Form onSubmit={this.handleFind.bind(this)} layout="vertical">
+          <ContractFormRow>
+            <ContractFormCol>
+              <Field
+                name="marketContractAddress"
+                validators={this.props.validators}
+                form={this.props.form}
+              />
+            </ContractFormCol>
+          </ContractFormRow>
 
-        <Row type="flex" justify="center">
-          <Col {...formButtonLayout}>
-            <Button className="submit-button" type="primary" htmlType="submit" loading={this.props.loading} disabled={this.isSubmitDisabled()} style={{width: '100%'}}>
-              Find Contract
-            </Button>
-          </Col>
-        </Row>
+          <Row type="flex" justify="center">
+            <Col {...formButtonLayout}>
+              <Button
+                className="submit-button"
+                type="primary"
+                htmlType="submit"
+                loading={this.props.loading}
+                disabled={this.isSubmitDisabled()}
+                style={{ width: '100%' }}
+              >
+                Find Contract
+              </Button>
+            </Col>
+          </Row>
 
-        <Row type="flex" justify="center" style={{ marginTop: '16px' }}>
-          <Col {...formButtonLayout}>
-            <Button className="reset-button" type="secondary" style={{width: '100%'}} disabled={this.props.loading} onClick={this.handleReset.bind(this)}>
-              Reset Form
-            </Button>
-          </Col>
-        </Row>
-        <Loader loading={this.props.loading} center={true}/>
-      </Form>
-      <br />
-      { this.props.contract.length > 0 &&
-      <List
-        grid={{ gutter: 16, column: 2 }}
-        dataSource={this.props.contract}
-        renderItem={item => (
-        <List.Item>
-          <Card title={this.state.keyMap[item.name]}>{item.value.toString()}</Card>
-        </List.Item>
+          <Row type="flex" justify="center" style={{ marginTop: '16px' }}>
+            <Col {...formButtonLayout}>
+              <Button
+                className="reset-button"
+                type="secondary"
+                style={{ width: '100%' }}
+                disabled={this.props.loading}
+                onClick={this.handleReset.bind(this)}
+              >
+                Reset Form
+              </Button>
+            </Col>
+          </Row>
+          <Loader loading={this.props.loading} center={true} />
+        </Form>
+        <br />
+        {this.props.contract.length > 0 && (
+          <List
+            grid={{ gutter: 16, column: 2 }}
+            dataSource={this.props.contract}
+            renderItem={item => (
+              <List.Item>
+                <Card title={this.state.keyMap[item.name]}>
+                  {item.value.toString()}
+                </Card>
+              </List.Item>
+            )}
+            {...formItemColLayout}
+          />
         )}
-        {...formItemColLayout}
-      />
-      }
-    </div>);
+      </div>
+    );
   }
 }
 
@@ -129,11 +151,11 @@ function ContractFormCol(props) {
 
 const formButtonLayout = {
   xs: {
-    span: 24,
+    span: 24
   },
   sm: {
     span: 8
-  },
+  }
 };
 
 const formItemColLayout = {

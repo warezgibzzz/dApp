@@ -5,14 +5,19 @@ import Rx from 'rxjs/Rx';
 const FormItem = Form.Item;
 
 class GasPriceField extends Component {
-
   constructor(props) {
     super(props);
     var gasLimitEstimate = 21000;
-    if (this.props.location && this.props.location.pathname.indexOf('/test') !== -1) {
+    if (
+      this.props.location &&
+      this.props.location.pathname.indexOf('/test') !== -1
+    ) {
       gasLimitEstimate = 200000;
     }
-    if (this.props.location && this.props.location.pathname.indexOf('/contract/deploy') !== -1) {
+    if (
+      this.props.location &&
+      this.props.location.pathname.indexOf('/contract/deploy') !== -1
+    ) {
       gasLimitEstimate = 5700000;
     }
     this.state = {
@@ -63,16 +68,21 @@ class GasPriceField extends Component {
     const cost = gasLimit * gasPrice / 1000000000;
     var message = !condition
       ? `The following MetaMask settings will cost ${cost} ETH, the confirmation time depends on the overall network traffic`
-      : (time >= 0
+      : time >= 0
         ? `The following MetaMask settings should give a ${time} min confirmation for ${cost} ETH`
-        : `The gas price is below the market low safe price (currently about ${condition.safeLow / 10} gwei), your transaction might take forever to get confirmed`
-      );
+        : `The gas price is below the market low safe price (currently about ${condition.safeLow /
+            10} gwei), your transaction might take forever to get confirmed`;
     return message;
   }
 
   componentDidMount() {
-    const gasInfoUrl = "https://ethgasstation.info/json/ethgasAPI.json";
-    Rx.Observable.ajax({ url: gasInfoUrl, method: 'GET', responseType: 'json', crossDomain: true })
+    const gasInfoUrl = 'https://ethgasstation.info/json/ethgasAPI.json';
+    Rx.Observable.ajax({
+      url: gasInfoUrl,
+      method: 'GET',
+      responseType: 'json',
+      crossDomain: true
+    })
       .map(data => data.response)
       .subscribe(this.updateNetworkCondition);
   }
@@ -87,23 +97,70 @@ class GasPriceField extends Component {
           <Row gutter={16}>
             <Col lg={12} xs={24}>
               <FormItem
-                label={<span>Gas Limit (units) <Popover content="Gas limit is how many cycles (think opcodes) your transaction will take" title="More about `Gas Limit`" trigger="click">
-                  <Icon type="question-circle-o" style={{ cursor: 'pointer' }} />
-                </Popover></span>}>
-                <Input type="number" min="0" id="gasLimit" placeholder="Gas Limit (units)" value={this.state.gaslimit} disabled />
+                label={
+                  <span>
+                    Gas Limit (units){' '}
+                    <Popover
+                      content="Gas limit is how many cycles (think opcodes) your transaction will take"
+                      title="More about `Gas Limit`"
+                      trigger="click"
+                    >
+                      <Icon
+                        type="question-circle-o"
+                        style={{ cursor: 'pointer' }}
+                      />
+                    </Popover>
+                  </span>
+                }
+              >
+                <Input
+                  type="number"
+                  min="0"
+                  id="gasLimit"
+                  placeholder="Gas Limit (units)"
+                  value={this.state.gaslimit}
+                  disabled
+                />
               </FormItem>
             </Col>
             <Col lg={12} xs={24}>
               <FormItem
-                label={<span>Gas Price (gwei) <Popover content="Gas price is how much ETH you’re willing to pay per cycle" title="More about `Gas Price`" trigger="click">
-                  <Icon type="question-circle-o" style={{ cursor: 'pointer' }} />
-                </Popover></span>}>
-                {this.props.form
-                  ? this.props.form.getFieldDecorator("gasPrice", { initialValue: 2 })(
-                    <Input type="number" min="0" onChange={this.onInputChange.bind(this)} placeholder="Gas Price (gwei)" />
-                  )
-                  : <Input type="number" min="0" onChange={this.onInputChange.bind(this)} placeholder="Gas Price (gwei)" value={this.state.gasprice} />
+                label={
+                  <span>
+                    Gas Price (gwei){' '}
+                    <Popover
+                      content="Gas price is how much ETH you’re willing to pay per cycle"
+                      title="More about `Gas Price`"
+                      trigger="click"
+                    >
+                      <Icon
+                        type="question-circle-o"
+                        style={{ cursor: 'pointer' }}
+                      />
+                    </Popover>
+                  </span>
                 }
+              >
+                {this.props.form ? (
+                  this.props.form.getFieldDecorator('gasPrice', {
+                    initialValue: 2
+                  })(
+                    <Input
+                      type="number"
+                      min="0"
+                      onChange={this.onInputChange.bind(this)}
+                      placeholder="Gas Price (gwei)"
+                    />
+                  )
+                ) : (
+                  <Input
+                    type="number"
+                    min="0"
+                    onChange={this.onInputChange.bind(this)}
+                    placeholder="Gas Price (gwei)"
+                    value={this.state.gasprice}
+                  />
+                )}
               </FormItem>
             </Col>
           </Row>
@@ -111,13 +168,31 @@ class GasPriceField extends Component {
             <strong>Help:</strong>
             <ul>
               <li>
-                <a href="https://www.cryptocompare.com/coins/guides/what-is-the-gas-in-ethereum/" target="_blank" rel="noopener noreferrer">Why do I need metamask / gas?</a>
+                <a
+                  href="https://www.cryptocompare.com/coins/guides/what-is-the-gas-in-ethereum/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Why do I need metamask / gas?
+                </a>
               </li>
               <li>
-                <a href="https://etherscan.io/gastracker" target="_blank" rel="noopener noreferrer">What gas price should I use?</a>
+                <a
+                  href="https://etherscan.io/gastracker"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  What gas price should I use?
+                </a>
               </li>
               <li>
-                <a href="https://ethgasstation.info/" target="_blank" rel="noopener noreferrer">What are current network conditions?</a>
+                <a
+                  href="https://ethgasstation.info/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  What are current network conditions?
+                </a>
               </li>
             </ul>
           </div>

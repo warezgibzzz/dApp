@@ -5,22 +5,20 @@ export default [
   {
     title: 'Block #',
     dataIndex: 'block',
-    key: 'block',
-  }, 
+    key: 'block'
+  },
   {
     title: 'In / Out',
     key: 'inout',
     render: (text, record) => (
-      <span className={`action action-${text.inout}`}>
-        {text.inout}
-      </span>
+      <span className={`action action-${text.inout}`}>{text.inout}</span>
     )
-  }, 
+  },
   {
     title: 'Type',
     dataIndex: 'type',
-    key: 'type',
-  }, 
+    key: 'type'
+  },
   {
     title: 'From / To',
     key: 'addresses',
@@ -30,47 +28,48 @@ export default [
         <div>{text.addresses.to}</div>
       </div>
     )
-  }, 
+  },
   {
     title: 'Amount',
     dataIndex: 'amount',
-    key: 'amount',
+    key: 'amount'
   },
   {
     title: 'Price',
     dataIndex: 'price',
-    key: 'price',
+    key: 'price'
   },
   {
     title: 'Total',
     dataIndex: 'total',
-    key: 'total',
+    key: 'total'
   },
   {
     title: '',
     key: 'details',
     render: (text, record) => (
-      <Popover 
-        placement="left" 
+      <Popover
+        placement="left"
         trigger="click"
-        content={(
+        content={
           <div className="popover-content">
             <div className="details">
               <div className="details-header">Hash:</div>
-              <div
-                title={text.details.hash}
-                className="details-info">{text.details.hash}</div>
+              <div title={text.details.hash} className="details-info">
+                {text.details.hash}
+              </div>
             </div>
             <div className="details">
               <div className="details-header">Trade id:</div>
-              <div 
-                title={text.details.id}
-                className="details-info">{text.details.id}</div>
+              <div title={text.details.id} className="details-info">
+                {text.details.id}
+              </div>
             </div>
           </div>
-        )}>
+        }
+      >
         <Button>Details</Button>
       </Popover>
     )
-  },
+  }
 ];

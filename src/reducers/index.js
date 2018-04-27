@@ -15,5 +15,5 @@ export default combineReducers({
   deploy: deploy,
   explorer: explorer,
   simExchange: simExchange,
-  testQuery: testQuery,
+  testQuery: testQuery
 });

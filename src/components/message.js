@@ -18,7 +18,7 @@ function showMessage(type, content, duration) {
   };
 
   const handleDismiss = () => {
-    if(msgHandlers[msgKey]) {
+    if (msgHandlers[msgKey]) {
       msgHandlers[msgKey]();
 
       handleClose();

@@ -3,10 +3,11 @@ import React from 'react';
 
 const FormItem = Form.Item;
 
-const getFieldSettings = (validators) => ({
+const getFieldSettings = validators => ({
   rules: [
     {
-      required: true, message: 'Please enter MARKET contract address',
+      required: true,
+      message: 'Please enter MARKET contract address'
     },
     {
       validator: validators.ethAddressValidator
@@ -24,11 +25,9 @@ function FindContractField(props) {
   const label = 'MARKET Contract Address';
 
   return (
-    <FormItem
-      label={(<span>{label}</span>)}
-    >
+    <FormItem label={<span>{label}</span>}>
       {getFieldDecorator(name, {
-        rules,
+        rules
       })(<Input />)}
     </FormItem>
   );

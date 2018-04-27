@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
-import { 
-  Form as AntForm,
-  Input,
-  Button,
-} from 'antd';
+import { Form as AntForm, Input, Button } from 'antd';
 
 const FormItem = AntForm.Item;
 
@@ -28,14 +24,14 @@ class Form extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         this.props.showModal();
-        this.props.onSubmit({...values, type: this.props.type });
+        this.props.onSubmit({ ...values, type: this.props.type });
       }
     });
-  };
+  }
 
   hasErrors(fieldsError) {
     return Object.keys(fieldsError).some(field => fieldsError[field]);
-  };
+  }
 
   render() {
     const { form } = this.props;
@@ -44,8 +40,8 @@ class Form extends Component {
     const {
       getFieldDecorator,
       getFieldError,
-      isFieldTouched, 
-      getFieldsError 
+      isFieldTouched,
+      getFieldsError
     } = form;
 
     const numberError = isFieldTouched('number') && getFieldError('number');
@@ -55,32 +51,42 @@ class Form extends Component {
       <AntForm onSubmit={this.handleSubmit}>
         <FormItem
           validateStatus={numberError ? 'error' : ''}
-          help={numberError || ''}>
+          help={numberError || ''}
+        >
           {getFieldDecorator('number', {
-            rules: [{ required: true, message: 'Please enter a number'}]
-          })(<Input addonAfter="ETH" type="number" placeholder="10.000" size="large" />)}
+            rules: [{ required: true, message: 'Please enter a number' }]
+          })(
+            <Input
+              addonAfter="ETH"
+              type="number"
+              placeholder="10.000"
+              size="large"
+            />
+          )}
         </FormItem>
         <FormItem>
           <Button
             disabled={this.hasErrors(getFieldsError())}
             htmlType="submit"
             type="primary"
-            style={{ width: '100%' }}>{ type }</Button>
+            style={{ width: '100%' }}
+          >
+            {type}
+          </Button>
         </FormItem>
       </AntForm>
     );
   }
-};
+}
 
 const WrappedForm = AntForm.create({
   mapPropsToFields({ amount }) {
     return {
       number: AntForm.createFormField({
-        value: amount.value, 
-      }),
+        value: amount.value
+      })
     };
-  },
+  }
 })(Form);
 
 export default WrappedForm;
-

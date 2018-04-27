@@ -3,7 +3,13 @@ import React, { Component } from 'react';
 
 import StepAnimation from '../StepAnimation';
 import showMessage from '../message';
-import { DataSourceStep, DeployStep, ExpirationStep, NameContractStep, PricingStep } from './Steps';
+import {
+  DataSourceStep,
+  DeployStep,
+  ExpirationStep,
+  NameContractStep,
+  PricingStep
+} from './Steps';
 
 const Step = Steps.Step;
 
@@ -38,7 +44,7 @@ class GuidedDeployment extends Component {
       qtyMultiplier: '',
       expirationTimeStamp: '',
       oracleDataSource: '',
-      oracleQuery: '',
+      oracleQuery: ''
     };
   }
 
@@ -71,7 +77,8 @@ class GuidedDeployment extends Component {
         key="0"
         onNextClicked={this.toNextStep.bind(this)}
         updateDeploymentState={this.setState.bind(this)}
-        {...this.state} />,
+        {...this.state}
+      />,
 
       <DataSourceStep
         key="3"
@@ -79,14 +86,16 @@ class GuidedDeployment extends Component {
         onNextClicked={this.toNextStep.bind(this)}
         updateDeploymentState={this.setState.bind(this)}
         initialValues={initialValues}
-        {...this.state} />,
+        {...this.state}
+      />,
 
       <PricingStep
         key="1"
         onPrevClicked={this.toPrevStep.bind(this)}
         onNextClicked={this.toNextStep.bind(this)}
         updateDeploymentState={this.setState.bind(this)}
-        {...this.state} />,
+        {...this.state}
+      />,
 
       <ExpirationStep
         key="2"
@@ -94,7 +103,8 @@ class GuidedDeployment extends Component {
         onPrevClicked={this.toPrevStep.bind(this)}
         onNextClicked={this.toNextStep.bind(this)}
         updateDeploymentState={this.setState.bind(this)}
-        {...this.state} />,
+        {...this.state}
+      />,
 
       <DeployStep
         key="4"
@@ -107,22 +117,21 @@ class GuidedDeployment extends Component {
         loading={this.props.loading}
         contract={this.props.contract}
         error={this.props.error}
-        />
+      />
     ];
 
     return (
       <div className="page">
         <Row type="flex" justify="center">
           <Col {...parentColLayout}>
-            <Steps current={currentStep} style={{marginBottom: '40px'}}>
-              <Step title="Name"/>
-              <Step title="Data Source"/>
-              <Step title="Pricing"/>
-              <Step title="Expiration"/>
-              <Step title="Deploy"/>
+            <Steps current={currentStep} style={{ marginBottom: '40px' }}>
+              <Step title="Name" />
+              <Step title="Data Source" />
+              <Step title="Pricing" />
+              <Step title="Expiration" />
+              <Step title="Deploy" />
             </Steps>
-            <StepAnimation
-              direction={this.state.transitionDirection}>
+            <StepAnimation direction={this.state.transitionDirection}>
               {steps.filter((step, index) => currentStep === index)}
             </StepAnimation>
           </Col>

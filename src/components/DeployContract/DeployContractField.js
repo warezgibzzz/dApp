@@ -1,9 +1,19 @@
-import { DatePicker, Form, Icon, Input, InputNumber, Select, Popover } from 'antd';
+import {
+  DatePicker,
+  Form,
+  Icon,
+  Input,
+  InputNumber,
+  Select,
+  Popover
+} from 'antd';
 import moment from 'moment';
 import React from 'react';
-import { checkContract } from "../../util/validations";
+import { checkContract } from '../../util/validations';
 import store from '../../store';
-import OracleDataSources, { getDataSourceObj } from '../TestQuery/OracleDataSources';
+import OracleDataSources, {
+  getDataSourceObj
+} from '../TestQuery/OracleDataSources';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -20,13 +30,21 @@ const timestampValidator = (rule, value, callback) => {
 const priceFloorValidator = (form, rule, value, callback) => {
   const priceCap = form.getFieldValue('priceCap');
 
-  callback(value <= priceCap ? undefined : 'Price floor must be less-than or equal to the price cap');
+  callback(
+    value <= priceCap
+      ? undefined
+      : 'Price floor must be less-than or equal to the price cap'
+  );
 };
 
 const priceCapValidator = (form, rule, value, callback) => {
   const priceFloor = form.getFieldValue('priceFloor');
 
-  callback(value >= priceFloor ? undefined : 'Price cap must be greater-than or equal to the price floor');
+  callback(
+    value >= priceFloor
+      ? undefined
+      : 'Price cap must be greater-than or equal to the price floor'
+  );
 };
 
 const oracleQueryValidator = (form, rule, value, callback) => {
@@ -35,27 +53,40 @@ const oracleQueryValidator = (form, rule, value, callback) => {
   const dataSourceObj = getDataSourceObj(oracleDataSource);
 
   if (dataSourceObj) {
-    callback(dataSourceObj.isQueryValid(oracleQuery) ? undefined
-    : `Invalid Query for '${oracleDataSource}' Data Source. A valid example is: ${dataSourceObj.sampleQueries[0].query}`);
+    callback(
+      dataSourceObj.isQueryValid(oracleQuery)
+        ? undefined
+        : `Invalid Query for '${oracleDataSource}' Data Source. A valid example is: ${
+            dataSourceObj.sampleQueries[0].query
+          }`
+    );
   } else {
     callback(undefined);
   }
 };
 
-
-const Hint = (props) => (<Popover content={props.hint} title={"More about `" + props.hintTitle + "`"} trigger="click">
-                          <Icon type="question-circle-o" style={{cursor: 'pointer'}} />
-                        </Popover>);
+const Hint = props => (
+  <Popover
+    content={props.hint}
+    title={'More about `' + props.hintTitle + '`'}
+    trigger="click"
+  >
+    <Icon type="question-circle-o" style={{ cursor: 'pointer' }} />
+  </Popover>
+);
 
 const fieldSettingsByName = {
   contractName: {
     label: 'Name',
     initialValue: 'ETH/BTC-Kraken_YYYY-MM-DD',
-    rules: [{
-      required: true, message: 'Please enter a name for your contract',
-    }],
+    rules: [
+      {
+        required: true,
+        message: 'Please enter a name for your contract'
+      }
+    ],
     extra: `Name of contract should be descriptive, e.g. "ETH/BTC-20180228-Kraken"`,
-    component: ({ showHint }) => (<Input />)
+    component: ({ showHint }) => <Input />
   },
 
   baseTokenAddress: {
@@ -63,32 +94,36 @@ const fieldSettingsByName = {
     initialValue: '0x3333333333333333333333333333333333333333',
     rules: [
       {
-        required: true, message: 'Please enter a base token address',
+        required: true,
+        message: 'Please enter a base token address'
       },
       {
         validator: ethAddressValidator
       }
     ],
-    extra: 'This is the token that collateralizes the contract, it can be any valid ERC20 token',
+    extra:
+      'This is the token that collateralizes the contract, it can be any valid ERC20 token',
 
-    component: () => (<Input />)
+    component: () => <Input />
   },
 
   priceFloor: {
     label: 'Price Floor',
     initialValue: 0,
-    rules: (form) => {
+    rules: form => {
       return [
         {
-          required: true, message: 'Please enter a price floor',
+          required: true,
+          message: 'Please enter a price floor'
         },
         {
-          type: 'integer', message: 'Value must be an integer'
+          type: 'integer',
+          message: 'Value must be an integer'
         },
         {
           validator: (rule, value, callback) => {
             priceFloorValidator(form, rule, value, callback);
-          },
+          }
         }
       ];
     },
@@ -113,18 +148,20 @@ const fieldSettingsByName = {
   priceCap: {
     label: 'Price Cap',
     initialValue: 150,
-    rules: (form) => {
+    rules: form => {
       return [
         {
-          required: true, message: 'Please enter a price cap',
+          required: true,
+          message: 'Please enter a price cap'
         },
         {
-          type: 'integer', message: 'Value must be an integer'
+          type: 'integer',
+          message: 'Value must be an integer'
         },
         {
           validator: (rule, value, callback) => {
             priceCapValidator(form, rule, value, callback);
-          },
+          }
         }
       ];
     },
@@ -151,10 +188,12 @@ const fieldSettingsByName = {
     initialValue: 2,
     rules: [
       {
-        required: true, message: 'Please enter the number of decimal places of the price',
+        required: true,
+        message: 'Please enter the number of decimal places of the price'
       },
       {
-        type: 'integer', message: 'Value must be an integer'
+        type: 'integer',
+        message: 'Value must be an integer'
       }
     ],
     extra: `Since all numbers must be represented as integers on the Ethereum blockchain, this is how many 
@@ -162,7 +201,7 @@ const fieldSettingsByName = {
     For instance if the oracle query results returned a value such as 190.22, we need to move the 
     decimal two(2) places to convert to an integer value of 19022.`,
 
-    component: () => (<InputNumber min={0} style={{ width: '100%' }} />)
+    component: () => <InputNumber min={0} style={{ width: '100%' }} />
   },
 
   qtyMultiplier: {
@@ -170,10 +209,12 @@ const fieldSettingsByName = {
     initialValue: 2,
     rules: [
       {
-        required: true, message: 'Please enter a valid quantity multiplier',
+        required: true,
+        message: 'Please enter a valid quantity multiplier'
       },
       {
-        type: 'integer', message: 'Value must be an integer'
+        type: 'integer',
+        message: 'Value must be an integer'
       }
     ],
     extra: `The qty multiplier allows the user to specify how many base units (for ethereum, this would be wei) each
@@ -182,7 +223,7 @@ const fieldSettingsByName = {
     multiplier was set at 1,000,000,000 the price movement of 1 unit would now
     correspond to a value of 1 gwei (not wei)`,
 
-    component: () => (<InputNumber min={0} style={{ width: '100%' }} />)
+    component: () => <InputNumber min={0} style={{ width: '100%' }} />
   },
 
   expirationTimeStamp: {
@@ -190,7 +231,8 @@ const fieldSettingsByName = {
     initialValue: moment().add(28, 'days'),
     rules: [
       {
-        required: true, message: 'Please enter an expiration time',
+        required: true,
+        message: 'Please enter an expiration time'
       },
       {
         validator: timestampValidator
@@ -198,7 +240,13 @@ const fieldSettingsByName = {
     ],
     extra: 'Expiration timestamp for all open positions to settle.',
 
-    component: () => (<DatePicker showTime format="YYYY-MM-DD HH:mm:ss" style={{ width: '100%' }} />)
+    component: () => (
+      <DatePicker
+        showTime
+        format="YYYY-MM-DD HH:mm:ss"
+        style={{ width: '100%' }}
+      />
+    )
   },
 
   oracleDataSource: {
@@ -206,7 +254,8 @@ const fieldSettingsByName = {
     initialValue: 'URL',
     rules: [
       {
-        required: true, message: 'Please select a data source',
+        required: true,
+        message: 'Please select a data source'
       }
     ],
     extra: 'Available data sources from Oraclize.it',
@@ -214,8 +263,11 @@ const fieldSettingsByName = {
     component: () => {
       return (
         <Select>
-          {OracleDataSources.map(dataSource =>
-            <Option key={dataSource.name} value={dataSource.name}>{dataSource.name}</Option>)}
+          {OracleDataSources.map(dataSource => (
+            <Option key={dataSource.name} value={dataSource.name}>
+              {dataSource.name}
+            </Option>
+          ))}
         </Select>
       );
     }
@@ -223,21 +275,24 @@ const fieldSettingsByName = {
 
   oracleQuery: {
     label: 'Oraclize.it Query',
-    initialValue: 'json(https://api.kraken.com/0/public/Ticker?pair=ETHUSD).result.XETHZUSD.c.0',
-    rules: (form) => ([
+    initialValue:
+      'json(https://api.kraken.com/0/public/Ticker?pair=ETHUSD).result.XETHZUSD.c.0',
+    rules: form => [
       {
-        required: true, message: 'Please enter a valid query',
+        required: true,
+        message: 'Please enter a valid query'
       },
       {
         validator: (rule, value, callback) => {
           oracleQueryValidator(form, rule, value, callback);
-        },
+        }
       }
-    ]),
-    extra: 'Properly structured Oraclize.it query, please use the test query page for clarification',
+    ],
+    extra:
+      'Properly structured Oraclize.it query, please use the test query page for clarification',
 
-    component: () => (<Input />)
-  },
+    component: () => <Input />
+  }
 };
 
 function DeployContractField(props) {
@@ -245,16 +300,23 @@ function DeployContractField(props) {
   const { getFieldDecorator } = form;
   const fieldSettings = fieldSettingsByName[name];
 
-  const rules = typeof fieldSettings.rules === 'function' ? fieldSettings.rules(form) : fieldSettings.rules;
-  const label = (<span>{fieldSettings.label} {showHint && <Hint hint={fieldSettings.extra} hintTitle= {fieldSettings.label}/>}</span>);
+  const rules =
+    typeof fieldSettings.rules === 'function'
+      ? fieldSettings.rules(form)
+      : fieldSettings.rules;
+  const label = (
+    <span>
+      {fieldSettings.label}{' '}
+      {showHint && (
+        <Hint hint={fieldSettings.extra} hintTitle={fieldSettings.label} />
+      )}
+    </span>
+  );
   return (
-    <FormItem
-      label={label}
-    >
-
+    <FormItem label={label}>
       {getFieldDecorator(name, {
         initialValue,
-        rules,
+        rules
       })(
         fieldSettings.component({
           form,

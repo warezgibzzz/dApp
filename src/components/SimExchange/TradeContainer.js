@@ -3,10 +3,7 @@ import Form from './TradeComponents/form';
 import Table from './TradeComponents/table';
 import _ from 'lodash';
 
-import {
-  Modal,
-  Table as AntTable,
-} from 'antd';
+import { Modal, Table as AntTable } from 'antd';
 
 import columns from './columns';
 
@@ -16,7 +13,7 @@ class Buy extends Component {
 
     this.state = {
       order: {},
-      modal: false,
+      modal: false
     };
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -24,7 +21,7 @@ class Buy extends Component {
     this.showModal = this.showModal.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.handleOk = this.handleOk.bind(this);
-  };
+  }
 
   onSubmit(order) {
     this.setState({ order });
@@ -79,17 +76,18 @@ class Buy extends Component {
           onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
-
-          <h3>Are you sure you want to {title} {order.amount} {order.market} at {order.price} ETX/ETH for a maximum of {order.total} ETH?</h3>
+          <h3>
+            Are you sure you want to {title} {order.amount} {order.market} at{' '}
+            {order.price} ETX/ETH for a maximum of {order.total} ETH?
+          </h3>
 
           <AntTable
             rowKey={() => _.uniqueId('row')}
             pagination={false}
             size="small"
             columns={columns}
-            dataSource={[order]}>
-          </AntTable>
-
+            dataSource={[order]}
+          />
         </Modal>
       </Fragment>
     );

@@ -1,17 +1,15 @@
 import store from '../store';
 import MarketContract from 'market-solidity/build/contracts/MarketContract';
-import { getBids, getAsks} from '../util/utils';
+import { getBids, getAsks } from '../util/utils';
 import Contracts from '../Contracts';
 
 const contract = require('truffle-contract');
-
 
 export function selectContract(contract) {
   return function(dispatch) {
     dispatch({ type: 'SELECTED_CONTRACT', payload: contract });
   };
 }
-
 
 export function getContractBids() {
   const type = 'GET_BIDS';
@@ -23,7 +21,9 @@ export function getContractBids() {
 
     if (web3 && typeof web3 !== 'undefined') {
       const contract_address = store.getState().simExchange.contract.key;
-      const marketContract = web3.eth.contract(MarketContract).at(contract_address);
+      const marketContract = web3.eth
+        .contract(MarketContract)
+        .at(contract_address);
 
       const orderLib = contract(Contracts.OrderLib);
       orderLib.setProvider(web3.currentProvider);
@@ -33,11 +33,13 @@ export function getContractBids() {
 
       dispatch({ type: `${type}_FULFILLED`, payload: activeBids });
     } else {
-      dispatch({ type: `${type}_REJECTED`, payload: {'error': 'Web3 not initialised'} });
+      dispatch({
+        type: `${type}_REJECTED`,
+        payload: { error: 'Web3 not initialised' }
+      });
     }
   };
 }
-
 
 export function getContractAsks() {
   const type = 'GET_ASKS';
@@ -49,7 +51,9 @@ export function getContractAsks() {
 
     if (web3 && typeof web3 !== 'undefined') {
       const contract_address = store.getState().simExchange.contract.key;
-      const marketContract = web3.eth.contract(MarketContract).at(contract_address);
+      const marketContract = web3.eth
+        .contract(MarketContract)
+        .at(contract_address);
 
       const orderLib = contract(Contracts.OrderLib);
       orderLib.setProvider(web3.currentProvider);
@@ -59,11 +63,13 @@ export function getContractAsks() {
 
       dispatch({ type: `${type}_FULFILLED`, payload: activeAsks });
     } else {
-      dispatch({ type: `${type}_REJECTED`, payload: {'error': 'Web3 not initialised'} });
+      dispatch({
+        type: `${type}_REJECTED`,
+        payload: { error: 'Web3 not initialised' }
+      });
     }
   };
 }
-
 
 export function tradeOrder(order) {
   const type = 'TRADE_ORDER';
@@ -74,17 +80,19 @@ export function tradeOrder(order) {
 
     if (web3 && typeof web3 !== 'undefined') {
       const contract_address = store.getState().simExchange.contract.key;
-      const marketContract = web3.eth.contract(MarketContract).at(contract_address);
+      const marketContract = web3.eth
+        .contract(MarketContract)
+        .at(contract_address);
 
       console.log(order);
       await marketContract.tradeOrder(
         order.orderAddresses,
         order.unsignedOrderValues,
-        order.orderQty,                  // qty is five
-        -1,          // let us fill a one lot
-        order.v,  // v
-        order.r,  // r
-        order.s,  // s
+        order.orderQty, // qty is five
+        -1, // let us fill a one lot
+        order.v, // v
+        order.r, // r
+        order.s, // s
         { from: web3.eth.accounts[0] }
       );
 
@@ -93,7 +101,10 @@ export function tradeOrder(order) {
 
       dispatch({ type: `${type}_FULFILLED` });
     } else {
-      dispatch({ type: `${type}_REJECTED`, payload: {'error': 'Web3 not initialised'} });
+      dispatch({
+        type: `${type}_REJECTED`,
+        payload: { error: 'Web3 not initialised' }
+      });
     }
   };
 }

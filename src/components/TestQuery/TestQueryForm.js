@@ -5,8 +5,12 @@ import React, { Component } from 'react';
 import TestQuerySuccess from './TestQuerySuccess';
 import StepAnimation from '../StepAnimation';
 import showMessage from '../message';
-import { AboutOraclesStep, QueryResultStep, SelectDataSourceStep, SetQueryStep } from './Steps';
-
+import {
+  AboutOraclesStep,
+  QueryResultStep,
+  SelectDataSourceStep,
+  SetQueryStep
+} from './Steps';
 
 const Step = Steps.Step;
 
@@ -39,12 +43,20 @@ class TestQueryForm extends Component {
     if (this.props.loading && !nextProps.loading) {
       if (nextProps.error) {
         // We had an error
-        showMessage('error', `There was an error deploying the contract: ${nextProps.error}`, 8);
+        showMessage(
+          'error',
+          `There was an error deploying the contract: ${nextProps.error}`,
+          8
+        );
       }
     }
 
     if (this.props.transaction !== nextProps.transaction) {
-        showMessage('info', TestQuerySuccess(this.props.network, nextProps.transaction), 8);
+      showMessage(
+        'info',
+        TestQuerySuccess(this.props.network, nextProps.transaction),
+        8
+      );
     }
   }
 
@@ -113,16 +125,15 @@ class TestQueryForm extends Component {
   render() {
     const currentStep = this.state.step;
     const steps = [
-      <AboutOraclesStep
-        key="0"
-        onNextClicked={this.toNextStep.bind(this)} />,
+      <AboutOraclesStep key="0" onNextClicked={this.toNextStep.bind(this)} />,
 
       <SelectDataSourceStep
         key="1"
         dataSource={this.state.oracleDataSource}
         onChange={this.onDataSourceChange.bind(this)}
         onPrevClicked={this.toPrevStep.bind(this)}
-        onNextClicked={this.toNextStep.bind(this)} />,
+        onNextClicked={this.toNextStep.bind(this)}
+      />,
 
       <SetQueryStep
         key="2"
@@ -131,7 +142,8 @@ class TestQueryForm extends Component {
         onGasPriceChange={this.onGasPriceChange.bind(this)}
         onPrevClicked={this.toPrevStep.bind(this)}
         onChange={this.onQueryChange.bind(this)}
-        onSubmit={this.onQuerySubmit.bind(this)} />,
+        onSubmit={this.onQuerySubmit.bind(this)}
+      />,
 
       <QueryResultStep
         key="3"
@@ -141,22 +153,21 @@ class TestQueryForm extends Component {
         onPrevClicked={this.toPrevStep.bind(this)}
         onCreateContractClicked={this.navigateToDeployContract.bind(this)}
         onFailSubmit={this.onFailSubmit.bind(this)}
-        />,
+      />
     ];
 
     return (
       <div className="page">
         <Row type="flex" justify="center">
           <Col {...parentColLayout}>
-            <Steps current={currentStep} style={{marginBottom: '40px'}}>
-              <Step title="Introduction"/>
+            <Steps current={currentStep} style={{ marginBottom: '40px' }}>
+              <Step title="Introduction" />
               <Step title="Oracle Data Source" />
               <Step title="Oracle Query" />
               <Step title="Result" />
             </Steps>
-            <StepAnimation
-              direction={this.state.transitionDirection}>
-              {steps.filter((step, index) => currentStep === index )[0]}
+            <StepAnimation direction={this.state.transitionDirection}>
+              {steps.filter((step, index) => currentStep === index)[0]}
             </StepAnimation>
           </Col>
         </Row>

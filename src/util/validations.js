@@ -37,4 +37,3 @@ export const checkContract = function(web3, value, callback) {
     }
   }
 };
-

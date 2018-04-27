@@ -1,4 +1,4 @@
-import {Affix, Menu } from 'antd';
+import { Affix, Menu } from 'antd';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -16,7 +16,7 @@ class Header extends Component {
           <div className="ant-row">
             <div className="ant-col-xs-24 ant-col-sm-24 ant-col-md-6 ant-col-lg-5 ant-col-xl-5 ant-col-xxl-4">
               <Link to="/" id="logo">
-                <img src={logo} alt="Market Protocol Logo"/>
+                <img src={logo} alt="Market Protocol Logo" />
               </Link>
             </div>
             <div className="ant-col-xs-0 ant-col-sm-0 ant-col-md-18 ant-col-lg-19 ant-col-xl-19 ant-col-xxl-20">
@@ -40,7 +40,9 @@ class Header extends Component {
                 </MenuItem>
                 {/*<MenuItem><Link to="/exchange">Sim Exchange</Link></MenuItem>*/}
                 <MenuItem>
-                  <Link to="http://docs.marketprotocol.io" target="_blank">Documentation</Link>
+                  <Link to="http://docs.marketprotocol.io" target="_blank">
+                    Documentation
+                  </Link>
                 </MenuItem>
               </Menu>
             </div>
@@ -52,6 +54,3 @@ class Header extends Component {
 }
 
 export default Header;
-
-
-

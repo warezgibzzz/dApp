@@ -1,9 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
-import {
-  Table, 
-  Row,
-} from 'antd';
+import { Table, Row } from 'antd';
 
 import columns from './columns';
 import wallet from '../data/wallet';
@@ -15,7 +12,7 @@ class BuyTable extends Component {
     super();
 
     this.state = {
-      inputValue: 1,
+      inputValue: 1
     };
 
     this.onChange = this.onChange.bind(this);
@@ -23,7 +20,7 @@ class BuyTable extends Component {
 
   onChange(value) {
     this.setState({
-      inputValue: value,
+      inputValue: value
     });
   }
 
@@ -37,6 +34,6 @@ class BuyTable extends Component {
       </Fragment>
     );
   }
-};
+}
 
 export default BuyTable;

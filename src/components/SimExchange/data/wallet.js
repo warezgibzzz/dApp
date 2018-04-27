@@ -1,4 +1,4 @@
-export default  [
+export default [
   {
     key: '1',
     block: 2461,
@@ -12,10 +12,11 @@ export default  [
     price: 0.25,
     total: 62.5,
     details: {
-      hash: '0xe2c52692236189a17645e220d60219df9897643212898d2758515c779ef1655d',
-      id: '0x12fd8c41a53f537a6302fbfe6e681e4d0b018a6885f9d042d0ea07911acbb594',
-    },
-  }, 
+      hash:
+        '0xe2c52692236189a17645e220d60219df9897643212898d2758515c779ef1655d',
+      id: '0x12fd8c41a53f537a6302fbfe6e681e4d0b018a6885f9d042d0ea07911acbb594'
+    }
+  },
   {
     key: '2',
     block: 2451,
@@ -29,9 +30,10 @@ export default  [
     price: 0.24,
     total: 24,
     details: {
-      hash: '0xe2c52692236189a17645e220d60219df9897643212898d2758515c779ef1655d',
-      id: '0x12fd8c41a53f537a6302fbfe6e681e4d0b018a6885f9d042d0ea07911acbb594',
-    },
+      hash:
+        '0xe2c52692236189a17645e220d60219df9897643212898d2758515c779ef1655d',
+      id: '0x12fd8c41a53f537a6302fbfe6e681e4d0b018a6885f9d042d0ea07911acbb594'
+    }
   },
   {
     key: '3',
@@ -46,9 +48,10 @@ export default  [
     price: 0.3,
     total: 75,
     details: {
-      hash: '0xe2c52692236189a17645e220d60219df9897643212898d2758515c779ef1655d',
-      id: '0x12fd8c41a53f537a6302fbfe6e681e4d0b018a6885f9d042d0ea07911acbb594',
-    },
+      hash:
+        '0xe2c52692236189a17645e220d60219df9897643212898d2758515c779ef1655d',
+      id: '0x12fd8c41a53f537a6302fbfe6e681e4d0b018a6885f9d042d0ea07911acbb594'
+    }
   },
   {
     key: '4',
@@ -63,8 +66,9 @@ export default  [
     price: 0.24,
     total: 24,
     details: {
-      hash: '0xe2c52692236189a17645e220d60219df9897643212898d2758515c779ef1655d',
-      id: '0x12fd8c41a53f537a6302fbfe6e681e4d0b018a6885f9d042d0ea07911acbb594',
-    },
-  },
+      hash:
+        '0xe2c52692236189a17645e220d60219df9897643212898d2758515c779ef1655d',
+      id: '0x12fd8c41a53f537a6302fbfe6e681e4d0b018a6885f9d042d0ea07911acbb594'
+    }
+  }
 ];
