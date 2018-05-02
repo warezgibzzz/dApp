@@ -7,14 +7,22 @@ cache:
 before_deploy:
   - CI=false npm run build:rinkeby
 deploy:
-  provider: s3
-  access_key_id: $AWS_ACCESS_KEY_ID
-  secret_access_key: $AWS_SECRET_ACCESS_KEY
-  bucket: $AWS_BUCKET_NAME
-  local_dir: dApp
-  skip_cleanup: true
-  on:
-    branch: master
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
+    bucket: $AWS_BUCKET_NAME
+    local_dir: dApp
+    skip_cleanup: true
+    on:
+      branch: master
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY_ID_DEV
+    secret_access_key: $AWS_SECRET_ACCESS_KEY_DEV
+    bucket: $AWS_BUCKET_NAME_DEV
+    local_dir: dApp
+    skip_cleanup: true
+    on:
+      branch: develop
 script:
   - npm test -- --coverage
 after_script:

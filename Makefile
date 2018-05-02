@@ -44,11 +44,11 @@ start_bridge:
 
 # start dApp
 start_dapp:
-	npm start
+	npm run start
 
 # start dApp with rinkeby abi's
 start_dapp_rinkeby:
-	npm start:rinkeby		  # run npm - should point metamask browser at rinkeby
+	npm run start:rinkeby		  # run npm - should point metamask browser at rinkeby
 
 # run tests
 run_tests:
