@@ -9,7 +9,7 @@ MARKET Protocol has been created to provide a secure, flexible, open source foun
 
 Take a look at our [docs](https://docs.marketprotocol.io) for a little more explanation.
 
-Join our [Discord Community](https://www.marketprotocol.io/discord) to interact with members of our dev staff and other contributors.
+Join our [Discord Community](https://marketprotocol.io/discord) to interact with members of our dev staff and other contributors.
 
 ## Getting Started
 A Makefile is provided for easy setup of the local development environment.

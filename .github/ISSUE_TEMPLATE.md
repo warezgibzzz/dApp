@@ -3,7 +3,7 @@ Hello!
 
 Please use the template below for issue ideas or bugs found within MARKET Protocol.
 If it is general support you need, reach out to us at
-https://www.marketprotocol.io/discord
+https://marketprotocol.io/discord
 
 Provide a general summary of the issue in the title above and use relevant fields below to define the problem.
 -->

@@ -18,13 +18,13 @@ class App extends Component {
           </Content>
 
           <Footer className="footer">
-            dApp ©2018 Created by
+            dApp ©2018 Created by&nbsp;
             <a
               href="https://marketprotocol.io"
               target="_blank"
               rel="noopener noreferrer"
             >
-              MARKET Protocol
+            MARKET Protocol
             </a>
           </Footer>
         </Layout>
