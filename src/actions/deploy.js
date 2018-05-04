@@ -1,3 +1,5 @@
+import Rx from 'rxjs/Rx';
+
 import { getMetamaskError } from '../util/utils';
 
 /**
@@ -77,18 +79,36 @@ export function deployContract(
               return MarketContractRegistry.deployed();
             })
             .then(function(marketContractRegistryInstance) {
-              marketContractRegistryInstance.addAddressToWhiteList(
-                marketContractInstanceDeployed.address,
-                {
-                  from: web3.eth.accounts[0],
-                  gasPrice: web3.toWei(contractSpecs.gasPrice, 'gwei')
+              web3.version.getNetwork((error, network) => {
+                // Rinkeby
+                if (network === '4') {
+                  // Add deployed contract address to whitelist
+                  Rx.Observable.ajax({
+                    url:
+                      'https://rbfo0jcfwj.execute-api.us-east-1.amazonaws.com/test/contracts/whitelist',
+                    method: 'POST',
+                    body: { address: marketContractInstanceDeployed.address },
+                    responseType: 'json',
+                    crossDomain: true
+                  })
+                    .map(data => data.response)
+                    .subscribe(res => console.log(res));
+                } else {
+                  marketContractRegistryInstance.addAddressToWhiteList(
+                    marketContractInstanceDeployed.address,
+                    {
+                      from: web3.eth.accounts[0],
+                      gasPrice: web3.toWei(contractSpecs.gasPrice, 'gwei')
+                    }
+                  );
                 }
-              );
+              });
 
               dispatch({
                 type: `${type}_FULFILLED`,
                 payload: marketContractInstanceDeployed
               });
+
               resolve(marketContractInstanceDeployed);
             })
             .catch(err => {
@@ -96,6 +116,7 @@ export function deployContract(
                 type: `${type}_REJECTED`,
                 payload: getMetamaskError(err.message.split('\n')[0])
               });
+
               reject(getMetamaskError(err.message.split('\n')[0]));
             });
         });
@@ -104,6 +125,7 @@ export function deployContract(
           type: `${type}_REJECTED`,
           payload: { error: 'Web3 not initialised' }
         });
+
         reject('Web3 not initialised');
       }
     });

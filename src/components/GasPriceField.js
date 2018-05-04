@@ -7,25 +7,30 @@ const FormItem = Form.Item;
 class GasPriceField extends Component {
   constructor(props) {
     super(props);
-    var gasLimitEstimate = 21000;
+
+    let gasLimitEstimate = 21000;
+
     if (
       this.props.location &&
       this.props.location.pathname.indexOf('/test') !== -1
     ) {
       gasLimitEstimate = 200000;
     }
+
     if (
       this.props.location &&
       this.props.location.pathname.indexOf('/contract/deploy') !== -1
     ) {
       gasLimitEstimate = 5700000;
     }
+
     this.state = {
       gaslimit: gasLimitEstimate,
       gasprice: 2,
       condition: null,
       message: this.getMessage(null, gasLimitEstimate, 2)
     };
+
     this.updateNetworkCondition = this.updateNetworkCondition.bind(this);
   }
 
@@ -49,8 +54,10 @@ class GasPriceField extends Component {
   }
 
   getTime(condition, price) {
-    var time = -1;
+    let time = -1;
+
     if (!condition) return time;
+
     if (price * 10 >= condition.fastest) {
       time = condition.fastestWait;
     } else if (price * 10 >= condition.fast) {
@@ -60,13 +67,14 @@ class GasPriceField extends Component {
     } else if (price * 10 >= condition.safeLow) {
       time = condition.safeLowWait;
     }
+
     return time;
   }
 
   getMessage(condition, gasLimit, gasPrice) {
     const time = this.getTime(condition, gasPrice);
     const cost = gasLimit * gasPrice / 1000000000;
-    var message = !condition
+    const message = !condition
       ? `The following MetaMask settings will cost ${cost} ETH, the confirmation time depends on the overall network traffic`
       : time >= 0
         ? `The following MetaMask settings should give a ${time} min confirmation for ${cost} ETH`

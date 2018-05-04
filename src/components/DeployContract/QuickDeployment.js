@@ -126,7 +126,11 @@ class QuickDeployment extends Component {
           }
         />
         <div className="page">
-          <Form onSubmit={this.handleDeploy.bind(this)} layout="vertical" style={{overflowX : 'hidden'}}>
+          <Form
+            onSubmit={this.handleDeploy.bind(this)}
+            layout="vertical"
+            style={{ overflowX: 'hidden' }}
+          >
             <ContractFormRow>
               <ContractFormCol>
                 <Field

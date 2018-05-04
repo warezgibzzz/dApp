@@ -83,6 +83,7 @@ let getWeb3 = (
               'Please select Rinkeby Test Network in MetaMask and then restart browser',
               8
             );
+
             resolve(dispatch(web3Initialized(results)));
           } else {
             web3 = new Web3(web3.currentProvider);
