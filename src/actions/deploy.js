@@ -1,4 +1,5 @@
 import Rx from 'rxjs/Rx';
+import { XMLHttpRequest } from 'xmlhttprequest';
 
 import { getMetamaskError } from '../util/utils';
 
@@ -88,9 +89,19 @@ export function deployContract(
                       'https://rbfo0jcfwj.execute-api.us-east-1.amazonaws.com/test/contracts/whitelist',
                     method: 'POST',
                     body: { address: marketContractInstanceDeployed.address },
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
                     responseType: 'json',
-                    crossDomain: true
+                    crossDomain: true,
+                    createXHR: () => new XMLHttpRequest()
                   })
+                    .catch(
+                      err =>
+                        err.xhr
+                          ? Rx.Observable.of(err)
+                          : Rx.Observable.of('.___.')
+                    )
                     .map(data => data.response)
                     .subscribe(res => console.log(res));
                 } else {
