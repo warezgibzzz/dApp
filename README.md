@@ -5,7 +5,7 @@
 MARKET Protocol has been created to provide a secure, flexible, open source foundation for decentralized trading on the Ethereum blockchain. We provide the pieces necessary to create a decentralized exchange, including the requisite clearing and collateral pool infrastructure, enabling third parties to build applications for trading.
 
 # dApp
-[MARKET Protocol's](https://github.com/MARKETProtocol/MARKETProtocol) main decentralized application. 
+[MARKET Protocol's](https://marketprotocol.io/) main decentralized application. 
 
 Take a look at our [docs](https://docs.marketprotocol.io) for a little more explanation.
 
@@ -90,4 +90,4 @@ Ready to jump in? Check [docs.marketprotocol.io/#contributing](https://docs.mark
 
 ## Questions?
 
-Join our [Discord Community](https://www.marketprotocol.io/discord) to get in touch with our dev staff and other contributors.
+Join our [Discord Community](https://marketprotocol.io/discord) to get in touch with our dev staff and other contributors.
