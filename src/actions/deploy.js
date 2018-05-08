@@ -85,8 +85,7 @@ export function deployContract(
                 if (network === '4') {
                   // Add deployed contract address to whitelist
                   Rx.Observable.ajax({
-                    url:
-                      'https://rbfo0jcfwj.execute-api.us-east-1.amazonaws.com/test/contracts/whitelist',
+                    url: 'https://api.marketprotocol.io/contracts/whitelist',
                     method: 'POST',
                     body: { address: marketContractInstanceDeployed.address },
                     headers: {
