@@ -79,3 +79,15 @@ $ make start_dapp
 
 ### Test Net only
 * Simulated Exchange : Users will register using their email address that will be used for tracking of simulated earnings for contest rewards, future airdrops, and project updates.  This game or sim, will allow users to trade against an automated bot that trades a few different MARKET contracts while making or losing tokens that keep score in the competition.
+
+## Contributing
+
+Want to hack on MARKET Protocol? Awesome!
+
+MARKET Protocol is an Open Source project and we welcome contributions of all sorts. There are many ways to help, from reporting issues, contributing code, and helping us improve our community.
+
+Ready to jump in? Check [docs.marketprotocol.io/#contributing](https://docs.marketprotocol.io/#contributing). 
+
+## Questions?
+
+Join our [Discord Community](https://www.marketprotocol.io/discord) to get in touch with our dev staff and other contributors.
