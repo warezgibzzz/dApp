@@ -20,3 +20,23 @@ Object.assign = require('object-assign');
 if (process.env.NODE_ENV === 'test') {
   require('raf').polyfill(global);
 }
+
+// Setup mock localStorage
+let localStorageMock = (function() {
+  let store = {};
+  return {
+    getItem: function(key) {
+      return store[key];
+    },
+    setItem: function(key, value) {
+      store[key] = value.toString();
+    },
+    clear: function() {
+      store = {};
+    },
+    removeItem: function(key) {
+      delete store[key];
+    }
+  };
+})();
+Object.defineProperty(window, 'localStorage', { value: localStorageMock });

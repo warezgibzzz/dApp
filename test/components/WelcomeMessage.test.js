@@ -1,22 +1,46 @@
-import React from 'react';
-import { mount, shallow } from 'enzyme';
-import { expect } from 'chai';
+import React from "react";
+import { mount } from "enzyme";
+import { expect } from "chai";
 
-import {Modal} from 'antd';
+import { Button, Modal } from "antd";
 
-import WelcomeMessage from '../../src/components/WelcomeMessage';
+import WelcomeMessage from "../../src/components/WelcomeMessage";
+import ReactDOM from "react-dom";
 
 
-describe('WelcomeMessage' , () => {
-  it('should have exact okText' , () => {
-    const modalOkText = mount(<WelcomeMessage />);
-    expect(modalOkText.find(Modal).prop('okText')).to.equal('Proceed to dApp');
-  
-});
+describe("WelcomeMessage", () => {
 
-it('should have exact title', () => {
-  const modalOkText = mount(<WelcomeMessage/>);
-  expect(modalOkText.find(Modal).prop('title')).to.equal('Welcome To MarketProtocol.io');
+  let welcomeMessage;
 
-});
+  beforeEach(() => {
+    welcomeMessage = mount(<WelcomeMessage />);
+  });
+
+  function $$(className) {
+    return document.body.querySelectorAll(className);
+  }
+
+  it('renders without crashing', () => {
+    const div = document.createElement('div');
+    ReactDOM.render(<WelcomeMessage />, div);
+  });
+
+  it("should have exact okText", () => {
+    expect(welcomeMessage.find(Modal).prop("okText")).to.equal("Proceed to dApp");
+  });
+
+  it("should have exact title", () => {
+    expect(welcomeMessage.find(Modal).prop("title")).to.equal("Welcome To MarketProtocol.io");
+  });
+
+  it("should be visible true", () => {
+    welcomeMessage.setState({ visible: true });
+    expect(welcomeMessage.find(Modal).prop("visible")).to.equal(true);
+  });
+
+  it("click proceed to dApp should hide the modal", () => {
+    $$('.ant-btn-primary')[0].click();
+    expect(welcomeMessage.find(Modal).prop("visible")).to.equal(false);
+  });
+
 });

@@ -16,13 +16,6 @@ import WelcomeMessage from './WelcomeMessage';
 import '../less/Landing.less';
 
 class Landing extends Component {
-  state = {
-    isVisited: false,
-  };
-
-  handleSetIsVisited = () => {
-    this.setState({ isVisited: true });
-  }
   render() {
     return (
       <div>
@@ -161,12 +154,8 @@ class Landing extends Component {
             </div>
           </Col>
         </Row>
-        { !this.state.isVisited
-          ? 
-          <WelcomeMessage setIsVisited={this.handleSetIsVisited} />
-          :
-          ''
-        }
+
+        <WelcomeMessage />
       </div>
     );
   }
