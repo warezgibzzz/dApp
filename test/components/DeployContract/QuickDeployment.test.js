@@ -137,6 +137,54 @@ describe('QuickDeployment', () => {
 
   });
 
+  it('should disable past dates in expiration date picker', () => {
+    const pastDate = moment().subtract(1, 'days').format('MMMM D, YYYY');
+    const currentDate = moment().format('MMMM D, YYYY');
+
+    quickDeployment.find('span#expirationTimeStamp input').simulate('click');
+
+    expect(
+      quickDeployment
+      .find('span#expirationTimeStamp')
+      .find(`td[title="${pastDate}"]`)
+      .find('.ant-calendar-date')
+      .prop('aria-disabled')
+    ).to.equal(true);
+
+    expect(
+      quickDeployment
+        .find('span#expirationTimeStamp')
+        .find(`td[title="${currentDate}"]`)
+        .find('.ant-calendar-date')
+        .prop('aria-disabled')
+    ).to.equal(false);
+  });
+
+  it('should disable dates more than 60 from today in expiration date picker', () => {
+    const invalidExpiryDate = moment().add(61, 'days').format('MMMM D, YYYY');
+    const validExpiryDate = moment().add(60, 'days').format('MMMM D, YYYY');
+
+    quickDeployment.find('span#expirationTimeStamp input').simulate('click');
+    quickDeployment.find('span#expirationTimeStamp').find('.ant-calendar-next-month-btn').simulate('click');
+    quickDeployment.find('span#expirationTimeStamp').find('.ant-calendar-next-month-btn').simulate('click');
+
+    expect(
+      quickDeployment
+        .find('span#expirationTimeStamp')
+        .find(`td[title="${invalidExpiryDate}"]`)
+        .find('.ant-calendar-date')
+        .prop('aria-disabled')
+    ).to.equal(true);
+
+    expect(
+      quickDeployment
+        .find('span#expirationTimeStamp')
+        .find(`td[title="${validExpiryDate}"]`)
+        .find('.ant-calendar-date')
+        .prop('aria-disabled')
+    ).to.equal(false);
+  });
+
   it('should reset form when .reset-button is clicked', () => {
     const defaultFieldValues = wrappedFormRef.props.form.getFieldsValue();
     wrappedFormRef.props.form.setFields(validContractFields());

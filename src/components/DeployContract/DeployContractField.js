@@ -238,11 +238,20 @@ const fieldSettingsByName = {
         validator: timestampValidator
       }
     ],
-    extra: 'Expiration timestamp for all open positions to settle.',
+    extra:
+      'Expiration timestamp for all open positions to settle. Cannot be more than 60 days from now.',
 
     component: () => (
       <DatePicker
         showTime
+        disabledDate={current => {
+          const now = moment().startOf('day');
+          return (
+            current &&
+            (current.isBefore(now, 'day') ||
+              current.startOf('day').diff(now, 'days') > 60)
+          );
+        }}
         format="YYYY-MM-DD HH:mm:ss"
         style={{ width: '100%' }}
       />
