@@ -70,6 +70,6 @@ describe('DeployContractForm', () => {
     });
     deployContractForm.find(QuickDeployment).props().switchMode('guided');
     expect(navSpy).to.have.property('callCount', 1);
-    // TODO: Test the actuall parameters pushed to history stack.
+    // TODO: Test the actual parameters pushed to history stack.
   });
 });
