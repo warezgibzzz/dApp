@@ -54,7 +54,10 @@ class TestQueryForm extends Component {
     if (this.props.transaction !== nextProps.transaction) {
       showMessage(
         'info',
-        TestQuerySuccess(this.props.network, nextProps.transaction),
+        TestQuerySuccess({
+          network: this.props.network,
+          txHash: nextProps.transaction
+        }),
         8
       );
     }
