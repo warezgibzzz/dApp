@@ -10,6 +10,8 @@ import exploreIcons from '../img/explore-icons.svg';
 import testIcons from '../img/test-icons.svg';
 import simulateIcons from '../img/simulated-icons.svg';
 
+import WelcomeMessage from './WelcomeMessage';
+
 // Styles
 import '../less/Landing.less';
 
@@ -152,6 +154,8 @@ class Landing extends Component {
             </div>
           </Col>
         </Row>
+
+        <WelcomeMessage />
       </div>
     );
   }

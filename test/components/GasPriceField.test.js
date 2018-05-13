@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Button, Select, Input } from 'antd';
-import { mount, shallow } from 'enzyme';
+import { Input } from 'antd';
+import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import { expect } from 'chai';
 
