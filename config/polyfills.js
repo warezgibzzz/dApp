@@ -22,8 +22,9 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 // Setup mock localStorage
-let localStorageMock = (function() {
-  let store = {};
+// Use `var` instead of `let` to avoid CRA error during build
+var localStorageMock = (function() {
+  var store = {};
   return {
     getItem: function(key) {
       return store[key];
