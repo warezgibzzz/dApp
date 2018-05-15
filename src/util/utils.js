@@ -289,3 +289,5 @@ export const getMetamaskError = function(message) {
     return 'User denied transaction';
   else return message;
 };
+
+export const getLocationOrigin = () => window.location.origin;

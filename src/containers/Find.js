@@ -1,14 +1,16 @@
 import { connect } from 'react-redux';
 
 import Contracts from '../Contracts.js';
+import withGAPageView from './GoogleAnalyticsTracker';
 import showMessage from '../components/message';
+import FindContractForm from '../components/FindContract/FindContractForm';
+
 import { findContract } from '../actions/find';
 import CreateInitializer, {
   contractConstructor
 } from '../util/web3/contractInitializer';
 import { processContractsList } from '../util/utils';
 import FormValidators from '../util/forms/Validators';
-import FindContractForm from '../components/FindContract/FindContractForm';
 import store from '../store';
 
 const mapStateToProps = state => {
@@ -60,7 +62,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) =>
   );
 
 const Find = connect(mapStateToProps, mapDispatchToProps, mergeProps)(
-  FindContractForm
+  withGAPageView(FindContractForm)
 );
 
 export default Find;

@@ -1,11 +1,13 @@
 import { connect } from 'react-redux';
 
 import Contracts from '../Contracts.js';
+import withGAPageView from './GoogleAnalyticsTracker';
+import TestQueryForm from '../components/TestQuery/TestQueryForm';
+
 import { testQuery } from '../actions/testQuery';
 import CreateInitializer, {
   contractConstructor
 } from '../util/web3/contractInitializer';
-import TestQueryForm from '../components/TestQuery/TestQueryForm';
 import store from '../store';
 
 const mapStateToProps = (state, ownProps) => {
@@ -36,7 +38,7 @@ const mapDispatchToProps = dispatch => {
 };
 
 const TestQueryFormContainer = connect(mapStateToProps, mapDispatchToProps)(
-  TestQueryForm
+  withGAPageView(TestQueryForm)
 );
 
 export default TestQueryFormContainer;
