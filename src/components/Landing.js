@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Button, Col, Icon, Row } from 'antd';
 
+import withGAPageView from '../containers/GoogleAnalyticsTracker';
+
 // Images
 import main from '../img/header-illustration.svg';
 import explore from '../img/explore-contracts.svg';
@@ -161,4 +163,4 @@ class Landing extends Component {
   }
 }
 
-export default Landing;
+export default withGAPageView(Landing);

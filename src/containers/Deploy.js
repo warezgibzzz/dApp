@@ -1,11 +1,13 @@
 import { connect } from 'react-redux';
 
 import Contracts from '../Contracts.js';
+import withGAPageView from './GoogleAnalyticsTracker';
+import DeployContractForm from '../components/DeployContract/DeployContractForm';
+
 import CreateInitializer, {
   contractConstructor
 } from '../util/web3/contractInitializer';
 import { deployContract } from '../actions/deploy';
-import DeployContractForm from '../components/DeployContract/DeployContractForm';
 import store from '../store';
 
 const mapStateToProps = state => {
@@ -39,6 +41,8 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-const Deploy = connect(mapStateToProps, mapDispatchToProps)(DeployContractForm);
+const Deploy = connect(mapStateToProps, mapDispatchToProps)(
+  withGAPageView(DeployContractForm)
+);
 
 export default Deploy;
