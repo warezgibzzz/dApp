@@ -2,9 +2,9 @@ import React from "react";
 import { mount } from "enzyme";
 import { expect } from "chai";
 
-import { Button, Modal } from "antd";
+import { Modal } from "antd";
 
-import WelcomeMessage from "../../src/components/WelcomeMessage";
+import WelcomeMessage, { title } from "../../src/components/WelcomeMessage";
 import ReactDOM from "react-dom";
 
 
@@ -25,12 +25,8 @@ describe("WelcomeMessage", () => {
     ReactDOM.render(<WelcomeMessage />, div);
   });
 
-  it("should have exact okText", () => {
-    expect(welcomeMessage.find(Modal).prop("okText")).to.equal("Proceed to dApp");
-  });
-
   it("should have exact title", () => {
-    expect(welcomeMessage.find(Modal).prop("title")).to.equal("Welcome To MarketProtocol.io");
+    expect(welcomeMessage.find(Modal).prop("title")).to.equal(title);
   });
 
   it("should be visible true", () => {

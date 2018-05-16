@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Modal } from 'antd';
+import { Button, Modal } from 'antd';
 
-//import metamaskLogo from '../img/metamask-image-tiny.png';
+export const title = 'Welcome to the official MARKET Protocol dApp';
 
 class WelcomeMessage extends Component {
   state = {
@@ -23,11 +23,15 @@ class WelcomeMessage extends Component {
   render() {
     return (
       <Modal
-        title="Welcome to the official MARKET Protocol dApp"
+        title={title}
         visible={this.state.visible}
-        onOk={this.setIsVisited}
         onCancel={this.setIsVisited}
-        okText="Proceed to dApp"
+        footer={[
+          null,
+          <Button key="submit" type="primary" onClick={this.setIsVisited}>
+            Proceed to dApp
+          </Button>
+        ]}
       >
         <ul>
           <p>

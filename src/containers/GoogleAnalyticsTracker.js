@@ -38,7 +38,7 @@ const withGAPageView = WrappedComponent => {
   let gaInitialised = false;
 
   const HOC = props => {
-    if (isClient && !isProduction) {
+    if (isClient && isProduction) {
       if (!gaInitialised) {
         gaInitialised = true;
         initializeGoogleAnalytics();
