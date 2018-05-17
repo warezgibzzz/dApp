@@ -61,8 +61,8 @@ const mergeProps = (stateProps, dispatchProps, ownProps) =>
     dispatchProps
   );
 
-const Find = connect(mapStateToProps, mapDispatchToProps, mergeProps)(
-  withGAPageView(FindContractForm)
+const Find = withGAPageView(
+  connect(mapStateToProps, mapDispatchToProps, mergeProps)(FindContractForm)
 );
 
 export default Find;

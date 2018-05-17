@@ -42,8 +42,8 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-const Explorer = connect(mapStateToProps, mapDispatchToProps)(
-  withGAPageView(ContractsList)
+const Explorer = withGAPageView(
+  connect(mapStateToProps, mapDispatchToProps)(ContractsList)
 );
 
 export default Explorer;

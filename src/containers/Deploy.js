@@ -41,8 +41,8 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-const Deploy = connect(mapStateToProps, mapDispatchToProps)(
-  withGAPageView(DeployContractForm)
+const Deploy = withGAPageView(
+  connect(mapStateToProps, mapDispatchToProps)(DeployContractForm)
 );
 
 export default Deploy;

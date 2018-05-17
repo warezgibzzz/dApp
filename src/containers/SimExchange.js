@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import store from '../store';
 import Contracts from '../Contracts.js';
 
+import withGAPageView from './GoogleAnalyticsTracker';
 import SimExchangeComponent from '../components/SimExchange/SimExchange';
+
 // import { loadContracts } from '../actions/explorer';
 import CreateInitializer, {
   contractConstructor
@@ -99,8 +101,8 @@ const mapDispatchToProps = dispatch => ({
   selectContract: contract => dispatch(selectContract({ contract }))
 });
 
-const SimExchange = connect(mapStateToProps, mapDispatchToProps)(
-  SimExchangeComponent
+const SimExchange = withGAPageView(
+  connect(mapStateToProps, mapDispatchToProps)(SimExchangeComponent)
 );
 
 export default SimExchange;

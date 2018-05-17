@@ -37,8 +37,8 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-const TestQueryFormContainer = connect(mapStateToProps, mapDispatchToProps)(
-  withGAPageView(TestQueryForm)
+const TestQueryFormContainer = withGAPageView(
+  connect(mapStateToProps, mapDispatchToProps)(TestQueryForm)
 );
 
 export default TestQueryFormContainer;
