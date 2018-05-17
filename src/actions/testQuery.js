@@ -30,15 +30,20 @@ export function testQuery({ web3, querySpecs }, { QueryTest }) {
               );
             })
             .then(function(queryCost) {
+              let txParams = {
+                gasPrice: web3.toWei(querySpecs.gasPrice, 'gwei'),
+                from: coinbase,
+                value: queryCost
+              };
+
+              if (querySpecs.gas) {
+                txParams.gas = querySpecs.gas;
+              }
+
               return queryTestContractInstance.testOracleQuery(
                 querySpecs.oracleDataSource,
                 querySpecs.oracleQuery,
-                {
-                  gas: 200000,
-                  gasPrice: web3.toWei(querySpecs.gasPrice, 'gwei'),
-                  from: coinbase,
-                  value: queryCost
-                }
+                txParams
               );
             })
             .then(function(queryTransactionResults) {
@@ -102,6 +107,56 @@ export function testQuery({ web3, querySpecs }, { QueryTest }) {
         });
       } else {
         dispatch({ type: `${type}_REJECTED`, payload: 'Web3 not initialised' });
+        reject('Web3 not initialised');
+      }
+    });
+  };
+}
+
+export function getGasEstimate({ web3 }, { QueryTest }) {
+  const type = 'TEST_QUERY_UPDATE_GAS';
+
+  return function(dispatch) {
+    return new Promise((resolve, reject) => {
+      if (web3 && typeof web3 !== 'undefined') {
+        // Get current ethereum wallet.
+        web3.eth.getCoinbase((error, coinbase) => {
+          if (error) {
+            console.error(error);
+            return reject(getMetamaskError(error.message.split('\n')[0]));
+          }
+
+          let queryTestContractInstance;
+
+          QueryTest.deployed()
+            .then(function(queryTestContract) {
+              queryTestContractInstance = queryTestContract;
+              return queryTestContractInstance.getQueryCost.call('URL');
+            })
+            .then(async function(queryCost) {
+              let txParams = {
+                from: coinbase,
+                value: queryCost
+              };
+
+              const gas = await queryTestContractInstance.testOracleQuery.estimateGas(
+                'URL',
+                'json(https://api.kraken.com/0/public/Ticker?pair=ETHUSD).result.XETHZUSD.p.1',
+                txParams
+              );
+
+              dispatch({
+                type,
+                payload: Math.round(gas * 1.2) // Add some buffer
+              });
+            })
+            .catch(err => {
+              // catch errors during query submission
+              console.error(err);
+              return reject(getMetamaskError(err.message.split('\n')[0]));
+            });
+        });
+      } else {
         reject('Web3 not initialised');
       }
     });

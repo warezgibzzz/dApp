@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
-import { Alert, Form, Input, InputNumber, Button, Select } from 'antd';
+import { Alert, Button, Form, Input, InputNumber } from 'antd';
 import { mount, shallow } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
@@ -15,10 +15,10 @@ import {
   ExchangeStep
 } from '../../../src/components/DeployContract/Steps';
 import Field from '../../../src/components/DeployContract/DeployContractField';
-import SelectTokenField from '../../../src/components/DeployContract/SelectTokenField';
 
 describe('NameContractStep', () => {
   let nameContractStep;
+
   beforeEach(() => {
     nameContractStep = mount(<NameContractStep />);
   });
@@ -39,6 +39,7 @@ describe('NameContractStep', () => {
 
 describe('PricingStep', () => {
   let pricingStep;
+
   beforeEach(() => {
     pricingStep = mount(<PricingStep />);
   });
@@ -120,10 +121,11 @@ describe('ExpirationStep', () => {
   beforeEach(() => {
     updateDeploymentStateSpy = sinon.spy();
     onNextClickedSpy = sinon.spy();
+
     expirationStep = mount(
       <ExpirationStep
-        updateDeploymentState={updateDeploymentStateSpy}
         onNextClicked={onNextClickedSpy}
+        updateDeploymentState={updateDeploymentStateSpy}
       />
     );
   });
@@ -133,13 +135,15 @@ describe('ExpirationStep', () => {
     ReactDOM.render(<ExpirationStep />, div);
   });
 
-  it('renders guided display 2 inputs fields', () => {
-    expect(expirationStep.find(Input)).to.have.length(2);
+  it('renders guided display 0 input field and 2 input number fields', () => {
+    expect(expirationStep.find(Input)).to.have.length(0);
+    expect(expirationStep.find(InputNumber)).to.have.length(2);
   });
 
-  it('renders simplified display 3 inputs fields', () => {
+  it('renders simplified display 1 input field and 2 input number fields', () => {
     expirationStep.setProps({ isSimplified: true });
-    expect(expirationStep.find(Input)).to.have.length(3);
+    expect(expirationStep.find(Input)).to.have.length(1);
+    expect(expirationStep.find(InputNumber)).to.have.length(2);
   });
 
   it('should updateDeploymentState on submit', () => {

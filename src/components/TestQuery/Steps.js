@@ -182,12 +182,17 @@ class SetQueryStep extends Component {
     this.props.onChange(text);
   }
 
-  onGasPriceChange(price) {
-    this.props.onGasPriceChange(price);
+  onUpdateGasLimit(gas) {
+    this.props.onUpdateGasLimit(gas);
+  }
+
+  onUpdateGasPrice(price) {
+    this.props.onUpdateGasPrice(price);
   }
 
   validateAndSubmit() {
     const dataSourceObj = getDataSourceObj(this.props.dataSource);
+
     if (dataSourceObj.isQueryValid(this.state.query)) {
       this.props.onSubmit();
     } else {
@@ -196,7 +201,8 @@ class SetQueryStep extends Component {
   }
 
   render() {
-    const { dataSource } = this.props;
+    const { dataSource, location, network, gas } = this.props;
+
     return (
       <div>
         <Row>
@@ -251,8 +257,11 @@ class SetQueryStep extends Component {
           </Col>
         </Row>
         <GasPriceField
-          location={this.props.location}
-          onChange={this.onGasPriceChange.bind(this)}
+          location={location}
+          network={network}
+          gaslimit={gas}
+          onUpdateGasLimit={this.onUpdateGasLimit.bind(this)}
+          onUpdateGasPrice={this.onUpdateGasPrice.bind(this)}
         />
         <Row type="flex" justify="end">
           <Col>

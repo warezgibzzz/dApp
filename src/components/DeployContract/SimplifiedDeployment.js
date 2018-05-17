@@ -65,6 +65,8 @@ class SimplifiedDeployment extends Component {
 
   render() {
     const currentStep = this.state.step;
+    const { gas } = this.props;
+
     const steps = [
       <ExchangeStep
         key="0"
@@ -78,17 +80,18 @@ class SimplifiedDeployment extends Component {
         onPrevClicked={this.toPrevStep.bind(this)}
         onNextClicked={this.toNextStep.bind(this)}
         updateDeploymentState={this.setState.bind(this)}
-        isSimplified
+        isSimplified={true}
         {...this.state}
       />,
 
       <ExpirationStep
         key="2"
+        gas={gas}
         location={this.props.location}
         onPrevClicked={this.toPrevStep.bind(this)}
         onNextClicked={this.toNextStep.bind(this)}
         updateDeploymentState={this.setState.bind(this)}
-        isSimplified
+        isSimplified={true}
         {...this.state}
       />,
 

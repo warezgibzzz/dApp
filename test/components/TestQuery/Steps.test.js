@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Button, Select, Input } from 'antd';
+import { Button, Select, Input, InputNumber } from 'antd';
 import { shallow } from 'enzyme';
 import sinon from 'sinon';
 import { expect } from 'chai';
@@ -20,10 +20,12 @@ const Option = Select.Option;
 describe('AboutOraclesStep', () => {
   let aboutOracleStep;
   let onNextClickSpy;
+
   beforeEach(() => {
     onNextClickSpy = sinon.spy();
-    aboutOracleStep = shallow(<AboutOraclesStep onNextClicked={onNextClickSpy}/>);
-
+    aboutOracleStep = shallow(
+      <AboutOraclesStep onNextClicked={onNextClickSpy} />
+    );
   });
 
   it('renders without crashing', () => {
@@ -36,7 +38,9 @@ describe('AboutOraclesStep', () => {
   });
 
   it('sets correct onNextClicked property', () => {
-    expect(aboutOracleStep.find(Button).props().onClick).to.equal(onNextClickSpy);
+    expect(aboutOracleStep.find(Button).props().onClick).to.equal(
+      onNextClickSpy
+    );
   });
 });
 
@@ -45,14 +49,18 @@ describe('SelectDataSourceStep', () => {
   let onNextClickSpy;
   let onPrevClickSpy;
   let onChangeSpy;
+
   beforeEach(() => {
     onNextClickSpy = sinon.spy();
     onPrevClickSpy = sinon.spy();
     onChangeSpy = sinon.spy();
-    selectDataSourceStep = shallow(<SelectDataSourceStep
-      onNextClicked={onNextClickSpy}
-      onPrevClicked={onPrevClickSpy}
-      onChange={onChangeSpy} />);
+    selectDataSourceStep = shallow(
+      <SelectDataSourceStep
+        onNextClicked={onNextClickSpy}
+        onPrevClicked={onPrevClickSpy}
+        onChange={onChangeSpy}
+      />
+    );
   });
 
   it('renders without crashing', () => {
@@ -61,17 +69,29 @@ describe('SelectDataSourceStep', () => {
   });
 
   it('renders all data sources as Option', () => {
-      const sourceOptions = DataSources.map(({ name }) => <Option key={name} value={name}>{name}</Option>);
-      expect(selectDataSourceStep.containsAllMatchingElements(sourceOptions)).to.equal(true);
+    const sourceOptions = DataSources.map(({ name }) => (
+      <Option key={name} value={name}>
+        {name}
+      </Option>
+    ));
+    expect(
+      selectDataSourceStep.containsAllMatchingElements(sourceOptions)
+    ).to.equal(true);
   });
 
   it('sets correct onNextClicked property', () => {
-    selectDataSourceStep.find(Button).last().simulate('click');
+    selectDataSourceStep
+      .find(Button)
+      .last()
+      .simulate('click');
     expect(onNextClickSpy).to.have.property('callCount', 1);
   });
 
   it('sets correct onPrevClicked property', () => {
-    selectDataSourceStep.find(Button).first().simulate('click');
+    selectDataSourceStep
+      .find(Button)
+      .first()
+      .simulate('click');
     expect(onPrevClickSpy).to.have.property('callCount', 1);
   });
 
@@ -86,18 +106,25 @@ describe('SetQueryStep', () => {
   let onSubmitSpy;
   let onPrevClickSpy;
   let onChangeSpy;
-  let onGasPriceSpy;
+  let updateGasLimitSpy;
+  let updateGasPriceSpy;
+
   beforeEach(() => {
     onSubmitSpy = sinon.spy();
     onPrevClickSpy = sinon.spy();
     onChangeSpy = sinon.spy();
-    onGasPriceSpy = sinon.spy();
-    setQueryStep = shallow(<SetQueryStep
-      dataSource={DataSources[0].name}
-      onSubmit={onSubmitSpy}
-      onPrevClicked={onPrevClickSpy}
-      onGasPriceChange={onGasPriceSpy}
-      onChange={onChangeSpy} />);
+    updateGasLimitSpy = sinon.spy();
+    updateGasPriceSpy = sinon.spy();
+    setQueryStep = shallow(
+      <SetQueryStep
+        dataSource={DataSources[0].name}
+        onSubmit={onSubmitSpy}
+        onPrevClicked={onPrevClickSpy}
+        onUpdateGasLimit={updateGasLimitSpy}
+        onUpdateGasPrice={updateGasPriceSpy}
+        onChange={onChangeSpy}
+      />
+    );
   });
 
   it('renders without crashing', () => {
@@ -107,19 +134,30 @@ describe('SetQueryStep', () => {
 
   it('should update query state with changes in query input', () => {
     const queryInput = '2+2';
-    setQueryStep.find(Input).simulate('change', { target: { value: queryInput } });
+    setQueryStep
+      .find(Input)
+      .simulate('change', { target: { value: queryInput } });
     expect(setQueryStep.state('query')).to.equal(queryInput);
     expect(onChangeSpy).to.have.property('callCount', 1);
   });
 
-  it('should call onGasPriceChange with changes in gas price input', () => {
+  it('should call updateGasLimit with changes in gas limit input', () => {
+    const gas = 580000;
+    setQueryStep.find(GasPriceField).simulate('updateGasLimit', gas);
+    expect(updateGasLimitSpy).to.have.property('callCount', 1);
+  });
+
+  it('should call updateGasPrice with changes in gas price input', () => {
     const price = 3;
-    setQueryStep.find(GasPriceField).simulate('change', price);
-    expect(onGasPriceSpy).to.have.property('callCount', 1);
+    setQueryStep.find(GasPriceField).simulate('updateGasPrice', price);
+    expect(updateGasPriceSpy).to.have.property('callCount', 1);
   });
 
   it('sets correct onPrevClicked property', () => {
-    setQueryStep.find(Button).first().simulate('click');
+    setQueryStep
+      .find(Button)
+      .first()
+      .simulate('click');
     expect(onPrevClickSpy).to.have.property('callCount', 1);
   });
 
@@ -130,7 +168,10 @@ describe('SetQueryStep', () => {
     // a valid query
     setQueryStep.setState({ query: '2+2' });
 
-    setQueryStep.find(Button).last().simulate('click');
+    setQueryStep
+      .find(Button)
+      .last()
+      .simulate('click');
     expect(onSubmitSpy).to.have.property('callCount', 1);
   });
 
@@ -141,7 +182,10 @@ describe('SetQueryStep', () => {
     // an invalid query
     setQueryStep.setState({ query: '' });
 
-    setQueryStep.find(Button).last().simulate('click');
+    setQueryStep
+      .find(Button)
+      .last()
+      .simulate('click');
     expect(setQueryStep.state('error')).to.not.be.a('null');
   });
 });
@@ -165,7 +209,11 @@ describe('QueryResultStep', () => {
 
   it('should display results when not loading', () => {
     const expectedResult = 'something nice';
-    queryResultStep.setProps({ loading: false, error: null, result: expectedResult });
+    queryResultStep.setProps({
+      loading: false,
+      error: null,
+      result: expectedResult
+    });
     expect(queryResultStep.find('.result').text()).to.equal(expectedResult);
   });
 

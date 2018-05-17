@@ -1,8 +1,9 @@
 export default function reducer(
   state = {
     contract: null,
-    loading: false,
-    error: null
+    error: null,
+    gas: 5700000,
+    loading: false
   },
   action
 ) {
@@ -29,6 +30,12 @@ export default function reducer(
         loading: false,
         contract: null,
         error: action.payload
+      };
+
+    case `${actionType}_UPDATE_GAS`:
+      return {
+        ...state,
+        gas: action.payload
       };
 
     default:
