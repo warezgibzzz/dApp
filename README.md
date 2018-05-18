@@ -16,7 +16,7 @@ A Makefile is provided for easy setup of the local development environment.
 
 Some pre-requisites are required in order to utilize the Makefile.
 
-NodeJS 8.11.2 LTS is reccomended for compatibility.
+NodeJS 8.11.2 LTS is recommended for compatibility.
 
 ```
 $ git clone https://github.com/MARKETProtocol/dApp.git  # clone this repository
