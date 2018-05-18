@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Modal } from 'antd';
+import { Button, Modal, Icon } from 'antd';
 
 export const title = 'Welcome to the official MARKET Protocol dApp';
 
@@ -19,6 +19,43 @@ class WelcomeMessage extends Component {
       localStorage.setItem('showWelcomeMessage', false);
     }
   };
+
+  renderNetWorkStatus(network) {
+    let textStyle = {
+      position: 'absolute',
+      bottom: 10,
+      left: 16,
+      maxWidth: '50%',
+      display: 'flex',
+      alignItems: 'center'
+    };
+
+    let iconProps = {
+      style: {
+        marginRight: 10
+      }
+    };
+
+    const networkStatusText =
+      network === 'rinkeby'
+        ? `Connected to rinkeby`
+        : `Not connected to rinkeby.`;
+
+    if (network === 'rinkeby') {
+      textStyle = { ...textStyle, color: '#00FFE2' };
+      iconProps = { ...iconProps, type: 'check-circle-o' };
+    } else {
+      textStyle = { ...textStyle, color: '#FF0A0A' };
+      iconProps = { ...iconProps, type: 'close-circle-o' };
+    }
+
+    return (
+      <p className="network-status" style={textStyle}>
+        <Icon {...iconProps} />
+        {networkStatusText}
+      </p>
+    );
+  }
 
   render() {
     return (
@@ -76,6 +113,7 @@ class WelcomeMessage extends Component {
             </span>
           </li>
         </ul>
+        {this.renderNetWorkStatus(this.props.network)}
       </Modal>
     );
   }

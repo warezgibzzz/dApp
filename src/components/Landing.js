@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Col, Icon, Row } from 'antd';
 
-import withGAPageView from '../containers/GoogleAnalyticsTracker';
-
 // Images
 import main from '../img/header-illustration.svg';
 import explore from '../img/explore-contracts.svg';
@@ -17,7 +15,7 @@ import WelcomeMessage from './WelcomeMessage';
 // Styles
 import '../less/Landing.less';
 
-class Landing extends Component {
+class LandingComponent extends Component {
   render() {
     return (
       <div>
@@ -157,10 +155,10 @@ class Landing extends Component {
           </Col>
         </Row>
 
-        <WelcomeMessage />
+        <WelcomeMessage network={this.props.network} />
       </div>
     );
   }
 }
 
-export default withGAPageView(Landing);
+export default LandingComponent;
