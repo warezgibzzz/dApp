@@ -29,6 +29,7 @@ class App extends Component {
           <Footer className="footer">
             dApp ©2018 Created by
             <a
+              style={{ marginLeft: 4 }}
               href="https://marketprotocol.io"
               target="_blank"
               rel="noopener noreferrer"

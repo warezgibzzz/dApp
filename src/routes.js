@@ -1,9 +1,8 @@
 import * as Containers from './containers';
-import Landing from './components/Landing';
 
 export const routes = [
   {
-    component: Landing,
+    component: Containers.LandingContainer,
     exact: true,
     path: '/'
   },
