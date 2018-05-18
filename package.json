@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "https://dapp.marketprotocol.io/",
+  "engines": {
+    "node": "^8.11.2"
+  },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "babel-plugin-import": "^1.7.0",

@@ -5,7 +5,7 @@
 MARKET Protocol has been created to provide a secure, flexible, open source foundation for decentralized trading on the Ethereum blockchain. We provide the pieces necessary to create a decentralized exchange, including the requisite clearing and collateral pool infrastructure, enabling third parties to build applications for trading.
 
 # dApp
-[MARKET Protocol's](https://marketprotocol.io/) main decentralized application. 
+[MARKET Protocol's](https://marketprotocol.io/) main decentralized application.
 
 Take a look at our [docs](https://docs.marketprotocol.io) for a little more explanation.
 
@@ -16,8 +16,10 @@ A Makefile is provided for easy setup of the local development environment.
 
 Some pre-requisites are required in order to utilize the Makefile.
 
+NodeJS 8.11.2 LTS is reccomended for compatibility.
+
 ```
-$ git clone https://github.com/MARKETProtocol/dApp.git  # clone this repository 
+$ git clone https://github.com/MARKETProtocol/dApp.git  # clone this repository
 $ git clone https://github.com/MARKETProtocol/ethereum-bridge.git # and the needed oraclize.it bridge (for local test rpc)
 ```
 
@@ -62,7 +64,7 @@ truffle(develop)> migrate
 ```
 If this fails due to a `revert`, please be sure the bridge is listening prior to attempting the migration.
 
-At this point we should be able to run the dApp locally 
+At this point we should be able to run the dApp locally
 
 ```
 $ make start_dapp
@@ -86,7 +88,7 @@ Want to hack on MARKET Protocol? Awesome!
 
 MARKET Protocol is an Open Source project and we welcome contributions of all sorts. There are many ways to help, from reporting issues, contributing code, and helping us improve our community.
 
-Ready to jump in? Check [docs.marketprotocol.io/#contributing](https://docs.marketprotocol.io/#contributing). 
+Ready to jump in? Check [docs.marketprotocol.io/#contributing](https://docs.marketprotocol.io/#contributing).
 
 ## Questions?
 
