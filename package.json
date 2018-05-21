@@ -89,16 +89,17 @@
     "build:rinkeby": "npm run clean && npm run copy:rinkeby && node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
-    "lint": "eslint src/ --ext .js",
+    "lint": "eslint src/**/*.js test/**/*.js",
+    "lint:fix": "eslint --fix src/**/*.js test/**/*.js",
     "precommit": "lint-staged",
     "clean": "rm -rf ./dApp/",
     "copy:rinkeby": "rm -rf ./build/ && cp -r rinkeby-build/ build/",
     "prettier-less": "prettier --single-quote --parser less --write \"./src/**/*.less\""
   },
   "lint-staged": {
-    "./src/**/*.{js,jsx}": [
+    "*.{js,jsx}": [
       "prettier --single-quote --write",
-      "eslint --fix",
+      "npm run lint:fix",
       "git add"
     ],
     "./src/**/*.less": [

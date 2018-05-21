@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import LandingComponent from '../components/Landing';
 import withGAPageView from './GoogleAnalyticsTracker';
 
-import store from '../store';
-
 const mapStateToProps = state => {
   const { network } = state.web3;
 

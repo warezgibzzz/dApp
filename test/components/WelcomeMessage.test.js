@@ -1,8 +1,8 @@
 import React from 'react';
-import { mount, render } from 'enzyme';
+import { mount } from 'enzyme';
 import { expect } from 'chai';
 
-import { Modal, Icon, Tag } from 'antd';
+import { Modal, Icon } from 'antd';
 
 import WelcomeMessage, { title } from '../../src/components/WelcomeMessage';
 import ReactDOM from 'react-dom';
