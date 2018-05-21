@@ -88,7 +88,7 @@ Want to hack on MARKET Protocol? Awesome!
 
 MARKET Protocol is an Open Source project and we welcome contributions of all sorts. There are many ways to help, from reporting issues, contributing code, and helping us improve our community.
 
-Ready to jump in? Check [docs.marketprotocol.io/#contributing](https://docs.marketprotocol.io/#contributing).
+Ready to jump in? Check [docs.marketprotocol.io/#contributing](https://docs.marketprotocol.io/#contributing) to see our general guidelines. Then you can find additional information about this specific repository on [CONTRIBUTING](https://github.com/MARKETProtocol/dApp/blob/develop/.github/CONTRIBUTING.md).
 
 ## Questions?
 
