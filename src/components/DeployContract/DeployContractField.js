@@ -14,6 +14,7 @@ import store from '../../store';
 import OracleDataSources, {
   getDataSourceObj
 } from '../TestQuery/OracleDataSources';
+import ExchangeSources from './ExchangeSources';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -301,11 +302,35 @@ const fieldSettingsByName = {
       'Properly structured Oraclize.it query, please use the test query page for clarification',
 
     component: () => <Input />
+  },
+
+  exchangeApi: {
+    label: 'Exchange Api',
+    initialValue: 'Binance',
+    rules: [
+      {
+        required: true,
+        message: 'Please select a exchange api'
+      }
+    ],
+    extra: 'Available exchange api',
+
+    component: ({ onChange }) => {
+      return (
+        <Select onChange={onChange}>
+          {ExchangeSources.map(exchange => (
+            <Option key={exchange.key} value={exchange.key}>
+              {exchange.name}
+            </Option>
+          ))}
+        </Select>
+      );
+    }
   }
 };
 
 function DeployContractField(props) {
-  const { name, form, initialValue, showHint } = props;
+  const { name, form, initialValue, showHint, onChange } = props;
   const { getFieldDecorator } = form;
   const fieldSettings = fieldSettingsByName[name];
 
@@ -330,7 +355,8 @@ function DeployContractField(props) {
         fieldSettings.component({
           form,
           fieldSettings,
-          showHint
+          showHint,
+          onChange
         })
       )}
     </FormItem>

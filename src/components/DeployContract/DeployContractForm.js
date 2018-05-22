@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import showMessage from '../message';
 import GuidedDeployment from './GuidedDeployment';
 import QuickDeployment from './QuickDeployment';
+import SimplifiedDeployment from './SimplifiedDeployment';
 
 class DeployContractForm extends Component {
   handleDeploy = values => {
@@ -25,6 +26,16 @@ class DeployContractForm extends Component {
   getGuidedDeploymentComponent(props) {
     return (
       <GuidedDeployment
+        {...props}
+        {...this.props}
+        onDeployContract={this.handleDeploy}
+      />
+    );
+  }
+
+  getSimplifiedDeploymentComponent(props) {
+    return (
+      <SimplifiedDeployment
         {...props}
         {...this.props}
         onDeployContract={this.handleDeploy}
@@ -62,7 +73,7 @@ class DeployContractForm extends Component {
       ? this.getGuidedDeploymentComponent(props)
       : mode === 'quick'
         ? this.getQuickDeploymentComponent(props)
-        : this.getQuickDeploymentComponent(props);
+        : this.getSimplifiedDeploymentComponent(props);
   }
 }
 
