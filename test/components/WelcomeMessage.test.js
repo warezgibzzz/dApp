@@ -20,7 +20,7 @@ describe('WelcomeMessage', () => {
 
   it('renders without crashing', () => {
     const div = document.createElement('div');
-    ReactDOM.render(<WelcomeMessage />, div);
+    ReactDOM.render(welcomeMessage, div);
   });
 
   it('should have exact title', () => {
@@ -41,15 +41,18 @@ describe('WelcomeMessage', () => {
     it('should render a label with green text and check Icon when connected to rinkeby', () => {
       welcomeMessage.setState({ visible: true });
       welcomeMessage.setProps({ network: 'rinkeby' });
+
       expect(welcomeMessage.find('p.network-status').length).to.equal(1);
       expect(
         welcomeMessage.find('p.network-status').props().style.color
       ).to.equal('#00FFE2');
       expect(welcomeMessage.find(Icon).props().type).to.equal('check-circle-o');
     });
+
     it('should render a label with red text and "X" Icon when NOT connected to rinkeby', () => {
       welcomeMessage.setState({ visible: true });
       welcomeMessage.setProps({ network: 'unknown' });
+
       expect(welcomeMessage.find('p.network-status').length).to.equal(1);
       expect(
         welcomeMessage.find('p.network-status').props().style.color
