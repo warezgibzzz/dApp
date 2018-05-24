@@ -287,11 +287,20 @@ PricingStep = Form.create()(PricingStep);
  */
 class ExpirationStep extends BaseStepComponent {
   render() {
+    const {
+      contractName,
+      expirationTimeStamp,
+      form,
+      gas,
+      isSimplified,
+      location
+    } = this.props;
+
     return (
       <div>
         <Form onSubmit={this.handleSubmit.bind(this)} layout="vertical">
           <h1>Set Expiration Time</h1>
-          {!this.props.isSimplified && (
+          {!isSimplified && (
             <div>
               Upon reaching the expiration timestamp all open positions will
               settle against the final price query returned by the oracle.
@@ -301,29 +310,26 @@ class ExpirationStep extends BaseStepComponent {
           <Field
             name="expirationTimeStamp"
             initialValue={
-              this.props.expirationTimeStamp
-                ? moment(this.props.expirationTimeStamp * 1000)
-                : this.props.isSimplified
+              expirationTimeStamp
+                ? moment(expirationTimeStamp * 1000)
+                : isSimplified
                   ? moment().add(30, 'days')
                   : ''
             }
-            form={this.props.form}
+            form={form}
           />
           <br />
-          {this.props.isSimplified && (
+          {isSimplified && (
             <div>
               <h2>Contract Name</h2>
               <Field
                 name="contractName"
-                initialValue={this.props.contractName}
-                form={this.props.form}
+                initialValue={contractName}
+                form={form}
               />
             </div>
           )}
-          <GasPriceField
-            location={this.props.location}
-            form={this.props.form}
-          />
+          <GasPriceField form={form} gaslimit={gas} location={location} />
 
           <Row type="flex" justify="end">
             <Col>

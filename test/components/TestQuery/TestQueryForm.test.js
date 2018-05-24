@@ -13,7 +13,6 @@ import {
   SetQueryStep
 } from '../../../src/components/TestQuery/Steps';
 
-const aboutStep = 0;
 const dataSourceStep = 1;
 const setQueryStep = 2;
 const queryResultStep = 3;
@@ -21,14 +20,23 @@ const queryResultStep = 3;
 describe('TestQueryForm', () => {
   let testQueryForm;
   let onTestQuerySpy;
+  let getGasEstimateSpy;
+
   beforeEach(() => {
     onTestQuerySpy = sinon.spy();
-    testQueryForm = shallow(<TestQueryForm onTestQuery={onTestQuerySpy}/>);
+    getGasEstimateSpy = sinon.spy();
+
+    testQueryForm = shallow(
+      <TestQueryForm
+        onTestQuery={onTestQuerySpy}
+        getGasEstimate={getGasEstimateSpy}
+      />
+    );
   });
 
   it('renders without crashing', () => {
     const div = document.createElement('div');
-    ReactDOM.render(<TestQueryForm />, div);
+    ReactDOM.render(testQueryForm, div);
   });
 
   it('should render 4 steps', () => {
@@ -47,26 +55,41 @@ describe('TestQueryForm', () => {
   it('should move to prev step on SelectDataSourceStep.onPrevClicked', () => {
     testQueryForm.setState({ step: dataSourceStep });
     testQueryForm.find(SelectDataSourceStep).simulate('prevClicked');
+
     expect(testQueryForm.state('step')).to.equal(dataSourceStep - 1);
   });
 
-  it('should move to next step on SelectDataSourceStep.onPrevClicked', () => {
+  it('should move to next step on SelectDataSourceStep.onNextClicked', () => {
     testQueryForm.setState({ step: dataSourceStep });
     testQueryForm.find(SelectDataSourceStep).simulate('nextClicked');
+
     expect(testQueryForm.state('step')).to.equal(dataSourceStep + 1);
   });
 
   it('should change data source with SelectDataSourceStep.onChange', () => {
     const dataSource = 'URL';
+
     testQueryForm.setState({ step: dataSourceStep });
     testQueryForm.find(SelectDataSourceStep).simulate('change', dataSource);
+
     expect(testQueryForm.state('oracleDataSource')).to.equal(dataSource);
   });
 
-  it('should change gas price with SetQueryStep.onGasPriceChange', () => {
-    const gasPrice = 3;
+  it('should change gas price with SetQueryStep.onUpdateGasLimit', () => {
+    const gas = 580000;
+
     testQueryForm.setState({ step: setQueryStep });
-    testQueryForm.find(SetQueryStep).simulate('gasPriceChange', gasPrice);
+    testQueryForm.find(SetQueryStep).simulate('updateGasLimit', gas);
+
+    expect(testQueryForm.state('gas')).to.equal(gas);
+  });
+
+  it('should change gas price with SetQueryStep.onUpdateGasPrice', () => {
+    const gasPrice = 3;
+
+    testQueryForm.setState({ step: setQueryStep });
+    testQueryForm.find(SetQueryStep).simulate('updateGasPrice', gasPrice);
+
     expect(testQueryForm.state('gasPrice')).to.equal(gasPrice);
   });
 
@@ -79,6 +102,7 @@ describe('TestQueryForm', () => {
     const query = 'https://some-query-url.com';
     testQueryForm.setState({ step: setQueryStep });
     testQueryForm.find(SetQueryStep).simulate('change', query);
+
     expect(testQueryForm.state('oracleQuery')).to.equal(query);
   });
 
@@ -95,24 +119,30 @@ describe('TestQueryForm', () => {
   });
 
   it('should reset to inital step', () => {
-    testQueryForm.setState({ step: queryResultStep});
-    testQueryForm.setProps({error: "Without data"});
+    testQueryForm.setState({ step: queryResultStep });
+    testQueryForm.setProps({ error: 'Without data' });
     testQueryForm.find(QueryResultStep).simulate('failSubmit');
-    expect(testQueryForm.state('step')).to.equal(0);
 
+    expect(testQueryForm.state('step')).to.equal(0);
   });
 
   it('should navigate to /contract/deploy onCreateContractClicked', () => {
     const navSpy = sinon.spy();
+
     testQueryForm.setState({
       step: queryResultStep,
       oracleDataSource: 'WolframAlpha',
       oracleQuery: '2+2'
     });
+
     testQueryForm.setProps({
       history: { push: navSpy }
     });
-    testQueryForm.find(QueryResultStep).props().onCreateContractClicked();
+
+    testQueryForm
+      .find(QueryResultStep)
+      .props()
+      .onCreateContractClicked();
 
     expect(navSpy).to.have.property('callCount', 1);
     // TODO: Test to ensure navSpy is called with correct path /contract/deploy

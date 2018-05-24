@@ -11,28 +11,32 @@ import { deployContract } from '../actions/deploy';
 import store from '../store';
 
 const mapStateToProps = state => {
-  const { loading, error, contract } = state.deploy;
+  const { contract, error, gas, loading } = state.deploy;
+  const { network } = state.web3;
 
   return {
-    loading,
+    contract,
     error,
-    contract
+    gas,
+    loading,
+    network
   };
 };
 
 const mapDispatchToProps = dispatch => {
+  const { web3Instance, network } = store.getState().web3;
+  const initializeContracts = CreateInitializer(
+    contractConstructor.bind(null, web3Instance)
+  );
+
   return {
     onDeployContract: contractSpecs => {
-      const web3 = store.getState().web3.web3Instance;
-      const initializeContracts = CreateInitializer(
-        contractConstructor.bind(null, web3)
-      );
-
       dispatch(
         deployContract(
           {
-            web3,
-            contractSpecs
+            web3: web3Instance,
+            contractSpecs,
+            network
           },
           initializeContracts(Contracts)
         )

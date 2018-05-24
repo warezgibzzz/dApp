@@ -3,11 +3,13 @@ export default function reducer(
     results: null,
     loading: false,
     error: null,
-    transaction: null
+    transaction: null,
+    gas: 200000
   },
   action
 ) {
   const actionType = 'TEST_QUERY';
+
   switch (action.type) {
     case `${actionType}_PENDING`:
       return {
@@ -22,6 +24,12 @@ export default function reducer(
         loading: true,
         transaction: action.payload,
         error: null
+      };
+
+    case `${actionType}_UPDATE_GAS`:
+      return {
+        ...state,
+        gas: action.payload
       };
 
     case `${actionType}_FULFILLED`:

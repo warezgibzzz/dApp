@@ -89,11 +89,11 @@
     "build:rinkeby":
       "npm run clean && npm run copy:rinkeby && node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "test:coverage": "npm run test -- --coverage",
+    "coverage": "npm run test -- --coverage",
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
     "lint": "eslint src/**/*.js test/**/*.js",
     "lint:fix": "eslint --fix src/**/*.js test/**/*.js",
-    "precommit": "lint-staged && npm run test:coverage",
+    "precommit": "lint-staged && npm run coverage",
     "clean": "rm -rf ./dApp/",
     "copy:rinkeby": "rm -rf ./build/ && cp -r rinkeby-build/ build/",
     "prettier-less":
