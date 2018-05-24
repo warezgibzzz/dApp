@@ -197,6 +197,9 @@ export async function processContractsList(
         .then(data => data.toNumber());
       contractJSON['isSettled'] = await instance.isSettled.call();
 
+      // TODO: There is a possibility a contract ends up in our registry that wasn't linked to a collateral pool
+      // correctly.  The code below will handle this, but a better solution would probably to not actually
+      // display contracts that are not correctly linked to a collateral pool!
       await marketCollateralPool
         .at(await instance.marketCollateralPoolAddress.call())
         .then(async function(collateralPoolInstance) {
@@ -205,6 +208,10 @@ export async function processContractsList(
           ] = await collateralPoolInstance.collateralPoolBalance
             .call()
             .then(data => data.toNumber());
+        })
+        .catch(function(err) {
+          console.error(err);
+          contractJSON['collateralPoolBalance'] = 'NA';
         });
 
       return contractJSON;

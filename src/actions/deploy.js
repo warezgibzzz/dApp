@@ -72,10 +72,21 @@ export function deployContract(
               );
             })
             .then(function(marketContractDeployResults) {
-              marketContractDeployedAddress = marketContractDeployResults.logs[0].args.contractAddress;
-              return MarketCollateralPool.new(marketContractDeployedAddress, txParams);
+              marketContractDeployedAddress =
+                marketContractDeployResults.logs[0].args.contractAddress;
+              console.log(
+                'Market Contract deployed to ' + marketContractDeployedAddress
+              );
+              return MarketCollateralPool.new(
+                marketContractDeployedAddress,
+                txParams
+              );
             })
             .then(function(marketCollateralPoolInstance) {
+              console.log(
+                'Market Collateral Pool deployed to ' +
+                  marketCollateralPoolInstance.address
+              );
               return MarketContract.at(marketContractDeployedAddress).then(
                 function(deployMarketContract) {
                   marketContractInstanceDeployed = deployMarketContract;
