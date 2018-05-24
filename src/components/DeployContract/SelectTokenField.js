@@ -50,14 +50,12 @@ class SelectTokenField extends React.Component {
     const symbol = this.state.pairs[e];
     this.props.onSelect({
       contractName: this.genContractName(symbol),
+      symbolName: symbol.symbol,
       oracleQuery: exchange.genOracleQuery(symbol),
+      price: symbol.price * 1.0, // force number
       priceDecimalPlaces: symbol.priceDecimalPlaces,
-      priceCap: Math.round(
-        symbol.price * 1.5 * 10 ** symbol.priceDecimalPlaces
-      ),
-      priceFloor: Math.round(
-        symbol.price * 0.5 * 10 ** symbol.priceDecimalPlaces
-      ),
+      priceCap: symbol.price * 1.5,
+      priceFloor: symbol.price * 0.5,
       qtyMultiplier: 10 ** (18 - symbol.priceDecimalPlaces),
       oracleDataSource: 'URL'
     });
