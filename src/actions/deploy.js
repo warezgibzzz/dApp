@@ -1,6 +1,3 @@
-import Rx from 'rxjs/Rx';
-import { XMLHttpRequest } from 'xmlhttprequest';
-
 import { getMetamaskError } from '../util/utils';
 
 /**
@@ -11,8 +8,13 @@ import { getMetamaskError } from '../util/utils';
  * @param {*}
  */
 export function deployContract(
-  { web3, contractSpecs, network },
-  { MarketContractRegistry, MarketContract, MarketCollateralPool, MarketToken }
+  { web3, contractSpecs },
+  {
+    MarketContractRegistry,
+    MarketContract,
+    MarketContractFactory,
+    MarketCollateralPool
+  }
 ) {
   const type = 'DEPLOY_CONTRACT';
 
@@ -47,6 +49,7 @@ export function deployContract(
 
           // find the address of the MKT token so we can link to our deployed contract
           let marketContractInstanceDeployed;
+          let marketContractDeployedAddress;
 
           let txParams = {
             gas: contractSpecs.gas,
@@ -54,64 +57,36 @@ export function deployContract(
             from: coinbase
           };
 
-          MarketToken.deployed()
-            .then(function(marketTokenInstance) {
-              return MarketContract.new(
+          MarketContractFactory.deployed()
+            .then(function(contractFactory) {
+              return contractFactory.deployMarketContractOraclize(
                 contractSpecs.contractName,
-                marketTokenInstance.address,
                 contractSpecs.baseTokenAddress,
                 contractConstructorArray,
                 contractSpecs.oracleDataSource,
                 contractSpecs.oracleQuery,
-                txParams
+                {
+                  ...txParams,
+                  gas: 4000000, // TODO : Remove hard-coded gas
+                }
               );
             })
-            .then(function(marketContractInstance) {
-              marketContractInstanceDeployed = marketContractInstance;
-              return MarketCollateralPool.new(
-                marketContractInstance.address,
-                txParams
-              );
+            .then(function(marketContractDeployResults) {
+              marketContractDeployedAddress = marketContractDeployResults.logs[0].args.contractAddress;
+              return MarketCollateralPool.new(marketContractDeployedAddress, txParams);
             })
             .then(function(marketCollateralPoolInstance) {
-              return marketContractInstanceDeployed.setCollateralPoolContractAddress(
-                marketCollateralPoolInstance.address,
-                txParams
+              return MarketContract.at(marketContractDeployedAddress).then(
+                function(deployMarketContract) {
+                  marketContractInstanceDeployed = deployMarketContract;
+                  return deployMarketContract.setCollateralPoolContractAddress(
+                    marketCollateralPoolInstance.address,
+                    txParams
+                  );
+                }
               );
             })
             .then(function() {
-              return MarketContractRegistry.deployed();
-            })
-            .then(function(marketContractRegistryInstance) {
-              // Rinkeby
-              if (network === 'rinkeby') {
-                // Add deployed contract address to whitelist
-                Rx.Observable.ajax({
-                  url: 'https://api.marketprotocol.io/contracts/whitelist',
-                  method: 'POST',
-                  body: { address: marketContractInstanceDeployed.address },
-                  headers: {
-                    'Content-Type': 'application/json'
-                  },
-                  responseType: 'json',
-                  crossDomain: true,
-                  createXHR: () => new XMLHttpRequest()
-                })
-                  .catch(
-                    err =>
-                      err.xhr
-                        ? Rx.Observable.of(err)
-                        : Rx.Observable.of('.___.')
-                  )
-                  .map(data => data.response)
-                  .subscribe(res => console.log(res));
-              } else {
-                marketContractRegistryInstance.addAddressToWhiteList(
-                  marketContractInstanceDeployed.address,
-                  txParams
-                );
-              }
-
               dispatch({
                 type: `${type}_FULFILLED`,
                 payload: marketContractInstanceDeployed

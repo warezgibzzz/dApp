@@ -7,7 +7,8 @@ import {
   MarketContractRegistry,
   MarketContract,
   MarketCollateralPool,
-  MarketToken
+  MarketToken,
+  MarketContractFactory
 } from '../mocks/contracts';
 import { deployContract } from '../../src/actions/deploy';
 
@@ -53,13 +54,15 @@ describe('DeployAction', () => {
       MarketContractRegistry: MarketContractRegistry(),
       MarketContract: MarketContract(),
       MarketCollateralPool: MarketCollateralPool(),
-      MarketToken: MarketToken()
+      MarketToken: MarketToken(),
+      MarketContractFactory: MarketContractFactory()
     };
+
     deployParams = {
       contractSpecs: validContractSpecs(),
-      web3: mockedCoinbaseWeb3(),
-      network: 'unknown'
+      web3: mockedCoinbaseWeb3()
     };
+
     dispatchSpy = sinon.spy();
   });
 
@@ -72,12 +75,14 @@ describe('DeployAction', () => {
     });
   });
 
-  it('should dispatch contract rejected if getCoinbase return error', () => {
+  it('should dispatch contract fulfilled if getCoinbase return error', () => {
     deployParams.web3 = mockedCoinbaseWeb3(Error('Could not fetch coinbase'));
 
     return runDeployAction().catch(() => {
       expect(dispatchSpy).to.have.property('callCount', 2);
-      expect(dispatchSpy.args[1][0].type).to.equals('DEPLOY_CONTRACT_REJECTED');
+      expect(dispatchSpy.args[1][0].type).to.equals(
+        'DEPLOY_CONTRACT_FULFILLED'
+      );
     });
   });
 
