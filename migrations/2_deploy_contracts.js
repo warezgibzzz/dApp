@@ -59,8 +59,9 @@ module.exports = function(deployer, network) {
           marketTokenAmountForContractCreation
         )
         .then(function() {
-          // deploy collateral token
-          deployer.deploy(CollateralToken, 'FakeDollars', 'FUSD', 1e9, 18);
+          // deploy collateral token and a fake wrapped ETH
+          deployer.deploy(CollateralToken, 'Stable USD', 'USD', 1e9, 18);
+          deployer.deploy(CollateralToken, 'Wrapped ETH', 'WETH', 1e9, 18);
 
           const daysToExpiration = 28;
           const expirationDate = new Date();
