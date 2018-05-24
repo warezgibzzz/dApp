@@ -9,7 +9,7 @@ import {
 } from 'antd';
 import moment from 'moment';
 import React from 'react';
-import { checkERC20Contract } from '../../util/validations';
+import FormValidators from '../../util/forms/Validators';
 import store from '../../store';
 import OracleDataSources, {
   getDataSourceObj
@@ -21,7 +21,7 @@ const Option = Select.Option;
 
 const ethAddressValidator = (rule, value, callback) => {
   const web3 = store.getState().web3.web3Instance;
-  checkERC20Contract(web3, value, callback);
+  FormValidators(web3).checkERC20Contract(value, callback);
 };
 
 const timestampValidator = (rule, value, callback) => {
