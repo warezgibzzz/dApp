@@ -57,6 +57,61 @@ describe('PricingStep', () => {
   });
 });
 
+describe('PricingStep Simplified', () => {
+  let pricingStep;
+  let updateDeploymentStateSpy;
+  let onNextClickedSpy;
+
+  beforeEach(() => {
+    updateDeploymentStateSpy = sinon.spy();
+    onNextClickedSpy = sinon.spy();
+    pricingStep = mount(
+      <PricingStep
+        updateDeploymentState={updateDeploymentStateSpy}
+        onNextClicked={onNextClickedSpy}
+        isSimplified
+      />
+    );
+  });
+
+  it('renders without crashing', () => {
+    const div = document.createElement('div');
+    ReactDOM.render(<PricingStep isSimplified />, div);
+  });
+
+  it('should display four inputs felds to accept price cap and price floor', () => {
+    expect(pricingStep.find(InputNumber)).to.have.length(2);
+  });
+
+  it('should have two buttons to navigate back and forward', () => {
+    expect(pricingStep.find(Button)).to.have.length(2);
+  });
+
+  it('should not proceed on error in form: price floor too low', () => {
+    pricingStep.setProps({
+      price: 1.0,
+      priceCap: 1.5,
+      priceFloor: 0.4
+    });
+
+    pricingStep.find(Form).simulate('submit');
+    expect(updateDeploymentStateSpy).to.have.property('callCount', 0);
+    expect(onNextClickedSpy).to.have.property('callCount', 0);
+  });
+
+  it('should not proceed on error in form: price cap too high', () => {
+    pricingStep.setProps({
+      price: 1.0,
+      priceCap: 1.6,
+      priceFloor: 0.6
+    });
+
+    pricingStep.find(Form).simulate('submit');
+    expect(updateDeploymentStateSpy).to.have.property('callCount', 0);
+    expect(onNextClickedSpy).to.have.property('callCount', 0);
+  });
+});
+
 describe('ExpirationStep', () => {
   let updateDeploymentStateSpy;
   let onNextClickedSpy;

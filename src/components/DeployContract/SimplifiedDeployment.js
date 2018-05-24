@@ -95,7 +95,23 @@ class SimplifiedDeployment extends Component {
       <DeployStep
         key="3"
         deployContract={() => {
-          this.props.onDeployContract(this.state);
+          // fix decimal points.
+          // this simply assumes the decimal places of the original price.
+          // Since we limit the floor-cap range to 45% to 155%, this is a good estimate
+          // and we shouldn't loose much in terms of precission
+          this.setState(
+            {
+              priceFloor: Math.round(
+                this.state.priceFloorSimplified *
+                  10 ** this.state.priceDecimalPlaces
+              ),
+              priceCap: Math.round(
+                this.state.priceCapSimplified *
+                  10 ** this.state.priceDecimalPlaces
+              )
+            },
+            () => this.props.onDeployContract(this.state)
+          );
         }}
         showErrorMessage={showMessage.bind(showMessage, 'error')}
         showSuccessMessage={showMessage.bind(showMessage, 'success')}

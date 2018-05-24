@@ -147,6 +147,20 @@ class PricingStep extends BaseStepComponent {
       <div>
         <Form onSubmit={this.handleSubmit.bind(this)} layout="vertical">
           <h1>Specify Pricing Rules</h1>
+
+          {this.props.isSimplified && (
+            <div>
+              <Field
+                name="price"
+                initialValue={this.props.price}
+                form={this.props.form}
+              />
+              <h2>
+                Current Price of {this.props.symbolName}: {this.props.price}
+              </h2>
+            </div>
+          )}
+
           {!this.props.isSimplified && (
             <div>
               The Price Floor and Cap define the range of a contract. If an
@@ -165,25 +179,27 @@ class PricingStep extends BaseStepComponent {
           )}
           <br />
 
-          <h2>Price Decimal Places</h2>
           {!this.props.isSimplified && (
             <div>
-              Ethereum currently does not support floating points numbers.
-              Therefore all prices reported by oracles must be converted to a
-              whole number (integer). This variable is how many decimal places
-              one needs to move the decimal in order to go from the oracle query
-              price to an integer. For example, if the oracle query results
-              returned a value of 190.22, we need to move the decimal two (2)
-              places to convert to a whole number of 19022, so we would enter 2
-              below.
+              <h2>Price Decimal Places</h2>
+              <div>
+                Ethereum currently does not support floating points numbers.
+                Therefore all prices reported by oracles must be converted to a
+                whole number (integer). This variable is how many decimal places
+                one needs to move the decimal in order to go from the oracle
+                query price to an integer. For example, if the oracle query
+                results returned a value of 190.22, we need to move the decimal
+                two (2) places to convert to a whole number of 19022, so we
+                would enter 2 below.
+              </div>
+              <br />
+              <Field
+                name="priceDecimalPlaces"
+                initialValue={this.props.priceDecimalPlaces}
+                form={this.props.form}
+              />
             </div>
           )}
-          <br />
-          <Field
-            name="priceDecimalPlaces"
-            initialValue={this.props.priceDecimalPlaces}
-            form={this.props.form}
-          />
 
           <h2>Price Floor</h2>
           {!this.props.isSimplified && (
@@ -198,7 +214,9 @@ class PricingStep extends BaseStepComponent {
           )}
           <br />
           <Field
-            name="priceFloor"
+            name={
+              this.props.isSimplified ? 'priceFloorSimplified' : 'priceFloor'
+            }
             initialValue={this.props.priceFloor}
             form={this.props.form}
           />
@@ -215,38 +233,41 @@ class PricingStep extends BaseStepComponent {
           )}
           <br />
           <Field
-            name="priceCap"
+            name={this.props.isSimplified ? 'priceCapSimplified' : 'priceCap'}
             initialValue={this.props.priceCap}
             form={this.props.form}
           />
 
-          <h2>Price Quantity Multiplier</h2>
           {!this.props.isSimplified && (
             <div>
-              The quantity multiplier allows the user to specify how many base
-              units (for Ethereum, this would be wei) each integer price
-              movement changes the value of the contract. If our integerized
-              price was 19022 with a qty multiplier of 1, and the price moved to
-              19023, then the value will have change by 1 wei. If however the
-              multiplier was set at 1,000,000,000 the price movement of 1 unit
-              would now correspond to a value of 1 gwei (not wei). Please see{' '}
-              <a
-                href="https://etherconverter.online/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {' '}
-                here{' '}
-              </a>{' '}
-              for an ethereum unit converter.
+              <h2>Price Quantity Multiplier</h2>
+              <div>
+                The quantity multiplier allows the user to specify how many base
+                units (for Ethereum, this would be wei) each integer price
+                movement changes the value of the contract. If our integerized
+                price was 19022 with a qty multiplier of 1, and the price moved
+                to 19023, then the value will have change by 1 wei. If however
+                the multiplier was set at 1,000,000,000 the price movement of 1
+                unit would now correspond to a value of 1 gwei (not wei). Please
+                see{' '}
+                <a
+                  href="https://etherconverter.online/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {' '}
+                  here{' '}
+                </a>{' '}
+                for an ethereum unit converter.
+              </div>
+              <br />
+              <Field
+                name="qtyMultiplier"
+                initialValue={this.props.qtyMultiplier}
+                form={this.props.form}
+              />
             </div>
           )}
-          <br />
-          <Field
-            name="qtyMultiplier"
-            initialValue={this.props.qtyMultiplier}
-            form={this.props.form}
-          />
           <Row type="flex" justify="end">
             <Col>
               <BiDirectionalNav text="Set Expiration Time" {...this.props} />

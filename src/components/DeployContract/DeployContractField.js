@@ -48,6 +48,38 @@ const priceCapValidator = (form, rule, value, callback) => {
   );
 };
 
+const priceFloorSimplifiedValidator = (form, rule, value, callback) => {
+  const priceCap = form.getFieldValue('priceCapSimplified');
+  const price = form.getFieldValue('price');
+
+  // just picked a number lower than the default of 0.5 * price
+  if (value < 0.45 * price) {
+    callback('Price floor must be larger than 45% of the current price');
+  }
+
+  callback(
+    value <= priceCap
+      ? undefined
+      : 'Price floor must be less-than or equal to the price cap'
+  );
+};
+
+const priceCapSimplifiedValidator = (form, rule, value, callback) => {
+  const priceFloor = form.getFieldValue('priceFloorSimplified');
+  const price = form.getFieldValue('price');
+
+  // just picked a number larger than the default of 1.5 * price
+  if (value > 1.55 * price) {
+    callback('Price cap must be smaller than 155% of the current price');
+  }
+
+  callback(
+    value >= priceFloor
+      ? undefined
+      : 'Price cap must be greater-than or equal to the price floor'
+  );
+};
+
 const oracleQueryValidator = (form, rule, value, callback) => {
   const oracleDataSource = form.getFieldValue('oracleDataSource');
   const oracleQuery = form.getFieldValue('oracleQuery');
@@ -182,6 +214,87 @@ const fieldSettingsByName = {
         />
       );
     }
+  },
+
+  priceFloorSimplified: {
+    label: 'Price Floor',
+    initialValue: 0,
+    rules: form => {
+      return [
+        {
+          required: true,
+          message: 'Please enter a price floor'
+        },
+        {
+          type: 'number',
+          message: 'Value must be a number'
+        },
+        {
+          validator: (rule, value, callback) => {
+            priceFloorSimplifiedValidator(form, rule, value, callback);
+          }
+        }
+      ];
+    },
+    extra: `The lower bound of price exposure this contract will trade. If the oracle reports a price below this 
+    value the contract will enter into settlement`,
+
+    component: ({ form }) => {
+      return (
+        <InputNumber
+          min={0}
+          style={{ width: '100%' }}
+          onChange={() => {
+            setTimeout(() => {
+              form.validateFields(['priceCapSimplified'], { force: true });
+            }, 100);
+          }}
+        />
+      );
+    }
+  },
+
+  priceCapSimplified: {
+    label: 'Price Cap',
+    initialValue: 150,
+    rules: form => {
+      return [
+        {
+          required: true,
+          message: 'Please enter a price cap'
+        },
+        {
+          type: 'number',
+          message: 'Value must be a number'
+        },
+        {
+          validator: (rule, value, callback) => {
+            priceCapSimplifiedValidator(form, rule, value, callback);
+          }
+        }
+      ];
+    },
+    extra: `The upper bound of price exposure this contract will trade. If the oracle reports a price above this
+    value the contract will enter into settlement`,
+
+    component: ({ form }) => {
+      return (
+        <InputNumber
+          min={0}
+          style={{ width: '100%' }}
+          onChange={() => {
+            setTimeout(() => {
+              form.validateFields(['priceFloorSimplified'], { force: true });
+            }, 100);
+          }}
+        />
+      );
+    }
+  },
+
+  price: {
+    // Hidden field for the symbol price for simplified contract deployment for easier validation of price floor and cap
+    component: () => <Input type="hidden" />
   },
 
   priceDecimalPlaces: {
