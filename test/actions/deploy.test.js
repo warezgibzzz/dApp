@@ -7,7 +7,8 @@ import {
   MarketContractRegistry,
   MarketContract,
   MarketCollateralPool,
-  MarketToken
+  MarketToken,
+  MarketContractFactory
 } from '../mocks/contracts';
 import { deployContract } from '../../src/actions/deploy';
 
@@ -53,13 +54,15 @@ describe('DeployAction', () => {
       MarketContractRegistry: MarketContractRegistry(),
       MarketContract: MarketContract(),
       MarketCollateralPool: MarketCollateralPool(),
-      MarketToken: MarketToken()
+      MarketToken: MarketToken(),
+      MarketContractFactory: MarketContractFactory()
     };
+
     deployParams = {
       contractSpecs: validContractSpecs(),
-      web3: mockedCoinbaseWeb3(),
-      network: 'unknown'
+      web3: mockedCoinbaseWeb3()
     };
+
     dispatchSpy = sinon.spy();
   });
 

@@ -1,4 +1,5 @@
 let MarketContractRegistry = {};
+let MarketContractFactory = {};
 let MarketContract = {};
 let MarketCollateralPool = {};
 let MarketToken = {};
@@ -12,6 +13,7 @@ if (process.env.NODE_ENV !== 'test') {
   // useful when running tests
 
   MarketContractRegistry = require('../build/contracts/MarketContractRegistry');
+  MarketContractFactory = require('../build/contracts/MarketContractFactoryOraclize');
   MarketContract = require('../build/contracts/MarketContractOraclize');
   MarketCollateralPool = require('../build/contracts/MarketCollateralPool');
   MarketToken = require('../build/contracts/MarketToken');
@@ -23,6 +25,7 @@ if (process.env.NODE_ENV !== 'test') {
 
 export default {
   MarketContractRegistry,
+  MarketContractFactory,
   MarketContract,
   MarketCollateralPool,
   MarketToken,
