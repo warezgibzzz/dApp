@@ -75,14 +75,12 @@ describe('DeployAction', () => {
     });
   });
 
-  it('should dispatch contract fulfilled if getCoinbase return error', () => {
+  it('should dispatch contract rejected if getCoinbase return error', () => {
     deployParams.web3 = mockedCoinbaseWeb3(Error('Could not fetch coinbase'));
 
     return runDeployAction().catch(() => {
       expect(dispatchSpy).to.have.property('callCount', 2);
-      expect(dispatchSpy.args[1][0].type).to.equals(
-        'DEPLOY_CONTRACT_FULFILLED'
-      );
+      expect(dispatchSpy.args[1][0].type).to.equals('DEPLOY_CONTRACT_REJECTED');
     });
   });
 

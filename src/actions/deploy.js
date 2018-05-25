@@ -65,10 +65,7 @@ export function deployContract(
                 contractConstructorArray,
                 contractSpecs.oracleDataSource,
                 contractSpecs.oracleQuery,
-                {
-                  ...txParams,
-                  gas: 4000000, // TODO : Remove hard-coded gas
-                }
+                txParams
               );
             })
             .then(function(marketContractDeployResults) {
