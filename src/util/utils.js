@@ -310,3 +310,20 @@ export const isTestnetOrMainnet = network => {
     network !== 'truffle' && network !== 'ganache' && network !== 'unknown'
   );
 };
+
+/**
+ * Set `baseTokenAddress` based on the `network`
+ *
+ * `0x01b8de20c76ed06c7e93068a45951c26f70be3db` -- WETH
+ * `0x0c58e89866dda96911a78dedf069a1848618c185` -- Stable USD
+ *
+ * @param network
+ * @return baseTokenAddress
+ *
+ * TODO: Update the method to return `WUSD` if the selected symbol pair is USD
+ */
+export const getBaseTokenAddress = network => {
+  return network === 'rinkeby'
+    ? '0x01b8de20c76ed06c7e93068a45951c26f70be3db'
+    : '';
+};

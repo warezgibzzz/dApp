@@ -2,8 +2,10 @@ import { Col, Row, Steps } from 'antd';
 import React, { Component } from 'react';
 
 import StepAnimation from '../StepAnimation';
-import showMessage from '../message';
 import { DeployStep, ExpirationStep, ExchangeStep, PricingStep } from './Steps';
+
+import showMessage from '../message';
+import { getBaseTokenAddress } from '../../util/utils';
 
 const Step = Steps.Step;
 
@@ -65,7 +67,7 @@ class SimplifiedDeployment extends Component {
 
   render() {
     const currentStep = this.state.step;
-    const { gas } = this.props;
+    const { gas, network } = this.props;
 
     const steps = [
       <ExchangeStep
@@ -104,6 +106,7 @@ class SimplifiedDeployment extends Component {
           // and we shouldn't loose much in terms of precission
           this.setState(
             {
+              baseTokenAddress: getBaseTokenAddress(network),
               priceFloor: Math.round(
                 this.state.priceFloorSimplified *
                   10 ** this.state.priceDecimalPlaces

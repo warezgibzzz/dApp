@@ -24,7 +24,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  const { web3Instance, network } = store.getState().web3;
+  const { web3Instance } = store.getState().web3;
   const initializeContracts = CreateInitializer(
     contractConstructor.bind(null, web3Instance)
   );
@@ -35,8 +35,7 @@ const mapDispatchToProps = dispatch => {
         deployContract(
           {
             web3: web3Instance,
-            contractSpecs,
-            network
+            contractSpecs
           },
           initializeContracts(Contracts)
         )

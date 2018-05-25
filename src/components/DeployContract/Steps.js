@@ -68,6 +68,7 @@ class NameContractStep extends BaseStepComponent {
   render() {
     const contractNameSettings = FieldSettings.contractName;
     const baseTokenSettings = FieldSettings.baseTokenAddress;
+
     return (
       <div>
         <Form onSubmit={this.handleSubmit.bind(this)} layout="vertical">
@@ -156,7 +157,8 @@ class PricingStep extends BaseStepComponent {
                 form={this.props.form}
               />
               <h2>
-                Current Price of {this.props.symbolName}: {this.props.price}
+                Current Price of {this.props.symbolName}:{' '}
+                <span className="text-primary">{this.props.price}</span>
               </h2>
             </div>
           )}
