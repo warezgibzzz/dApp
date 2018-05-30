@@ -118,6 +118,7 @@ class FindContractForm extends Component {
           <List
             grid={{ gutter: 16, column: 2 }}
             dataSource={this.props.contract}
+            style={{ padding: '0 16px' }}
             renderItem={item => (
               <List.Item>
                 <Card title={this.state.keyMap[item.name]}>
@@ -135,7 +136,7 @@ class FindContractForm extends Component {
 
 function ContractFormRow(props) {
   return (
-    <Row type="flex" justify="center" gutter={16} {...props}>
+    <Row type="flex" justify="center" {...props}>
       {props.children}
     </Row>
   );
