@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import showMessage from '../message';
 import GuidedDeployment from './GuidedDeployment';
 import QuickDeployment from './QuickDeployment';
+import SimplifiedDeployment from './SimplifiedDeployment';
 
 class DeployContractForm extends Component {
   handleDeploy = values => {
@@ -32,9 +33,20 @@ class DeployContractForm extends Component {
     );
   }
 
+  getSimplifiedDeploymentComponent(props) {
+    return (
+      <SimplifiedDeployment
+        {...props}
+        {...this.props}
+        onDeployContract={this.handleDeploy}
+      />
+    );
+  }
+
   computeChildrenProps() {
-    const location = this.props.location;
+    const { gas, location, network } = this.props;
     const queryParams = qs.parse(location.search);
+
     const {
       mode = 'quick' // defaults to QuickDeployment
     } = queryParams;
@@ -45,13 +57,22 @@ class DeployContractForm extends Component {
       ...queryParams,
       mode: 'guided'
     })}`;
+
     const switchMode = newMode => {
       this.props.history.push({
         ...location,
         search: `?${qs.stringify({ ...queryParams, mode: newMode })}`
       });
     };
-    return { mode, switchMode, guidedModeUrl, initialValues: queryParams };
+
+    return {
+      gas,
+      guidedModeUrl,
+      initialValues: queryParams,
+      mode,
+      network,
+      switchMode
+    };
   }
 
   render() {
@@ -62,7 +83,7 @@ class DeployContractForm extends Component {
       ? this.getGuidedDeploymentComponent(props)
       : mode === 'quick'
         ? this.getQuickDeploymentComponent(props)
-        : this.getQuickDeploymentComponent(props);
+        : this.getSimplifiedDeploymentComponent(props);
   }
 }
 

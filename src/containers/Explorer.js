@@ -1,12 +1,14 @@
 import { connect } from 'react-redux';
 
 import Contracts from '../Contracts.js';
+import withGAPageView from './GoogleAnalyticsTracker';
+import ContractsList from '../components/ContractsList';
+
 import { loadContracts } from '../actions/explorer';
 import CreateInitializer, {
   contractConstructor
 } from '../util/web3/contractInitializer';
 import { processContractsList } from '../util/utils';
-import ContractsList from '../components/ContractsList';
 import store from '../store';
 
 const mapStateToProps = state => ({
@@ -40,6 +42,8 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-const Explorer = connect(mapStateToProps, mapDispatchToProps)(ContractsList);
+const Explorer = withGAPageView(
+  connect(mapStateToProps, mapDispatchToProps)(ContractsList)
+);
 
 export default Explorer;

@@ -1,0 +1,12 @@
+{
+  "linters": {
+    "*.{js,jsx}": [
+      "prettier --single-quote --write",
+      "npm run lint:fix",
+      "git add"
+    ],
+    "src/**/*.less": ["npm run prettier-less", "git add"],
+    "*.json": ["prettier --single-quote --write", "git add"]
+  },
+  "ignore": ["config/**/*.js", "migrations/**/*.js", "scripts/**/*.js"]
+}

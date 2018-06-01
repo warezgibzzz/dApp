@@ -2,14 +2,10 @@ import { Col, Row, Steps } from 'antd';
 import React, { Component } from 'react';
 
 import StepAnimation from '../StepAnimation';
+import { DeployStep, ExpirationStep, ExchangeStep, PricingStep } from './Steps';
+
 import showMessage from '../message';
-import {
-  DataSourceStep,
-  DeployStep,
-  ExpirationStep,
-  NameContractStep,
-  PricingStep
-} from './Steps';
+import { getBaseTokenAddress } from '../../util/utils';
 
 const Step = Steps.Step;
 
@@ -26,10 +22,10 @@ const parentColLayout = {
 };
 
 /**
- * Component for Guided Deployment of Contracts
+ * Component for Simplified Deployment of Contracts
  *
  */
-class GuidedDeployment extends Component {
+class SimplifiedDeployment extends Component {
   constructor(props) {
     super(props);
 
@@ -71,22 +67,13 @@ class GuidedDeployment extends Component {
 
   render() {
     const currentStep = this.state.step;
-    const { gas, initialValues } = this.props;
+    const { gas, network } = this.props;
 
     const steps = [
-      <NameContractStep
+      <ExchangeStep
         key="0"
         onNextClicked={this.toNextStep.bind(this)}
         updateDeploymentState={this.setState.bind(this)}
-        {...this.state}
-      />,
-
-      <DataSourceStep
-        key="3"
-        onPrevClicked={this.toPrevStep.bind(this)}
-        onNextClicked={this.toNextStep.bind(this)}
-        updateDeploymentState={this.setState.bind(this)}
-        initialValues={initialValues}
         {...this.state}
       />,
 
@@ -95,6 +82,7 @@ class GuidedDeployment extends Component {
         onPrevClicked={this.toPrevStep.bind(this)}
         onNextClicked={this.toNextStep.bind(this)}
         updateDeploymentState={this.setState.bind(this)}
+        isSimplified={true}
         {...this.state}
       />,
 
@@ -105,13 +93,31 @@ class GuidedDeployment extends Component {
         onPrevClicked={this.toPrevStep.bind(this)}
         onNextClicked={this.toNextStep.bind(this)}
         updateDeploymentState={this.setState.bind(this)}
+        isSimplified={true}
         {...this.state}
       />,
 
       <DeployStep
-        key="4"
+        key="3"
         deployContract={() => {
-          this.props.onDeployContract(this.state);
+          // fix decimal points.
+          // this simply assumes the decimal places of the original price.
+          // Since we limit the floor-cap range to 45% to 155%, this is a good estimate
+          // and we shouldn't loose much in terms of precission
+          this.setState(
+            {
+              baseTokenAddress: getBaseTokenAddress(network),
+              priceFloor: Math.round(
+                this.state.priceFloorSimplified *
+                  10 ** this.state.priceDecimalPlaces
+              ),
+              priceCap: Math.round(
+                this.state.priceCapSimplified *
+                  10 ** this.state.priceDecimalPlaces
+              )
+            },
+            () => this.props.onDeployContract(this.state)
+          );
         }}
         showErrorMessage={showMessage.bind(showMessage, 'error')}
         showSuccessMessage={showMessage.bind(showMessage, 'success')}
@@ -127,8 +133,7 @@ class GuidedDeployment extends Component {
         <Row type="flex" justify="center">
           <Col {...parentColLayout}>
             <Steps current={currentStep} style={{ marginBottom: '40px' }}>
-              <Step title="Name" />
-              <Step title="Data Source" />
+              <Step title="Exchange" />
               <Step title="Pricing" />
               <Step title="Expiration" />
               <Step title="Deploy" />
@@ -143,4 +148,4 @@ class GuidedDeployment extends Component {
   }
 }
 
-export default GuidedDeployment;
+export default SimplifiedDeployment;

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
-import { Alert, Form, Input, InputNumber, Button } from 'antd';
+import { Alert, Button, Form, Input, InputNumber } from 'antd';
 import { mount, shallow } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
@@ -11,11 +11,14 @@ import {
   PricingStep,
   ExpirationStep,
   DataSourceStep,
-  DeployStep
+  DeployStep,
+  ExchangeStep
 } from '../../../src/components/DeployContract/Steps';
+import Field from '../../../src/components/DeployContract/DeployContractField';
 
 describe('NameContractStep', () => {
   let nameContractStep;
+
   beforeEach(() => {
     nameContractStep = mount(<NameContractStep />);
   });
@@ -36,6 +39,7 @@ describe('NameContractStep', () => {
 
 describe('PricingStep', () => {
   let pricingStep;
+
   beforeEach(() => {
     pricingStep = mount(<PricingStep />);
   });
@@ -54,6 +58,61 @@ describe('PricingStep', () => {
   });
 });
 
+describe('PricingStep Simplified', () => {
+  let pricingStep;
+  let updateDeploymentStateSpy;
+  let onNextClickedSpy;
+
+  beforeEach(() => {
+    updateDeploymentStateSpy = sinon.spy();
+    onNextClickedSpy = sinon.spy();
+    pricingStep = mount(
+      <PricingStep
+        updateDeploymentState={updateDeploymentStateSpy}
+        onNextClicked={onNextClickedSpy}
+        isSimplified
+      />
+    );
+  });
+
+  it('renders without crashing', () => {
+    const div = document.createElement('div');
+    ReactDOM.render(<PricingStep isSimplified />, div);
+  });
+
+  it('should display four inputs felds to accept price cap and price floor', () => {
+    expect(pricingStep.find(InputNumber)).to.have.length(2);
+  });
+
+  it('should have two buttons to navigate back and forward', () => {
+    expect(pricingStep.find(Button)).to.have.length(2);
+  });
+
+  it('should not proceed on error in form: price floor too low', () => {
+    pricingStep.setProps({
+      price: 1.0,
+      priceCap: 1.5,
+      priceFloor: 0.4
+    });
+
+    pricingStep.find(Form).simulate('submit');
+    expect(updateDeploymentStateSpy).to.have.property('callCount', 0);
+    expect(onNextClickedSpy).to.have.property('callCount', 0);
+  });
+
+  it('should not proceed on error in form: price cap too high', () => {
+    pricingStep.setProps({
+      price: 1.0,
+      priceCap: 1.6,
+      priceFloor: 0.6
+    });
+
+    pricingStep.find(Form).simulate('submit');
+    expect(updateDeploymentStateSpy).to.have.property('callCount', 0);
+    expect(onNextClickedSpy).to.have.property('callCount', 0);
+  });
+});
+
 describe('ExpirationStep', () => {
   let updateDeploymentStateSpy;
   let onNextClickedSpy;
@@ -62,9 +121,13 @@ describe('ExpirationStep', () => {
   beforeEach(() => {
     updateDeploymentStateSpy = sinon.spy();
     onNextClickedSpy = sinon.spy();
-    expirationStep = mount(<ExpirationStep
-      updateDeploymentState={updateDeploymentStateSpy}
-      onNextClicked={onNextClickedSpy} />);
+
+    expirationStep = mount(
+      <ExpirationStep
+        onNextClicked={onNextClickedSpy}
+        updateDeploymentState={updateDeploymentStateSpy}
+      />
+    );
   });
 
   it('renders without crashing', () => {
@@ -72,13 +135,26 @@ describe('ExpirationStep', () => {
     ReactDOM.render(<ExpirationStep />, div);
   });
 
+  it('renders guided display 0 input field and 2 input number fields', () => {
+    expect(expirationStep.find(Input)).to.have.length(0);
+    expect(expirationStep.find(InputNumber)).to.have.length(2);
+  });
+
+  it('renders simplified display 1 input field and 2 input number fields', () => {
+    expirationStep.setProps({ isSimplified: true });
+    expect(expirationStep.find(Input)).to.have.length(1);
+    expect(expirationStep.find(InputNumber)).to.have.length(2);
+  });
+
   it('should updateDeploymentState on submit', () => {
     expirationStep.setProps({
       expirationTimeStamp: 1234567,
       form: {
-        validateFields(cb) { cb(null, {}); },
+        validateFields(cb) {
+          cb(null, {});
+        },
         getFieldDecorator(name, object) {
-          return (component) => component;
+          return component => component;
         }
       }
     });
@@ -92,9 +168,11 @@ describe('ExpirationStep', () => {
     expirationStep.setProps({
       expirationTimeStamp: 1234567,
       form: {
-        validateFields(cb) { cb(new Error('Test field fails')); },
+        validateFields(cb) {
+          cb(new Error('Test field fails'));
+        },
         getFieldDecorator(name, object) {
-          return (component) => component;
+          return component => component;
         }
       }
     });
@@ -113,13 +191,15 @@ describe('ExpirationStep', () => {
           cb(null, { expirationTimeStamp: currentMoment });
         },
         getFieldDecorator(name, object) {
-          return (component) => component;
+          return component => component;
         }
       }
     });
 
     expirationStep.find(Form).simulate('submit');
-    expect(updateDeploymentStateSpy.args[0][0].expirationTimeStamp).to.equals(expectedTimeStamp);
+    expect(updateDeploymentStateSpy.args[0][0].expirationTimeStamp).to.equals(
+      expectedTimeStamp
+    );
   });
 });
 
@@ -140,10 +220,13 @@ describe('DeployStep', () => {
     successMessageSpy = sinon.spy();
     errorMessageSpy = sinon.spy();
 
-    deployStep = shallow(<DeployStep 
-      deployContract={deployContractSpy}
-      showSuccessMessage={successMessageSpy}
-      showErrorMessage={errorMessageSpy} />);
+    deployStep = shallow(
+      <DeployStep
+        deployContract={deployContractSpy}
+        showSuccessMessage={successMessageSpy}
+        showErrorMessage={errorMessageSpy}
+      />
+    );
   });
 
   it('renders without crashing', () => {
@@ -159,9 +242,13 @@ describe('DeployStep', () => {
   it('should only render .result when contract is created', () => {
     deployStep.setProps({ error: null, loading: true, contract: null });
     expect(deployStep.find('.result')).to.have.length(0);
-    deployStep.setProps({ error: null, loading: false, contract: {
-      address: '0x00000'
-    } });
+    deployStep.setProps({
+      error: null,
+      loading: false,
+      contract: {
+        address: '0x00000'
+      }
+    });
     expect(deployStep.find('.result')).to.have.length(1);
   });
 
@@ -173,9 +260,43 @@ describe('DeployStep', () => {
 
   it('should call showSuccessMessage if new props has contract', () => {
     deployStep.setProps({ error: null, loading: true, contract: null });
-    deployStep.setProps({ error: null, loading: false, contract: {
-      address: '0x00000'
-    } });
+    deployStep.setProps({
+      error: null,
+      loading: false,
+      contract: {
+        address: '0x00000'
+      }
+    });
     expect(successMessageSpy).to.have.property('callCount', 1);
+  });
+});
+
+describe('ExchangeStep', () => {
+  let exchangeStep;
+  let updateDeploymentStateSpy;
+  let wrappedComponentRef;
+  beforeEach(() => {
+    updateDeploymentStateSpy = sinon.spy();
+
+    exchangeStep = mount(
+      <ExchangeStep
+        wrappedComponentRef={inst => (wrappedComponentRef = inst)}
+        updateDeploymentState={updateDeploymentStateSpy}
+      />
+    );
+  });
+
+  it('renders without crashing', () => {
+    const div = document.createElement('div');
+    ReactDOM.render(<ExchangeStep />, div);
+  });
+
+  it('should change exchangeApi state when select api', () => {
+    const value = 'KRA';
+    exchangeStep
+      .find(Field)
+      .getElement()
+      .props.onChange(value);
+    expect(wrappedComponentRef.state.exchangeApi).to.equal(value);
   });
 });

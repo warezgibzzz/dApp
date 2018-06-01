@@ -1,13 +1,22 @@
 import { Layout } from 'antd';
 import React, { Component } from 'react';
 import { Route, Router } from 'react-router';
-import './less/App.less';
+
 import Header from './components/Header';
+
 import { routes } from './routes';
+
+import './less/App.less';
 
 const { Footer, Content } = Layout;
 
 class App extends Component {
+  componentWillMount() {
+    if (localStorage) {
+      localStorage.setItem('showWelcomeMessage', true);
+    }
+  }
+
   render() {
     return (
       <Router history={this.props.history}>
@@ -18,13 +27,14 @@ class App extends Component {
           </Content>
 
           <Footer className="footer">
-            dApp ©2018 Created by&nbsp;
+            dApp ©2018 Created by
             <a
+              style={{ marginLeft: 4 }}
               href="https://marketprotocol.io"
               target="_blank"
               rel="noopener noreferrer"
             >
-            MARKET Protocol
+              MARKET Protocol
             </a>
           </Footer>
         </Layout>

@@ -1,17 +1,23 @@
 /**
  * Default mocked contract instances.
  * It is currenlty setup to work along the happy paths.
- * 
+ *
  * ASIDE: There should be a library that can read abi's and automatically create a
  *        mock with default implementations just like this module is doing manually.
- * 
+ *
  */
 const defaultContractInstances = {
   MarketContractRegistry: {
     address: '0x00001',
     addAddressToWhiteList(address, ...params) {},
-    isAddressWhiteListed(address) { return Promise.resolve(true); },
-    getAddressWhiteList: { call() { return Promise.resolve([]); } }
+    isAddressWhiteListed(address) {
+      return Promise.resolve(true);
+    },
+    getAddressWhiteList: {
+      call() {
+        return Promise.resolve([]);
+      }
+    }
   },
   MarketContract: {
     address: '0x00002',
@@ -26,7 +32,23 @@ const defaultContractInstances = {
   QueryTest: {
     address: '0x00005',
     queryCost: 20000,
-    getQueryCost(oracleSource) { return this.queryCost; }
+    getQueryCost(oracleSource) {
+      return this.queryCost;
+    }
+  },
+  MarketContractFactory: {
+    address: '0x00006',
+    deployMarketContractOraclize(
+      contractName,
+      baseTokenAddress,
+      contractSpecs,
+      oracleDataSource,
+      oracleQuery
+    ) {
+      return Promise.resolve({
+        logs: [{ args: { contractAddress: '0x00002' } }, 2]
+      });
+    }
   }
 };
 
@@ -49,22 +71,23 @@ MockContract.prototype = {
 };
 
 function createMockContract(contractName) {
-  function MockMarketToken() { }
-  Object.assign(
-    MockMarketToken.prototype,
-    MockContract.prototype, 
-    {
-      // update instance with default contract instances
-      instance: defaultContractInstances[contractName]
-    }
-  );
+  function MockMarketToken() {}
+  Object.assign(MockMarketToken.prototype, MockContract.prototype, {
+    // update instance with default contract instances
+    instance: defaultContractInstances[contractName]
+  });
 
-  return () => (new MockMarketToken());
+  return () => new MockMarketToken();
 }
 
-export const MarketContractRegistry = createMockContract('MarketContractRegistry');
+export const MarketContractRegistry = createMockContract(
+  'MarketContractRegistry'
+);
 export const MarketContract = createMockContract('MarketContract');
 export const MarketCollateralPool = createMockContract('MarketCollateralPool');
+export const MarketContractFactory = createMockContract(
+  'MarketContractFactory'
+);
 export const MarketToken = createMockContract('MarketToken');
 export const CollateralToken = createMockContract('CollateralToken');
 export const QueryTest = createMockContract('QueryTest');

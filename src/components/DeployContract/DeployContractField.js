@@ -9,18 +9,19 @@ import {
 } from 'antd';
 import moment from 'moment';
 import React from 'react';
-import { checkERC20Contract } from '../../util/validations';
+import FormValidators from '../../util/forms/Validators';
 import store from '../../store';
 import OracleDataSources, {
   getDataSourceObj
 } from '../TestQuery/OracleDataSources';
+import ExchangeSources from './ExchangeSources';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
 const ethAddressValidator = (rule, value, callback) => {
   const web3 = store.getState().web3.web3Instance;
-  checkERC20Contract(web3, value, callback);
+  FormValidators(web3).checkERC20Contract(value, callback);
 };
 
 const timestampValidator = (rule, value, callback) => {
@@ -39,6 +40,38 @@ const priceFloorValidator = (form, rule, value, callback) => {
 
 const priceCapValidator = (form, rule, value, callback) => {
   const priceFloor = form.getFieldValue('priceFloor');
+
+  callback(
+    value >= priceFloor
+      ? undefined
+      : 'Price cap must be greater-than or equal to the price floor'
+  );
+};
+
+const priceFloorSimplifiedValidator = (form, rule, value, callback) => {
+  const priceCap = form.getFieldValue('priceCapSimplified');
+  const price = form.getFieldValue('price');
+
+  // just picked a number lower than the default of 0.5 * price
+  if (value < 0.45 * price) {
+    callback('Price floor must be larger than 45% of the current price');
+  }
+
+  callback(
+    value <= priceCap
+      ? undefined
+      : 'Price floor must be less-than or equal to the price cap'
+  );
+};
+
+const priceCapSimplifiedValidator = (form, rule, value, callback) => {
+  const priceFloor = form.getFieldValue('priceFloorSimplified');
+  const price = form.getFieldValue('price');
+
+  // just picked a number larger than the default of 1.5 * price
+  if (value > 1.55 * price) {
+    callback('Price cap must be smaller than 155% of the current price');
+  }
 
   callback(
     value >= priceFloor
@@ -183,6 +216,87 @@ const fieldSettingsByName = {
     }
   },
 
+  priceFloorSimplified: {
+    label: 'Price Floor',
+    initialValue: 0,
+    rules: form => {
+      return [
+        {
+          required: true,
+          message: 'Please enter a price floor'
+        },
+        {
+          type: 'number',
+          message: 'Value must be a number'
+        },
+        {
+          validator: (rule, value, callback) => {
+            priceFloorSimplifiedValidator(form, rule, value, callback);
+          }
+        }
+      ];
+    },
+    extra: `The lower bound of price exposure this contract will trade. If the oracle reports a price below this 
+    value the contract will enter into settlement`,
+
+    component: ({ form }) => {
+      return (
+        <InputNumber
+          min={0}
+          style={{ width: '100%' }}
+          onChange={() => {
+            setTimeout(() => {
+              form.validateFields(['priceCapSimplified'], { force: true });
+            }, 100);
+          }}
+        />
+      );
+    }
+  },
+
+  priceCapSimplified: {
+    label: 'Price Cap',
+    initialValue: 150,
+    rules: form => {
+      return [
+        {
+          required: true,
+          message: 'Please enter a price cap'
+        },
+        {
+          type: 'number',
+          message: 'Value must be a number'
+        },
+        {
+          validator: (rule, value, callback) => {
+            priceCapSimplifiedValidator(form, rule, value, callback);
+          }
+        }
+      ];
+    },
+    extra: `The upper bound of price exposure this contract will trade. If the oracle reports a price above this
+    value the contract will enter into settlement`,
+
+    component: ({ form }) => {
+      return (
+        <InputNumber
+          min={0}
+          style={{ width: '100%' }}
+          onChange={() => {
+            setTimeout(() => {
+              form.validateFields(['priceFloorSimplified'], { force: true });
+            }, 100);
+          }}
+        />
+      );
+    }
+  },
+
+  price: {
+    // Hidden field for the symbol price for simplified contract deployment for easier validation of price floor and cap
+    component: () => <Input type="hidden" />
+  },
+
   priceDecimalPlaces: {
     label: 'Price Decimal Places',
     initialValue: 2,
@@ -238,11 +352,20 @@ const fieldSettingsByName = {
         validator: timestampValidator
       }
     ],
-    extra: 'Expiration timestamp for all open positions to settle.',
+    extra:
+      'Expiration timestamp for all open positions to settle. Cannot be more than 60 days from now.',
 
     component: () => (
       <DatePicker
         showTime
+        disabledDate={current => {
+          const now = moment().startOf('day');
+          return (
+            current &&
+            (current.isBefore(now, 'day') ||
+              current.startOf('day').diff(now, 'days') > 60)
+          );
+        }}
         format="YYYY-MM-DD HH:mm:ss"
         style={{ width: '100%' }}
       />
@@ -292,11 +415,35 @@ const fieldSettingsByName = {
       'Properly structured Oraclize.it query, please use the test query page for clarification',
 
     component: () => <Input />
+  },
+
+  exchangeApi: {
+    label: 'Exchange Api',
+    initialValue: 'Binance',
+    rules: [
+      {
+        required: true,
+        message: 'Please select a exchange api'
+      }
+    ],
+    extra: 'Available exchange api',
+
+    component: ({ onChange }) => {
+      return (
+        <Select onChange={onChange}>
+          {ExchangeSources.map(exchange => (
+            <Option key={exchange.key} value={exchange.key}>
+              {exchange.name}
+            </Option>
+          ))}
+        </Select>
+      );
+    }
   }
 };
 
 function DeployContractField(props) {
-  const { name, form, initialValue, showHint } = props;
+  const { name, form, initialValue, showHint, onChange } = props;
   const { getFieldDecorator } = form;
   const fieldSettings = fieldSettingsByName[name];
 
@@ -321,7 +468,8 @@ function DeployContractField(props) {
         fieldSettings.component({
           form,
           fieldSettings,
-          showHint
+          showHint,
+          onChange
         })
       )}
     </FormItem>

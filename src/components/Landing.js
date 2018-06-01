@@ -10,10 +10,12 @@ import exploreIcons from '../img/explore-icons.svg';
 import testIcons from '../img/test-icons.svg';
 import simulateIcons from '../img/simulated-icons.svg';
 
+import WelcomeMessage from './WelcomeMessage';
+
 // Styles
 import '../less/Landing.less';
 
-class Landing extends Component {
+class LandingComponent extends Component {
   render() {
     return (
       <div>
@@ -152,9 +154,11 @@ class Landing extends Component {
             </div>
           </Col>
         </Row>
+
+        <WelcomeMessage network={this.props.network} />
       </div>
     );
   }
 }
 
-export default Landing;
+export default LandingComponent;

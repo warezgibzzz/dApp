@@ -35,8 +35,13 @@ class TestQueryForm extends Component {
       transitionDirection: 'next',
       oracleDataSource: 'URL',
       oracleQuery: '',
+      gas: props.gas,
       gasPrice: 2
     };
+  }
+
+  componentWillMount() {
+    this.props.getGasEstimate();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -54,9 +59,16 @@ class TestQueryForm extends Component {
     if (this.props.transaction !== nextProps.transaction) {
       showMessage(
         'info',
-        TestQuerySuccess(this.props.network, nextProps.transaction),
+        TestQuerySuccess({
+          network: this.props.network,
+          txHash: nextProps.transaction
+        }),
         8
       );
+    }
+
+    if (this.props.gas !== nextProps.gas) {
+      this.setState({ gas: nextProps.gas });
     }
   }
 
@@ -83,10 +95,12 @@ class TestQueryForm extends Component {
     this.props.onTestQuery(this.state);
   }
 
-  onGasPriceChange(price) {
-    this.setState({
-      gasPrice: price
-    });
+  onUpdateGasLimit(gas) {
+    this.setState({ gas });
+  }
+
+  onUpdateGasPrice(price) {
+    this.setState({ gasPrice: price });
   }
 
   toNextStep() {
@@ -124,6 +138,7 @@ class TestQueryForm extends Component {
 
   render() {
     const currentStep = this.state.step;
+
     const steps = [
       <AboutOraclesStep key="0" onNextClicked={this.toNextStep.bind(this)} />,
 
@@ -139,7 +154,10 @@ class TestQueryForm extends Component {
         key="2"
         dataSource={this.state.oracleDataSource}
         location={this.props.location}
-        onGasPriceChange={this.onGasPriceChange.bind(this)}
+        network={this.props.network}
+        gas={this.props.gas}
+        onUpdateGasLimit={this.onUpdateGasLimit.bind(this)}
+        onUpdateGasPrice={this.onUpdateGasPrice.bind(this)}
         onPrevClicked={this.toPrevStep.bind(this)}
         onChange={this.onQueryChange.bind(this)}
         onSubmit={this.onQuerySubmit.bind(this)}

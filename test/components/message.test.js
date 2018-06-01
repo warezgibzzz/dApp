@@ -1,7 +1,3 @@
-import React from 'react';
-import { mount } from 'enzyme';
-import { expect } from 'chai';
-
 import showMessage from '../../src/components/message';
 
 describe('showMessage', () => {
@@ -9,6 +5,4 @@ describe('showMessage', () => {
     const handler = showMessage('success', 'It was successful', 2);
     handler();
   });
-
-  
 });

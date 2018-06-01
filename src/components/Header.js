@@ -26,6 +26,11 @@ class Header extends Component {
                     <Link to="/contract/deploy?mode=quick">Quick Deploy</Link>
                   </MenuItem>
                   <MenuItem>
+                    <Link to="/contract/deploy?mode=simplified">
+                      Simplified Deploy
+                    </Link>
+                  </MenuItem>
+                  <MenuItem>
                     <Link to="/contract/deploy?mode=guided">Guided Deploy</Link>
                   </MenuItem>
                 </SubMenu>

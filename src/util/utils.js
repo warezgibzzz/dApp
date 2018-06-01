@@ -197,6 +197,9 @@ export async function processContractsList(
         .then(data => data.toNumber());
       contractJSON['isSettled'] = await instance.isSettled.call();
 
+      // TODO: There is a possibility a contract ends up in our registry that wasn't linked to a collateral pool
+      // correctly.  The code below will handle this, but a better solution would probably to not actually
+      // display contracts that are not correctly linked to a collateral pool!
       await marketCollateralPool
         .at(await instance.marketCollateralPoolAddress.call())
         .then(async function(collateralPoolInstance) {
@@ -205,6 +208,10 @@ export async function processContractsList(
           ] = await collateralPoolInstance.collateralPoolBalance
             .call()
             .then(data => data.toNumber());
+        })
+        .catch(function(err) {
+          console.error(err);
+          contractJSON['collateralPoolBalance'] = 'NA';
         });
 
       return contractJSON;
@@ -288,4 +295,35 @@ export const getMetamaskError = function(message) {
   if (message.indexOf('User denied transaction') !== -1)
     return 'User denied transaction';
   else return message;
+};
+
+export const getLocationOrigin = () => window.location.origin;
+
+/**
+ * Detect if network belongs to testnet/mainnet
+ *
+ * @param network
+ * @return boolean true/false
+ */
+export const isTestnetOrMainnet = network => {
+  return (
+    network !== 'truffle' && network !== 'ganache' && network !== 'unknown'
+  );
+};
+
+/**
+ * Set `baseTokenAddress` based on the `network`
+ *
+ * `0x01b8de20c76ed06c7e93068a45951c26f70be3db` -- WETH
+ * `0x0c58e89866dda96911a78dedf069a1848618c185` -- Stable USD
+ *
+ * @param network
+ * @return baseTokenAddress
+ *
+ * TODO: Update the method to return `WUSD` if the selected symbol pair is USD
+ */
+export const getBaseTokenAddress = network => {
+  return network === 'rinkeby'
+    ? '0x01b8de20c76ed06c7e93068a45951c26f70be3db'
+    : '';
 };

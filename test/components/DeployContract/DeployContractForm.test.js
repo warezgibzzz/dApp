@@ -6,6 +6,7 @@ import sinon from 'sinon';
 import DeployContractForm from '../../../src/components/DeployContract/DeployContractForm';
 import QuickDeployment from '../../../src/components/DeployContract/QuickDeployment';
 import GuidedDeployment from '../../../src/components/DeployContract/GuidedDeployment';
+import SimplifiedDeployment from '../../../src/components/DeployContract/SimplifiedDeployment';
 
 describe('DeployContractForm', () => {
   let deployContractForm;
@@ -16,13 +17,13 @@ describe('DeployContractForm', () => {
       location: {},
       onDeployContract: onDeployContractSpy
     };
-    deployContractForm = shallow(<DeployContractForm {...props}/>);
+    deployContractForm = shallow(<DeployContractForm {...props} />);
   });
-  
+
   it('should render QuickDeployment by default', () => {
     deployContractForm.setProps({
       location: {
-        search: ""
+        search: ''
       }
     });
     expect(deployContractForm.find(QuickDeployment)).to.have.length(1);
@@ -31,21 +32,24 @@ describe('DeployContractForm', () => {
   it('should render QuickDeployment if mode is quick', () => {
     deployContractForm.setProps({
       location: {
-        search: "?mode=quick"
+        search: '?mode=quick'
       }
     });
     expect(deployContractForm.find(QuickDeployment)).to.have.length(1);
   });
 
   it('should deployContract when QuickDeployment.props.onDeployContract is invoked', () => {
-    deployContractForm.find(QuickDeployment).props().onDeployContract({});
+    deployContractForm
+      .find(QuickDeployment)
+      .props()
+      .onDeployContract({});
     expect(onDeployContractSpy).to.have.property('callCount', 1);
   });
 
   it('should render GuidedDeployment if mode is guided', () => {
     deployContractForm.setProps({
       location: {
-        search: "?mode=guided"
+        search: '?mode=guided'
       }
     });
     expect(deployContractForm.find(GuidedDeployment)).to.have.length(1);
@@ -54,10 +58,35 @@ describe('DeployContractForm', () => {
   it('should deployContract when GuidedDeployment.props.onDeployContract is invoked', () => {
     deployContractForm.setProps({
       location: {
-        search: "?mode=guided"
+        search: '?mode=guided'
       }
     });
-    deployContractForm.find(GuidedDeployment).props().onDeployContract({});
+    deployContractForm
+      .find(GuidedDeployment)
+      .props()
+      .onDeployContract({});
+    expect(onDeployContractSpy).to.have.property('callCount', 1);
+  });
+
+  it('should render SimplifiedDeployment if mode is simplified', () => {
+    deployContractForm.setProps({
+      location: {
+        search: '?mode=guided'
+      }
+    });
+    expect(deployContractForm.find(GuidedDeployment)).to.have.length(1);
+  });
+
+  it('should deployContract when SimplifiedDeployment.props.onDeployContract is invoked', () => {
+    deployContractForm.setProps({
+      location: {
+        search: '?mode=simplified'
+      }
+    });
+    deployContractForm
+      .find(SimplifiedDeployment)
+      .props()
+      .onDeployContract({});
     expect(onDeployContractSpy).to.have.property('callCount', 1);
   });
 
@@ -68,8 +97,11 @@ describe('DeployContractForm', () => {
         push: navSpy
       }
     });
-    deployContractForm.find(QuickDeployment).props().switchMode('guided');
+    deployContractForm
+      .find(QuickDeployment)
+      .props()
+      .switchMode('guided');
     expect(navSpy).to.have.property('callCount', 1);
-    // TODO: Test the actuall parameters pushed to history stack.
+    // TODO: Test the actual parameters pushed to history stack.
   });
 });

@@ -95,6 +95,4 @@ class SimExchange extends Component {
   }
 }
 
-SimExchange = withRouter(SimExchange);
-
-export default SimExchange;
+export default withRouter(SimExchange);

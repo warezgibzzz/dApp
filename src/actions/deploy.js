@@ -1,6 +1,3 @@
-import Rx from 'rxjs/Rx';
-import { XMLHttpRequest } from 'xmlhttprequest';
-
 import { getMetamaskError } from '../util/utils';
 
 /**
@@ -12,7 +9,12 @@ import { getMetamaskError } from '../util/utils';
  */
 export function deployContract(
   { web3, contractSpecs },
-  { MarketContractRegistry, MarketContract, MarketCollateralPool, MarketToken }
+  {
+    MarketContractRegistry,
+    MarketContract,
+    MarketContractFactory,
+    MarketCollateralPool
+  }
 ) {
   const type = 'DEPLOY_CONTRACT';
 
@@ -33,87 +35,66 @@ export function deployContract(
         // Get current ethereum wallet.
         web3.eth.getCoinbase((error, coinbase) => {
           // Log errors, if any
-          // TODO(perfectmak): handle this error
           if (error) {
             console.error(error);
+            dispatch({
+              type: `${type}_REJECTED`,
+              payload: getMetamaskError(error.message.split('\n')[0])
+            });
+
+            return reject(getMetamaskError(error.message.split('\n')[0]));
           }
 
           console.log('Attempting to deploy contract from ' + coinbase);
 
           // find the address of the MKT token so we can link to our deployed contract
           let marketContractInstanceDeployed;
+          let marketContractDeployedAddress;
 
-          MarketToken.deployed()
-            .then(function(marketTokenInstance) {
-              return MarketContract.new(
+          let txParams = {
+            gas: contractSpecs.gas,
+            gasPrice: web3.toWei(contractSpecs.gasPrice, 'gwei'),
+            from: coinbase
+          };
+
+          MarketContractFactory.deployed()
+            .then(function(contractFactory) {
+              return contractFactory.deployMarketContractOraclize(
                 contractSpecs.contractName,
-                marketTokenInstance.address,
                 contractSpecs.baseTokenAddress,
                 contractConstructorArray,
                 contractSpecs.oracleDataSource,
                 contractSpecs.oracleQuery,
-                {
-                  gas: 5700000, // TODO : Remove hard-coded gas
-                  gasPrice: web3.toWei(contractSpecs.gasPrice, 'gwei'),
-                  from: coinbase
-                }
+                txParams
               );
             })
-            .then(function(marketContractInstance) {
-              marketContractInstanceDeployed = marketContractInstance;
-              return MarketCollateralPool.new(marketContractInstance.address, {
-                gas: 2100000,
-                gasPrice: web3.toWei(contractSpecs.gasPrice, 'gwei'),
-                from: coinbase
-              });
+            .then(function(marketContractDeployResults) {
+              marketContractDeployedAddress =
+                marketContractDeployResults.logs[0].args.contractAddress;
+              console.log(
+                'Market Contract deployed to ' + marketContractDeployedAddress
+              );
+              return MarketCollateralPool.new(
+                marketContractDeployedAddress,
+                txParams
+              );
             })
             .then(function(marketCollateralPoolInstance) {
-              return marketContractInstanceDeployed.setCollateralPoolContractAddress(
-                marketCollateralPoolInstance.address,
-                {
-                  from: coinbase,
-                  gasPrice: web3.toWei(contractSpecs.gasPrice, 'gwei')
+              console.log(
+                'Market Collateral Pool deployed to ' +
+                  marketCollateralPoolInstance.address
+              );
+              return MarketContract.at(marketContractDeployedAddress).then(
+                function(deployMarketContract) {
+                  marketContractInstanceDeployed = deployMarketContract;
+                  return deployMarketContract.setCollateralPoolContractAddress(
+                    marketCollateralPoolInstance.address,
+                    txParams
+                  );
                 }
               );
             })
             .then(function() {
-              return MarketContractRegistry.deployed();
-            })
-            .then(function(marketContractRegistryInstance) {
-              web3.version.getNetwork((error, network) => {
-                // Rinkeby
-                if (network === '4') {
-                  // Add deployed contract address to whitelist
-                  Rx.Observable.ajax({
-                    url: 'https://api.marketprotocol.io/contracts/whitelist',
-                    method: 'POST',
-                    body: { address: marketContractInstanceDeployed.address },
-                    headers: {
-                      'Content-Type': 'application/json'
-                    },
-                    responseType: 'json',
-                    crossDomain: true,
-                    createXHR: () => new XMLHttpRequest()
-                  })
-                    .catch(
-                      err =>
-                        err.xhr
-                          ? Rx.Observable.of(err)
-                          : Rx.Observable.of('.___.')
-                    )
-                    .map(data => data.response)
-                    .subscribe(res => console.log(res));
-                } else {
-                  marketContractRegistryInstance.addAddressToWhiteList(
-                    marketContractInstanceDeployed.address,
-                    {
-                      from: web3.eth.accounts[0],
-                      gasPrice: web3.toWei(contractSpecs.gasPrice, 'gwei')
-                    }
-                  );
-                }
-              });
-
               dispatch({
                 type: `${type}_FULFILLED`,
                 payload: marketContractInstanceDeployed
@@ -141,3 +122,6 @@ export function deployContract(
     });
   };
 }
+
+// TODO: Add getGasEstimate for creating new MarketContract
+// Ref: https://github.com/trufflesuite/truffle-contract/tree/web3-one-readme

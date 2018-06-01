@@ -18,9 +18,9 @@ EB_PATH=../ethereum-bridge
 default:
 	pwd
 
-# install truffle 4.1.3 as latest versions throw error while migrate
+# install truffle
 install_truffle:
-	npm i -g truffle@4.1.3
+	npm i -g truffle
 
 # install required dependencies
 install_deps:

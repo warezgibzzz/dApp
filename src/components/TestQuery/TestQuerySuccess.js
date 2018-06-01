@@ -1,6 +1,6 @@
 import React from 'react';
 
-function TestQuerySuccess(network, txHash) {
+function TestQuerySuccess({ network, txHash }) {
   let link;
 
   switch (network) {

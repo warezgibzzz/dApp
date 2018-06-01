@@ -2,7 +2,10 @@
   "name": "market-dapp",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://dapp.marketprotocol.io/",
+  "homepage": "https://dapp.marketprotocol.io/",
+  "engines": {
+    "node": "^8.11.2"
+  },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "babel-plugin-import": "^1.7.0",
@@ -23,6 +26,7 @@
     "less-vars-to-js": "^1.2.1",
     "lint-staged": "^7.0.5",
     "prettier": "^1.12.1",
+    "react-ga": "^2.5.2",
     "sinon": "^4.2.2",
     "web3-fake-provider": "^0.1.0"
   },
@@ -44,7 +48,7 @@
     "fs-extra": "3.0.1",
     "html-webpack-plugin": "2.29.0",
     "jest": "20.0.4",
-    "market-solidity": "0.0.23",
+    "market-solidity": "0.0.28",
     "moment": "^2.20.1",
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "3.2.0",
@@ -82,29 +86,18 @@
     "start": "node scripts/start.js",
     "start:rinkeby": "npm run copy:rinkeby && node scripts/start.js",
     "build": "node scripts/build.js",
-    "build:rinkeby": "npm run clean && npm run copy:rinkeby && node scripts/build.js",
+    "build:rinkeby":
+      "npm run clean && npm run copy:rinkeby && node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
+    "coverage": "npm run test -- --coverage",
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
-    "lint": "eslint src/ --ext .js",
-    "precommit": "lint-staged",
+    "lint": "eslint src/**/*.js test/**/*.js",
+    "lint:fix": "eslint --fix src/**/*.js test/**/*.js",
+    "precommit": "lint-staged && npm run coverage",
     "clean": "rm -rf ./dApp/",
     "copy:rinkeby": "rm -rf ./build/ && cp -r rinkeby-build/ build/",
-    "prettier-less": "prettier --single-quote --parser less --write \"./src/**/*.less\""
-  },
-  "lint-staged": {
-    "./src/**/*.{js,jsx}": [
-      "prettier --single-quote --write",
-      "eslint --fix",
-      "git add"
-    ],
-    "./src/**/*.less": [
-      "npm run prettier-less",
-      "git add"
-    ],
-    "src/**/*.json": [
-      "prettier --single-quote --write",
-      "git add"
-    ]
+    "prettier-less":
+      "prettier --single-quote --parser less --write \"./src/**/*.less\""
   },
   "jest": {
     "collectCoverageFrom": [
@@ -113,22 +106,17 @@
       "!src/index.js",
       "!src/registerServiceWorker.js"
     ],
-    "setupFiles": [
-      "<rootDir>/config/polyfills.js"
-    ],
-    "testMatch": [
-      "<rootDir>/test/**/?(*.)(spec|test).{js,jsx,mjs}"
-    ],
+    "setupFiles": ["<rootDir>/config/polyfills.js"],
+    "testMatch": ["<rootDir>/test/**/?(*.)(spec|test).{js,jsx,mjs}"],
     "testEnvironment": "node",
     "testURL": "http://localhost",
     "transform": {
       "^.+\\.(js|jsx|mjs)$": "<rootDir>/node_modules/babel-jest",
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
-      "^(?!.*\\.(js|jsx|mjs|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+      "^(?!.*\\.(js|jsx|mjs|css|json)$)":
+        "<rootDir>/config/jest/fileTransform.js"
     },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$"
-    ],
+    "transformIgnorePatterns": ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$"],
     "moduleNameMapper": {
       "^react-native$": "react-native-web"
     },
@@ -144,9 +132,7 @@
     "setupTestFrameworkScriptFile": "<rootDir>/test/setup.js"
   },
   "babel": {
-    "presets": [
-      "react-app"
-    ]
+    "presets": ["react-app"]
   },
   "eslintConfig": {
     "extends": "react-app"

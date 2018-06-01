@@ -18,6 +18,9 @@
 ##### Affected core subsystem(s)
 <!-- Provide affected core subsystem(s) (like Docs, UI, UX, Tests etc). -->
 
+##### Screenshots (Optional) 
+<!-- Please attach screenshots of all purposeful UI changes (before and after screens are recommended). -->
+
 ##### Testing
 <!-- Why should the PR reviewer trust that this change doesn't break anything? How have you tested this change? -->
 

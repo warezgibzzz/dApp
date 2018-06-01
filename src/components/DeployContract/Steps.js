@@ -11,6 +11,7 @@ import Loader from '../Loader';
 import Field, { FieldSettings } from './DeployContractField';
 import DeployContractSuccess from './DeployContractSuccess';
 import GasPriceField from '../GasPriceField';
+import SelectTokenField from './SelectTokenField';
 
 const ButtonGroup = Button.Group;
 
@@ -67,6 +68,7 @@ class NameContractStep extends BaseStepComponent {
   render() {
     const contractNameSettings = FieldSettings.contractName;
     const baseTokenSettings = FieldSettings.baseTokenAddress;
+
     return (
       <div>
         <Form onSubmit={this.handleSubmit.bind(this)} layout="vertical">
@@ -146,94 +148,128 @@ class PricingStep extends BaseStepComponent {
       <div>
         <Form onSubmit={this.handleSubmit.bind(this)} layout="vertical">
           <h1>Specify Pricing Rules</h1>
-          <div>
-            The Price Floor and Cap define the range of a contract. If an oracle
-            reports a price above a Cap or below a Floor the contract will enter
-            settlement and no longer trade. Additionally, these parameters
-            define a participants maximum loss when entering a trade and
-            therefore the amount collateral that must be posted.
-            <br />
-            <br />
-            <h3>
-              All prices must in an integer format (e.g 1245, not 12.45),
-              floating point values (decimals), are not currently supported by
-              Ethereum.
-            </h3>
-          </div>
+
+          {this.props.isSimplified && (
+            <div>
+              <Field
+                name="price"
+                initialValue={this.props.price}
+                form={this.props.form}
+              />
+              <h2>
+                Current Price of {this.props.symbolName}:{' '}
+                <span className="text-primary">{this.props.price}</span>
+              </h2>
+            </div>
+          )}
+
+          {!this.props.isSimplified && (
+            <div>
+              The Price Floor and Cap define the range of a contract. If an
+              oracle reports a price above a Cap or below a Floor the contract
+              will enter settlement and no longer trade. Additionally, these
+              parameters define a participants maximum loss when entering a
+              trade and therefore the amount collateral that must be posted.
+              <br />
+              <br />
+              <h3>
+                All prices must in an integer format (e.g 1245, not 12.45),
+                floating point values (decimals), are not currently supported by
+                Ethereum.
+              </h3>
+            </div>
+          )}
           <br />
 
-          <h2>Price Decimal Places</h2>
-          <div>
-            Ethereum currently does not support floating points numbers.
-            Therefore all prices reported by oracles must be converted to a
-            whole number (integer). This variable is how many decimal places one
-            needs to move the decimal in order to go from the oracle query price
-            to an integer. For example, if the oracle query results returned a
-            value of 190.22, we need to move the decimal two (2) places to
-            convert to a whole number of 19022, so we would enter 2 below.
-          </div>
-          <br />
-          <Field
-            name="priceDecimalPlaces"
-            initialValue={this.props.priceDecimalPlaces}
-            form={this.props.form}
-          />
+          {!this.props.isSimplified && (
+            <div>
+              <h2>Price Decimal Places</h2>
+              <div>
+                Ethereum currently does not support floating points numbers.
+                Therefore all prices reported by oracles must be converted to a
+                whole number (integer). This variable is how many decimal places
+                one needs to move the decimal in order to go from the oracle
+                query price to an integer. For example, if the oracle query
+                results returned a value of 190.22, we need to move the decimal
+                two (2) places to convert to a whole number of 19022, so we
+                would enter 2 below.
+              </div>
+              <br />
+              <Field
+                name="priceDecimalPlaces"
+                initialValue={this.props.priceDecimalPlaces}
+                form={this.props.form}
+              />
+            </div>
+          )}
 
           <h2>Price Floor</h2>
-          <div>
-            This is the lower bound of price exposure this contract will trade.
-            If the oracle reports a price below this value the contract will
-            enter into settlement. This should also be represented as a whole
-            number. If we take the example above of a price of 190.22 and decide
-            the Floor for our contract should be 150.00, we would enter 15000
-            here.
-          </div>
+          {!this.props.isSimplified && (
+            <div>
+              This is the lower bound of price exposure this contract will
+              trade. If the oracle reports a price below this value the contract
+              will enter into settlement. This should also be represented as a
+              whole number. If we take the example above of a price of 190.22
+              and decide the Floor for our contract should be 150.00, we would
+              enter 15000 here.
+            </div>
+          )}
           <br />
           <Field
-            name="priceFloor"
+            name={
+              this.props.isSimplified ? 'priceFloorSimplified' : 'priceFloor'
+            }
             initialValue={this.props.priceFloor}
             form={this.props.form}
           />
 
           <h2>Price Cap</h2>
-          <div>
-            This is the upper bound of price exposure this contract will trade.
-            If the oracle reports a price above this value the contract will
-            enter into settlement. Following our example, if we decide the Cap
-            for our contract should be 230.00, we would enter 23000 as our Cap.
-          </div>
+          {!this.props.isSimplified && (
+            <div>
+              This is the upper bound of price exposure this contract will
+              trade. If the oracle reports a price above this value the contract
+              will enter into settlement. Following our example, if we decide
+              the Cap for our contract should be 230.00, we would enter 23000 as
+              our Cap.
+            </div>
+          )}
           <br />
           <Field
-            name="priceCap"
+            name={this.props.isSimplified ? 'priceCapSimplified' : 'priceCap'}
             initialValue={this.props.priceCap}
             form={this.props.form}
           />
 
-          <h2>Price Quantity Multiplier</h2>
-          <div>
-            The quantity multiplier allows the user to specify how many base
-            units (for Ethereum, this would be wei) each integer price movement
-            changes the value of the contract. If our integerized price was
-            19022 with a qty multiplier of 1, and the price moved to 19023, then
-            the value will have change by 1 wei. If however the multiplier was
-            set at 1,000,000,000 the price movement of 1 unit would now
-            correspond to a value of 1 gwei (not wei). Please see{' '}
-            <a
-              href="https://etherconverter.online/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {' '}
-              here{' '}
-            </a>{' '}
-            for an ethereum unit converter.
-          </div>
-          <br />
-          <Field
-            name="qtyMultiplier"
-            initialValue={this.props.qtyMultiplier}
-            form={this.props.form}
-          />
+          {!this.props.isSimplified && (
+            <div>
+              <h2>Price Quantity Multiplier</h2>
+              <div>
+                The quantity multiplier allows the user to specify how many base
+                units (for Ethereum, this would be wei) each integer price
+                movement changes the value of the contract. If our integerized
+                price was 19022 with a qty multiplier of 1, and the price moved
+                to 19023, then the value will have change by 1 wei. If however
+                the multiplier was set at 1,000,000,000 the price movement of 1
+                unit would now correspond to a value of 1 gwei (not wei). Please
+                see{' '}
+                <a
+                  href="https://etherconverter.online/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {' '}
+                  here{' '}
+                </a>{' '}
+                for an ethereum unit converter.
+              </div>
+              <br />
+              <Field
+                name="qtyMultiplier"
+                initialValue={this.props.qtyMultiplier}
+                form={this.props.form}
+              />
+            </div>
+          )}
           <Row type="flex" justify="end">
             <Col>
               <BiDirectionalNav text="Set Expiration Time" {...this.props} />
@@ -253,29 +289,49 @@ PricingStep = Form.create()(PricingStep);
  */
 class ExpirationStep extends BaseStepComponent {
   render() {
+    const {
+      contractName,
+      expirationTimeStamp,
+      form,
+      gas,
+      isSimplified,
+      location
+    } = this.props;
+
     return (
       <div>
         <Form onSubmit={this.handleSubmit.bind(this)} layout="vertical">
           <h1>Set Expiration Time</h1>
-          <div>
-            Upon reaching the expiration timestamp all open positions will
-            settle against the final price query returned by the oracle.
-          </div>
+          {!isSimplified && (
+            <div>
+              Upon reaching the expiration timestamp all open positions will
+              settle against the final price query returned by the oracle.
+            </div>
+          )}
           <br />
           <Field
             name="expirationTimeStamp"
             initialValue={
-              this.props.expirationTimeStamp
-                ? moment(this.props.expirationTimeStamp * 1000)
-                : ''
+              expirationTimeStamp
+                ? moment(expirationTimeStamp * 1000)
+                : isSimplified
+                  ? moment().add(30, 'days')
+                  : ''
             }
-            form={this.props.form}
+            form={form}
           />
           <br />
-          <GasPriceField
-            location={this.props.location}
-            form={this.props.form}
-          />
+          {isSimplified && (
+            <div>
+              <h2>Contract Name</h2>
+              <Field
+                name="contractName"
+                initialValue={contractName}
+                form={form}
+              />
+            </div>
+          )}
+          <GasPriceField form={form} gaslimit={gas} location={location} />
 
           <Row type="flex" justify="end">
             <Col>
@@ -431,10 +487,55 @@ class DeployStep extends BaseStepComponent {
   }
 }
 
+/**
+ * First step in the simplified contract.
+ * [Dropdown] Select the API which user would like to use
+ * [Dropdown] Select the symbol which is returned from the Binance exchangeInfo API
+ *
+ */
+class ExchangeStep extends BaseStepComponent {
+  constructor(props) {
+    super(props);
+    this.state = { exchangeApi: 'BIN' };
+  }
+
+  render() {
+    return (
+      <div>
+        <Form onSubmit={this.handleSubmit.bind(this)} layout="vertical">
+          <h1>Exchange API and Symbol</h1>
+          <h2>Exchange API</h2>
+          <Field
+            onChange={exchangeApi => this.setState({ exchangeApi })}
+            name="exchangeApi"
+            initialValue={this.state.exchangeApi}
+            form={this.props.form}
+          />
+          <h2>Symbol</h2>
+          <SelectTokenField
+            name="tokenPair"
+            form={this.props.form}
+            exchange={this.state.exchangeApi}
+            onSelect={this.props.updateDeploymentState}
+          />
+          <Row type="flex" justify="end">
+            <Col>
+              <BiDirectionalNav text="Pricing" {...this.props} />
+            </Col>
+          </Row>
+        </Form>
+      </div>
+    );
+  }
+}
+
+ExchangeStep = Form.create()(ExchangeStep);
+
 export {
   NameContractStep,
   PricingStep,
   ExpirationStep,
   DataSourceStep,
-  DeployStep
+  DeployStep,
+  ExchangeStep
 };

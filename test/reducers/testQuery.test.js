@@ -1,4 +1,3 @@
-import React from 'react';
 import { expect } from 'chai';
 
 import testQuery from '../../src/reducers/testQuery';
@@ -8,7 +7,7 @@ describe('TestQuery Reducer', () => {
     pending: 'TEST_QUERY_PENDING',
     fulfilled: 'TEST_QUERY_FULFILLED',
     rejected: 'TEST_QUERY_REJECTED',
-    pendingTransaction: 'TEST_QUERY_TRANSACTION_PENDING',
+    pendingTransaction: 'TEST_QUERY_TRANSACTION_PENDING'
   };
 
   it('should return loading state with PENDING action', () => {
@@ -19,7 +18,10 @@ describe('TestQuery Reducer', () => {
 
   it('should return result state with QUERY TRANSACTION PENDING action', () => {
     const expectedTransaction = 'Result of query';
-    const newState = testQuery({}, { type: actions.pendingTransaction, payload: expectedTransaction });
+    const newState = testQuery(
+      {},
+      { type: actions.pendingTransaction, payload: expectedTransaction }
+    );
     expect(newState.transaction).to.equal(expectedTransaction);
     expect(newState.loading).to.equal(true);
     expect(newState.error).to.equal(null);
@@ -27,7 +29,10 @@ describe('TestQuery Reducer', () => {
 
   it('should return result state with FULFILLED action', () => {
     const expectedResult = 'Result of query';
-    const newState = testQuery({}, { type: actions.fulfilled, payload: expectedResult });
+    const newState = testQuery(
+      {},
+      { type: actions.fulfilled, payload: expectedResult }
+    );
     expect(newState.results).to.equal(expectedResult);
     expect(newState.loading).to.equal(false);
     expect(newState.error).to.equal(null);
@@ -35,7 +40,10 @@ describe('TestQuery Reducer', () => {
 
   it('should return error state with REJECT action', () => {
     const expectedError = new Error('error');
-    const newState = testQuery({}, { type: actions.rejected, payload: expectedError });
+    const newState = testQuery(
+      {},
+      { type: actions.rejected, payload: expectedError }
+    );
     expect(newState.loading).to.equal(false);
     expect(newState.error).to.equal(expectedError);
   });

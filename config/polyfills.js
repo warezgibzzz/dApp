@@ -20,3 +20,24 @@ Object.assign = require('object-assign');
 if (process.env.NODE_ENV === 'test') {
   require('raf').polyfill(global);
 }
+
+// Setup mock localStorage
+// Use `var` instead of `let` to avoid CRA error during build
+var localStorageMock = (function() {
+  var store = {};
+  return {
+    getItem: function(key) {
+      return store[key];
+    },
+    setItem: function(key, value) {
+      store[key] = value.toString();
+    },
+    clear: function() {
+      store = {};
+    },
+    removeItem: function(key) {
+      delete store[key];
+    }
+  };
+})();
+Object.defineProperty(window, 'localStorage', { value: localStorageMock });
