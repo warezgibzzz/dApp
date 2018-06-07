@@ -143,8 +143,8 @@ class QuickDeployment extends Component {
 
               <ContractFormCol>
                 <Field
-                  name="baseTokenAddress"
-                  initialValue={initialValues.baseTokenAddress}
+                  name="collateralTokenAddress"
+                  initialValue={initialValues.collateralTokenAddress}
                   form={form}
                   showHint
                 />

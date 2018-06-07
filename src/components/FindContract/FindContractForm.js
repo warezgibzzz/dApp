@@ -15,9 +15,9 @@ class FindContractForm extends Component {
       keyMap: {
         key: 'Address',
         CONTRACT_NAME: 'Contract Name',
-        BASE_TOKEN: 'Base Token',
-        BASE_TOKEN_ADDRESS: 'Token Address',
-        BASE_TOKEN_SYMBOL: 'Base Token Symbol',
+        COLLATERAL_TOKEN: 'Collateral Token',
+        COLLATERAL_TOKEN_ADDRESS: 'Token Address',
+        COLLATERAL_TOKEN_SYMBOL: 'Collateral Token Symbol',
         PRICE_FLOOR: 'Price Floor',
         PRICE_CAP: 'Price Cap',
         PRICE_DECIMAL_PLACES: 'Price Decimal Places',

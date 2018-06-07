@@ -7,7 +7,7 @@ import Loader from './Loader';
 
 // Example Contract
 /* {
-  "BASE_TOKEN": "0xa4392264a2d8c998901d10c154c91725b1bf0158",
+  "COLLATERAL_TOKEN": "0xa4392264a2d8c998901d10c154c91725b1bf0158",
   "CONTRACT_NAME": "ETHXBT",
   "ORACLE_QUERY": "json(https://api.kraken.com/0/public/Ticker?pair=ETHUSD).result.XETHZUSD.c.0",
   "PRICE_CAP": "60465",
@@ -82,8 +82,8 @@ class ContractsList extends Component {
     filters = filters || {};
     contracts = contracts || [];
 
-    let baseTokenSymbols = [
-      ...new Set(contracts.map(item => item.BASE_TOKEN_SYMBOL))
+    let collateralTokenSymbols = [
+      ...new Set(contracts.map(item => item.COLLATERAL_TOKEN_SYMBOL))
     ].map(item => {
       return { value: item, text: item };
     });
@@ -148,19 +148,21 @@ class ContractsList extends Component {
       },
       {
         title: 'Base Token',
-        dataIndex: 'BASE_TOKEN',
+        dataIndex: 'COLLATERAL_TOKEN',
         width: 150,
         filterDropdown: (
           <div className="custom-filter-dropdown">
             <Input
-              ref={ele => (this.baseTokenSearchInput = ele)}
+              ref={ele => (this.collateralTokenSearchInput = ele)}
               placeholder="Search Base Token"
-              value={this.state['BASE_TOKEN_SEARCH_TEXT']}
-              onChange={e => this.onInputChange(e, 'BASE_TOKEN_SEARCH_TEXT')}
+              value={this.state['COLLATERAL_TOKEN_SEARCH_TEXT']}
+              onChange={e =>
+                this.onInputChange(e, 'COLLATERAL_TOKEN_SEARCH_TEXT')
+              }
               onPressEnter={() =>
                 this.onSearch(
-                  'BASE_TOKEN',
-                  'BASE_TOKEN_SEARCH_TEXT',
+                  'COLLATERAL_TOKEN',
+                  'COLLATERAL_TOKEN_SEARCH_TEXT',
                   'tokenSearchVisible',
                   'tokenFiltered'
                 )
@@ -170,8 +172,8 @@ class ContractsList extends Component {
               type="primary"
               onClick={() =>
                 this.onSearch(
-                  'BASE_TOKEN',
-                  'BASE_TOKEN_SEARCH_TEXT',
+                  'COLLATERAL_TOKEN',
+                  'COLLATERAL_TOKEN_SEARCH_TEXT',
                   'tokenSearchVisible',
                   'tokenFiltered'
                 )
@@ -193,21 +195,24 @@ class ContractsList extends Component {
             {
               tokenSearchVisible: visible
             },
-            () => this.baseTokenSearchInput && this.baseTokenSearchInput.focus()
+            () =>
+              this.collateralTokenSearchInput &&
+              this.collateralTokenSearchInput.focus()
           );
         }
       },
       {
         title: 'Base Token Symbol',
-        dataIndex: 'BASE_TOKEN_SYMBOL',
+        dataIndex: 'COLLATERAL_TOKEN_SYMBOL',
         width: 150,
         className: 'text-center',
         render: (text, row, index) => {
           return text;
         },
-        filters: baseTokenSymbols,
-        filteredValue: filters.BASE_TOKEN_SYMBOL || null,
-        onFilter: (value, record) => record.BASE_TOKEN_SYMBOL.includes(value)
+        filters: collateralTokenSymbols,
+        filteredValue: filters.COLLATERAL_TOKEN_SYMBOL || null,
+        onFilter: (value, record) =>
+          record.COLLATERAL_TOKEN_SYMBOL.includes(value)
       },
       {
         title: 'Oracle Query',
@@ -332,7 +337,7 @@ class ContractsList extends Component {
                   </Col>
                   <Col xs={{ span: 24 }} lg={{ span: 12 }}>
                     <strong>Base Token Address :</strong>{' '}
-                    {record.BASE_TOKEN_ADDRESS}
+                    {record.COLLATERAL_TOKEN_ADDRESS}
                   </Col>
                   <Col xs={{ span: 12 }} lg={{ span: 6 }}>
                     <strong>Price Cap :</strong> {record.PRICE_CAP}

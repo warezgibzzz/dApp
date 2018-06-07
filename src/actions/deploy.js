@@ -13,7 +13,8 @@ export function deployContract(
     MarketContractRegistry,
     MarketContract,
     MarketContractFactory,
-    MarketCollateralPool
+    MarketCollateralPool,
+    MarketCollateralPoolFactory
   }
 ) {
   const type = 'DEPLOY_CONTRACT';
@@ -59,9 +60,10 @@ export function deployContract(
 
           MarketContractFactory.deployed()
             .then(function(contractFactory) {
+              console.log(contractSpecs);
               return contractFactory.deployMarketContractOraclize(
                 contractSpecs.contractName,
-                contractSpecs.baseTokenAddress,
+                contractSpecs.collateralTokenAddress,
                 contractConstructorArray,
                 contractSpecs.oracleDataSource,
                 contractSpecs.oracleQuery,
@@ -74,23 +76,18 @@ export function deployContract(
               console.log(
                 'Market Contract deployed to ' + marketContractDeployedAddress
               );
-              return MarketCollateralPool.new(
-                marketContractDeployedAddress,
-                txParams
-              );
-            })
-            .then(function(marketCollateralPoolInstance) {
-              console.log(
-                'Market Collateral Pool deployed to ' +
-                  marketCollateralPoolInstance.address
-              );
+
               return MarketContract.at(marketContractDeployedAddress).then(
-                function(deployMarketContract) {
-                  marketContractInstanceDeployed = deployMarketContract;
-                  return deployMarketContract.setCollateralPoolContractAddress(
-                    marketCollateralPoolInstance.address,
-                    txParams
-                  );
+                function(deployedMarketContract) {
+                  marketContractInstanceDeployed = deployedMarketContract;
+                  return MarketCollateralPoolFactory.deployed().then(function(
+                    collateralPoolFactory
+                  ) {
+                    return collateralPoolFactory.deployMarketCollateralPool(
+                      marketContractDeployedAddress,
+                      txParams
+                    );
+                  });
                 }
               );
             })
