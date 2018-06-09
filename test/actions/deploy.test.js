@@ -8,7 +8,8 @@ import {
   MarketContract,
   MarketCollateralPool,
   MarketToken,
-  MarketContractFactory
+  MarketContractFactory,
+  MarketCollateralPoolFactory
 } from '../mocks/contracts';
 import { deployContract } from '../../src/actions/deploy';
 
@@ -20,7 +21,7 @@ function validContractSpecs() {
     priceDecimalPlaces: 5,
     qtyMultiplier: 2,
     expirationTimeStamp: 600000,
-    baseTokenAddress: '0x000000001',
+    collateralTokenAddress: '0x000000001',
     oracleDataSource: 'Wolfram',
     oracleQuery: '2+2'
   };
@@ -54,6 +55,7 @@ describe('DeployAction', () => {
       MarketContractRegistry: MarketContractRegistry(),
       MarketContract: MarketContract(),
       MarketCollateralPool: MarketCollateralPool(),
+      MarketCollateralPoolFactory: MarketCollateralPoolFactory(),
       MarketToken: MarketToken(),
       MarketContractFactory: MarketContractFactory()
     };

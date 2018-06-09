@@ -1,6 +1,6 @@
 /**
  * Default mocked contract instances.
- * It is currenlty setup to work along the happy paths.
+ * It is currently setup to work along the happy paths.
  *
  * ASIDE: There should be a library that can read abi's and automatically create a
  *        mock with default implementations just like this module is doing manually.
@@ -40,7 +40,7 @@ const defaultContractInstances = {
     address: '0x00006',
     deployMarketContractOraclize(
       contractName,
-      baseTokenAddress,
+      collateralTokenAddress,
       contractSpecs,
       oracleDataSource,
       oracleQuery
@@ -48,6 +48,12 @@ const defaultContractInstances = {
       return Promise.resolve({
         logs: [{ args: { contractAddress: '0x00002' } }, 2]
       });
+    }
+  },
+  MarketCollateralPoolFactory: {
+    address: '0x00007',
+    deployMarketCollateralPool(marketContractAddress) {
+      return Promise.resolve([]);
     }
   }
 };
@@ -87,6 +93,9 @@ export const MarketContract = createMockContract('MarketContract');
 export const MarketCollateralPool = createMockContract('MarketCollateralPool');
 export const MarketContractFactory = createMockContract(
   'MarketContractFactory'
+);
+export const MarketCollateralPoolFactory = createMockContract(
+  'MarketCollateralPoolFactory'
 );
 export const MarketToken = createMockContract('MarketToken');
 export const CollateralToken = createMockContract('CollateralToken');
