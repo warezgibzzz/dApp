@@ -29,6 +29,7 @@ class SelectTokenField extends React.Component {
       this.props.onSelect({
         contractName: '',
         oracleQuery: '',
+        quoteAsset: '',
         priceDecimalPlaces: '',
         priceCap: '',
         priceFloor: '',
@@ -51,6 +52,7 @@ class SelectTokenField extends React.Component {
     this.props.onSelect({
       contractName: this.genContractName(symbol),
       symbolName: symbol.symbol,
+      quoteAsset: symbol.quoteAsset,
       oracleQuery: exchange.genOracleQuery(symbol),
       price: symbol.price * 1.0, // force number
       priceDecimalPlaces: symbol.priceDecimalPlaces,
@@ -77,8 +79,8 @@ class SelectTokenField extends React.Component {
     const { name, form, initialValue, showHint } = this.props;
     const { getFieldDecorator } = form;
     const fieldSettings = {
-      label: 'Select ETH based pair',
-      extra: 'Available ETH based pairs from exchange'
+      label: 'Select ETH or USDT based pair',
+      extra: 'Available ETH or USDT based pairs from exchange'
     };
 
     const rules = [

@@ -13,7 +13,9 @@ const ExchangeSources = [
         method: 'GET',
         responseType: 'json'
       }).map(data =>
-        data.response.symbols.filter(symbol => symbol.quoteAsset === 'ETH')
+        data.response.symbols.filter(
+          symbol => symbol.quoteAsset === 'ETH' || symbol.quoteAsset === 'USDT'
+        )
       );
 
       const price = Rx.Observable.ajax({
