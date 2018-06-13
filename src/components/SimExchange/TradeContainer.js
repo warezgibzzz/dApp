@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import Form from './TradeComponents/form';
 import Table from './TradeComponents/table';
-import _ from 'lodash';
+import uniqueId from 'lodash/uniqueId';
 
 import { Modal, Table as AntTable } from 'antd';
 
@@ -82,7 +82,7 @@ class Buy extends Component {
           </h3>
 
           <AntTable
-            rowKey={() => _.uniqueId('row')}
+            rowKey={() => uniqueId('row')}
             pagination={false}
             size="small"
             columns={columns}
