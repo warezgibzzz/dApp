@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import _ from 'lodash';
+import capitalize from 'lodash/capitalize';
 import { Form as AntForm, Input, Button } from 'antd';
 
 const FormItem = AntForm.Item;
@@ -45,7 +45,7 @@ class Form extends Component {
     } = form;
 
     const numberError = isFieldTouched('number') && getFieldError('number');
-    type = _.capitalize(type);
+    type = capitalize(type);
 
     return (
       <AntForm onSubmit={this.handleSubmit}>
