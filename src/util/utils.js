@@ -333,8 +333,16 @@ export const isTestnetOrMainnet = network => {
  *
  * TODO: Update the method to return `WUSD` if the selected symbol pair is USD
  */
-export const getCollateralTokenAddress = network => {
-  return network === 'rinkeby'
-    ? '0x01b8de20c76ed06c7e93068a45951c26f70be3db'
-    : '';
+export const getCollateralTokenAddress = (network, quoteAsset) => {
+  if (network === 'rinkeby') {
+    switch (quoteAsset) {
+      case 'ETH':
+        return '0x01b8de20c76ed06c7e93068a45951c26f70be3db';
+      case 'USDT':
+        return '0x0c58e89866dda96911a78dedf069a1848618c185';
+      default:
+        return '';
+    }
+  }
+  return '';
 };

@@ -33,6 +33,7 @@ class SimplifiedDeployment extends Component {
       step: 0,
       transitionDirection: 'next',
       contractName: '',
+      quoteAsset: '',
       collateralTokenAddress: '',
       priceFloor: '',
       priceCap: '',
@@ -106,7 +107,10 @@ class SimplifiedDeployment extends Component {
           // and we shouldn't loose much in terms of precission
           this.setState(
             {
-              collateralTokenAddress: getCollateralTokenAddress(network),
+              collateralTokenAddress: getCollateralTokenAddress(
+                network,
+                this.state.quoteAsset
+              ),
               priceFloor: Math.round(
                 this.state.priceFloorSimplified *
                   10 ** this.state.priceDecimalPlaces
