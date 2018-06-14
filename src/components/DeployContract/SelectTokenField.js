@@ -3,7 +3,7 @@ import React from 'react';
 import { getExchangeObj } from './ExchangeSources';
 
 const FormItem = Form.Item;
-const Option = Select.Option;
+const { Option, OptGroup } = Select;
 
 const Hint = props => (
   <Popover
@@ -18,7 +18,10 @@ const Hint = props => (
 class SelectTokenField extends React.Component {
   constructor() {
     super();
-    this.state = { pairs: [] };
+    this.state = {
+      pairs: [],
+      quotes: ['ETH', 'USDT']
+    };
     this.updateList = this.updateList.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
   }
@@ -37,7 +40,7 @@ class SelectTokenField extends React.Component {
         oracleDataSource: ''
       });
       getExchangeObj(newProps.exchange)
-        .fetchList()
+        .fetchList(this.state.quotes)
         .subscribe(this.updateList);
     }
   }
@@ -71,7 +74,7 @@ class SelectTokenField extends React.Component {
 
   componentDidMount() {
     getExchangeObj(this.props.exchange)
-      .fetchList()
+      .fetchList(this.state.quotes)
       .subscribe(this.updateList);
   }
 
@@ -103,11 +106,29 @@ class SelectTokenField extends React.Component {
           initialValue,
           rules
         })(
-          <Select onSelect={this.handleSelect}>
-            {this.state.pairs.map((symbol, index) => (
-              <Option key={index} value={index}>
-                {symbol.symbol}
-              </Option>
+          <Select
+            showSearch={true}
+            defaultActiveFirstOption={false}
+            allowClear={true}
+            onSelect={this.handleSelect}
+            optionFilterProp="children"
+            filterOption={function(inputValue, option) {
+              return (
+                option.props.children.indexOf(inputValue.toUpperCase()) >= 0
+              );
+            }}
+          >
+            {this.state.quotes.map(quoteAsset => (
+              <OptGroup key={quoteAsset} label={quoteAsset}>
+                {this.state.pairs.map(
+                  (symbol, index) =>
+                    symbol.quoteAsset === quoteAsset && (
+                      <Option key={index} value={index}>
+                        {symbol.symbol}
+                      </Option>
+                    )
+                )}
+              </OptGroup>
             ))}
           </Select>
         )}

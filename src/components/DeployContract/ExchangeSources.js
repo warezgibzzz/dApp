@@ -7,14 +7,14 @@ const ExchangeSources = [
     genOracleQuery(symbol) {
       return `json(https://api.binance.com/api/v3/ticker/price?symbol=${symbol}).price`;
     },
-    fetchList() {
+    fetchList(quotes) {
       const info = Rx.Observable.ajax({
         url: 'https://api.marketprotocol.io/proxy/binance/api/v1/exchangeInfo',
         method: 'GET',
         responseType: 'json'
       }).map(data =>
         data.response.symbols.filter(
-          symbol => symbol.quoteAsset === 'ETH' || symbol.quoteAsset === 'USDT'
+          symbol => quotes.indexOf(symbol.quoteAsset) >= 0
         )
       );
 
