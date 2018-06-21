@@ -9,17 +9,17 @@ const SubMenu = Menu.SubMenu;
 const MenuItem = Menu.Item;
 
 const subMenuItems = [
-  { Name: 'Simplified Deploy', to: '/contract/deploy?mode=simplified' },
-  { Name: 'Guided Deploy', to: '/contract/deploy?mode=guided' },
-  { Name: 'Quick Deploy', to: '/contract/deploy?mode=quick' }
+  { name: 'Simplified Deploy', to: '/contract/deploy?mode=simplified' },
+  { name: 'Guided Deploy', to: '/contract/deploy?mode=guided' },
+  { name: 'Quick Deploy', to: '/contract/deploy?mode=quick' }
 ];
 
 const mainMenuItems = [
-  { Name: 'Explore Contracts', to: '/contract/explorer' },
-  { Name: 'Find Contracts', to: '/contract/find' },
-  { Name: 'Test Query', to: '/test' },
+  { name: 'Explore Contracts', to: '/contract/explorer' },
+  { name: 'Find Contracts', to: '/contract/find' },
+  { name: 'Test Query', to: '/test' },
   {
-    Name: 'Documentation',
+    name: 'Documentation',
     to: 'http://docs.marketprotocol.io',
     target: '_blank'
   }
@@ -34,13 +34,27 @@ class Header extends Component {
     this.setState({ selected: e.key });
   };
 
+  componentDidUpdate() {
+    const path = `${window.location.pathname}${window.location.search}`;
+
+    if (this.state.selected && path === '/') {
+      this.setState({
+        selected: ''
+      });
+    } else if (this.state.selected && this.state.selected !== path) {
+      this.setState({
+        selected: path
+      });
+    }
+  }
+
   render() {
     return (
       <Affix>
         <header id="header" className="clearfix">
           <div className="ant-row">
             <div className="ant-col-xs-24 ant-col-sm-24 ant-col-md-6 ant-col-lg-5 ant-col-xl-5 ant-col-xxl-4">
-              <Link to="/" id="logo" onClick={this.onClick}>
+              <Link to="/" id="logo">
                 <img src={logo} alt="Market Protocol Logo" />
               </Link>
             </div>
@@ -54,14 +68,14 @@ class Header extends Component {
                 <SubMenu title="Deploy Contracts">
                   {subMenuItems.map(item => (
                     <MenuItem key={item.to} onClick={this.onClick}>
-                      <Link to={item.to}>{item.Name}</Link>
+                      <Link to={item.to}>{item.name}</Link>
                     </MenuItem>
                   ))}
                 </SubMenu>
                 {mainMenuItems.map(item => (
                   <MenuItem key={item.to} onClick={this.onClick}>
                     <Link to={item.to} target={item.target}>
-                      {item.Name}
+                      {item.name}
                     </Link>
                   </MenuItem>
                 ))}
