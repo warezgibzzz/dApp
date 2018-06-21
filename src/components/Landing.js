@@ -23,7 +23,7 @@ class LandingComponent extends Component {
             <div className="hero-text-container">
               <h1>Guided Contract Deployment</h1>
               <p>
-                Step by step guide for first time MARKET Smart Contract
+                Step by step guide for first time MARKET Protocol Smart Contract
                 deployment
               </p>
               <Link to="/contract/deploy?mode=guided">
@@ -50,8 +50,8 @@ class LandingComponent extends Component {
               <div className="feature-text-container">
                 <h2 className="feature-header">Explore Contracts</h2>
                 <p className="feature-description">
-                  Search, filter, and select from already deployed MARKET Smart
-                  Contracts that meet your needs.
+                  Search, filter, and select from already deployed MARKET
+                  Protocol Smart Contracts that meet your needs.
                 </p>
                 <Link to="/contract/explore">
                   <Button type="primary" size="large">
@@ -104,9 +104,9 @@ class LandingComponent extends Component {
               <div className="feature-text-container">
                 <h2 className="feature-header">Simulated Exchange</h2>
                 <p className="feature-description">
-                  What is it like to trade a MARKET Smart Contract? Find out
-                  here. Leaderboards for trading and competitions all coming
-                  soon.
+                  What is it like to trade a MARKET Protocol Smart Contract?
+                  Find out here. Leaderboards for trading and competitions all
+                  coming soon.
                 </p>
                 <Link to="/exchange">
                   <Button type="primary" size="large">
