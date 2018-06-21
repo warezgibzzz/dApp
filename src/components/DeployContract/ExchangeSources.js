@@ -5,7 +5,9 @@ const ExchangeSources = [
     key: 'BIN',
     name: 'Binance',
     genOracleQuery(symbol) {
-      return `json(https://api.binance.com/api/v3/ticker/price?symbol=${symbol}).price`;
+      return `json(https://api.binance.com/api/v3/ticker/price?symbol=${
+        symbol.symbol
+      }).price`;
     },
     fetchList() {
       const info = Rx.Observable.ajax({
