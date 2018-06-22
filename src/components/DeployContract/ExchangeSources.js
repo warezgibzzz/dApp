@@ -46,7 +46,7 @@ const ExchangeSources = [
   },
   {
     key: 'KRA',
-    name: 'Kraken',
+    name: 'Kraken (coming soon...)',
     genOracleQuery(symbol) {
       return `json(https://api.kraken.com/0/public/Ticker?pair=${symbol}).result.XETHZUSD.p.1`;
     },

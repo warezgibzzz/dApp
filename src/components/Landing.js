@@ -21,12 +21,12 @@ class LandingComponent extends Component {
         <Row type="flex" className="hero" align="middle">
           <Col xs={24} sm={24} md={10} lg={10} xl={10}>
             <div className="hero-text-container">
-              <h1>Guided Contract Deployment</h1>
+              <h1>Simplified Contract Deployment</h1>
               <p>
-                Step by step guide for first time MARKET Protocol Smart Contract
-                deployment
+                Quickly deploy a MARKET Protocol Smart Contract for the first
+                time
               </p>
-              <Link to="/contract/deploy?mode=guided">
+              <Link to="/contract/deploy?mode=simplified">
                 <Button type="primary" size="large">
                   Get Started
                 </Button>
