@@ -122,7 +122,7 @@ const fieldSettingsByName = {
     component: ({ showHint }) => <Input />
   },
 
-  baseTokenAddress: {
+  collateralTokenAddress: {
     label: 'Base Token Address',
     initialValue: '0x3333333333333333333333333333333333333333',
     rules: [

@@ -67,7 +67,7 @@ class BaseStepComponent extends Component {
 class NameContractStep extends BaseStepComponent {
   render() {
     const contractNameSettings = FieldSettings.contractName;
-    const baseTokenSettings = FieldSettings.baseTokenAddress;
+    const collateralTokenSettings = FieldSettings.collateralTokenAddress;
 
     return (
       <div>
@@ -116,12 +116,12 @@ class NameContractStep extends BaseStepComponent {
             addresses.
             <br />
             <br />
-            Example address <b>{baseTokenSettings.initialValue}</b>
+            Example address <b>{collateralTokenSettings.initialValue}</b>
           </div>
           <br />
           <Field
-            name="baseTokenAddress"
-            initialValue={this.props.baseTokenAddress}
+            name="collateralTokenAddress"
+            initialValue={this.props.collateralTokenAddress}
             form={this.props.form}
           />
           <Row type="flex" justify="end">

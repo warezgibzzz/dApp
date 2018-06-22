@@ -3,12 +3,13 @@ import React, { Component } from 'react';
 import { Route, Router } from 'react-router';
 
 import Header from './components/Header';
+import MarketFooter from './components/MarketFooter';
 
 import { routes } from './routes';
 
 import './less/App.less';
 
-const { Footer, Content } = Layout;
+const { Content } = Layout;
 
 class App extends Component {
   componentWillMount() {
@@ -26,17 +27,7 @@ class App extends Component {
             {routes.map(route => <Route key={route.path} {...route} />)}
           </Content>
 
-          <Footer className="footer">
-            dApp ©2018 Created by
-            <a
-              style={{ marginLeft: 4 }}
-              href="https://marketprotocol.io"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              MARKET Protocol
-            </a>
-          </Footer>
+          <MarketFooter />
         </Layout>
       </Router>
     );

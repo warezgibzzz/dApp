@@ -5,7 +5,7 @@ import StepAnimation from '../StepAnimation';
 import { DeployStep, ExpirationStep, ExchangeStep, PricingStep } from './Steps';
 
 import showMessage from '../message';
-import { getBaseTokenAddress } from '../../util/utils';
+import { getCollateralTokenAddress } from '../../util/utils';
 
 const Step = Steps.Step;
 
@@ -33,7 +33,8 @@ class SimplifiedDeployment extends Component {
       step: 0,
       transitionDirection: 'next',
       contractName: '',
-      baseTokenAddress: '',
+      quoteAsset: '',
+      collateralTokenAddress: '',
       priceFloor: '',
       priceCap: '',
       priceDecimalPlaces: '',
@@ -106,7 +107,10 @@ class SimplifiedDeployment extends Component {
           // and we shouldn't loose much in terms of precission
           this.setState(
             {
-              baseTokenAddress: getBaseTokenAddress(network),
+              collateralTokenAddress: getCollateralTokenAddress(
+                network,
+                this.state.quoteAsset
+              ),
               priceFloor: Math.round(
                 this.state.priceFloorSimplified *
                   10 ** this.state.priceDecimalPlaces

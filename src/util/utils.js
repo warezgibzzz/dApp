@@ -143,79 +143,90 @@ const createNewOrders = async function(
 export async function processContractsList(
   marketContract,
   marketCollateralPool,
-  baseToken,
+  collateralToken,
   ERC20,
   deployedContracts
 ) {
   let promises = deployedContracts.map(async contract => {
-    return await marketContract.at(contract).then(async function(instance) {
-      const contractJSON = {};
-      contractJSON['key'] = instance.address;
-      contractJSON['CONTRACT_NAME'] = await instance.CONTRACT_NAME.call();
+    return await marketContract
+      .at(contract)
+      .then(async function(instance) {
+        const contractJSON = {};
+        contractJSON['key'] = instance.address;
+        contractJSON['CONTRACT_NAME'] = await instance.CONTRACT_NAME.call();
 
-      const baseTokenContractAddress = await instance.BASE_TOKEN_ADDRESS.call();
-      contractJSON['BASE_TOKEN_ADDRESS'] = baseTokenContractAddress;
+        const collateralTokenContractAddress = await instance.COLLATERAL_TOKEN_ADDRESS.call();
+        contractJSON[
+          'COLLATERAL_TOKEN_ADDRESS'
+        ] = collateralTokenContractAddress;
 
-      await baseToken
-        .at(baseTokenContractAddress)
-        .then(async function(baseTokenInstance) {
-          contractJSON['BASE_TOKEN'] = await baseTokenInstance.name();
-          contractJSON['BASE_TOKEN_SYMBOL'] = await baseTokenInstance.symbol();
-        })
-        .catch(function(err) {
-          try {
-            const token = contract(ERC20).at(baseTokenContractAddress);
-            contractJSON['BASE_TOKEN'] = token.name();
-            contractJSON['BASE_TOKEN_SYMBOL'] = token.symbol();
-          } catch (e) {
-            console.error(e);
-            contractJSON['BASE_TOKEN'] = 'NA';
-            contractJSON['BASE_TOKEN_SYMBOL'] = 'NA';
-          }
-        });
+        await collateralToken
+          .at(collateralTokenContractAddress)
+          .then(async function(collateralTokenInstance) {
+            contractJSON[
+              'COLLATERAL_TOKEN'
+            ] = await collateralTokenInstance.name();
+            contractJSON[
+              'COLLATERAL_TOKEN_SYMBOL'
+            ] = await collateralTokenInstance.symbol();
+          })
+          .catch(function(err) {
+            try {
+              const token = contract(ERC20).at(collateralTokenContractAddress);
+              contractJSON['COLLATERAL_TOKEN'] = token.name();
+              contractJSON['COLLATERAL_TOKEN_SYMBOL'] = token.symbol();
+            } catch (e) {
+              console.error(e);
+              contractJSON['COLLATERAL_TOKEN'] = 'NA';
+              contractJSON['COLLATERAL_TOKEN_SYMBOL'] = 'NA';
+            }
+          });
 
-      contractJSON['PRICE_FLOOR'] = await instance.PRICE_FLOOR.call().then(
-        data => data.toNumber()
-      );
-      contractJSON['PRICE_CAP'] = await instance.PRICE_CAP.call().then(data =>
-        data.toNumber()
-      );
-      contractJSON[
-        'PRICE_DECIMAL_PLACES'
-      ] = await instance.PRICE_DECIMAL_PLACES.call().then(data =>
-        data.toNumber()
-      );
-      contractJSON[
-        'QTY_MULTIPLIER'
-      ] = await instance.QTY_MULTIPLIER.call().then(data => data.toNumber());
-      contractJSON['ORACLE_QUERY'] = await instance.ORACLE_QUERY.call();
-      contractJSON['EXPIRATION'] = await instance.EXPIRATION.call().then(data =>
-        data.toNumber()
-      );
-      contractJSON['lastPrice'] = await instance.lastPrice
-        .call()
-        .then(data => data.toNumber());
-      contractJSON['isSettled'] = await instance.isSettled.call();
+        contractJSON['PRICE_FLOOR'] = await instance.PRICE_FLOOR.call().then(
+          data => data.toNumber()
+        );
+        contractJSON['PRICE_CAP'] = await instance.PRICE_CAP.call().then(data =>
+          data.toNumber()
+        );
+        contractJSON[
+          'PRICE_DECIMAL_PLACES'
+        ] = await instance.PRICE_DECIMAL_PLACES.call().then(data =>
+          data.toNumber()
+        );
+        contractJSON[
+          'QTY_MULTIPLIER'
+        ] = await instance.QTY_MULTIPLIER.call().then(data => data.toNumber());
+        contractJSON['ORACLE_QUERY'] = await instance.ORACLE_QUERY.call();
+        contractJSON['EXPIRATION'] = await instance.EXPIRATION.call().then(
+          data => data.toNumber()
+        );
+        contractJSON['lastPrice'] = await instance.lastPrice
+          .call()
+          .then(data => data.toNumber());
+        contractJSON['isSettled'] = await instance.isSettled.call();
 
-      // TODO: There is a possibility a contract ends up in our registry that wasn't linked to a collateral pool
-      // correctly.  The code below will handle this, but a better solution would probably to not actually
-      // display contracts that are not correctly linked to a collateral pool!
-      await marketCollateralPool
-        .at(await instance.marketCollateralPoolAddress.call())
-        .then(async function(collateralPoolInstance) {
-          contractJSON[
-            'collateralPoolBalance'
-          ] = await collateralPoolInstance.collateralPoolBalance
-            .call()
-            .then(data => data.toNumber());
-        })
-        .catch(function(err) {
-          console.error(err);
-          contractJSON['collateralPoolBalance'] = 'NA';
-        });
+        // TODO: There is a possibility a contract ends up in our registry that wasn't linked to a collateral pool
+        // correctly.  The code below will handle this, but a better solution would probably to not actually
+        // display contracts that are not correctly linked to a collateral pool!
+        await marketCollateralPool
+          .at(await instance.MARKET_COLLATERAL_POOL_ADDRESS.call())
+          .then(async function(collateralPoolInstance) {
+            contractJSON[
+              'collateralPoolBalance'
+            ] = await collateralPoolInstance.collateralPoolBalance
+              .call()
+              .then(data => data.toNumber());
+          })
+          .catch(function(err) {
+            console.error(err);
+            contractJSON['collateralPoolBalance'] = 'NA';
+          });
 
-      return contractJSON;
-    });
+        return contractJSON;
+      })
+      .catch(function(err) {
+        console.error(err);
+      });
   });
 
   return await Promise.all(promises);
@@ -312,18 +323,26 @@ export const isTestnetOrMainnet = network => {
 };
 
 /**
- * Set `baseTokenAddress` based on the `network`
+ * Set `collateralTokenAddress` based on the `network`
  *
  * `0x01b8de20c76ed06c7e93068a45951c26f70be3db` -- WETH
  * `0x0c58e89866dda96911a78dedf069a1848618c185` -- Stable USD
  *
  * @param network
- * @return baseTokenAddress
+ * @return collateralTokenAddress
  *
  * TODO: Update the method to return `WUSD` if the selected symbol pair is USD
  */
-export const getBaseTokenAddress = network => {
-  return network === 'rinkeby'
-    ? '0x01b8de20c76ed06c7e93068a45951c26f70be3db'
-    : '';
+export const getCollateralTokenAddress = (network, quoteAsset) => {
+  if (network === 'rinkeby') {
+    switch (quoteAsset) {
+      case 'ETH':
+        return '0x01b8de20c76ed06c7e93068a45951c26f70be3db';
+      case 'USDT':
+        return '0x0c58e89866dda96911a78dedf069a1848618c185';
+      default:
+        return '';
+    }
+  }
+  return '';
 };

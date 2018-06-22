@@ -9,13 +9,15 @@ const ExchangeSources = [
         symbol.symbol
       }).price`;
     },
-    fetchList() {
+    fetchList(quotes) {
       const info = Rx.Observable.ajax({
         url: 'https://api.marketprotocol.io/proxy/binance/api/v1/exchangeInfo',
         method: 'GET',
         responseType: 'json'
       }).map(data =>
-        data.response.symbols.filter(symbol => symbol.quoteAsset === 'ETH')
+        data.response.symbols.filter(
+          symbol => quotes.indexOf(symbol.quoteAsset) >= 0
+        )
       );
 
       const price = Rx.Observable.ajax({
@@ -44,7 +46,7 @@ const ExchangeSources = [
   },
   {
     key: 'KRA',
-    name: 'Kraken',
+    name: 'Kraken (coming soon...)',
     genOracleQuery(symbol) {
       return `json(https://api.kraken.com/0/public/Ticker?pair=${symbol}).result.XETHZUSD.p.1`;
     },

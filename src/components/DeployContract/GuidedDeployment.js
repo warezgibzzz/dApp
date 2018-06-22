@@ -37,7 +37,7 @@ class GuidedDeployment extends Component {
       step: 0,
       transitionDirection: 'next',
       contractName: '',
-      baseTokenAddress: '',
+      collateralTokenAddress: '',
       priceFloor: '',
       priceCap: '',
       priceDecimalPlaces: '',
