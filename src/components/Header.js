@@ -1,5 +1,6 @@
 import { Affix, Menu } from 'antd';
 import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import logo from '../img/market-logo-white.png';
@@ -26,29 +27,9 @@ const mainMenuItems = [
 ];
 
 class Header extends Component {
-  state = {
-    selected: ''
-  };
-
-  onClick = e => {
-    this.setState({ selected: e.key });
-  };
-
-  componentDidUpdate() {
-    const path = `${window.location.pathname}${window.location.search}`;
-
-    if (this.state.selected && path === '/') {
-      this.setState({
-        selected: ''
-      });
-    } else if (this.state.selected && this.state.selected !== path) {
-      this.setState({
-        selected: path
-      });
-    }
-  }
-
   render() {
+    const path = this.props.location.pathname + this.props.location.search;
+
     return (
       <Affix>
         <header id="header" className="clearfix">
@@ -63,17 +44,17 @@ class Header extends Component {
                 mode="horizontal"
                 className="menu-site"
                 id="nav"
-                selectedKeys={[this.state.selected]}
+                selectedKeys={[path]}
               >
                 <SubMenu title="Deploy Contracts">
                   {subMenuItems.map(item => (
-                    <MenuItem key={item.to} onClick={this.onClick}>
+                    <MenuItem key={item.to}>
                       <Link to={item.to}>{item.name}</Link>
                     </MenuItem>
                   ))}
                 </SubMenu>
                 {mainMenuItems.map(item => (
-                  <MenuItem key={item.to} onClick={this.onClick}>
+                  <MenuItem key={item.to}>
                     <Link to={item.to} target={item.target}>
                       {item.name}
                     </Link>
@@ -88,4 +69,4 @@ class Header extends Component {
   }
 }
 
-export default Header;
+export default withRouter(Header);
