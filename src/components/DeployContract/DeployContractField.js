@@ -28,6 +28,16 @@ const timestampValidator = (rule, value, callback) => {
   callback(value > moment() ? undefined : 'Expiration must be in the future');
 };
 
+const datePickerDates = current => {
+  const now = moment().startOf('day');
+
+  return (
+    current &&
+    (current.valueOf() < moment().endOf('day') ||
+      current.diff(now, 'days') > 60)
+  );
+};
+
 const priceFloorValidator = (form, rule, value, callback) => {
   const priceCap = form.getFieldValue('priceCap');
 
@@ -358,14 +368,8 @@ const fieldSettingsByName = {
     component: () => (
       <DatePicker
         showTime
-        disabledDate={current => {
-          const now = moment().startOf('day');
-          return (
-            current &&
-            (current.isBefore(now, 'day') ||
-              current.startOf('day').diff(now, 'days') > 60)
-          );
-        }}
+        disabledDate={datePickerDates}
+        showToday={false}
         format="YYYY-MM-DD HH:mm:ss"
         style={{ width: '100%' }}
       />
