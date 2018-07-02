@@ -367,7 +367,7 @@ const fieldSettingsByName = {
           );
         }}
         showToday={false}
-        format="YYYY-MM-DD HH:mm:ss"
+        format="YYYY-MM-DD HH:mm:ss ([UTC/GMT]Z)"
         style={{ width: '100%' }}
       />
     )
