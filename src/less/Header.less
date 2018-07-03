@@ -34,16 +34,49 @@
 }
 
 #nav-mobile {
-    background-color: #ffffff;
+    background-color: transparent;
     border-right: none;
 
     li,
     a {
         color: #000;
     }
-
     .ant-menu-sub {
-        background-color: #ffffff;
+        background-color: rgba(0, 0, 0, 0.05);
+
+        .ant-menu-item {
+            padding-left: 24px !important;
+        }
+    }
+
+    .ant-menu-submenu-arrow {
+        &:before,
+        &:after {
+            background-color: red !important;
+        }
+    }
+
+    .ant-menu-item-active a {
+        color: #00e2c1;
+    }
+
+    .ant-menu-item-selected {
+        background-color: transparent;
+
+        a {
+            color: #00e2c1;
+        }
+
+        &::after {
+            content: '';
+            display: none;
+        }
+    }
+}
+
+#mobile-popover {
+    .ant-popover-inner-content {
+        padding: 0;
     }
 }
 

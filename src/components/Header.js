@@ -63,6 +63,7 @@ class Header extends Component {
                 </Menu>
               ) : (
                 <Popover
+                  id="mobile-popover"
                   placement="bottomRight"
                   trigger="click"
                   content={
