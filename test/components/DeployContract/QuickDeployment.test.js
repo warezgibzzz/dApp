@@ -110,15 +110,6 @@ describe('QuickDeployment', () => {
     expect(submitButton.prop('disabled')).to.equal(false);
   });
 
-  it('should disable reset button when loading', () => {
-    quickDeployment.setProps({
-      loading: true
-    });
-
-    const resetButton = quickDeployment.find('.reset-button').first();
-    expect(resetButton.prop('disabled')).to.equal(true);
-  });
-
   it('should show the overlay when loading', () => {
     quickDeployment.setProps({
       loading: true
@@ -237,20 +228,6 @@ describe('QuickDeployment', () => {
     expect(
       quickDeployment.find('.ant-calendar-picker-input').prop('value')
     ).to.equal(dateFormated);
-  });
-
-  it('should reset form when .reset-button is clicked', () => {
-    const defaultFieldValues = wrappedFormRef.props.form.getFieldsValue();
-    wrappedFormRef.props.form.setFields(validContractFields());
-    quickDeployment.setProps({
-      loading: false
-    });
-
-    const resetButton = quickDeployment.find('.reset-button').first();
-    resetButton.simulate('click', { preventDefault() {} });
-
-    const valuesAfterReset = wrappedFormRef.props.form.getFieldsValue();
-    expect(valuesAfterReset).to.deep.equals(defaultFieldValues);
   });
 
   it('should call onDeployContract with form values when submitted', () => {

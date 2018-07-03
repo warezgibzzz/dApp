@@ -263,20 +263,6 @@ class QuickDeployment extends Component {
                 </Button>
               </Col>
             </Row>
-
-            <Row type="flex" justify="center" style={{ marginTop: '16px' }}>
-              <Col {...formButtonLayout}>
-                <Button
-                  className="reset-button"
-                  type="secondary"
-                  style={{ width: '100%' }}
-                  disabled={loading}
-                  onClick={this.handleReset.bind(this)}
-                >
-                  Reset Form
-                </Button>
-              </Col>
-            </Row>
           </Form>
         </div>
       </div>
