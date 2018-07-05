@@ -20,6 +20,8 @@ import {
 
 const mapStateToProps = state => ({
   contracts: state.explorer.contracts,
+  simExchange: state.simExchange,
+  web3: state.web3,
   shouldRender: true,
   ...state.simExchange
 });
@@ -28,7 +30,6 @@ const mapDispatchToProps = dispatch => ({
   getAsks: () => {
     const web3 = store.getState().web3.web3Instance;
     const contractAddress = store.getState().simExchange.contract.key;
-
     const initializeContracts = CreateInitializer(
       contractConstructor.bind(null, web3)
     );
@@ -70,6 +71,7 @@ const mapDispatchToProps = dispatch => ({
     const initializeContracts = CreateInitializer(
       contractConstructor.bind(null, web3)
     );
+
     const contracts = initializeContracts(Contracts);
     const processContracts = processContractsList.bind(
       null,

@@ -13,6 +13,7 @@ import Wallet from '../../../src/components/SimExchange/Wallet';
 describe('SimExchange', () => {
   let simExchangeTrades;
   let simExchangeWallet;
+  let simExchangeBadRoute;
   let getContractsSpy;
 
   const tradesPath = '/exchange/trades/';
@@ -21,11 +22,24 @@ describe('SimExchange', () => {
   const props = {
     asks: [],
     bids: [],
+    simExchange: [],
     tradeOrder: {}
   };
 
   beforeEach(() => {
     getContractsSpy = sinon.spy();
+
+    simExchangeBadRoute = mount(
+      <MemoryRouter initialEntries={[{ pathname: '/test', key: 'start' }]}>
+        <SimExchange
+          asks={props.asks}
+          bids={props.bids}
+          getContracts={getContractsSpy}
+          shouldRender={true}
+          tradeOrder={props.tradeOrder}
+        />
+      </MemoryRouter>
+    );
 
     simExchangeTrades = mount(
       <MemoryRouter initialEntries={[{ pathname: tradesPath, key: 'start' }]}>
@@ -41,7 +55,11 @@ describe('SimExchange', () => {
 
     simExchangeWallet = mount(
       <MemoryRouter initialEntries={[{ pathname: walletPath, key: 'start' }]}>
-        <SimExchange getContracts={getContractsSpy} shouldRender={true} />
+        <SimExchange
+          getContracts={getContractsSpy}
+          simExchange={props.simExchange}
+          shouldRender={true}
+        />
       </MemoryRouter>
     );
   });
@@ -96,6 +114,10 @@ describe('SimExchange', () => {
       <strong>Coming soon...</strong>
     );
 
+    simExchangeWallet.setProps({
+      contracts: ['test'],
+      contract: null
+    });
     expect(showsDummy, 'Should render dummy text').to.be.true;
   });
 });

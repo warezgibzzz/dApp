@@ -3,7 +3,9 @@ import { expect } from 'chai';
 import {
   getMetamaskError,
   calculateCollateral,
-  getCollateralTokenAddress
+  getCollateralTokenAddress,
+  toBaseUnit,
+  fromBaseUnit
 } from '../../src/util/utils';
 
 describe('getMetamaskError', () => {
@@ -83,10 +85,25 @@ describe('getCollateralTokenAddress', () => {
     expect(getCollateralTokenAddress('rinkeby', 'ETH')).to.equal(
       '0x01b8de20c76ed06c7e93068a45951c26f70be3db'
     );
+    expect(getCollateralTokenAddress('rinkeby', 'WETH')).to.equal(
+      '0xc778417e063141139fce010982780140aa0cd5ab'
+    );
     expect(getCollateralTokenAddress('rinkeby', 'USDT')).to.equal(
       '0x0c58e89866dda96911a78dedf069a1848618c185'
     );
     expect(getCollateralTokenAddress('rinkeby', 'INVALIDQUOTE')).to.equal('');
     expect(getCollateralTokenAddress('invalidnetwork', 'ETH')).to.equal('');
+  });
+});
+
+describe('toBaseUnit', () => {
+  it('should return a big number', () => {
+    expect(toBaseUnit('5.5', 18)).to.equal(5500000000000000000);
+  });
+});
+
+describe('fromBaseUnit', () => {
+  it('should return a small number', () => {
+    expect(fromBaseUnit('5500000000000000000', 18)).to.equal(5.5);
   });
 });
