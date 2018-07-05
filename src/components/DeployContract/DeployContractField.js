@@ -362,11 +362,12 @@ const fieldSettingsByName = {
           const now = moment().startOf('day');
           return (
             current &&
-            (current.isBefore(now, 'day') ||
-              current.startOf('day').diff(now, 'days') > 60)
+            (current.valueOf() < moment().endOf('day') ||
+              current.diff(now, 'days') > 60)
           );
         }}
-        format="YYYY-MM-DD HH:mm:ss"
+        showToday={false}
+        format="YYYY-MM-DD HH:mm:ss ([UTC/GMT]Z)"
         style={{ width: '100%' }}
       />
     )

@@ -151,6 +151,9 @@ describe('QuickDeployment', () => {
     const pastDate = moment()
       .subtract(1, 'days')
       .format('MMMM D, YYYY');
+    const futureDate = moment()
+      .add(1, 'days')
+      .format('MMMM D, YYYY');
     const currentDate = moment().format('MMMM D, YYYY');
 
     quickDeployment.find('span#expirationTimeStamp input').simulate('click');
@@ -167,6 +170,14 @@ describe('QuickDeployment', () => {
       quickDeployment
         .find('span#expirationTimeStamp')
         .find(`td[title="${currentDate}"]`)
+        .find('.ant-calendar-date')
+        .prop('aria-disabled')
+    ).to.equal(true);
+
+    expect(
+      quickDeployment
+        .find('span#expirationTimeStamp')
+        .find(`td[title="${futureDate}"]`)
         .find('.ant-calendar-date')
         .prop('aria-disabled')
     ).to.equal(false);
@@ -205,6 +216,27 @@ describe('QuickDeployment', () => {
         .find('.ant-calendar-date')
         .prop('aria-disabled')
     ).to.equal(false);
+  });
+
+  it('should format the local date with utc', () => {
+    const dateSelected = moment()
+      .add(2, 'days')
+      .format('MMMM D, YYYY');
+
+    const dateFormated = moment()
+      .add(2, 'days')
+      .format('YYYY-MM-DD HH:mm:ss ([UTC/GMT]Z)');
+
+    quickDeployment.find('span#expirationTimeStamp input').simulate('click');
+
+    quickDeployment
+      .find('span#expirationTimeStamp')
+      .find(`td[title="${dateSelected}"]`)
+      .simulate('click');
+
+    expect(
+      quickDeployment.find('.ant-calendar-picker-input').prop('value')
+    ).to.equal(dateFormated);
   });
 
   it('should reset form when .reset-button is clicked', () => {

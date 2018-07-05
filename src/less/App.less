@@ -53,6 +53,18 @@ code {
 
 /* Ant overrides */
 #market {
+    .ant-calendar {
+        width: 300px;
+    }
+    .ant-calendar-disabled-cell.ant-calendar-today .ant-calendar-date:before {
+        right: 0;
+        left: 0;
+        margin: auto;
+    }
+    .ant-calendar-disabled-cell.ant-calendar-today .ant-calendar-date {
+        padding: 0;
+        margin: 0;
+    }
     .ant-select-arrow,
     .ant-calendar-picker-icon:after {
         color: #fff;
@@ -104,9 +116,6 @@ code {
         border-bottom: 2px solid #000;
         border-right: 2px solid #000;
     }
-    .ant-calendar-selected-day .ant-calendar-date {
-        color: #000;
-    }
     .ant-calendar-picker-container {
         border: 1px solid @primary-color;
     }
@@ -135,6 +144,10 @@ code {
     }
     .ant-spin-blur {
         opacity: 0.25;
+    }
+    .ant-calendar-last-month-cell .ant-calendar-date,
+    .ant-calendar-next-month-btn-day .ant-calendar-date {
+        color: rgba(255, 255, 255, 0.25);
     }
 }
 
