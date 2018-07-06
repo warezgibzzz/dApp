@@ -9,10 +9,10 @@ const { Content } = Layout;
 class Wallet extends Component {
   render() {
     return (
-      <Layout style={{ background: '#FFF' }}>
-        <Content style={{ background: '#FFF' }}>
-          <HeaderMenu />
-          <Table />
+      <Layout>
+        <Content>
+          <HeaderMenu {...this.props} />
+          <Table {...this.props} />
         </Content>
       </Layout>
     );

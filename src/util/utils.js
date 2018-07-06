@@ -1,22 +1,7 @@
+import { Market } from '@marketprotocol/marketjs';
+
 const BUY_SIGN = 1;
 const SELL_SIGN = -1;
-
-/**
- * Signs a message.
- *
- * @param web3
- * @param address
- * @param message
- * @return {[*,*,*]}
- */
-export const signMessage = function(web3, address, message) {
-  const signature = web3.eth.sign(address, message);
-  const r = signature.slice(0, 66);
-  const s = `0x${signature.slice(66, 130)}`;
-  let v = web3.toDecimal(`0x${signature.slice(130, 132)}`);
-  if (v !== 27 && v !== 28) v += 27;
-  return [v, r, s];
-};
 
 /**
  *
@@ -53,55 +38,118 @@ export const calculateCollateral = function(
 };
 
 // TODO: move me to wherever I belong -clean up, add documentation, figure out how best to create order object in JS
-export async function getBids(web3, marketContract, orderLib) {
+export async function getBids(web3, contractAddress, marketContract, orderLib) {
+  ('getBids');
+
+  orderLib = await orderLib.deployed();
+
+  const { priceCap, priceFloor } = await marketContract
+    .at(contractAddress)
+    .then(async function(instance) {
+      const priceFloor = await instance.PRICE_FLOOR.call().then(data =>
+        data.toNumber()
+      );
+
+      const priceCap = await instance.PRICE_CAP.call().then(data =>
+        data.toNumber()
+      );
+
+      return {
+        priceCap,
+        priceFloor
+      };
+    });
+
   // for now we will create orders around the contract mid price, eventually we should create orders
   // that are around an price pulled from an active API that mimics the oracle solution
-  const contractMidPrice =
-    (marketContract.PRICE_FLOOR.call().toNumber() +
-      marketContract.PRICE_CAP.call().toNumber()) /
-    2;
+  const contractMidPrice = (priceFloor + priceCap) / 2;
 
-  // we will need to fix this, the server will need to have an unlocked account created the order for the user to match
-  // here we are just using an account that we only have access to in the dev environment, but wont be able
-  // to use when we attempt to deploy to a test net (rinkeby)
-  return createNewOrders(
-    web3,
-    marketContract,
-    orderLib,
-    web3.eth.accounts[0],
-    contractMidPrice - BUY_SIGN, // subtract our sign so our market are not crossed.
-    SELL_SIGN,
-    5
-  );
+  return new Promise((resolve, reject) => {
+    // Get current web3.ethereum wallet.
+    web3.eth.getAccounts(async function(error, accounts) {
+      // Log errors, if any
+      // TODO: Handle error
+      if (error) {
+        console.error(error);
+      }
+
+      // we will need to fix this, the server will need to have an unlocked account created the order for the user to match
+      // here we are just using an account that we only have access to in the dev environment, but wont be able
+      // to use when we attempt to deploy to a test net (rinkeby)
+      const bids = await createNewOrders(
+        web3,
+        contractAddress,
+        orderLib,
+        accounts.length > 1 ? accounts[1] : accounts[0],
+        contractMidPrice - SELL_SIGN, // subtract our sign so our market are not crossed.
+        SELL_SIGN,
+        2
+      );
+
+      resolve(bids);
+    });
+  });
 }
 
-export async function getAsks(web3, marketContract, orderLib) {
-  // for now we will create orders around the contract mid price, eventually we should create orders
-  // that are around an price pulled from an active API that mimics the oracle solution
-  const contractMidPrice =
-    (marketContract.PRICE_FLOOR.call().toNumber() +
-      marketContract.PRICE_CAP.call().toNumber()) /
-    2;
+export async function getAsks(web3, contractAddress, marketContract, orderLib) {
+  console.log('getAsks');
 
-  // we will need to fix this, the server will need to have an unlocked account created the order for the user to match
-  // here we are just using an account that we only have access to in the dev environment, but wont be able
-  // to use when we attempt to deploy to a test net (rinkeby)
-  return createNewOrders(
-    web3,
-    marketContract,
-    orderLib,
-    web3.eth.accounts[0],
-    contractMidPrice - BUY_SIGN, // subtract our sign so our market are not crossed.
-    SELL_SIGN,
-    5
-  );
+  orderLib = await orderLib.deployed();
+
+  return new Promise((resolve, reject) => {
+    // Get current web3.ethereum wallet.
+    web3.eth.getAccounts(async function(error, accounts) {
+      // Log errors, if any
+      // TODO: Handle error
+      if (error) {
+        console.error(error);
+      }
+
+      const maker = accounts.length > 1 ? accounts[1] : accounts[0];
+
+      const { priceCap, priceFloor } = await marketContract
+        .at(contractAddress)
+        .then(async function(instance) {
+          const priceFloor = await instance.PRICE_FLOOR.call().then(data =>
+            data.toNumber()
+          );
+          const priceCap = await instance.PRICE_CAP.call().then(data =>
+            data.toNumber()
+          );
+
+          return {
+            priceCap,
+            priceFloor
+          };
+        });
+
+      // for now we will create orders around the contract mid price, eventually we should create orders
+      // that are around an price pulled from an active API that mimics the oracle solution
+      const contractMidPrice = (priceFloor + priceCap) / 2;
+
+      // we will need to fix this, the server will need to have an unlocked account created the order for the user to match
+      // here we are just using an account that we only have access to in the dev environment, but wont be able
+      // to use when we attempt to deploy to a test net (rinkeby)
+      const asks = await createNewOrders(
+        web3,
+        contractAddress,
+        orderLib,
+        maker,
+        contractMidPrice - BUY_SIGN, // subtract our sign so our market are not crossed.
+        BUY_SIGN,
+        2
+      );
+
+      resolve(asks);
+    });
+  });
 }
 
 const createNewOrders = async function(
   web3,
-  marketContract,
+  contractAddress,
   orderLib,
-  makerAccount,
+  maker,
   startingPrice,
   mktSign,
   desiredOrderCount
@@ -110,29 +158,44 @@ const createNewOrders = async function(
 
   startingPrice = Math.trunc(startingPrice); //convert to integer
   const orders = [];
-  const orderQty = 1 * mktSign; // for now all orders have qty of 1 (+1 for bid, -1 for sell)
-  const expirationTimeStamp = Math.floor(Date.now() / 1000) + 86400; // order expires in a day.
-  const takerAccount = null;
-  const feeRecipient = null;
+  const orderQty = 100 * mktSign; // for now all orders have qty of 1 (+1 for bid, -1 for sell)
+  const expirationTimestamp = Math.floor(Date.now() / 1000) + 60 * 60; // order expires in a day.
+  const taker = '0x0000000000000000000000000000000000000000';
+  const feeRecipient = '0x0000000000000000000000000000000000000000';
   const makerFee = 0;
   const takerFee = 0;
+  const salt = 1;
+
+  const marketjs = new Market(web3.currentProvider);
 
   for (let i = 0; i < desiredOrderCount; i++) {
-    const newOrderPrice = startingPrice - i * mktSign;
-    const order = new Order(
-      marketContract.address,
-      makerAccount,
-      takerAccount,
+    const price = startingPrice - i * mktSign;
+
+    const order = {
+      contractAddress,
+      expirationTimestamp,
       feeRecipient,
+      maker,
       makerFee,
-      takerFee,
-      newOrderPrice,
-      expirationTimeStamp,
-      1,
-      orderQty
-    );
-    await order.getOrderHash(orderLib);
-    order.signOrder(web3, makerAccount);
+      orderQty,
+      price,
+      salt,
+      taker,
+      takerFee
+    };
+
+    await marketjs
+      .createOrderHashAsync(orderLib.address, order)
+      .then(function(data) {
+        order.orderHash = data;
+      });
+
+    await marketjs
+      .signOrderHashAsync(order.orderHash, maker)
+      .then(function(data) {
+        order.ecSignature = data;
+      });
+
     orders.push(order);
   }
 
@@ -193,6 +256,13 @@ export async function processContractsList(
         ] = await instance.PRICE_DECIMAL_PLACES.call().then(data =>
           data.toNumber()
         );
+
+        contractJSON[
+          'MARKET_COLLATERAL_POOL_ADDRESS'
+        ] = await instance.MARKET_COLLATERAL_POOL_ADDRESS.call().then(
+          data => data
+        );
+
         contractJSON[
           'QTY_MULTIPLIER'
         ] = await instance.QTY_MULTIPLIER.call().then(data => data.toNumber());
@@ -232,69 +302,6 @@ export async function processContractsList(
   return await Promise.all(promises);
 }
 
-class Order {
-  constructor(
-    contractAddress,
-    maker,
-    taker,
-    feeRecipient,
-    makerFee,
-    takerFee,
-    price,
-    expirationTimeStamp,
-    salt,
-    orderQty
-  ) {
-    this.contractAddress = contractAddress;
-    this.maker = maker;
-    this.taker = taker;
-    this.feeRecipient = feeRecipient;
-    this.makerFee = makerFee;
-    this.takerFee = takerFee;
-    this.price = price;
-    this.expirationTimeStamp = expirationTimeStamp;
-    this.salt = salt;
-    this.orderQty = orderQty;
-    this.remainingQty = orderQty;
-    this.orderHash = null;
-    this.orderAddresses = [maker, taker, feeRecipient];
-    this.unsignedOrderValues = [
-      makerFee,
-      takerFee,
-      price,
-      expirationTimeStamp,
-      salt
-    ];
-    this.v = null;
-    this.r = null;
-    this.s = null;
-    this.isSigned = false;
-  }
-
-  async getOrderHash(orderLib) {
-    if (this.orderHash != null) return this.orderHash;
-
-    this.orderHash = await orderLib.createOrderHash.call(
-      this.contractAddress,
-      this.orderAddresses,
-      this.unsignedOrderValues,
-      this.orderQty
-    );
-
-    return this.orderHash;
-  }
-
-  signOrder(web3, makerAccount) {
-    if (this.isSigned) return;
-
-    const signature = signMessage(web3, makerAccount, this.orderHash);
-    this.v = signature[0];
-    this.r = signature[1];
-    this.s = signature[2];
-    this.isSigned = true;
-  }
-}
-
 /**
  * Convert MetaMask error message to dApp error message.
  * Fallback: return original message.
@@ -302,10 +309,10 @@ class Order {
  * @param errorMessage
  * @return getMetamaskError
  */
-export const getMetamaskError = function(message) {
-  if (message.indexOf('User denied transaction') !== -1)
+export const getMetamaskError = function(errorMessage) {
+  if (errorMessage.indexOf('User denied transaction') !== -1)
     return 'User denied transaction';
-  else return message;
+  else return errorMessage;
 };
 
 export const getLocationOrigin = () => window.location.origin;
@@ -323,9 +330,31 @@ export const isTestnetOrMainnet = network => {
 };
 
 /**
+ * Convert String to ERC20 Token Base Unit
+ *
+ * @param value
+ * @param decimals
+ * @return BigNumber String
+ */
+export const toBaseUnit = (value, decimals) => {
+  return value * 10 ** decimals;
+};
+
+/**
+ * Convert BigNumber String to Number
+ *
+ * @param value
+ * @param decimals
+ * @return Number
+ */
+export const fromBaseUnit = (value, decimals) => {
+  return value / 10 ** decimals;
+};
+
+/**
  * Set `collateralTokenAddress` based on the `network`
  *
- * `0x01b8de20c76ed06c7e93068a45951c26f70be3db` -- WETH
+ * `0x01b8de20c76ed06c7e93068a45951c26f70be3db` -- Web3.eth
  * `0x0c58e89866dda96911a78dedf069a1848618c185` -- Stable USD
  *
  * @param network
@@ -338,7 +367,10 @@ export const getCollateralTokenAddress = (network, quoteAsset) => {
     switch (quoteAsset) {
       case 'ETH':
         return '0x01b8de20c76ed06c7e93068a45951c26f70be3db';
+      case 'WETH':
+        return '0xc778417e063141139fce010982780140aa0cd5ab';
       case 'USDT':
+      case 'USD':
         return '0x0c58e89866dda96911a78dedf069a1848618c185';
       default:
         return '';

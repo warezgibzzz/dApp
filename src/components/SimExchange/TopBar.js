@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Col, Dropdown, Icon, Menu, Row } from 'antd';
+import Loader from '../Loader';
 
 class TopBar extends Component {
   render() {
@@ -19,16 +20,18 @@ class TopBar extends Component {
     return (
       <div>
         <Row type="flex" justify="space-between" gutter={24}>
-          <Col span={12}>Last Price: 0.00453143 ETH</Col>
           <Col span={12}>
             {contracts && (
               <Dropdown overlay={menu}>
-                <Button style={{ marginLeft: 8 }}>
+                <Button>
                   {contract ? contract.CONTRACT_NAME : 'Contracts'}{' '}
                   <Icon type="down" />
                 </Button>
               </Dropdown>
             )}
+
+            {!contracts && <Loader loading={true} />}
+            {!contracts && <span>Loading Contracts, Please Wait...</span>}
           </Col>
         </Row>
       </div>

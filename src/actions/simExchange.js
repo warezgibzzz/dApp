@@ -1,4 +1,5 @@
-// import store from '../store';
+import BigNumber from 'bignumber.js';
+import { Market } from '@marketprotocol/marketjs';
 
 export function selectContract({ contract }) {
   return function(dispatch) {
@@ -6,22 +7,16 @@ export function selectContract({ contract }) {
   };
 }
 
-export function getContractBids(
-  { web3, getBids },
-  { MarketContract, OrderLib }
-) {
+export function getContractBids({ web3, getBids }) {
   const type = 'GET_BIDS';
 
   return async function(dispatch) {
     dispatch({ type: `${type}_PENDING` });
 
     if (web3 && typeof web3 !== 'undefined') {
-      // const orderLibInstance = await OrderLib.deployed();
-      // const marketContractInstance = await MarketContract.deployed();
-
-      const activeBids = await getBids();
-
-      dispatch({ type: `${type}_FULFILLED`, payload: activeBids });
+      await getBids().then(bids => {
+        dispatch({ type: `${type}_FULFILLED`, payload: bids });
+      });
     } else {
       dispatch({
         type: `${type}_REJECTED`,
@@ -31,22 +26,16 @@ export function getContractBids(
   };
 }
 
-export function getContractAsks(
-  { web3, getAsks },
-  { MarketContract, OrderLib }
-) {
+export function getContractAsks({ web3, getAsks }) {
   const type = 'GET_ASKS';
 
   return async function(dispatch) {
     dispatch({ type: `${type}_PENDING` });
 
     if (web3 && typeof web3 !== 'undefined') {
-      await OrderLib.deployed();
-      await MarketContract.deployed();
-
-      const activeAsks = await getAsks();
-
-      dispatch({ type: `${type}_FULFILLED`, payload: activeAsks });
+      await getAsks().then(asks => {
+        dispatch({ type: `${type}_FULFILLED`, payload: asks });
+      });
     } else {
       dispatch({
         type: `${type}_REJECTED`,
@@ -56,31 +45,107 @@ export function getContractAsks(
   };
 }
 
-export function tradeOrder({ web3, order }, { MarketContract }) {
+export function tradeOrder(
+  { web3, order, contractAddress },
+  { CollateralToken, MarketContract }
+) {
   const type = 'TRADE_ORDER';
 
   return async function(dispatch) {
     dispatch({ type: `${type}_PENDING` });
 
     if (web3 && typeof web3 !== 'undefined') {
-      const marketContract = await MarketContract.deployed();
-
       console.log(order);
-      await marketContract.tradeOrder(
-        order.orderAddresses,
-        order.unsignedOrderValues,
-        order.orderQty, // qty is five
-        -1, // let us fill a one lot
-        order.v, // v
-        order.r, // r
-        order.s, // s
-        { from: web3.eth.accounts[0] }
-      );
 
-      // NOTE: this is a very rough example of how this could all work.  Essentially the user selects an order object
-      // to trade against and calls trade order from their account.
+      // Get current ethereum wallet.
+      web3.eth.getAccounts(async function(error, accounts) {
+        // Log errors, if any
+        // TODO: Handle error
+        if (error) {
+          console.error(error);
+        }
 
-      dispatch({ type: `${type}_FULFILLED` });
+        order.remainingQty = 100;
+
+        const marketjs = new Market(web3.currentProvider);
+
+        const initialCredit = new BigNumber(1e23);
+        const maker = accounts.length > 1 ? accounts[1] : accounts[0];
+
+        const {
+          collateralPoolAddress,
+          collateralTokenAddress
+        } = await MarketContract.at(contractAddress).then(async function(
+          instance
+        ) {
+          const collateralPoolAddress = await instance.MARKET_COLLATERAL_POOL_ADDRESS.call();
+          const collateralTokenAddress = await instance.COLLATERAL_TOKEN_ADDRESS.call();
+
+          return {
+            collateralPoolAddress,
+            collateralTokenAddress
+          };
+        });
+
+        await CollateralToken.at(collateralTokenAddress).then(async function(
+          collateralTokenInstance
+        ) {
+          await collateralTokenInstance.transfer(
+            maker,
+            initialCredit.toNumber(),
+            {
+              from: accounts[0]
+            }
+          );
+
+          await collateralTokenInstance.transfer(
+            accounts[0],
+            initialCredit.toNumber(),
+            {
+              from: accounts[0]
+            }
+          );
+
+          await collateralTokenInstance.approve(
+            collateralPoolAddress,
+            initialCredit.toNumber(),
+            { from: maker }
+          );
+
+          await collateralTokenInstance.approve(
+            collateralPoolAddress,
+            initialCredit.toNumber(),
+            { from: accounts[0] }
+          );
+        });
+
+        await marketjs.depositCollateralAsync(
+          collateralPoolAddress,
+          initialCredit,
+          {
+            from: maker
+          }
+        );
+
+        await marketjs.depositCollateralAsync(
+          collateralPoolAddress,
+          initialCredit,
+          {
+            from: accounts[0]
+          }
+        );
+
+        console.log(
+          'Order Qty =' + order.orderQty + ' fillQty must be the same sign!'
+        );
+        const fillQty = Math.sign(order.orderQty);
+        await marketjs.tradeOrderAsync(order, fillQty, {
+          from: accounts[0],
+          gas: 400000
+        });
+
+        dispatch({ type: `${type}_FULFILLED` });
+      });
     } else {
       dispatch({
         type: `${type}_REJECTED`,
