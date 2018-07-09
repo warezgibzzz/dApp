@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { Button, Col, Dropdown, Icon, Menu, Row } from 'antd';
 import Loader from '../Loader';
-import _ from 'lodash';
 
 class TopBar extends Component {
   render() {
     const { contract, contracts } = this.props;
-    let validContracts = _.compact(contracts);
+    let validContracts = contracts;
 
     const menu = (
       <Menu onClick={e => this.props.onSelectContract(e.item.props.contract)}>
