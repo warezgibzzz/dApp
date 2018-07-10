@@ -199,7 +199,7 @@ describe('QueryResultStep', () => {
 
   it('should show loading correctly', () => {
     queryResultStep.setProps({ loading: true });
-    expect(queryResultStep.find(Loader).props().loading).to.equal(true);
+    expect(queryResultStep.find(Loader)).to.have.length(1);
   });
 
   it('should hide loading correctly', () => {
