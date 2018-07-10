@@ -5,18 +5,14 @@ import { expect } from 'chai';
 import Loader from '../../src/components/Loader';
 
 describe('Loader', () => {
-  it('should be visible with loading set', () => {
-    const loader = mount(<Loader loading={true}/>);
-    expect(loader.find('img').props('style').style.display).to.not.equals('none');
+  it('should be visible', () => {
+    const loader = mount(<Loader />);
+    expect(loader.find('.loader')).to.have.length(1);
   });
 
-  it('should not be visible', () => {
-    const loader = mount(<Loader loading={false}/>);
-    expect(loader.find('img').props('style').style.display).to.equals('none');
-  });
+  it('should be visible with message', () => {
+    const loader = mount(<Loader message="test" />);
 
-  it('should be in the center', () => {
-    const loader = mount(<Loader center={true}/>);
-    expect(loader.find('img').props('style').className).to.equals('page-loader');
+    expect(loader.props().message).to.equals('test');
   });
 });
