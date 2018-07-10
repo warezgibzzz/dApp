@@ -268,7 +268,7 @@ class QuickDeployment extends Component {
       </div>
     );
 
-    const loader = <Loader loading={loading} center={true} />;
+    const loader = <Loader />;
 
     return loading ? (
       <Spin indicator={loader} style={{ maxHeight: '100%', height: '100%' }}>

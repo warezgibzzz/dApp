@@ -312,7 +312,7 @@ class ContractsList extends Component {
     ];
 
     if (!this.state.contracts) {
-      return <Loader loading={true} center={true} />;
+      return <Loader />;
     }
 
     if (this.state.contracts.length === 0) {

@@ -71,7 +71,6 @@ class FindContractForm extends Component {
   render() {
     return (
       <div className="page">
-        <br />
         <Form onSubmit={this.handleFind.bind(this)} layout="vertical">
           <ContractFormRow>
             <ContractFormCol>
@@ -111,24 +110,36 @@ class FindContractForm extends Component {
               </Button>
             </Col>
           </Row>
-          <Loader loading={this.props.loading} center={true} />
+
+          <Row>
+            <div className="contract-data">
+              {this.props.loading && (
+                <div className="loader-wrapper">
+                  <Loader />
+                </div>
+              )}
+
+              {!this.props.loading &&
+                this.props.contract.length > 0 && (
+                  <List
+                    grid={{ gutter: 16, column: 2 }}
+                    dataSource={this.props.contract}
+                    style={{ padding: '0 16px' }}
+                    renderItem={item => (
+                      <List.Item>
+                        <Card title={this.state.keyMap[item.name]}>
+                          <div className="absolute-center">
+                            {item.value.toString()}
+                          </div>
+                        </Card>
+                      </List.Item>
+                    )}
+                    {...formItemColLayout}
+                  />
+                )}
+            </div>
+          </Row>
         </Form>
-        <br />
-        {this.props.contract.length > 0 && (
-          <List
-            grid={{ gutter: 16, column: 2 }}
-            dataSource={this.props.contract}
-            style={{ padding: '0 16px' }}
-            renderItem={item => (
-              <List.Item>
-                <Card title={this.state.keyMap[item.name]}>
-                  {item.value.toString()}
-                </Card>
-              </List.Item>
-            )}
-            {...formItemColLayout}
-          />
-        )}
       </div>
     );
   }

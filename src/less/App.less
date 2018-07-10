@@ -28,21 +28,6 @@ code {
     zoom: 1;
 }
 
-.market-loader {
-    width: 80px;
-    margin: auto;
-}
-
-.page-loader {
-    width: 80px;
-    margin: auto;
-    position: absolute; /* To negate the footer height to make it visually centered */
-    top: -60px;
-    left: 0;
-    bottom: 0;
-    right: 0;
-}
-
 .text-center {
     text-align: center;
 }
@@ -51,8 +36,24 @@ code {
     color: @primary-color;
 }
 
+.absolute-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
 /* Ant overrides */
 #market {
+    .ant-layout-content,
+    .ant-card-body {
+        position: relative;
+        min-height: 100px;
+        padding: 0px;
+    }
+
     .ant-calendar {
         width: 300px;
     }
