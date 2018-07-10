@@ -441,7 +441,7 @@ class DeployStep extends BaseStepComponent {
       <div style={{ padding: '30px' }}>
         <Row type="flex" justify="center">
           <Col lg={{ span: 16 }} sm={{ span: 24 }} xs={{ span: 24 }}>
-            <Card title="Deployment Status" style={{ width: '100%' }}>
+            <Card title="Deployment Status">
               {this.props.loading && <Loader />}
               {this.props.contract && (
                 <div className="result">

@@ -36,10 +36,22 @@ code {
     color: @primary-color;
 }
 
+.absolute-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
 /* Ant overrides */
 #market {
-    .ant-layout-content {
+    .ant-layout-content,
+    .ant-card-body {
         position: relative;
+        min-height: 100px;
+        padding: 0px;
     }
 
     .ant-calendar {
