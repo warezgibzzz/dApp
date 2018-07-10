@@ -2,24 +2,24 @@ import React from 'react';
 
 import splash from '../animations/splash.gif';
 
+// Styles
+import '../less/components/Loader.less';
+
 Loader.defaultProps = {
-  loading: false,
-  center: false
+  loading: false
 };
 
 function Loader(props) {
   const style = {
-    display: props.loading ? 'flex' : 'none',
-    top: props.top ? props.top : '-60px'
+    display: props.loading ? 'flex' : 'none'
   };
 
   return (
-    <img
-      alt="Market Loader"
-      className={props.center ? 'page-loader' : 'market-loader'}
-      src={splash}
-      style={{ ...style }}
-    />
+    <div className="loader">
+      <img alt="Loader" src={splash} style={{ ...style }} />
+
+      {props.message && <span>{props.message}</span>}
+    </div>
   );
 }
 

@@ -31,8 +31,12 @@ class TopBar extends Component {
               </Dropdown>
             )}
 
-            {!contracts && <Loader loading={true} />}
-            {!contracts && <span>Loading Contracts, Please Wait...</span>}
+            {!contracts && (
+              <Loader
+                loading={true}
+                message="Loading Contracts, Please Wait..."
+              />
+            )}
           </Col>
         </Row>
       </div>
