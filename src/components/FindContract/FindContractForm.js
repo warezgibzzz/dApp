@@ -111,7 +111,7 @@ class FindContractForm extends Component {
               </Button>
             </Col>
           </Row>
-          <Loader loading={this.props.loading} center={true} />
+          {this.props.loading && <Loader />}
         </Form>
         <br />
         {this.props.contract.length > 0 && (

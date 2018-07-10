@@ -32,10 +32,7 @@ class TopBar extends Component {
             )}
 
             {!contracts && (
-              <Loader
-                loading={true}
-                message="Loading Contracts, Please Wait..."
-              />
+              <Loader message="Loading Contracts, Please Wait..." />
             )}
           </Col>
         </Row>

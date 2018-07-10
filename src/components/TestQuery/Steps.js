@@ -297,7 +297,7 @@ class QueryResultStep extends Component {
             <Card title="Query Result" style={{ width: '100%' }}>
               {this.props.loading && (
                 <div style={{ position: 'relative', height: '100px' }}>
-                  <Loader loading={this.props.loading} top={'0'} />
+                  <Loader />
                 </div>
               )}
               {!this.props.loading &&
