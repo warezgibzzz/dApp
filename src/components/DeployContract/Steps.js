@@ -2,7 +2,7 @@
  * Steps for use by GuidedDeployment.
  *
  */
-import { Alert, Button, Card, Col, Form, Icon, Row } from 'antd';
+import { Button, Col, Form, Icon, Row, Collapse, Timeline } from 'antd';
 import moment from 'moment';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
@@ -13,6 +13,8 @@ import DeployContractSuccess from './DeployContractSuccess';
 import GasPriceField from '../GasPriceField';
 import SelectTokenField from './SelectTokenField';
 
+// extract antd subcomponents
+const Panel = Collapse.Panel;
 const ButtonGroup = Button.Group;
 
 function BiDirectionalNav(props) {
@@ -408,13 +410,112 @@ class DataSourceStep extends BaseStepComponent {
 
 DataSourceStep = Form.create()(DataSourceStep);
 
-/**
- * Final Step for showing deploy status of Contract
- * and possible a summary of the deployed contract on success.
- *
+/*
+  *  [WIP] Modifying UX flow for contract deployment to be more
+  *        stepwise, descriptive, and educational.
+  *
+  *        See https://github.com/MARKETProtocol/dApp/issues/187.
  */
 class DeployStep extends BaseStepComponent {
+  constructor(props) {
+    super(props);
+
+    this.panelKeys = [
+      'Contract Deployment',
+      'Collateral Pool Deployment',
+      'Deployment Results'
+    ];
+
+    this.panelConfig = {
+      'Contract Deployment': {
+        key: 'Contract Deployment',
+        stepNum: 1,
+        pendingText: 'Pending',
+        loadingText: 'Deploying',
+        completedText: 'Deployed',
+        errorText: 'Cancelled',
+        subactions: [
+          {
+            title: 'Deploy Contract',
+            explanation:
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+          },
+          {
+            title: 'Whitelist Contract',
+            explanation:
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+          }
+        ]
+      },
+      'Collateral Pool Deployment': {
+        key: 'Collateral Pool Deployment',
+        stepNum: 2,
+        pendingText: 'Pending',
+        loadingText: 'Deploying',
+        completedText: 'Deployed',
+        errorText: 'Cancelled',
+        subactions: [
+          {
+            title: 'Deploy Collateral Pool',
+            explanation:
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+          },
+          {
+            title: 'Link Collateral Pool and Contract',
+            explanation:
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+          }
+        ]
+      },
+      'Deployment Results': {
+        key: 'Deployment Results',
+        stepNum: 3,
+        pendingText: 'Pending',
+        loadingText: 'Processing',
+        errorText: 'Rejected',
+        completedText: 'Succeeded'
+      }
+    };
+
+    this.initialState = {
+      currStepNum: 1,
+      activePanelKey: 'Contract Deployment',
+      txHashes: {
+        'Contract Deployment': null,
+        'Collateral Pool Deployment': null
+      }
+    };
+
+    this.state = Object.assign({}, this.initialState);
+  }
+
+  /*
+   *  Possible values for 'props.currentStep', in order
+   *  ------------------------------------------------------------------------
+   *  [null]
+   *    Uninitialized.
+   *  [rejected]
+   *    Something went wrong, deployment is cancelled, and an error message
+   *    is exposed in 'props.error'.
+   *  [pending]
+   *    Waiting for contract deployment to start.
+   *  [contractDeploying]
+   *    Waiting for market contract deployment to complete.
+   *  [collateralPoolDeploying]
+   *    Waiting for market collateral pool deployment to complete.
+   *  [deploymentComplete]
+   *    Market collateral pool deployment has completed.
+   *  [fulfilled]
+   *    Full deployment process has completed and contract information is now
+   *    exposed in 'props.contract'.
+  **/
   componentWillReceiveProps(nextProps) {
+    if (this.props.currentStep !== nextProps.currentStep) {
+      this.onUpdateCurrStep(nextProps.currentStep);
+    }
+
+    this.onUpdateTxHashes(nextProps);
+
     if (this.props.loading && !nextProps.loading) {
       if (nextProps.error) {
         // We had an error
@@ -433,56 +534,296 @@ class DeployStep extends BaseStepComponent {
   }
 
   componentDidMount() {
-    this.props.deployContract();
+    if (this.props.deployContract) {
+      this.props.deployContract();
+    }
   }
 
-  render() {
-    return (
-      <div style={{ padding: '30px' }}>
-        <Row type="flex" justify="center">
-          <Col lg={{ span: 16 }} sm={{ span: 24 }} xs={{ span: 24 }}>
-            <Card title="Deployment Status">
-              {this.props.loading && <Loader />}
-              {this.props.contract && (
-                <div className="result">
-                  <div>
-                    Congratulations!!! Your contract has successfully deployed
-                    at:{' '}
-                    <a
-                      href={`https://etherscan.io/address/${
-                        this.props.contract.address
-                      }`}
-                      target="_blank"
-                    >
-                      {this.props.contract.address}
-                    </a>
-                  </div>
+  componentWillUnmount() {
+    this.props.onResetDeploymentState();
+  }
+
+  onRetry() {
+    this.setState(Object.assign(this.initialState));
+    this.props.onResetDeploymentState({
+      preservations: {
+        currentStep: 'pending'
+      }
+    });
+    this.props.onDeployContract();
+  }
+
+  onUpdateCurrStep(currentStep) {
+    // determine new step number
+    let currStepNum;
+    switch (currentStep) {
+      case null:
+      case 'pending':
+      case 'contractDeploying':
+        currStepNum = 1;
+        break;
+      case 'deploymentComplete':
+      case 'collateralPoolDeploying':
+        currStepNum = 2;
+        break;
+      case 'rejected':
+      case 'fulfilled':
+        currStepNum = 3;
+        break;
+      default:
+        currStepNum = 1;
+    }
+
+    // update state and trigger active panel change on slight delay to make
+    // updated tx hash/loader changes visible
+    this.setState(
+      {
+        currStepNum
+      },
+      () =>
+        currStepNum >= 1 && currStepNum <= 3
+          ? setTimeout(
+              () => this.onChangeActivePanel(this.panelKeys[currStepNum - 1]),
+              'rejected' === currentStep ? 0 : 1250
+            )
+          : null
+    );
+  }
+
+  onUpdateTxHashes(nextProps) {
+    let { txHashes } = this.state;
+
+    txHashes['Contract Deployment'] = nextProps.contractDeploymentTxHash;
+    txHashes['Collateral Pool Deployment'] =
+      nextProps.collateralPoolDeploymentTxHash;
+
+    this.setState({ txHashes });
+  }
+
+  onChangeActivePanel(newActivePanelKey) {
+    this.setState({
+      activePanelKey: newActivePanelKey
+    });
+  }
+
+  renderPanel(config) {
+    let { currStepNum, txHashes } = this.state;
+    let {
+      key,
+      stepNum,
+      pendingText,
+      loadingText,
+      completedText,
+      errorText,
+      subactions
+    } = config;
+
+    let loading =
+      'Deployment Results' === key ? false : currStepNum === stepNum;
+    let pending = currStepNum < stepNum;
+    let txHash = txHashes[key];
+
+    let panelStyle = {
+      background: 'transparent',
+      borderRadius: 4,
+      border: 'none',
+      overflow: 'hidden'
+    };
+
+    let panelHeader = (
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 30,
+              height: 30,
+              borderRadius: 15,
+              backgroundColor: '#02E2C1',
+              margin: 0
+            }}
+          >
+            <h4 style={{ color: 'black', margin: 0 }}>{stepNum}</h4>
+          </div>
+
+          <h3 style={{ margin: 0, marginLeft: 20 }}>{key}</h3>
+        </div>
+
+        <Button
+          size={'small'}
+          loading={loading}
+          style={{
+            marginRight: 34,
+            borderRadius: 4,
+            backgroundColor: '#02E2C1',
+            color: '#171F26'
+          }}
+        >
+          {this.props.error
+            ? errorText
+            : loading
+              ? loadingText
+              : pending
+                ? pendingText
+                : completedText}
+        </Button>
+      </div>
+    );
+
+    let panelContent =
+      'Deployment Results' === key ? (
+        <Row className={'panel-content-wrap'} type={'flex'} align={'middle'}>
+          <Col
+            style={{ paddingBottom: 20 }}
+            lg={{ span: 24 }}
+            sm={{ span: 24 }}
+            xs={{ span: 24 }}
+          >
+            {this.props.contract ? (
+              <div id={'contract-info-wrap'}>
+                <h3>{'Your contract has successfully deployed!'}</h3>
+
+                <p>
+                  {'Contract address: '}
+                  <a
+                    href={`https://etherscan.io/address/${
+                      this.props.contract.address
+                    }`}
+                    target={'_blank'}
+                  >
+                    {this.props.contract.address}
+                  </a>
+                </p>
+
+                <br />
+
+                <Link to={'/contract/explorer'}>
+                  <Button type={'primary'}>{'Explore All Contracts'}</Button>
+                </Link>
+              </div>
+            ) : (
+              <div>
+                <h3>{'There was an error deploying your contract.'}</h3>
+
+                <p>{this.props.error}</p>
+
+                <div style={{ display: 'flex' }}>
+                  <Button
+                    id={'retry-button'}
+                    type={'primary'}
+                    onClick={this.onRetry.bind(this)}
+                  >
+                    {'Retry'}
+                  </Button>
+
+                  <div style={{ width: 20 }} />
+
+                  <Button
+                    type={'default'}
+                    onClick={() => this.props.history.push('/')}
+                  >
+                    {'Cancel'}
+                  </Button>
                 </div>
-              )}
-              {!this.props.loading &&
-                this.props.error && (
-                  <Alert message={`${this.props.error}`} type="error" />
-                )}
-            </Card>
-          </Col>
-        </Row>
-        <br />
-        <Row type="flex" justify="center">
-          <Col>
-            {!this.props.loading &&
-              this.props.error && (
-                <Button type="primary" onClick={this.props.onFailSubmit}>
-                  Try again
-                </Button>
-              )}
-            {this.props.contract && (
-              <Link to="/contract/explorer">
-                <Button type="primary">Explore All Contracts</Button>
-              </Link>
+              </div>
             )}
           </Col>
         </Row>
-      </div>
+      ) : (
+        <Row className={'panel-content-wrap'} type={'flex'} align={'middle'}>
+          <Col lg={{ span: 18 }} sm={{ span: 24 }} xs={{ span: 24 }}>
+            <Timeline>
+              {subactions.map((subaction, i) => (
+                <Timeline.Item key={`subaction-${i}`} style={{ padding: 0 }}>
+                  <Row>
+                    <h3>{subaction.title}</h3>
+                    <h4>{"What's happening?"}</h4>
+                    <p>{subaction.explanation}</p>
+                  </Row>
+                </Timeline.Item>
+              ))}
+
+              <Timeline.Item
+                dot={!txHash && <Icon type={'loading'} />}
+                style={{ padding: 0 }}
+              >
+                <Row>
+                  <h3>
+                    {'Transaction Hash: '}
+                    {txHash ? (
+                      <a
+                        href={`https://etherscan.io/tx/${txHash}`}
+                        target={'_blank'}
+                      >
+                        {txHash}
+                      </a>
+                    ) : (
+                      'TBD'
+                    )}
+                  </h3>
+                </Row>
+              </Timeline.Item>
+            </Timeline>
+          </Col>
+          <Col lg={{ span: 6 }} sm={{ span: 0 }} xs={{ span: 0 }}>
+            <div className={'hide-on-mobile'}>
+              <Loader loading={loading} />
+            </div>
+          </Col>
+        </Row>
+      );
+
+    return (
+      <Panel
+        key={key}
+        header={panelHeader}
+        disabled={pending}
+        style={panelStyle}
+        showArrow
+      >
+        {panelContent}
+      </Panel>
+    );
+  }
+
+  render() {
+    let { activePanelKey } = this.state;
+    let collapseStyle = {
+      background: '#171F26',
+      border: '1px solid #02E2C1',
+      borderRadius: 6,
+      height: 'auto'
+    };
+
+    return (
+      <Col
+        style={this.props.containerStyles || {}}
+        lg={{ span: 22, offset: 1 }}
+        sm={{ span: 24 }}
+        xs={{ span: 24 }}
+      >
+        <Collapse
+          accordion
+          activeKey={activePanelKey}
+          style={collapseStyle}
+          onChange={newActivePanelKey =>
+            this.onChangeActivePanel(newActivePanelKey)
+          }
+        >
+          {/* render panels */
+          this.panelKeys.map((key, i) =>
+            this.renderPanel(this.panelConfig[key])
+          )}
+        </Collapse>
+      </Col>
     );
   }
 }

@@ -19,6 +19,7 @@ class DeployContractForm extends Component {
         showErrorMessage={showMessage.bind(showMessage, 'error')}
         showSuccessMessage={showMessage.bind(showMessage, 'success')}
         onDeployContract={this.handleDeploy}
+        onResetDeploymentState={this.props.onResetDeploymentState}
       />
     );
   }
@@ -29,6 +30,7 @@ class DeployContractForm extends Component {
         {...props}
         {...this.props}
         onDeployContract={this.handleDeploy}
+        onResetDeploymentState={this.props.onResetDeploymentState}
       />
     );
   }
@@ -39,6 +41,7 @@ class DeployContractForm extends Component {
         {...props}
         {...this.props}
         onDeployContract={this.handleDeploy}
+        onResetDeploymentState={this.props.onResetDeploymentState}
       />
     );
   }

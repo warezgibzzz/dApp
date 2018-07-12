@@ -69,6 +69,10 @@ class GuidedDeployment extends Component {
     });
   }
 
+  onDeployContract() {
+    this.props.onDeployContract(this.state);
+  }
+
   render() {
     const currentStep = this.state.step;
     const { gas, initialValues } = this.props;
@@ -110,15 +114,20 @@ class GuidedDeployment extends Component {
 
       <DeployStep
         key="4"
-        deployContract={() => {
-          this.props.onDeployContract(this.state);
-        }}
+        deployContract={this.onDeployContract.bind(this)}
         showErrorMessage={showMessage.bind(showMessage, 'error')}
         showSuccessMessage={showMessage.bind(showMessage, 'success')}
         onFailSubmit={this.onFailSubmit.bind(this)}
+        onDeployContract={this.onDeployContract.bind(this)}
+        onResetDeploymentState={this.props.onResetDeploymentState}
         loading={this.props.loading}
         contract={this.props.contract}
         error={this.props.error}
+        currentStep={this.props.currentStep}
+        contractDeploymentTxHash={this.props.contractDeploymentTxHash}
+        collateralPoolDeploymentTxHash={
+          this.props.collateralPoolDeploymentTxHash
+        }
       />
     ];
 

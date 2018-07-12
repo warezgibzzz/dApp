@@ -211,63 +211,80 @@ describe('DataSourceStep', () => {
 });
 
 describe('DeployStep', () => {
-  let deployContractSpy;
   let deployStep;
-  let successMessageSpy;
-  let errorMessageSpy;
+  let onDeployContractSpy;
+  let onResetDeploymentStateSpy;
+  let showErrorMessageSpy;
+  let showSuccessMessageSpy;
+
   beforeEach(() => {
-    deployContractSpy = sinon.spy();
-    successMessageSpy = sinon.spy();
-    errorMessageSpy = sinon.spy();
+    onDeployContractSpy = sinon.spy();
+    onResetDeploymentStateSpy = sinon.spy();
+    showErrorMessageSpy = sinon.spy();
+    showSuccessMessageSpy = sinon.spy();
 
     deployStep = shallow(
       <DeployStep
-        deployContract={deployContractSpy}
-        showSuccessMessage={successMessageSpy}
-        showErrorMessage={errorMessageSpy}
+        onDeployContract={onDeployContractSpy}
+        onResetDeploymentState={onResetDeploymentStateSpy}
+        showErrorMessage={showErrorMessageSpy}
+        showSuccessMessage={showSuccessMessageSpy}
       />
     );
   });
 
   it('renders without crashing', () => {
     const div = document.createElement('div');
-    ReactDOM.render(<DeployStep deployContract={deployContractSpy} />, div);
+    ReactDOM.render(<DeployStep />, div);
   });
 
-  it('should render Alert when error is set', () => {
-    deployStep.setProps({ error: 'Error message', loading: false });
-    expect(deployStep.find(Alert)).to.have.length(1);
+  it('should call onUpdateCurrStep if next props have a different currentStep value', () => {
+    let instance = deployStep.instance();
+    deployStep.setProps({ currentStep: null });
+    expect(instance.state.currStepNum).to.equal(1);
+    deployStep.setProps({ currentStep: 'pending' });
+    expect(instance.state.currStepNum).to.equal(1);
+    deployStep.setProps({ currentStep: 'contractDeploying' });
+    expect(instance.state.currStepNum).to.equal(1);
+    deployStep.setProps({ currentStep: 'deploymentComplete' });
+    expect(instance.state.currStepNum).to.equal(2);
+    deployStep.setProps({ currentStep: 'collateralPoolDeploying' });
+    expect(instance.state.currStepNum).to.equal(2);
+    deployStep.setProps({ currentStep: 'rejected' });
+    expect(instance.state.currStepNum).to.equal(3);
+    deployStep.setProps({ currentStep: 'fulfilled' });
+    expect(instance.state.currStepNum).to.equal(3);
   });
 
-  it('should only render .result when contract is created', () => {
-    deployStep.setProps({ error: null, loading: true, contract: null });
-    expect(deployStep.find('.result')).to.have.length(0);
+  it('should call props.onResetDeploymentState and props.onDeployContract when the retry button is clicked', () => {
+    let instance = deployStep.instance();
+    deployStep.find('#retry-button').simulate('click');
+    expect(onResetDeploymentStateSpy).to.have.property('callCount', 1);
+    expect(onDeployContractSpy).to.have.property('callCount', 1);
+  });
+
+  it('should call onUpdateTxHashes when props change, updating txHashes state var with new tx hash values', () => {
+    let instance = deployStep.instance();
     deployStep.setProps({
-      error: null,
-      loading: false,
-      contract: {
-        address: '0x00000'
-      }
+      contractDeploymentTxHash: 'val1',
+      collateralPoolDeploymentTxHash: 'val2'
     });
-    expect(deployStep.find('.result')).to.have.length(1);
+    expect(instance.state.txHashes['Contract Deployment']).to.equal('val1');
+    expect(instance.state.txHashes['Collateral Pool Deployment']).to.equal(
+      'val2'
+    );
   });
 
-  it('should call showErrorMessage if new props is error', () => {
-    deployStep.setProps({ error: null, loading: true, contract: null });
-    deployStep.setProps({ error: new Error('Error message'), loading: false });
-    expect(errorMessageSpy).to.have.property('callCount', 1);
+  it('should call props.showErrorMessage if next props have an error value', () => {
+    deployStep.setProps({ error: null, loading: true });
+    deployStep.setProps({ error: new Error('err'), loading: false });
+    expect(showErrorMessageSpy).to.have.property('callCount', 1);
   });
 
   it('should call showSuccessMessage if new props has contract', () => {
-    deployStep.setProps({ error: null, loading: true, contract: null });
-    deployStep.setProps({
-      error: null,
-      loading: false,
-      contract: {
-        address: '0x00000'
-      }
-    });
-    expect(successMessageSpy).to.have.property('callCount', 1);
+    deployStep.setProps({ contract: null, loading: true });
+    deployStep.setProps({ contract: { address: '0x00000' }, loading: false });
+    expect(showSuccessMessageSpy).to.have.property('callCount', 1);
   });
 });
 

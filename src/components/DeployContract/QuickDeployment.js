@@ -1,9 +1,8 @@
-import { Alert, Button, Col, Form, Row, Spin } from 'antd';
+import { Alert, Button, Col, Form, Row } from 'antd';
 import React, { Component } from 'react';
 
-import Loader from '../Loader';
+import { DeployStep } from './Steps';
 import Field from './DeployContractField';
-import DeployContractSuccess from './DeployContractSuccess';
 import GasPriceField from '../GasPriceField';
 
 const formButtonLayout = {
@@ -48,31 +47,13 @@ function ContractFormCol(props) {
  *
  */
 class QuickDeployment extends Component {
-  componentWillReceiveProps(nextProps) {
-    if (this.props.loading && !nextProps.loading) {
-      if (nextProps.error) {
-        // We had an error
-        this.props.showErrorMessage(
-          `There was an error deploying the contract: ${nextProps.error}`,
-          8
-        );
-      } else if (nextProps.contract) {
-        // Contract was deployed
-        this.props.showSuccessMessage(
-          DeployContractSuccess({ contract: nextProps.contract }),
-          5
-        );
-      }
-    }
-  }
-
   handleReset(event) {
     event.preventDefault();
     this.props.form.resetFields();
   }
 
   handleDeploy(event) {
-    event.preventDefault();
+    if (event) event.preventDefault();
 
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) {
@@ -103,7 +84,14 @@ class QuickDeployment extends Component {
   }
 
   render() {
-    const { form, gas, initialValues, loading, network } = this.props;
+    const {
+      form,
+      gas,
+      initialValues,
+      loading,
+      network,
+      currentStep
+    } = this.props;
 
     const quickForm = (
       <div>
@@ -268,14 +256,38 @@ class QuickDeployment extends Component {
       </div>
     );
 
-    const loader = <Loader />;
+    return (
+      <div>
+        {/* show form if contract is not deploying */}
+        <div
+          style={{
+            opacity: null === currentStep ? 1 : 0,
+            height: null === currentStep ? 'auto' : 1
+          }}
+        >
+          {quickForm}
+        </div>
 
-    return loading ? (
-      <Spin indicator={loader} style={{ maxHeight: '100%', height: '100%' }}>
-        {quickForm}
-      </Spin>
-    ) : (
-      quickForm
+        {/* show contract deployment flow if contract is deploying */
+        null === currentStep ? null : (
+          <DeployStep
+            containerStyles={{ padding: '20px 10px 20px 10px' }}
+            history={this.props.history}
+            showErrorMessage={this.props.showErrorMessage}
+            showSuccessMessage={this.props.showSuccessMessage}
+            onDeployContract={this.handleDeploy.bind(this)}
+            onResetDeploymentState={this.props.onResetDeploymentState}
+            loading={this.props.loading}
+            contract={this.props.contract}
+            error={this.props.error}
+            currentStep={this.props.currentStep}
+            contractDeploymentTxHash={this.props.contractDeploymentTxHash}
+            collateralPoolDeploymentTxHash={
+              this.props.collateralPoolDeploymentTxHash
+            }
+          />
+        )}
+      </div>
     );
   }
 }

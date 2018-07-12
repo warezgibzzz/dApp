@@ -48,6 +48,10 @@ export function deployContract(
 
           console.log('Attempting to deploy contract from ' + coinbase);
 
+          dispatch({
+            type: `${type}_CONTRACT_DEPLOYMENT_STARTED`
+          });
+
           // find the address of the MKT token so we can link to our deployed contract
           let marketContractInstanceDeployed;
           let marketContractDeployedAddress;
@@ -77,17 +81,39 @@ export function deployContract(
                 'Market Contract deployed to ' + marketContractDeployedAddress
               );
 
+              dispatch({
+                type: `${type}_CONTRACT_DEPLOYED`,
+                payload: {
+                  deploymentResults: marketContractDeployResults
+                }
+              });
+
               return MarketContract.at(marketContractDeployedAddress).then(
                 function(deployedMarketContract) {
                   marketContractInstanceDeployed = deployedMarketContract;
-                  return MarketCollateralPoolFactory.deployed().then(function(
-                    collateralPoolFactory
-                  ) {
-                    return collateralPoolFactory.deployMarketCollateralPool(
-                      marketContractDeployedAddress,
-                      txParams
-                    );
-                  });
+                  return MarketCollateralPoolFactory.deployed()
+                    .then(function(collateralPoolFactory) {
+                      return collateralPoolFactory.deployMarketCollateralPool(
+                        marketContractDeployedAddress,
+                        txParams
+                      );
+                    })
+                    .then(function(marketCollateralPoolDeployResults) {
+                      dispatch({
+                        type: `${type}_COLLATERAL_POOL_DEPLOYED`,
+                        payload: {
+                          deploymentResults: marketCollateralPoolDeployResults
+                        }
+                      });
+                    })
+                    .catch(err => {
+                      dispatch({
+                        type: `${type}_REJECTED`,
+                        payload: getMetamaskError(err.message.split('\n')[0])
+                      });
+
+                      reject(getMetamaskError(err.message.split('\n')[0]));
+                    });
                 }
               );
             })
@@ -116,6 +142,15 @@ export function deployContract(
 
         reject('Web3 not initialised');
       }
+    });
+  };
+}
+
+export function resetDeploymentState(preservations) {
+  return function(dispatch) {
+    dispatch({
+      type: 'DEPLOY_CONTRACT_RESET_STATE',
+      payload: preservations ? preservations : {}
     });
   };
 }

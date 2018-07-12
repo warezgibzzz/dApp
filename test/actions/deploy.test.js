@@ -70,8 +70,8 @@ describe('DeployAction', () => {
 
   it('should dispatch deploy contract fulfilled', async () => {
     return runDeployAction().then(() => {
-      expect(dispatchSpy).to.have.property('callCount', 2);
-      expect(dispatchSpy.args[1][0].type).to.equals(
+      expect(dispatchSpy).to.have.property('callCount', 5);
+      expect(dispatchSpy.args[4][0].type).to.equals(
         'DEPLOY_CONTRACT_FULFILLED'
       );
     });

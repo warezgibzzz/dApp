@@ -66,9 +66,33 @@ class SimplifiedDeployment extends Component {
     });
   }
 
+  onDeployContract() {
+    const { network } = this.props;
+
+    // fix decimal points.
+    // this simply assumes the decimal places of the original price.
+    // Since we limit the floor-cap range to 45% to 155%, this is a good estimate
+    // and we shouldn't loose much in terms of precission
+    this.setState(
+      {
+        collateralTokenAddress: getCollateralTokenAddress(
+          network,
+          this.state.quoteAsset
+        ),
+        priceFloor: Math.round(
+          this.state.priceFloorSimplified * 10 ** this.state.priceDecimalPlaces
+        ),
+        priceCap: Math.round(
+          this.state.priceCapSimplified * 10 ** this.state.priceDecimalPlaces
+        )
+      },
+      () => this.props.onDeployContract(this.state)
+    );
+  }
+
   render() {
     const currentStep = this.state.step;
-    const { gas, network } = this.props;
+    const { gas } = this.props;
 
     const steps = [
       <ExchangeStep
@@ -100,35 +124,21 @@ class SimplifiedDeployment extends Component {
 
       <DeployStep
         key="3"
-        deployContract={() => {
-          // fix decimal points.
-          // this simply assumes the decimal places of the original price.
-          // Since we limit the floor-cap range to 45% to 155%, this is a good estimate
-          // and we shouldn't loose much in terms of precission
-          this.setState(
-            {
-              collateralTokenAddress: getCollateralTokenAddress(
-                network,
-                this.state.quoteAsset
-              ),
-              priceFloor: Math.round(
-                this.state.priceFloorSimplified *
-                  10 ** this.state.priceDecimalPlaces
-              ),
-              priceCap: Math.round(
-                this.state.priceCapSimplified *
-                  10 ** this.state.priceDecimalPlaces
-              )
-            },
-            () => this.props.onDeployContract(this.state)
-          );
-        }}
+        deployContract={this.onDeployContract.bind(this)}
         showErrorMessage={showMessage.bind(showMessage, 'error')}
         showSuccessMessage={showMessage.bind(showMessage, 'success')}
         onFailSubmit={this.onFailSubmit.bind(this)}
+        onDeployContract={this.onDeployContract.bind(this)}
+        history={this.props.history}
+        onResetDeploymentState={this.props.onResetDeploymentState}
         loading={this.props.loading}
         contract={this.props.contract}
         error={this.props.error}
+        currentStep={this.props.currentStep}
+        contractDeploymentTxHash={this.props.contractDeploymentTxHash}
+        collateralPoolDeploymentTxHash={
+          this.props.collateralPoolDeploymentTxHash
+        }
       />
     ];
 

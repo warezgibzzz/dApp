@@ -110,25 +110,6 @@ describe('QuickDeployment', () => {
     expect(submitButton.prop('disabled')).to.equal(false);
   });
 
-  it('should show the overlay when loading', () => {
-    quickDeployment.setProps({
-      loading: true
-    });
-
-    const overlay = quickDeployment.find('.ant-spin');
-    expect(overlay).to.have.length(1);
-  });
-
-  it('should overlay dont hide on click', () => {
-    quickDeployment.setProps({
-      loading: true
-    });
-
-    quickDeployment.find('.ant-spin').simulate('click');
-
-    expect(quickDeployment.find('.ant-spin')).to.have.length(1);
-  });
-
   it('should hide the overlay when is not loading', () => {
     quickDeployment.setProps({
       loading: false

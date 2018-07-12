@@ -7,11 +7,19 @@ import DeployContractForm from '../components/DeployContract/DeployContractForm'
 import CreateInitializer, {
   contractConstructor
 } from '../util/web3/contractInitializer';
-import { deployContract } from '../actions/deploy';
+import { deployContract, resetDeploymentState } from '../actions/deploy';
 import store from '../store';
 
 const mapStateToProps = state => {
-  const { contract, error, gas, loading } = state.deploy;
+  const {
+    contract,
+    error,
+    gas,
+    loading,
+    currentStep,
+    contractDeploymentTxHash,
+    collateralPoolDeploymentTxHash
+  } = state.deploy;
   const { network } = state.web3;
 
   return {
@@ -19,7 +27,10 @@ const mapStateToProps = state => {
     error,
     gas,
     loading,
-    network
+    network,
+    currentStep,
+    contractDeploymentTxHash,
+    collateralPoolDeploymentTxHash
   };
 };
 
@@ -40,6 +51,9 @@ const mapDispatchToProps = dispatch => {
           initializeContracts(Contracts)
         )
       );
+    },
+    onResetDeploymentState: preservations => {
+      dispatch(resetDeploymentState(preservations));
     }
   };
 };
