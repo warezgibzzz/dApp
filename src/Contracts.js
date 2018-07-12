@@ -19,7 +19,7 @@ if (process.env.NODE_ENV !== 'test') {
   MarketCollateralPool = require('@marketprotocol/marketprotocol/build/contracts/MarketCollateralPool');
   MarketCollateralPoolFactory = require('../build/contracts/MarketCollateralPoolFactory');
   MarketToken = require('../build/contracts/MarketToken');
-  CollateralToken = require('../build/contracts/CollateralToken');
+  CollateralToken = require('../build/contracts/InitialAllocationCollateralToken');
   QueryTest = require('../build/contracts/OraclizeQueryTest');
   ERC20 = require('@marketprotocol/marketprotocol/build/contracts/ERC20');
   OrderLib = require('../build/contracts/OrderLib');
