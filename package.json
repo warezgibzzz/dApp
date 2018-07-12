@@ -103,7 +103,8 @@
     "lint:fix": "eslint --fix src/**/*.js test/**/*.js",
     "precommit": "lint-staged",
     "clean": "rm -rf ./dApp/",
-    "copy:rinkeby": "rm -rf ./build/ && cp -r rinkeby-build/ build/",
+    "copy:rinkeby":
+      "rm -rf ./build/ && cp -r node_modules/@marketprotocol/abis/build/ build/",
     "prettier-less":
       "prettier --single-quote --parser less --write \"./src/**/*.less\""
   },
