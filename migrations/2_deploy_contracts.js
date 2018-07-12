@@ -37,6 +37,12 @@ module.exports = function(deployer, network) {
         MarketContractOraclize,
         MarketContractFactory
       );
+
+      deployer.link(
+        MathLib,
+        MarketCollateralPoolFactory
+      );
+
       deployer.link(OrderLib, MarketContractFactory, MarketContractOraclize);
       // deploy our quest test contract
       deployer.deploy(QueryTest).then(function(queryTestInstance) {
