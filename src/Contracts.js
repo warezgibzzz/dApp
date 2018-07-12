@@ -16,12 +16,12 @@ if (process.env.NODE_ENV !== 'test') {
   MarketContractRegistry = require('../build/contracts/MarketContractRegistry');
   MarketContractFactory = require('../build/contracts/MarketContractFactoryOraclize');
   MarketContract = require('../build/contracts/MarketContractOraclize');
-  MarketCollateralPool = require('market-solidity/build/contracts/MarketCollateralPool');
+  MarketCollateralPool = require('@marketprotocol/marketprotocol/build/contracts/MarketCollateralPool');
   MarketCollateralPoolFactory = require('../build/contracts/MarketCollateralPoolFactory');
   MarketToken = require('../build/contracts/MarketToken');
   CollateralToken = require('../build/contracts/CollateralToken');
   QueryTest = require('../build/contracts/OraclizeQueryTest');
-  ERC20 = require('market-solidity/build/contracts/ERC20');
+  ERC20 = require('@marketprotocol/marketprotocol/build/contracts/ERC20');
   OrderLib = require('../build/contracts/OrderLib');
 }
 

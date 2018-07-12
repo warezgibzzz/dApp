@@ -1,29 +1,29 @@
 const MathLib = artifacts.require(
-  'market-solidity/contracts/libraries/MathLib.sol'
+  '@marketprotocol/marketprotocol/contracts/libraries/MathLib.sol'
 );
 const OrderLib = artifacts.require(
-  'market-solidity/contracts/libraries/OrderLib.sol'
+  '@marketprotocol/marketprotocol/contracts/libraries/OrderLib.sol'
 );
 const QueryTest = artifacts.require(
-  'market-solidity/contracts/oraclize/OraclizeQueryTest.sol'
+  '@marketprotocol/marketprotocol/contracts/oraclize/OraclizeQueryTest.sol'
 );
 const CollateralToken = artifacts.require(
-  'market-solidity/contracts/tokens/CollateralToken.sol'
+  '@marketprotocol/marketprotocol/contracts/tokens/CollateralToken.sol'
 );
 const MarketContractOraclize = artifacts.require(
-  'market-solidity/contracts/oraclize/MarketContractOraclize.sol'
+  '@marketprotocol/marketprotocol/contracts/oraclize/MarketContractOraclize.sol'
 );
 const MarketContractFactory = artifacts.require(
-  'market-solidity/contracts/oraclize/MarketContractFactoryOraclize.sol'
+  '@marketprotocol/marketprotocol/contracts/oraclize/MarketContractFactoryOraclize.sol'
 );
 const MarketCollateralPoolFactory = artifacts.require(
-  'market-solidity/contracts/factories/MarketCollateralPoolFactory.sol'
+  '@marketprotocol/marketprotocol/contracts/factories/MarketCollateralPoolFactory.sol'
 );
 const MarketContractRegistry = artifacts.require(
-  'market-solidity/contracts/MarketContractRegistry.sol'
+  '@marketprotocol/marketprotocol/contracts/MarketContractRegistry.sol'
 );
 const MarketToken = artifacts.require(
-  'market-solidity/contracts/tokens/MarketToken.sol'
+  '@marketprotocol/marketprotocol/contracts/tokens/MarketToken.sol'
 );
 
 module.exports = function(deployer, network) {
