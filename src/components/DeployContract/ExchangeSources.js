@@ -54,15 +54,14 @@ const ExchangeSources = [
     },
     getPrice(symbol) {
       return Rx.Observable.ajax({
-        url: `http://128.199.206.130/api/proxy?url=https://api.bitfinex.com/v1/pubticker/${symbol}`,
+        url: `https://api.marketprotocol.io/proxy/bitfinex/v1/pubticker/${symbol}`,
         method: 'GET',
         responseType: 'json'
       }).map(data => data.response.last_price);
     },
     fetchList(quotes) {
       return Rx.Observable.ajax({
-        url:
-          'http://128.199.206.130/api/proxy?url=https://api.bitfinex.com/v1/symbols_details',
+        url: `https://api.marketprotocol.io/proxy/bitfinex/v1/symbols_details`,
         method: 'GET',
         responseType: 'json'
       }).map(data =>
