@@ -166,7 +166,9 @@ const createNewOrders = async function(
   const takerFee = 0;
   const salt = 1;
 
-  const marketjs = new Market(web3.currentProvider);
+  const marketjs = new Market(web3.currentProvider, {
+    networkId: web3.version.network
+  });
 
   for (let i = 0; i < desiredOrderCount; i++) {
     const price = startingPrice - i * mktSign;
