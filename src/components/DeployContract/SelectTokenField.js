@@ -24,6 +24,7 @@ class SelectTokenField extends React.Component {
     };
     this.updateList = this.updateList.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
+    this.onSelect = this.onSelect.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -52,6 +53,18 @@ class SelectTokenField extends React.Component {
   handleSelect(e) {
     const exchange = getExchangeObj(this.props.exchange);
     const symbol = this.state.pairs[e];
+    if (exchange.getPrice) {
+      const onSelect = this.onSelect;
+      exchange.getPrice(symbol.symbol).subscribe(price => {
+        symbol.price = price;
+        onSelect(symbol, exchange);
+      });
+    } else {
+      this.onSelect(symbol, exchange);
+    }
+  }
+
+  onSelect(symbol, exchange) {
     this.props.onSelect({
       contractName: this.genContractName(symbol),
       symbolName: symbol.symbol,
