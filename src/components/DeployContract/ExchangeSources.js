@@ -45,10 +45,46 @@ const ExchangeSources = [
     }
   },
   {
+    key: 'BIT',
+    name: 'Bitfinex',
+    genOracleQuery(symbol) {
+      return `json(https://api.bitfinex.com/v1/pubticker/${
+        symbol.symbol
+      }).last_price`;
+    },
+    getPrice(symbol) {
+      return Rx.Observable.ajax({
+        url: `http://128.199.206.130/api/proxy?url=https://api.bitfinex.com/v1/pubticker/${symbol}`,
+        method: 'GET',
+        responseType: 'json'
+      }).map(data => data.response.last_price);
+    },
+    fetchList(quotes) {
+      return Rx.Observable.ajax({
+        url:
+          'http://128.199.206.130/api/proxy?url=https://api.bitfinex.com/v1/symbols_details',
+        method: 'GET',
+        responseType: 'json'
+      }).map(data =>
+        data.response
+          .filter(symbol => {
+            if (symbol.pair.endsWith('eth')) symbol.quoteAsset = 'ETH';
+            if (symbol.pair.endsWith('usd')) symbol.quoteAsset = 'USDT';
+            return quotes.indexOf(symbol.quoteAsset) >= 0;
+          })
+          .map(e => ({
+            symbol: e.pair.toUpperCase(),
+            priceDecimalPlaces: e.price_precision,
+            quoteAsset: e.quoteAsset
+          }))
+      );
+    }
+  },
+  {
     key: 'KRA',
     name: 'Kraken (coming soon...)',
     genOracleQuery(symbol) {
-      return `json(https://api.kraken.com/0/public/Ticker?pair=${symbol}).result.XETHZUSD.p.1`;
+      return `json(https://api.kraken.com/0/public/Ticker?pair=${symbol}).result.${symbol}.p.1`;
     },
     fetchList() {
       return Rx.Observable.empty();
