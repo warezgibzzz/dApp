@@ -338,9 +338,7 @@ export const getLocationOrigin = () => window.location.origin;
  * @return boolean true/false
  */
 export const isTestnetOrMainnet = network => {
-  return (
-    network !== 'truffle' && network !== 'ganache' && network !== 'unknown'
-  );
+  return network !== 'truffle' && network !== 'unknown';
 };
 
 /**

@@ -12,7 +12,6 @@ function web3Initialized(results) {
   };
 }
 
-const GANACHE = '5777';
 const RINKEBY = '4';
 const TRUFFLE = '4447';
 
@@ -22,8 +21,7 @@ const networkMap = {
   3: 'ropsten',
   4: 'rinkeby',
   42: 'kovan',
-  4447: 'truffle',
-  5777: 'ganache'
+  4447: 'truffle'
 };
 
 let getWeb3 = (
@@ -50,7 +48,8 @@ let getWeb3 = (
             // check for unlocked metamask state
             results = {
               web3Instance: null,
-              network: 'unknown'
+              network: 'unknown',
+              networkId: 0
             };
 
             console.log('Please unlock MetaMask!');
@@ -65,14 +64,11 @@ let getWeb3 = (
 
         web3.version.getNetwork((error, network) => {
           // Ensure beta users don't spend real ETH
-          if (
-            network !== RINKEBY &&
-            network !== TRUFFLE &&
-            network !== GANACHE
-          ) {
+          if (network !== RINKEBY && network !== TRUFFLE) {
             results = {
               web3Instance: null,
-              network: 'unknown'
+              network: 'unknown',
+              networkId: 0
             };
 
             console.log(
@@ -90,7 +86,8 @@ let getWeb3 = (
 
             results = {
               web3Instance: web3,
-              network: networkMap[network] || 'unknown'
+              network: networkMap[network] || 'unknown',
+              networkId: network
             };
 
             console.log('Injected web3 detected.');
@@ -109,7 +106,8 @@ let getWeb3 = (
 
         results = {
           web3Instance: web3,
-          network: 'truffle'
+          network: 'truffle',
+          networkId: 4447
         };
 
         console.log('No web3 instance injected, using Local web3.');
