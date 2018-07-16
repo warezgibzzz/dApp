@@ -67,7 +67,9 @@ export function tradeOrder(
 
         order.remainingQty = 100;
 
-        const marketjs = new Market(web3.currentProvider);
+        const marketjs = new Market(web3.currentProvider, {
+          networkId: web3.version.network
+        });
 
         const initialCredit = new BigNumber(1e23);
         const maker = accounts.length > 1 ? accounts[1] : accounts[0];

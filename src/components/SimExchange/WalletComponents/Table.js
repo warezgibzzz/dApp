@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import InputDataDecoder from 'ethereum-input-data-decoder';
-import { abi } from '../../../../build/contracts/MarketCollateralPool.json';
+import { abi } from '@marketprotocol/marketprotocol/build/contracts/MarketCollateralPool';
 
 import { Table, Row } from 'antd';
 

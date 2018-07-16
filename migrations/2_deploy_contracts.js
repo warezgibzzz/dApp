@@ -1,29 +1,29 @@
 const MathLib = artifacts.require(
-  'market-solidity/contracts/libraries/MathLib.sol'
+  '@marketprotocol/marketprotocol/MathLib.sol'
 );
 const OrderLib = artifacts.require(
-  'market-solidity/contracts/libraries/OrderLib.sol'
+  '@marketprotocol/marketprotocol/OrderLib.sol'
 );
 const QueryTest = artifacts.require(
-  'market-solidity/contracts/oraclize/OraclizeQueryTest.sol'
+  '@marketprotocol/marketprotocol/OraclizeQueryTest.sol'
 );
 const CollateralToken = artifacts.require(
-  'market-solidity/contracts/tokens/CollateralToken.sol'
+  '@marketprotocol/marketprotocol/InitialAllocationCollateralToken.sol'
 );
 const MarketContractOraclize = artifacts.require(
-  'market-solidity/contracts/oraclize/MarketContractOraclize.sol'
+  '@marketprotocol/marketprotocol/MarketContractOraclize.sol'
 );
 const MarketContractFactory = artifacts.require(
-  'market-solidity/contracts/oraclize/MarketContractFactoryOraclize.sol'
+  '@marketprotocol/marketprotocol/MarketContractFactoryOraclize.sol'
 );
 const MarketCollateralPoolFactory = artifacts.require(
-  'market-solidity/contracts/factories/MarketCollateralPoolFactory.sol'
+  '@marketprotocol/marketprotocol/MarketCollateralPoolFactory.sol'
 );
 const MarketContractRegistry = artifacts.require(
-  'market-solidity/contracts/MarketContractRegistry.sol'
+  '@marketprotocol/marketprotocol/MarketContractRegistry.sol'
 );
 const MarketToken = artifacts.require(
-  'market-solidity/contracts/tokens/MarketToken.sol'
+  '@marketprotocol/marketprotocol/MarketToken.sol'
 );
 
 module.exports = function(deployer, network) {
@@ -37,6 +37,12 @@ module.exports = function(deployer, network) {
         MarketContractOraclize,
         MarketContractFactory
       );
+
+      deployer.link(
+        MathLib,
+        MarketCollateralPoolFactory
+      );
+
       deployer.link(OrderLib, MarketContractFactory, MarketContractOraclize);
       // deploy our quest test contract
       deployer.deploy(QueryTest).then(function(queryTestInstance) {
@@ -61,7 +67,7 @@ module.exports = function(deployer, network) {
         .then(function() {
           // deploy collateral token and a fake wrapped ETH
           deployer.deploy(CollateralToken, 'Stable USD', 'USD', 1e9, 18);
-          deployer.deploy(CollateralToken, 'Wrapped ETH', 'WETH', 1e9, 18);
+          deployer.deploy(CollateralToken, 'Fake Wrapped ETH', 'FWETH', 1e9, 18);
 
           const daysToExpiration = 28;
           const expirationDate = new Date();

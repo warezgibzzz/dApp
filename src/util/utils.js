@@ -166,7 +166,9 @@ const createNewOrders = async function(
   const takerFee = 0;
   const salt = 1;
 
-  const marketjs = new Market(web3.currentProvider);
+  const marketjs = new Market(web3.currentProvider, {
+    networkId: web3.version.network
+  });
 
   for (let i = 0; i < desiredOrderCount; i++) {
     const price = startingPrice - i * mktSign;
@@ -336,9 +338,7 @@ export const getLocationOrigin = () => window.location.origin;
  * @return boolean true/false
  */
 export const isTestnetOrMainnet = network => {
-  return (
-    network !== 'truffle' && network !== 'ganache' && network !== 'unknown'
-  );
+  return network !== 'truffle' && network !== 'unknown';
 };
 
 /**
@@ -378,12 +378,12 @@ export const getCollateralTokenAddress = (network, quoteAsset) => {
   if (network === 'rinkeby') {
     switch (quoteAsset) {
       case 'ETH':
-        return '0x01b8de20c76ed06c7e93068a45951c26f70be3db';
+        return '0x2021c394e8fce5e56c166601a0428e4611147802';
       case 'WETH':
         return '0xc778417e063141139fce010982780140aa0cd5ab';
       case 'USDT':
       case 'USD':
-        return '0x0c58e89866dda96911a78dedf069a1848618c185';
+        return '0xee78ae82ab0bbbae6d99b36a999e7b6de2e8664b';
       default:
         return '';
     }
