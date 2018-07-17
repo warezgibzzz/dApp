@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
+import { Card, Row, Modal, Col } from 'antd';
 import { Market } from '@marketprotocol/marketjs';
 import abi from 'human-standard-token-abi';
+
+import Contracts from '../../../Contracts';
 import showMessage from '../../message';
-
-import { Card, Row, Modal, Col } from 'antd';
-
-import { toBaseUnit } from '../../../util/utils';
+import { getContractAddress, toBaseUnit } from '../../../util/utils';
 
 import Form from './Form';
 
@@ -13,9 +13,30 @@ class HeaderMenu extends Component {
   constructor(props) {
     super(props);
 
-    if (props.web3 && props.web3.web3Instance && props.web3.networkId) {
+    if (props.web3 && props.web3.web3Instance) {
+      const networkId = props.web3.networkId;
+
+      // TODO: Refactor fetching contract addresses to the marketjs middleware
       this.marketjs = new Market(props.web3.web3Instance.currentProvider, {
-        networkId: props.web3.networkId
+        marketContractRegistryAddress: getContractAddress(
+          Contracts.MarketContractRegistry,
+          networkId
+        ),
+        marketContractFactoryAddress: getContractAddress(
+          Contracts.MarketContractFactory,
+          networkId
+        ),
+        marketCollateralPoolFactoryAddress: getContractAddress(
+          Contracts.MarketCollateralPoolFactory,
+          networkId
+        ),
+        marketTokenAddress: getContractAddress(
+          Contracts.MarketToken,
+          networkId
+        ),
+        mathLibAddress: getContractAddress(Contracts.MathLib, networkId),
+        orderLibAddress: getContractAddress(Contracts.OrderLib, networkId),
+        networkId
       });
     }
 
@@ -33,6 +54,11 @@ class HeaderMenu extends Component {
       unallocatedCollateral: 0,
       availableCollateral: 0
     };
+  }
+
+  componentDidCatch(error, info) {
+    console.log(error);
+    console.log(info);
   }
 
   componentWillReceiveProps(nextProps) {

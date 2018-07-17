@@ -19,7 +19,7 @@ const mockContract = {
   COLLATERAL_TOKEN: 'FakeDollars',
   COLLATERAL_TOKEN_ADDRESS: '0x6467854f25ff1f1ff8c11a717faf03e409b53635',
   COLLATERAL_TOKEN_SYMBOL: 'FUSD',
-  MARKET_COLLATERAL_POOL_ADDRESS: new BigNumber(),
+  MARKET_COLLATERAL_POOL_ADDRESS: '0x3e69935694cdb936bf0b281e62b4087cfcb063bb',
   PRICE_FLOOR: '60465',
   PRICE_CAP: '20155',
   PRICE_DECIMAL_PLACES: '2',
@@ -82,6 +82,7 @@ describe('HeaderMenu', () => {
     getFieldsError = sinon.spy();
     showMessage = sinon.spy();
 
+    // TODO: Update `networkId` prop once marketjs middleware is setup to stub responses
     props = {
       amount: {
         type: 'deposit',
@@ -91,8 +92,8 @@ describe('HeaderMenu', () => {
         contract: ''
       },
       web3: {
-        network: 'unknown',
-        networkId: 0,
+        network: 'rinkeby',
+        networkId: 4,
         web3Instance: web3
       },
       form: {
@@ -125,7 +126,7 @@ describe('HeaderMenu', () => {
     expect(form.find(Input).length).to.equal(1);
   });
 
-  /*it('should getBalances when a contract is selected', () => {
+  it('should getBalances when a contract is selected', () => {
     let spy = sinon.spy(headerMenu.instance(), 'getBalances');
 
     headerMenu.update();
@@ -137,7 +138,7 @@ describe('HeaderMenu', () => {
     });
 
     expect(spy.called).to.equal(true);
-  });*/
+  });
 
   it('should update amount and submit request', () => {
     const amount = {
@@ -190,7 +191,7 @@ describe('HeaderMenu', () => {
     expect(spy.called).to.equal(true);
   });
 
-  /*it('should handleOk deposit', () => {
+  it('should handleOk deposit', () => {
     let spy = sinon.spy(headerMenu.instance(), 'handleOk');
     headerMenu.setProps({
       simExchange: {
@@ -226,7 +227,7 @@ describe('HeaderMenu', () => {
 
     expect(headerMenu.state('modal')).to.equal(false);
     expect(spy.called).to.equal(true);
-  });*/
+  });
 
   describe('Table', () => {
     it('renders with transaction data', () => {
