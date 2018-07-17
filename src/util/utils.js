@@ -1,4 +1,5 @@
 import { Market } from '@marketprotocol/marketjs';
+import Contracts from '../Contracts';
 
 const BUY_SIGN = 1;
 const SELL_SIGN = -1;
@@ -39,8 +40,6 @@ export const calculateCollateral = function(
 
 // TODO: move me to wherever I belong -clean up, add documentation, figure out how best to create order object in JS
 export async function getBids(web3, contractAddress, marketContract, orderLib) {
-  ('getBids');
-
   orderLib = await orderLib.deployed();
 
   const { priceCap, priceFloor } = await marketContract
@@ -166,8 +165,25 @@ const createNewOrders = async function(
   const takerFee = 0;
   const salt = 1;
 
+  const networkId = web3.version.network;
+
   const marketjs = new Market(web3.currentProvider, {
-    networkId: web3.version.network
+    marketContractRegistryAddress: getContractAddress(
+      Contracts.MarketContractRegistry,
+      networkId
+    ),
+    marketContractFactoryAddress: getContractAddress(
+      Contracts.MarketContractFactory,
+      networkId
+    ),
+    marketCollateralPoolFactoryAddress: getContractAddress(
+      Contracts.MarketCollateralPoolFactory,
+      networkId
+    ),
+    marketTokenAddress: getContractAddress(Contracts.MarketToken, networkId),
+    mathLibAddress: getContractAddress(Contracts.MathLib, networkId),
+    orderLibAddress: getContractAddress(Contracts.OrderLib, networkId),
+    networkId
   });
 
   for (let i = 0; i < desiredOrderCount; i++) {
@@ -420,5 +436,6 @@ export const getCollateralTokenAddress = (network, quoteAsset) => {
  * @return {string}
  */
 export const getContractAddress = (contract, networkId) => {
+  // TODO: Throw an error in case the contract doesn't have network specific address
   return contract.networks[networkId].address;
 };
