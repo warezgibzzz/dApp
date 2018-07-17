@@ -20,6 +20,7 @@ const mapStateToProps = state => {
     contractDeploymentTxHash,
     collateralPoolDeploymentTxHash
   } = state.deploy;
+
   const { network } = state.web3;
 
   return {

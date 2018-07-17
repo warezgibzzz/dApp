@@ -6,7 +6,8 @@ import {
   getCollateralTokenAddress,
   getLocationOrigin,
   toBaseUnit,
-  fromBaseUnit
+  fromBaseUnit,
+  getEtherscanUrl
 } from '../../src/util/utils';
 
 describe('getMetamaskError', () => {
@@ -78,6 +79,20 @@ describe('calculateCollateral', () => {
 
       expect(expectedCollateral).to.equal(actualCollateral);
     });
+  });
+});
+
+describe('getEtherscanUrl', () => {
+  it('should return the correct etherscan url for the supplied eth network', () => {
+    expect(getEtherscanUrl('mainnet')).to.equal('https://etherscan.io');
+
+    expect(getEtherscanUrl('morden')).to.equal('https://morden.etherscan.io');
+
+    expect(getEtherscanUrl('ropsten')).to.equal('https://ropsten.etherscan.io');
+
+    expect(getEtherscanUrl('rinkeby')).to.equal('https://rinkeby.etherscan.io');
+
+    expect(getEtherscanUrl('kovan')).to.equal('https://kovan.etherscan.io');
   });
 });
 

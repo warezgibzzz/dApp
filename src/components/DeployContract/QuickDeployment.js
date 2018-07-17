@@ -271,6 +271,7 @@ class QuickDeployment extends Component {
         {/* show contract deployment flow if contract is deploying */
         null === currentStep ? null : (
           <DeployStep
+            network={this.props.network}
             containerStyles={{ padding: '20px 10px 20px 10px' }}
             history={this.props.history}
             showErrorMessage={this.props.showErrorMessage}

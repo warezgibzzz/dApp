@@ -100,6 +100,7 @@ class SimplifiedDeployment extends Component {
         onNextClicked={this.toNextStep.bind(this)}
         updateDeploymentState={this.setState.bind(this)}
         {...this.state}
+        {...this.props}
       />,
 
       <PricingStep
@@ -109,6 +110,7 @@ class SimplifiedDeployment extends Component {
         updateDeploymentState={this.setState.bind(this)}
         isSimplified={true}
         {...this.state}
+        {...this.props}
       />,
 
       <ExpirationStep
@@ -120,6 +122,7 @@ class SimplifiedDeployment extends Component {
         updateDeploymentState={this.setState.bind(this)}
         isSimplified={true}
         {...this.state}
+        {...this.props}
       />,
 
       <DeployStep
@@ -139,6 +142,7 @@ class SimplifiedDeployment extends Component {
         collateralPoolDeploymentTxHash={
           this.props.collateralPoolDeploymentTxHash
         }
+        {...this.props}
       />
     ];
 
@@ -146,11 +150,15 @@ class SimplifiedDeployment extends Component {
       <div className="page">
         <Row type="flex" justify="center">
           <Col {...parentColLayout}>
-            <Steps current={currentStep} style={{ marginBottom: '40px' }}>
+            <Steps
+              network={this.props.network}
+              current={currentStep}
+              style={{ marginBottom: '40px' }}
+            >
               <Step title="Exchange" />
               <Step title="Pricing" />
               <Step title="Expiration" />
-              <Step title="Deploy" />
+              <Step network={this.props.network} title="Deploy" />
             </Steps>
             <StepAnimation direction={this.state.transitionDirection}>
               {steps.filter((step, index) => currentStep === index)}

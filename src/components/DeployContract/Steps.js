@@ -12,6 +12,7 @@ import Field, { FieldSettings } from './DeployContractField';
 import DeployContractSuccess from './DeployContractSuccess';
 import GasPriceField from '../GasPriceField';
 import SelectTokenField from './SelectTokenField';
+import { getEtherscanUrl } from '../../util/utils';
 
 // extract antd subcomponents
 const Panel = Collapse.Panel;
@@ -431,19 +432,18 @@ class DeployStep extends BaseStepComponent {
         key: 'Contract Deployment',
         stepNum: 1,
         pendingText: 'Pending',
-        loadingText: 'Deploying',
+        loadingText: 'Waiting for transaction',
         completedText: 'Deployed',
         errorText: 'Cancelled',
         subactions: [
           {
-            title: 'Deploy Contract',
+            title: 'Deploying your MarketContract',
             explanation:
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+              'The MarketContract is the main contract responsible for facilitating many to many trading. Your customized contract is about to be deployed to the Ethereum blockchain and will soon be tradeable!'
           },
           {
-            title: 'Whitelist Contract',
-            explanation:
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+            title: 'Adding your contract to our registry',
+            explanation: `We want other's to be able to find your awesome new contract, and are adding it to our registry so it will show up in the Contract Explorer page.`
           }
         ]
       },
@@ -451,19 +451,19 @@ class DeployStep extends BaseStepComponent {
         key: 'Collateral Pool Deployment',
         stepNum: 2,
         pendingText: 'Pending',
-        loadingText: 'Deploying',
+        loadingText: 'Waiting for transaction',
         completedText: 'Deployed',
         errorText: 'Cancelled',
         subactions: [
           {
-            title: 'Deploy Collateral Pool',
+            title: 'Deploying a new Collateral Pool for your contract',
             explanation:
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+              'Each MARKET Protocol Smart Contract needs its own collateral pool to ensure that all trades are always 100% collateralized and solvent!'
           },
           {
-            title: 'Link Collateral Pool and Contract',
+            title: 'Linking the Collateral Pool to your contract',
             explanation:
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+              'Finally, we must link your newly deployed contracts together to ensure all functionality is in place. Shortly, your contract will be all set for use. Happy Trading!'
           }
         ]
       },
@@ -694,7 +694,7 @@ class DeployStep extends BaseStepComponent {
                 <p>
                   {'Contract address: '}
                   <a
-                    href={`https://etherscan.io/address/${
+                    href={`${getEtherscanUrl(this.props.network)}/address/${
                       this.props.contract.address
                     }`}
                     target={'_blank'}
@@ -760,7 +760,9 @@ class DeployStep extends BaseStepComponent {
                     {'Transaction Hash: '}
                     {txHash ? (
                       <a
-                        href={`https://etherscan.io/tx/${txHash}`}
+                        href={`${getEtherscanUrl(
+                          this.props.network
+                        )}/tx/${txHash}`}
                         target={'_blank'}
                       >
                         {txHash}

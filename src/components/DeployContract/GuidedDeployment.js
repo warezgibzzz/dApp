@@ -83,9 +83,11 @@ class GuidedDeployment extends Component {
         onNextClicked={this.toNextStep.bind(this)}
         updateDeploymentState={this.setState.bind(this)}
         {...this.state}
+        {...this.props}
       />,
 
       <DataSourceStep
+        {...this.props}
         key="3"
         onPrevClicked={this.toPrevStep.bind(this)}
         onNextClicked={this.toNextStep.bind(this)}
@@ -95,6 +97,7 @@ class GuidedDeployment extends Component {
       />,
 
       <PricingStep
+        {...this.props}
         key="1"
         onPrevClicked={this.toPrevStep.bind(this)}
         onNextClicked={this.toNextStep.bind(this)}
@@ -103,6 +106,7 @@ class GuidedDeployment extends Component {
       />,
 
       <ExpirationStep
+        {...this.props}
         key="2"
         gas={gas}
         location={this.props.location}
@@ -113,6 +117,7 @@ class GuidedDeployment extends Component {
       />,
 
       <DeployStep
+        {...this.props}
         key="4"
         deployContract={this.onDeployContract.bind(this)}
         showErrorMessage={showMessage.bind(showMessage, 'error')}
@@ -135,7 +140,11 @@ class GuidedDeployment extends Component {
       <div className="page">
         <Row type="flex" justify="center">
           <Col {...parentColLayout}>
-            <Steps current={currentStep} style={{ marginBottom: '40px' }}>
+            <Steps
+              network={this.props.network}
+              current={currentStep}
+              style={{ marginBottom: '40px' }}
+            >
               <Step title="Name" />
               <Step title="Data Source" />
               <Step title="Pricing" />

@@ -363,6 +363,28 @@ export const fromBaseUnit = (value, decimals) => {
   return value / 10 ** decimals;
 };
 
+/** get Etherscan Url for correct Ethereum Network
+ *
+ * @param networkId(string)
+ * return baseUrl
+ */
+export const getEtherscanUrl = networkId => {
+  switch (networkId) {
+    case 'mainnet':
+      return 'https://etherscan.io';
+    case 'morden':
+      return 'https://morden.etherscan.io';
+    case 'ropsten':
+      return 'https://ropsten.etherscan.io';
+    case 'rinkeby':
+      return 'https://rinkeby.etherscan.io';
+    case 'kovan':
+      return 'https://kovan.etherscan.io';
+    default:
+      break;
+  }
+};
+
 /**
  * Set `collateralTokenAddress` based on the `network`
  *
