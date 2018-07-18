@@ -64,7 +64,6 @@ export function deployContract(
 
           MarketContractFactory.deployed()
             .then(function(contractFactory) {
-              console.log(contractSpecs);
               return contractFactory.deployMarketContractOraclize(
                 contractSpecs.contractName,
                 contractSpecs.collateralTokenAddress,

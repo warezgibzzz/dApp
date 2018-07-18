@@ -18,7 +18,7 @@ const mapStateToProps = state => ({
   simExchange: state.simExchange,
   web3: state.web3,
   marketjs: state.marketjs,
-  shouldRender: true,
+  shouldRender: false,
   ...state.simExchange
 });
 

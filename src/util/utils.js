@@ -243,7 +243,7 @@ export const getEtherscanUrl = networkId => {
     case 'kovan':
       return 'https://kovan.etherscan.io';
     default:
-      break;
+      return '';
   }
 };
 
@@ -254,9 +254,8 @@ export const getEtherscanUrl = networkId => {
  * `0x0c58e89866dda96911a78dedf069a1848618c185` -- Stable USD
  *
  * @param network
+ * @param quoteAsset
  * @return collateralTokenAddress
- *
- * TODO: Update the method to return `WUSD` if the selected symbol pair is USD
  */
 export const getCollateralTokenAddress = (network, quoteAsset) => {
   if (network === 'rinkeby') {
@@ -272,6 +271,7 @@ export const getCollateralTokenAddress = (network, quoteAsset) => {
         return '';
     }
   }
+
   return '';
 };
 

@@ -1,17 +1,12 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import Web3 from 'web3';
-import FakeProvider from 'web3-fake-provider';
+// import Web3 from 'web3';
+// import FakeProvider from 'web3-fake-provider';
 
-import { MarketContract, OrderLib } from '../mocks/contracts';
-import {
-  selectContract,
-  getContractBids,
-  getContractAsks,
-  tradeOrder
-} from '../../src/actions/simExchange';
+// import { MarketContract, OrderLib } from '../mocks/contracts';
+import { selectContract } from '../../src/actions/simExchange';
 
-function mockedCoinbaseWeb3(
+/*function mockedCoinbaseWeb3(
   callbackError = null,
   coinbaseAddress = '0x123456'
 ) {
@@ -22,17 +17,17 @@ function mockedCoinbaseWeb3(
     callback(callbackError, coinbaseAddress);
   };
   return web3;
-}
+}*/
 
 describe('SimExchange Actions', () => {
-  let web3;
+  // let web3;
   let dispatchSpy;
-  let mockContracts;
+  // let mockContracts;
 
   beforeEach(() => {
-    web3 = mockedCoinbaseWeb3();
+    // web3 = mockedCoinbaseWeb3();
     dispatchSpy = sinon.spy();
-    mockContracts = { MarketContract: MarketContract(), OrderLib: OrderLib() };
+    // mockContracts = { MarketContract: MarketContract(), OrderLib: OrderLib() };
   });
 
   describe('select contract', () => {

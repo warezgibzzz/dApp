@@ -69,8 +69,6 @@ class BaseStepComponent extends Component {
  */
 class NameContractStep extends BaseStepComponent {
   render() {
-    console.log('nameContract', this.props);
-
     const contractNameSettings = FieldSettings.contractName;
     const collateralTokenSettings = FieldSettings.collateralTokenAddress;
 
@@ -422,8 +420,6 @@ DataSourceStep = Form.create()(DataSourceStep);
 class DeployStep extends BaseStepComponent {
   constructor(props) {
     super(props);
-
-    console.log('deploy step props', this.props);
 
     this.panelKeys = [
       'Contract Deployment',
