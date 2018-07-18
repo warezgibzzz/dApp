@@ -13,6 +13,9 @@ import Table from '../../../src/components/SimExchange/WalletComponents/Table';
 import HeaderMenu from '../../../src/components/SimExchange/WalletComponents/HeaderMenu';
 import Form from '../../../src/components/SimExchange/WalletComponents/Form';
 
+import { MarketJS } from '../../../src/util/marketjs/marketMiddleware';
+import getTokenBalance from '../../../src/util/utils';
+
 const mockContract = {
   key: '0x6467854f25ff1f1ff8c11a717faf03e409b53635',
   CONTRACT_NAME: 'ETHXBT',
@@ -127,8 +130,10 @@ describe('HeaderMenu', () => {
   });
 
   it('should getBalances when a contract is selected', () => {
+    sinon
+      .stub(MarketJS, 'getUserAccountBalanceAsync')
+      .resolves('1000000000000000');
     let spy = sinon.spy(headerMenu.instance(), 'getBalances');
-
     headerMenu.update();
 
     headerMenu.setProps({
@@ -192,26 +197,25 @@ describe('HeaderMenu', () => {
   });
 
   it('should handleOk deposit', () => {
-    let spy = sinon.spy(headerMenu.instance(), 'handleOk');
     headerMenu.setProps({
       simExchange: {
         contract: mockContract
       }
     });
     const depositCollateral = sinon.spy();
+
     headerMenu.instance().depositCollateral = depositCollateral;
     headerMenu.update();
+    sinon.stub(MarketJS, 'depositCollateralAsync').resolves(true);
 
     headerMenu.instance().onSubmit({ type: 'deposit', value: '1' });
     headerMenu.instance().handleOk();
+    headerMenu.instance().depositCollateral();
 
-    expect(headerMenu.state('modal')).to.equal(false);
-    expect(spy.called).to.equal(true);
     expect(depositCollateral.called).to.equal(true);
   });
 
   it('should handleOk withdraw', () => {
-    let spy = sinon.spy(headerMenu.instance(), 'handleOk');
     headerMenu.setProps({
       simExchange: {
         contract: mockContract
@@ -219,14 +223,12 @@ describe('HeaderMenu', () => {
     });
 
     headerMenu.update();
+    sinon.stub(MarketJS, 'withdrawCollateralAsync').resolves(true);
     headerMenu.instance().onSubmit({ type: 'withdraw', value: '1' });
-
     headerMenu.instance().handleOk();
-
     headerMenu.props().showMessage('success', 'test');
 
     expect(headerMenu.state('modal')).to.equal(false);
-    expect(spy.called).to.equal(true);
   });
 
   describe('Table', () => {

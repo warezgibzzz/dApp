@@ -93,6 +93,7 @@ class SimplifiedDeployment extends Component {
   render() {
     const currentStep = this.state.step;
     const { gas } = this.props;
+    console.log('simplified props', this.props);
 
     const steps = [
       <ExchangeStep

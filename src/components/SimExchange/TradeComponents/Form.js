@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
-import { Form, Input, Card, Button } from 'antd';
+import { Form, Input, Card, Button, DatePicker } from 'antd';
+import moment from 'moment';
 
 const FormItem = Form.Item;
 
-const title = {
-  ask: 'Sell',
-  bid: 'Buy'
+const types = {
+  asks: 'Sell',
+  bids: 'Buy'
 };
 
 class BuyForm extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.hasErrors = this.hasErrors.bind(this);
@@ -23,17 +24,16 @@ class BuyForm extends Component {
   }
 
   handleSubmit(e) {
-    const { form, market, order } = this.props;
+    const { form, market } = this.props;
     e.preventDefault();
 
     form.validateFields((err, values) => {
-      if (!err && order.orderHash) {
+      if (!err) {
         this.props.showModal();
         this.props.onSubmit({
           ...values,
           market,
-          title: title[this.props.title],
-          ...order
+          ...types[this.props.type]
         });
       }
     });
@@ -44,7 +44,8 @@ class BuyForm extends Component {
   }
 
   render() {
-    const { form } = this.props;
+    const { form, simExchange } = this.props;
+
     const {
       getFieldDecorator,
       getFieldError,
@@ -52,47 +53,98 @@ class BuyForm extends Component {
       getFieldsError
     } = form;
 
-    const amountError = isFieldTouched('amount') && getFieldError('amount');
+    const qtyError = isFieldTouched('qty') && getFieldError('qty');
     const priceError = isFieldTouched('price') && getFieldError('price');
+    const expirationError =
+      isFieldTouched('expirationTimestamp') &&
+      getFieldError('expirationTimestamp');
 
     return (
-      <Card title={`${title[this.props.title]} ${this.props.market}`}>
-        <Form onSubmit={this.handleSubmit}>
-          <FormItem
-            validateStatus={amountError ? 'error' : ''}
-            help={amountError || ''}
-          >
-            {getFieldDecorator('amount', {
-              rules: [{ required: true, message: 'Please enter an amount' }]
-            })(<Input addonAfter="ETH" type="number" placeholder="Amount" />)}
-          </FormItem>
-          <FormItem
-            validateStatus={priceError ? 'error' : ''}
-            help={priceError || ''}
-          >
-            {getFieldDecorator('price', {
-              rules: [{ required: true, message: 'Please enter a price' }]
-            })(
-              <Input
-                addonAfter="ETX"
-                disabled={true}
-                type="number"
-                placeholder="Price"
-              />
-            )}
-          </FormItem>
-          <FormItem>
-            <Button
-              disabled={this.hasErrors(getFieldsError())}
-              type="primary"
-              htmlType="submit"
-              style={{ width: '100%' }}
+      <div>
+        <Card title={`${types[this.props.type]} ${this.props.market}`}>
+          <Form onSubmit={this.handleSubmit}>
+            <FormItem
+              validateStatus={qtyError ? 'error' : ''}
+              help={qtyError || ''}
             >
-              {title[this.props.title]}
-            </Button>
-          </FormItem>
-        </Form>
-      </Card>
+              {getFieldDecorator('qty', {
+                rules: [{ required: true, message: 'Please enter a quantity' }]
+              })(
+                <Input
+                  disabled={this.props.simExchange.contract === null}
+                  addonAfter=""
+                  min="0"
+                  step="0.01"
+                  type="number"
+                  placeholder="Quantity"
+                />
+              )}
+            </FormItem>
+
+            <FormItem
+              validateStatus={priceError ? 'error' : ''}
+              help={priceError || ''}
+            >
+              {getFieldDecorator('price', {
+                rules: [{ required: true, message: 'Please enter a price' }]
+              })(
+                <Input
+                  addonAfter={
+                    simExchange.contract &&
+                    simExchange.contract.COLLATERAL_TOKEN_SYMBOL
+                  }
+                  disabled={this.props.simExchange.contract === null}
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  placeholder="Price"
+                />
+              )}
+            </FormItem>
+
+            <FormItem
+              validateStatus={expirationError ? 'error' : ''}
+              help={expirationError || ''}
+            >
+              {getFieldDecorator('expirationTimestamp', {
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please select an expiration date and time.'
+                  }
+                ]
+              })(
+                <DatePicker
+                  showTime
+                  disabledDate={current => {
+                    const now = moment().startOf('day');
+                    return (
+                      current &&
+                      (current.valueOf() < moment().endOf('day') ||
+                        current.diff(now, 'days') > 60)
+                    );
+                  }}
+                  disabled={this.props.simExchange.contract === null}
+                  showToday={false}
+                  format="YYYY-MM-DD HH:mm:ss ([UTC/GMT]Z)"
+                  style={{ width: '100%' }}
+                />
+              )}
+            </FormItem>
+
+            <FormItem>
+              <Button
+                disabled={this.hasErrors(getFieldsError())}
+                type="primary"
+                htmlType="submit"
+                style={{ width: '100%' }}
+              >
+                {types[this.props.type]}
+              </Button>
+            </FormItem>
+          </Form>
+        </Card>
+      </div>
     );
   }
 }
@@ -100,17 +152,14 @@ class BuyForm extends Component {
 const WrappedForm = Form.create({
   mapPropsToFields({ order }) {
     return {
-      amount: Form.createFormField({
+      qty: Form.createFormField({
         value: order.orderQty ? Math.abs(order.orderQty) : ''
       }),
       price: Form.createFormField({
         value: order.price
       }),
-      market: Form.createFormField({
-        value: order.market
-      }),
-      type: Form.createFormField({
-        value: order.type
+      expirationTimestamp: Form.createFormField({
+        value: order.expirationTimestamp
       })
     };
   }

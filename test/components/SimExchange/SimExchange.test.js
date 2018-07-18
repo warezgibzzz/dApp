@@ -22,7 +22,9 @@ describe('SimExchange', () => {
   const props = {
     asks: [],
     bids: [],
-    simExchange: [],
+    simExchange: {
+      contract: {}
+    },
     tradeOrder: {},
     contract: {}
   };
@@ -33,11 +35,9 @@ describe('SimExchange', () => {
     simExchangeBadRoute = mount(
       <MemoryRouter initialEntries={[{ pathname: '/test', key: 'start' }]}>
         <SimExchange
-          asks={props.asks}
-          bids={props.bids}
+          {...props}
           getContracts={getContractsSpy}
           shouldRender={true}
-          tradeOrder={props.tradeOrder}
         />
       </MemoryRouter>
     );
@@ -45,11 +45,9 @@ describe('SimExchange', () => {
     simExchangeTrades = mount(
       <MemoryRouter initialEntries={[{ pathname: tradesPath, key: 'start' }]}>
         <SimExchange
-          asks={props.asks}
-          bids={props.bids}
+          {...props}
           getContracts={getContractsSpy}
           shouldRender={true}
-          tradeOrder={props.tradeOrder}
         />
       </MemoryRouter>
     );
@@ -57,8 +55,8 @@ describe('SimExchange', () => {
     simExchangeWallet = mount(
       <MemoryRouter initialEntries={[{ pathname: walletPath, key: 'start' }]}>
         <SimExchange
+          {...props}
           getContracts={getContractsSpy}
-          simExchange={props.simExchange}
           shouldRender={true}
         />
       </MemoryRouter>
@@ -88,11 +86,7 @@ describe('SimExchange', () => {
   it('renders trades', () => {
     const component = simExchangeTrades.find(SimExchange);
     const showsTrades = component.containsMatchingElement(
-      <Trades
-        asks={props.asks}
-        bids={props.bids}
-        tradeOrder={props.tradeOrder}
-      />
+      <Trades {...props} tradeOrder={props.tradeOrder} />
     );
 
     expect(showsTrades, 'Should render trades').to.be.true;

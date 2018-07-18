@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { Card, Row, Modal, Col } from 'antd';
-import { Market } from '@marketprotocol/marketjs';
-import abi from 'human-standard-token-abi';
+import { MarketJS } from '../../../util/marketjs/marketMiddleware';
 
+import { Market } from '@marketprotocol/marketjs';
 import Contracts from '../../../Contracts';
-import showMessage from '../../message';
-import { getContractAddress, toBaseUnit } from '../../../util/utils';
+import { getContractAddress, getTokenBalance } from '../../../util/utils';
 
 import Form from './Form';
 
@@ -44,8 +43,6 @@ class HeaderMenu extends Component {
     this.showModal = this.showModal.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.handleOk = this.handleOk.bind(this);
-    this.depositCollateral = this.depositCollateral.bind(this);
-    this.withdrawCollateral = this.withdrawCollateral.bind(this);
     this.getBalances = this.getBalances.bind(this);
 
     this.state = {
@@ -70,6 +67,10 @@ class HeaderMenu extends Component {
     }
   }
 
+  componentDidMount() {
+    this.props.simExchange.contract && this.getBalances(this.props);
+  }
+
   onSubmit(amount) {
     this.setState({ amount });
   }
@@ -88,126 +89,36 @@ class HeaderMenu extends Component {
 
     switch (amount.type) {
       case 'deposit':
-        this.depositCollateral();
+        MarketJS.depositCollateralAsync(amount);
         break;
       case 'withdraw':
-        this.withdrawCollateral();
+        MarketJS.withdrawCollateralAsync(amount);
         break;
       default:
         break;
     }
   }
 
-  async depositCollateral() {
-    const marketjs = this.marketjs;
-    const { simExchange, web3 } = this.props;
-    const { amount } = this.state;
-    let txParams = {
-      from: web3.web3Instance.eth.coinbase
-    };
+  async getBalances(props) {
+    const { simExchange } = props;
 
-    let collateralTokenContractInstance = web3.web3Instance.eth
-      .contract(abi)
-      .at(simExchange.contract.COLLATERAL_TOKEN_ADDRESS);
-
-    await collateralTokenContractInstance.decimals.call((err, res) => {
-      this.setState({
-        decimals: res.toNumber()
-      });
-    });
-
-    collateralTokenContractInstance.approve(
-      simExchange.contract.MARKET_COLLATERAL_POOL_ADDRESS,
-      web3.web3Instance.toBigNumber(
-        toBaseUnit(amount.number, this.state.decimals)
-      ),
-      txParams,
-      (err, res) => {
-        marketjs
-          .depositCollateralAsync(
-            simExchange.contract.MARKET_COLLATERAL_POOL_ADDRESS,
-            web3.web3Instance.toBigNumber(
-              toBaseUnit(amount.number, this.state.decimals)
-            ),
-            txParams
-          )
-          .then(res => {
-            showMessage(
-              'success',
-              'Deposit successful, your transaction will process shortly.',
-              5
-            );
-          });
+    await MarketJS.getUserAccountBalanceAsync(simExchange.contract, true).then(
+      balance => {
+        this.setState({
+          unallocatedCollateral: balance
+        });
       }
     );
-  }
 
-  getBalances(props) {
-    this.marketjs
-      .getUserAccountBalanceAsync(
-        props.simExchange.contract.MARKET_COLLATERAL_POOL_ADDRESS,
-        props.web3.web3Instance.eth.coinbase
-      )
-      .then(res => {
-        const unallocatedCollateral = props.web3.web3Instance
-          .fromWei(res.toFixed(), 'ether')
-          .toString();
-
+    getTokenBalance(
+      simExchange.contract.COLLATERAL_TOKEN_ADDRESS,
+      true,
+      availableCollateral => {
         this.setState({
-          unallocatedCollateral: unallocatedCollateral
+          availableCollateral: availableCollateral
         });
-      })
-      .then(() => {
-        let contractInstance = props.web3.web3Instance.eth
-          .contract(abi)
-          .at(props.simExchange.contract.COLLATERAL_TOKEN_ADDRESS);
-
-        contractInstance.balanceOf.call(
-          props.web3.web3Instance.eth.coinbase,
-          (err, res) => {
-            if (err) {
-              console.error(err);
-            } else {
-              const availableCollateral = props.web3.web3Instance
-                .fromWei(res.toFixed(), 'ether')
-                .toString();
-
-              this.setState({
-                availableCollateral: availableCollateral
-              });
-            }
-          }
-        );
-      });
-  }
-
-  withdrawCollateral() {
-    let marketjs = this.marketjs;
-    const { simExchange, web3 } = this.props;
-    const { amount } = this.state;
-    const txParams = {
-      from: web3.web3Instance.eth.coinbase
-    };
-
-    let collateralTokenContractInstance = web3.web3Instance.eth
-      .contract(abi)
-      .at(simExchange.contract.COLLATERAL_TOKEN_ADDRESS);
-
-    collateralTokenContractInstance.decimals.call((err, decimals) => {
-      marketjs
-        .withdrawCollateralAsync(
-          simExchange.contract.MARKET_COLLATERAL_POOL_ADDRESS,
-          toBaseUnit(amount.number, decimals),
-          txParams
-        )
-        .then(res => {
-          showMessage(
-            'success',
-            'Withdraw successful, your transaction will process shortly.',
-            5
-          );
-        });
-    });
+      }
+    );
   }
 
   render() {

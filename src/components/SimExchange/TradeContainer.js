@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import Form from './TradeComponents/Form';
 import Table from './TradeComponents/Table';
 import uniqueId from 'lodash/uniqueId';
+import { MarketJS } from '../../util/marketjs/marketMiddleware';
 
 import { Modal, Table as AntTable } from 'antd';
 
@@ -12,7 +13,13 @@ class Buy extends Component {
     super(props);
 
     this.state = {
-      order: {},
+      order: {
+        qty: '',
+        market: '',
+        price: '',
+        expirationTimestamp: '',
+        type: ''
+      },
       modal: false
     };
 
@@ -23,8 +30,20 @@ class Buy extends Component {
     this.handleOk = this.handleOk.bind(this);
   }
 
-  onSubmit(order) {
-    this.setState({ order });
+  onSubmit(values, market, type) {
+    const { simExchange } = this.props;
+
+    let order = {
+      contractAddress: simExchange.contract.MARKET_COLLATERAL_POOL_ADDRESS,
+      qty: values.qty,
+      price: values.price,
+      expirationTimestamp: values.expirationTimestamp,
+      type: type
+    };
+
+    this.setState({
+      order: order
+    });
   }
 
   onRowSelect(order) {
@@ -40,24 +59,21 @@ class Buy extends Component {
   }
 
   handleOk() {
-    this.props.tradeOrder(this.state.order);
     this.setState({ modal: false });
+
+    MarketJS.createSignedOrderAsync(this.state.order).then(res => {
+      console.log('createSignedOrderAsync', res);
+    });
   }
 
   render() {
     const { order } = this.state;
-    let title = '';
-
-    if (order && order.title) {
-      title = order.title.toLowerCase();
-    }
 
     return (
       <Fragment>
         <div className="tradeForm-container" style={{ marginBottom: '20px' }}>
           <Form
-            title={this.props.title}
-            market={this.props.market}
+            {...this.props}
             onSubmit={this.onSubmit}
             showModal={this.showModal}
             order={order}
@@ -65,30 +81,36 @@ class Buy extends Component {
         </div>
 
         <Table
-          data={this.props.data}
-          title={`${this.props.title}s`}
+          {...this.props}
+          title={`${this.props.type}`}
           onRowSelect={this.onRowSelect}
         />
 
-        <Modal
-          title="Confirmation required"
-          visible={this.state.modal}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-        >
-          <h3>
-            Are you sure you want to {title} {order.amount} {order.market} at{' '}
-            {order.price} ETX/ETH for a maximum of {order.total} ETH?
-          </h3>
+        {order && (
+          <Modal
+            title="Confirmation required"
+            visible={this.state.modal}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+          >
+            <h3>
+              Are you sure you want to{' '}
+              {this.props.type === 'bids' ? 'buy' : 'sell'} {order.qty}{' '}
+              {order.market} at {order.price}{' '}
+              {this.props.simExchange.contract &&
+                this.props.simExchange.contract.COLLATERAL_TOKEN_SYMBOL}{' '}
+              for a total of {parseInt(order.qty, 10) * parseFloat(order.price)}?
+            </h3>
 
-          <AntTable
-            rowKey={() => uniqueId('row')}
-            pagination={false}
-            size="small"
-            columns={columns}
-            dataSource={[order]}
-          />
-        </Modal>
+            <AntTable
+              rowKey={() => uniqueId('row')}
+              pagination={false}
+              size="small"
+              columns={columns}
+              dataSource={[order]}
+            />
+          </Modal>
+        )}
       </Fragment>
     );
   }

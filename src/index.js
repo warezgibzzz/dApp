@@ -6,6 +6,7 @@ import App from './App';
 import Splash from './Splash';
 import store, { history } from './store';
 import getWeb3 from './util/web3/getWeb3';
+import initializeMarket from './util/marketjs/initializeMarket';
 
 // Display Splash until web3 is initialized
 ReactDOM.render(
@@ -23,6 +24,12 @@ getWeb3(window)
       document.getElementById('dapp')
     );
   })
+  .then(() => {
+    // initializes a new market.js instance and stores it in the redux state.
+    // depends on web3 having been properly initialized first.
+    initializeMarket();
+  })
+
   .catch(() => {
     console.log('Error in web3 initialization.');
   });

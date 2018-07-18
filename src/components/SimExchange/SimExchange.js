@@ -21,8 +21,6 @@ class SimExchange extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.contracts && !nextProps.contract) {
       this.props.selectContract(nextProps.contracts[0]);
-      // this.props.getAsks();
-      // this.props.getBids();
     }
   }
 
@@ -70,13 +68,7 @@ class SimExchange extends Component {
             <Route
               path="/exchange/trades/"
               exact
-              render={() => (
-                <Trades
-                  asks={asks}
-                  bids={bids}
-                  tradeOrder={this.props.tradeOrder}
-                />
-              )}
+              render={() => <Trades {...this.props} asks={asks} bids={bids} />}
             />
             <Route
               exact
