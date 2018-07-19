@@ -147,14 +147,14 @@ class ContractsList extends Component {
         }
       },
       {
-        title: 'Base Token',
+        title: 'Collateral Token',
         dataIndex: 'COLLATERAL_TOKEN',
         width: 150,
         filterDropdown: (
           <div className="custom-filter-dropdown">
             <Input
               ref={ele => (this.collateralTokenSearchInput = ele)}
-              placeholder="Search Base Token"
+              placeholder="Search Collateral Token"
               value={this.state['COLLATERAL_TOKEN_SEARCH_TEXT']}
               onChange={e =>
                 this.onInputChange(e, 'COLLATERAL_TOKEN_SEARCH_TEXT')
@@ -202,7 +202,7 @@ class ContractsList extends Component {
         }
       },
       {
-        title: 'Base Token Symbol',
+        title: 'Collateral Token Symbol',
         dataIndex: 'COLLATERAL_TOKEN_SYMBOL',
         width: 150,
         className: 'text-center',
@@ -336,7 +336,7 @@ class ContractsList extends Component {
                     <strong>Address :</strong> {record.key}
                   </Col>
                   <Col xs={{ span: 24 }} lg={{ span: 12 }}>
-                    <strong>Base Token Address :</strong>{' '}
+                    <strong>Collateral Token Address :</strong>{' '}
                     {record.COLLATERAL_TOKEN_ADDRESS}
                   </Col>
                   <Col xs={{ span: 12 }} lg={{ span: 6 }}>

@@ -64,7 +64,7 @@ class BaseStepComponent extends Component {
 /**
  * First step in the guided contract.
  * It displays two fields. First to collect name of the contract and
- * second to collect the base address.
+ * second to collect the collateral token address.
  *
  */
 class NameContractStep extends BaseStepComponent {
@@ -106,7 +106,7 @@ class NameContractStep extends BaseStepComponent {
           <h2>Collateral Token</h2>
           <div>
             Next, every contract should be backed by an ERC20 Token that will be
-            used a collateral for the contract. Traders must deposit tokens to
+            used as collateral for the contract. Traders must deposit tokens to
             the smart contract prior to trading, and upon execution of a trade,
             the appropriate amount of collateral becomes locked until that
             position is exited. In this fashion, all open positions always
