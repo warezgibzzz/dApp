@@ -1,10 +1,12 @@
-import { Button, Col, Icon, Input, Row, Table } from 'antd';
-import moment from 'moment';
+import { Col, Input, Row, Table, Select, Popover } from 'antd';
+import { formatedTimeFrom } from '../util/utils';
 import React, { Component } from 'react';
 
 import '../less/ContractsList.less';
 import Loader from './Loader';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
+const Search = Input.Search;
 // Example Contract
 /* {
   "COLLATERAL_TOKEN": "0xa4392264a2d8c998901d10c154c91725b1bf0158",
@@ -18,7 +20,7 @@ import Loader from './Loader';
   "isSettled": true,
   "lastPrice": "105700"
 } */
-
+const Option = Select.Option;
 class ContractsList extends Component {
   state = {
     filters: null,
@@ -27,7 +29,7 @@ class ContractsList extends Component {
   };
 
   componentWillMount() {
-    if (!this.props.contracts && !this.props.loading) {
+    if (!this.props.contracts) {
       this.props.onLoad();
     }
   }
@@ -87,7 +89,7 @@ class ContractsList extends Component {
     ].map(item => {
       return { value: item, text: item };
     });
-
+    console.log(filters);
     const columns = [
       {
         title: 'Name',
@@ -97,43 +99,7 @@ class ContractsList extends Component {
           return a.CONTRACT_NAME.localeCompare(b.CONTRACT_NAME);
         },
         sortOrder: sort.columnKey === 'CONTRACT_NAME' && sort.order,
-        filterDropdown: (
-          <div className="custom-filter-dropdown">
-            <Input
-              ref={ele => (this.contractNameSearchInput = ele)}
-              placeholder="Search Contract Name"
-              value={this.state['CONTRACT_NAME_SEARCH_TEXT']}
-              onChange={e => this.onInputChange(e, 'CONTRACT_NAME_SEARCH_TEXT')}
-              onPressEnter={() =>
-                this.onSearch(
-                  'CONTRACT_NAME',
-                  'CONTRACT_NAME_SEARCH_TEXT',
-                  'contractSearchVisible',
-                  'contractFiltered'
-                )
-              }
-            />
-            <Button
-              type="primary"
-              onClick={() =>
-                this.onSearch(
-                  'CONTRACT_NAME',
-                  'CONTRACT_NAME_SEARCH_TEXT',
-                  'contractSearchVisible',
-                  'contractFiltered'
-                )
-              }
-            >
-              Search
-            </Button>
-          </div>
-        ),
-        filterIcon: (
-          <Icon
-            type="search"
-            style={{ color: this.state.contractFiltered ? '#108ee9' : '#aaa' }}
-          />
-        ),
+
         contractSearchVisible: this.state.contractSearchVisible,
         onFilterDropdownVisibleChange: visible => {
           this.setState(
@@ -147,48 +113,10 @@ class ContractsList extends Component {
         }
       },
       {
-        title: 'Collateral Token',
+        title: 'Base Token',
         dataIndex: 'COLLATERAL_TOKEN',
         width: 150,
-        filterDropdown: (
-          <div className="custom-filter-dropdown">
-            <Input
-              ref={ele => (this.collateralTokenSearchInput = ele)}
-              placeholder="Search Collateral Token"
-              value={this.state['COLLATERAL_TOKEN_SEARCH_TEXT']}
-              onChange={e =>
-                this.onInputChange(e, 'COLLATERAL_TOKEN_SEARCH_TEXT')
-              }
-              onPressEnter={() =>
-                this.onSearch(
-                  'COLLATERAL_TOKEN',
-                  'COLLATERAL_TOKEN_SEARCH_TEXT',
-                  'tokenSearchVisible',
-                  'tokenFiltered'
-                )
-              }
-            />
-            <Button
-              type="primary"
-              onClick={() =>
-                this.onSearch(
-                  'COLLATERAL_TOKEN',
-                  'COLLATERAL_TOKEN_SEARCH_TEXT',
-                  'tokenSearchVisible',
-                  'tokenFiltered'
-                )
-              }
-            >
-              Search
-            </Button>
-          </div>
-        ),
-        filterIcon: (
-          <Icon
-            type="search"
-            style={{ color: this.state.tokenFiltered ? '#108ee9' : '#aaa' }}
-          />
-        ),
+
         tokenSearchVisible: this.state.tokenSearchVisible,
         onFilterDropdownVisibleChange: visible => {
           this.setState(
@@ -202,14 +130,14 @@ class ContractsList extends Component {
         }
       },
       {
-        title: 'Collateral Token Symbol',
+        title: 'Symbol',
         dataIndex: 'COLLATERAL_TOKEN_SYMBOL',
         width: 150,
-        className: 'text-center',
+
         render: (text, row, index) => {
           return text;
         },
-        filters: collateralTokenSymbols,
+
         filteredValue: filters.COLLATERAL_TOKEN_SYMBOL || null,
         onFilter: (value, record) =>
           record.COLLATERAL_TOKEN_SYMBOL.includes(value)
@@ -218,43 +146,6 @@ class ContractsList extends Component {
         title: 'Oracle Query',
         dataIndex: 'ORACLE_QUERY',
         width: 300,
-        filterDropdown: (
-          <div className="custom-filter-dropdown">
-            <Input
-              ref={ele => (this.oracleQuerySearchInput = ele)}
-              placeholder="Search Oracle Query"
-              value={this.state['ORACLE_QUERY_SEARCH_TEXT']}
-              onChange={e => this.onInputChange(e, 'ORACLE_QUERY_SEARCH_TEXT')}
-              onPressEnter={() =>
-                this.onSearch(
-                  'ORACLE_QUERY',
-                  'ORACLE_QUERY_SEARCH_TEXT',
-                  'oracleSearchVisible',
-                  'tokenFiltered'
-                )
-              }
-            />
-            <Button
-              type="primary"
-              onClick={() =>
-                this.onSearch(
-                  'ORACLE_QUERY',
-                  'ORACLE_QUERY_SEARCH_TEXT',
-                  'oracleSearchVisible',
-                  'oracleFiltered'
-                )
-              }
-            >
-              Search
-            </Button>
-          </div>
-        ),
-        filterIcon: (
-          <Icon
-            type="search"
-            style={{ color: this.state.oracleFiltered ? '#108ee9' : '#aaa' }}
-          />
-        ),
         oracleSearchVisible: this.state.oracleSearchVisible,
         onFilterDropdownVisibleChange: visible => {
           this.setState(
@@ -266,36 +157,12 @@ class ContractsList extends Component {
           );
         }
       },
-      {
-        title: 'Settled',
-        dataIndex: 'isSettled',
-        width: 120,
-        className: 'text-center',
-        render: (text, row, index) => {
-          return text ? (
-            <Icon
-              type="check-circle"
-              style={{ fontSize: 16, color: '#52c41a' }}
-            />
-          ) : (
-            <Icon
-              type="close-circle"
-              style={{ fontSize: 16, color: '#f5222d' }}
-            />
-          );
-        },
-        filters: [
-          { text: 'True', value: true },
-          { text: 'False', value: false }
-        ],
-        filteredValue: filters.isSettled || null,
-        onFilter: (value, record) => record.isSettled === (value === 'true')
-      },
+
       {
         title: 'Balance',
         dataIndex: 'collateralPoolBalance',
         width: 120,
-        className: 'text-center',
+
         sorter: (a, b) => a.collateralPoolBalance - b.collateralPoolBalance,
         sortOrder: sort.columnKey === 'collateralPoolBalance' && sort.order
       },
@@ -304,10 +171,65 @@ class ContractsList extends Component {
         dataIndex: 'EXPIRATION',
         width: 200,
         render: (text, row, index) => {
-          return moment.unix(text).format('Do MMM YYYY, HH:MM:ss');
+          let formatedTime = formatedTimeFrom(text);
+          return formatedTime.includes('s') ? (
+            <span style={{ color: '#E41640' }}>{formatedTime}</span>
+          ) : (
+            formatedTime
+          );
         },
         sorter: (a, b) => a.EXPIRATION - b.EXPIRATION,
         sortOrder: sort.columnKey === 'EXPIRATION' && sort.order
+      },
+      {
+        title: '',
+        render: (text, record, index) => {
+          let rowrender = (
+            <div>
+              <Row style={{ padding: '14px' }}>
+                <Col>
+                  <strong>Address </strong> {record.key}
+                </Col>
+                <Col>
+                  <strong>Token </strong> {record.COLLATERAL_TOKEN_ADDRESS}
+                </Col>
+                <Col>
+                  <strong>Price Cap </strong> {record.PRICE_CAP}
+                </Col>
+                <Col>
+                  <strong>Price Decimal Places </strong>{' '}
+                  {record.PRICE_DECIMAL_PLACES}
+                </Col>
+                <Col>
+                  <strong>Qty Multiplier </strong> {record.QTY_MULTIPLIER}
+                </Col>
+                <Col>
+                  <strong>Price Floor </strong> {record.PRICE_FLOOR}
+                </Col>
+                <Col>
+                  <strong>Last Price </strong> {record.lastPrice}
+                </Col>
+              </Row>
+              <CopyToClipboard text={record.ORACLE_QUERY}>
+                <button className="copyOrcaleQuery">Copy Orcale Query</button>
+              </CopyToClipboard>
+            </div>
+          );
+          return (
+            <Popover
+              overlayClassName={'contractPopOver'}
+              content={rowrender}
+              placement={'bottomLeft'}
+              trigger="click"
+            >
+              <div role="button" className="dotdotdot" tabIndex="0" Save>
+                <span className="dot" />
+                <span className="dot" />
+                <span className="dot" />
+              </div>
+            </Popover>
+          );
+        }
       }
     ];
 
@@ -316,11 +238,52 @@ class ContractsList extends Component {
     }
 
     if (this.state.contracts.length === 0) {
-      return <div>No contracts found</div>;
+      //  return <div>No contracts found</div>;
     }
 
     return (
-      <div className="page" style={{ margin: '0 5%' }}>
+      <div className="page contractPage" style={{ margin: '0 13%' }}>
+        <Row style={{ padding: '30px 20px' }} gutter={16}>
+          <Col span={8}>
+            <div>
+              <Search
+                ref={ele => (this.contractNameSearchInput = ele)}
+                placeholder="Search Contract Name"
+                value={this.state['CONTRACT_NAME_SEARCH_TEXT']}
+                onChange={e =>
+                  this.onInputChange(e, 'CONTRACT_NAME_SEARCH_TEXT')
+                }
+                onPressEnter={() =>
+                  this.onSearch(
+                    'CONTRACT_NAME',
+                    'CONTRACT_NAME_SEARCH_TEXT',
+                    'contractSearchVisible',
+                    'contractFiltered'
+                  )
+                }
+              />
+            </div>
+          </Col>
+          <Col span={4}>
+            <Select
+              mode="multiple"
+              style={{ width: 200 }}
+              placeholder="All Tokens"
+              showArrow={true}
+              optionFilterProp="children"
+              onChange={values =>
+                this.setState({ filters: { COLLATERAL_TOKEN_SYMBOL: values } })
+              }
+            >
+              {collateralTokenSymbols.map(e => (
+                <Option key={e.value} value={e.value}>
+                  {e.text}
+                </Option>
+              ))}
+            </Select>
+          </Col>
+        </Row>
+
         <Row style={{ padding: '0px 20px' }}>
           <Table
             columns={columns}
@@ -328,36 +291,6 @@ class ContractsList extends Component {
             onChange={this.handleChange}
             pagination={{ pageSize: 25 }}
             // scroll={{ y: '60vh' }}
-            bordered
-            expandedRowRender={record => {
-              return (
-                <Row>
-                  <Col xs={{ span: 24 }} lg={{ span: 12 }}>
-                    <strong>Address :</strong> {record.key}
-                  </Col>
-                  <Col xs={{ span: 24 }} lg={{ span: 12 }}>
-                    <strong>Collateral Token Address :</strong>{' '}
-                    {record.COLLATERAL_TOKEN_ADDRESS}
-                  </Col>
-                  <Col xs={{ span: 12 }} lg={{ span: 6 }}>
-                    <strong>Price Cap :</strong> {record.PRICE_CAP}
-                  </Col>
-                  <Col xs={{ span: 12 }} lg={{ span: 6 }}>
-                    <strong>Price Decimal Places :</strong>{' '}
-                    {record.PRICE_DECIMAL_PLACES}
-                  </Col>
-                  <Col xs={{ span: 12 }} lg={{ span: 12 }}>
-                    <strong>Qty Multiplier :</strong> {record.QTY_MULTIPLIER}
-                  </Col>
-                  <Col xs={{ span: 12 }} lg={{ span: 6 }}>
-                    <strong>Price Floor :</strong> {record.PRICE_FLOOR}
-                  </Col>
-                  <Col xs={{ span: 12 }} lg={{ span: 6 }}>
-                    <strong>Last Price :</strong> {record.lastPrice}
-                  </Col>
-                </Row>
-              );
-            }}
           />
         </Row>
       </div>
