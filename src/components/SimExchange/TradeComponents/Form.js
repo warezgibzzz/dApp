@@ -20,7 +20,7 @@ class BuyForm extends Component {
   componentDidMount() {
     setTimeout(() => {
       this.props.form.validateFields();
-    });
+    }, 100);
   }
 
   handleSubmit(e) {

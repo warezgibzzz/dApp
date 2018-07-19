@@ -23,11 +23,10 @@ getWeb3(window)
       </Provider>,
       document.getElementById('dapp')
     );
-  })
-  .then(() => {
+
     // initializes a new market.js instance and stores it in the redux state.
     // depends on web3 having been properly initialized first.
-    initializeMarket();
+    initializeMarket(results.payload);
   })
 
   .catch(() => {

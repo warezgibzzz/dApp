@@ -2,42 +2,13 @@ import React, { Component } from 'react';
 import { Card, Row, Modal, Col } from 'antd';
 import { MarketJS } from '../../../util/marketjs/marketMiddleware';
 
-import { Market } from '@marketprotocol/marketjs';
-import Contracts from '../../../Contracts';
-import { getContractAddress, getTokenBalance } from '../../../util/utils';
+import { getTokenBalance } from '../../../util/utils';
 
 import Form from './Form';
 
 class HeaderMenu extends Component {
   constructor(props) {
     super(props);
-
-    if (props.web3 && props.web3.web3Instance) {
-      const networkId = props.web3.networkId;
-
-      // TODO: Refactor fetching contract addresses to the marketjs middleware
-      this.marketjs = new Market(props.web3.web3Instance.currentProvider, {
-        marketContractRegistryAddress: getContractAddress(
-          Contracts.MarketContractRegistry,
-          networkId
-        ),
-        marketContractFactoryAddress: getContractAddress(
-          Contracts.MarketContractFactory,
-          networkId
-        ),
-        marketCollateralPoolFactoryAddress: getContractAddress(
-          Contracts.MarketCollateralPoolFactory,
-          networkId
-        ),
-        marketTokenAddress: getContractAddress(
-          Contracts.MarketToken,
-          networkId
-        ),
-        mathLibAddress: getContractAddress(Contracts.MathLib, networkId),
-        orderLibAddress: getContractAddress(Contracts.OrderLib, networkId),
-        networkId
-      });
-    }
 
     this.onSubmit = this.onSubmit.bind(this);
     this.showModal = this.showModal.bind(this);
