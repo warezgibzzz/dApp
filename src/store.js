@@ -1,6 +1,7 @@
 import { routerMiddleware } from 'react-router-redux';
 import { applyMiddleware, compose, createStore } from 'redux';
 import { logger } from 'redux-logger';
+import thunk from 'redux-thunk';
 
 import createHistory from 'history/createBrowserHistory';
 
@@ -15,7 +16,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const historyMiddleware = routerMiddleware(history);
 
 // Middlewares
-const middlewares = [historyMiddleware];
+const middlewares = [thunk, historyMiddleware];
 
 // Redux Logger
 if (process.env.NODE_ENV === 'development') {

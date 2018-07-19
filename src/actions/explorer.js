@@ -1,4 +1,5 @@
 import _ from 'lodash';
+
 /**
  * loads list of Market Contracts based on whitelisted addresses in MarketContractRegistry
  *

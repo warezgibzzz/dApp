@@ -9,7 +9,7 @@ import { findContract } from '../actions/find';
 import CreateInitializer, {
   contractConstructor
 } from '../util/web3/contractInitializer';
-import { processContractsList } from '../util/utils';
+import { processContractsList } from '../util/contracts';
 import FormValidators from '../util/forms/Validators';
 import store from '../store';
 

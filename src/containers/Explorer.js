@@ -8,7 +8,7 @@ import { loadContracts } from '../actions/explorer';
 import CreateInitializer, {
   contractConstructor
 } from '../util/web3/contractInitializer';
-import { processContractsList } from '../util/utils';
+import { processContractsList } from '../util/contracts';
 import store from '../store';
 
 const mapStateToProps = state => ({
