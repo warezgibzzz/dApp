@@ -12,6 +12,7 @@ class Trades extends Component {
   constructor(props) {
     super(props);
 
+    this.getOrders = this.getOrders.bind(this);
     this.getUnallocatedCollateral = this.getUnallocatedCollateral.bind(this);
 
     this.state = {
@@ -20,18 +21,38 @@ class Trades extends Component {
   }
 
   componentDidMount() {
-    this.props.simExchange.contract !== null &&
-      this.props.simExchange.contract.MARKET_COLLATERAL_POOL_ADDRESS &&
-      this.getUnallocatedCollateral(this.props);
+    const { simExchange } = this.props;
+
+    if (
+      simExchange.contract !== null &&
+      simExchange.contract.MARKET_COLLATERAL_POOL_ADDRESS
+    ) {
+      this.getUnallocatedCollateral(
+        simExchange.contract.MARKET_COLLATERAL_POOL_ADDRESS
+      );
+      this.getOrders(simExchange.contract.key);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (
-      nextProps.simExchange.contract !== this.props.simExchange.contract &&
-      nextProps.simExchange.contract !== null
-    ) {
+    const newContract = nextProps.simExchange.contract;
+    const oldContract = this.props.simExchange.contract;
+    console.log('np', nextProps);
+
+    if (newContract !== oldContract && newContract !== null) {
       this.getUnallocatedCollateral(nextProps);
+      this.getOrders(nextProps.simExchange.contract.key);
     }
+  }
+
+  getOrders(contractAddress) {
+    fetch(`https://api.marketprotocol.io/orders/${contractAddress}/`)
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(response) {
+        console.log('res', response);
+      });
   }
 
   getUnallocatedCollateral(props) {
