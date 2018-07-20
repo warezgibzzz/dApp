@@ -123,12 +123,12 @@ const fieldSettingsByName = {
   },
 
   collateralTokenAddress: {
-    label: 'Base Token Address',
+    label: 'Collateral Token Address',
     initialValue: '0x3333333333333333333333333333333333333333',
     rules: [
       {
         required: true,
-        message: 'Please enter a base token address'
+        message: 'Please enter a collateral token address'
       },
       {
         validator: ethAddressValidator

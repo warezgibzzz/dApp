@@ -28,7 +28,7 @@ describe('NameContractStep', () => {
     ReactDOM.render(<NameContractStep />, div);
   });
 
-  it('should display two input felds to accept name and base token address', () => {
+  it('should display two input felds to accept name and collateral token address', () => {
     expect(nameContractStep.find(Input)).to.have.length(2);
   });
 
