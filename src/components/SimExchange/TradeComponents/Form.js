@@ -163,7 +163,7 @@ const WrappedForm = Form.create({
           ? moment(
               order.expirationTimestamp,
               'YYYY-MM-DD HH:mm:ss ([UTC/GMT]Z)'
-            ).toDate()
+            )
           : moment().add(28, 'days')
       })
     };

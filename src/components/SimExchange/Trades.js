@@ -51,8 +51,6 @@ class Trades extends Component {
       })
       .then(
         function(response) {
-          console.log('response', response);
-
           this.setState({
             buys: response.buys,
             sells: response.sells,
@@ -65,17 +63,19 @@ class Trades extends Component {
   getUnallocatedCollateral(props) {
     const { simExchange } = props;
 
-    MarketJS.getUserAccountBalanceAsync(simExchange.contract, true).then(
-      balance => {
-        this.setState({
-          unallocatedCollateral: balance
-        });
-      }
-    );
+    if (simExchange) {
+      MarketJS.getUserAccountBalanceAsync(simExchange.contract, true).then(
+        balance => {
+          this.setState({
+            unallocatedCollateral: balance
+          });
+        }
+      );
+    }
   }
 
   render() {
-    const { unallocatedCollateral, buys, sells } = this.state;
+    const { unallocatedCollateral, buys, sells, contract } = this.state;
     const { simExchange } = this.props;
 
     return (
@@ -95,6 +95,7 @@ class Trades extends Component {
                 type="bids"
                 market=""
                 data={buys}
+                contract={contract}
               />
             </Col>
             <Col span={12}>
@@ -103,6 +104,7 @@ class Trades extends Component {
                 type="asks"
                 market=""
                 data={sells}
+                contract={contract}
               />
             </Col>
           </Row>

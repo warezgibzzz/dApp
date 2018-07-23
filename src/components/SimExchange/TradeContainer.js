@@ -6,8 +6,6 @@ import { MarketJS } from '../../util/marketjs/marketMiddleware';
 
 import { Modal, Table as AntTable } from 'antd';
 
-import columns from './Columns';
-
 class Buy extends Component {
   constructor(props) {
     super(props);
@@ -63,6 +61,18 @@ class Buy extends Component {
 
   render() {
     const { order } = this.state;
+    const columns = [
+      {
+        title: 'Amount',
+        dataIndex: 'qty',
+        key: 'qty'
+      },
+      {
+        title: 'Price',
+        dataIndex: 'price',
+        key: 'price'
+      }
+    ];
 
     return (
       <Fragment>
