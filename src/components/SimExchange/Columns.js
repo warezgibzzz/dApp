@@ -1,9 +1,9 @@
 export default [
   {
     title: 'Amount',
-    dataIndex: 'qty',
-    key: 'qty',
-    render: text => Math.abs(text)
+    dataIndex: 'orderQty',
+    key: 'orderQty',
+    render: text => text
   },
   {
     title: 'Price',

@@ -160,6 +160,8 @@ const WrappedForm = Form.create({
       }),
       expirationTimestamp: Form.createFormField({
         value: order.expirationTimestamp
+          ? order.expirationTimestamp
+          : moment().add(28, 'days')
       })
     };
   }

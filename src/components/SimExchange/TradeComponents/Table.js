@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import uniqueId from 'lodash/uniqueId';
 
 import { Table } from 'antd';
 
@@ -28,7 +29,7 @@ class OrdersTable extends Component {
         size="small"
         dataSource={this.props.data}
         columns={columns}
-        rowKey="orderHash"
+        rowKey={() => uniqueId('orderHash')}
       />
     );
   }

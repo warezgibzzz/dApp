@@ -37,7 +37,6 @@ class Trades extends Component {
   componentWillReceiveProps(nextProps) {
     const newContract = nextProps.simExchange.contract;
     const oldContract = this.props.simExchange.contract;
-    console.log('np', nextProps);
 
     if (newContract !== oldContract && newContract !== null) {
       this.getUnallocatedCollateral(nextProps);
@@ -46,13 +45,19 @@ class Trades extends Component {
   }
 
   getOrders(contractAddress) {
-    fetch(`https://api.marketprotocol.io/orders/${contractAddress}/`)
+    fetch(`https://dev.api.marketprotocol.io/orders/${contractAddress}/`)
       .then(function(response) {
         return response.json();
       })
-      .then(function(response) {
-        console.log('res', response);
-      });
+      .then(
+        function(response) {
+          this.setState({
+            buys: response.buys,
+            sells: response.sells,
+            contract: response.contract
+          });
+        }.bind(this)
+      );
   }
 
   getUnallocatedCollateral(props) {
@@ -68,8 +73,10 @@ class Trades extends Component {
   }
 
   render() {
-    const { unallocatedCollateral } = this.state;
+    const { unallocatedCollateral, buys, sells } = this.state;
     const { simExchange } = this.props;
+
+    console.log('buys/sells', buys, sells);
 
     return (
       <Layout id="trading">
@@ -87,7 +94,7 @@ class Trades extends Component {
                 {...this.props}
                 type="bids"
                 market=""
-                data={this.props.bids}
+                data={buys}
               />
             </Col>
             <Col span={12}>
@@ -95,7 +102,7 @@ class Trades extends Component {
                 {...this.props}
                 type="asks"
                 market=""
-                data={this.props.asks}
+                data={sells}
               />
             </Col>
           </Row>
