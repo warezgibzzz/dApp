@@ -51,6 +51,8 @@ class Trades extends Component {
       })
       .then(
         function(response) {
+          console.log('response', response);
+
           this.setState({
             buys: response.buys,
             sells: response.sells,
@@ -75,8 +77,6 @@ class Trades extends Component {
   render() {
     const { unallocatedCollateral, buys, sells } = this.state;
     const { simExchange } = this.props;
-
-    console.log('buys/sells', buys, sells);
 
     return (
       <Layout id="trading">

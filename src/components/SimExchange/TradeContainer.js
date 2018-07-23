@@ -24,7 +24,6 @@ class Buy extends Component {
     };
 
     this.onSubmit = this.onSubmit.bind(this);
-    this.onRowSelect = this.onRowSelect.bind(this);
     this.showModal = this.showModal.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.handleOk = this.handleOk.bind(this);
@@ -44,10 +43,6 @@ class Buy extends Component {
     this.setState({
       order: order
     });
-  }
-
-  onRowSelect(order) {
-    this.setState({ order });
   }
 
   showModal() {
@@ -80,11 +75,7 @@ class Buy extends Component {
           />
         </div>
 
-        <Table
-          {...this.props}
-          title={`${this.props.type}`}
-          onRowSelect={this.onRowSelect}
-        />
+        <Table {...this.props} title={`${this.props.type}`} />
 
         {order && (
           <Modal
