@@ -5,7 +5,7 @@ cache:
   directories:
     - node_modules
 before_deploy:
-  - npm run build:rinkeby
+  - CI=false npm run build:rinkeby
   - pip install --user awscli
   - ./scripts/clean_bucket.sh
 deploy:
@@ -27,6 +27,6 @@ deploy:
     on:
       branch: develop
 script:
-  - npm run test:prod
+  - CI=false npm run test:prod
 after_script:
   - npm run coveralls

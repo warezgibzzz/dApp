@@ -1,4 +1,6 @@
-import Rx from 'rxjs/Rx';
+import { EMPTY, Observable, zip } from 'rxjs';
+import { ajax } from 'rxjs/ajax';
+import { map } from 'rxjs/operators';
 
 const ExchangeSources = [
   {
@@ -10,23 +12,25 @@ const ExchangeSources = [
       }).price`;
     },
     fetchList(quotes) {
-      const info = Rx.Observable.ajax({
+      const info = ajax({
         url: 'https://api.marketprotocol.io/proxy/binance/api/v1/exchangeInfo',
         method: 'GET',
         responseType: 'json'
-      }).map(data =>
-        data.response.symbols.filter(
-          symbol => quotes.indexOf(symbol.quoteAsset) >= 0
+      }).pipe(
+        map(data =>
+          data.response.symbols.filter(
+            symbol => quotes.indexOf(symbol.quoteAsset) >= 0
+          )
         )
       );
 
-      const price = Rx.Observable.ajax({
+      const price = ajax({
         url: 'https://api.marketprotocol.io/proxy/binance/api/v3/ticker/price',
         method: 'GET',
         responseType: 'json'
-      }).map(data => data.response);
+      }).pipe(map(data => data.response));
 
-      return Rx.Observable.zip(info, price, function(infoItem, priceItem) {
+      return zip(info, price, function(infoItem, priceItem) {
         const prices = {};
         const symbols = [];
         priceItem.forEach(e => {
@@ -53,29 +57,31 @@ const ExchangeSources = [
       }).last_price`;
     },
     getPrice(symbol) {
-      return Rx.Observable.ajax({
+      return ajax({
         url: `https://api.marketprotocol.io/proxy/bitfinex/v1/pubticker/${symbol}`,
         method: 'GET',
         responseType: 'json'
-      }).map(data => data.response.last_price);
+      }).pipe(map(data => data.response.last_price));
     },
     fetchList(quotes) {
-      return Rx.Observable.ajax({
+      return ajax({
         url: `https://api.marketprotocol.io/proxy/bitfinex/v1/symbols_details`,
         method: 'GET',
         responseType: 'json'
-      }).map(data =>
-        data.response
-          .filter(symbol => {
-            if (symbol.pair.endsWith('eth')) symbol.quoteAsset = 'ETH';
-            if (symbol.pair.endsWith('usd')) symbol.quoteAsset = 'USDT';
-            return quotes.indexOf(symbol.quoteAsset) >= 0;
-          })
-          .map(e => ({
-            symbol: e.pair.toUpperCase(),
-            priceDecimalPlaces: e.price_precision,
-            quoteAsset: e.quoteAsset
-          }))
+      }).pipe(
+        map(data =>
+          data.response
+            .filter(symbol => {
+              if (symbol.pair.endsWith('eth')) symbol.quoteAsset = 'ETH';
+              if (symbol.pair.endsWith('usd')) symbol.quoteAsset = 'USDT';
+              return quotes.indexOf(symbol.quoteAsset) >= 0;
+            })
+            .map(e => ({
+              symbol: e.pair.toUpperCase(),
+              priceDecimalPlaces: e.price_precision,
+              quoteAsset: e.quoteAsset
+            }))
+        )
       );
     }
   },
@@ -86,7 +92,7 @@ const ExchangeSources = [
       return `json(https://api.kraken.com/0/public/Ticker?pair=${symbol}).result.${symbol}.p.1`;
     },
     fetchList() {
-      return Rx.Observable.empty();
+      return EMPTY;
     }
   }
 ];

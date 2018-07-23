@@ -2,7 +2,7 @@ import React from 'react';
 import { expect } from 'chai';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
-import Rx from 'rxjs/Rx';
+import { from } from 'rxjs';
 
 import { Form, Select } from 'antd';
 import SelectTokenField from '../../../src/components/DeployContract/SelectTokenField';
@@ -19,7 +19,7 @@ ExchangeSources.push({
     }).last_price`;
   },
   fetchList(quotes) {
-    return Rx.Observable.from([
+    return from([
       [{ symbol: 'ETHUSDT', priceDecimalPlaces: 5, quoteAsset: 'USDT' }]
     ]);
   }
@@ -34,10 +34,10 @@ ExchangeSources.push({
     }).last_price`;
   },
   getPrice(symbol) {
-    return Rx.Observable.from([1]);
+    return from([1]);
   },
   fetchList(quotes) {
-    return Rx.Observable.from([
+    return from([
       [{ symbol: 'ETHUSDT', priceDecimalPlaces: 5, quoteAsset: 'USDT' }]
     ]);
   }

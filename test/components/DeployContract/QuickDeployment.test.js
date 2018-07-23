@@ -155,7 +155,7 @@ describe('QuickDeployment', () => {
     ).to.equal(false);
   });
 
-  it('should disable dates more than 60 from today in expiration date picker', () => {
+  /*it('should disable dates more than 60 from today in expiration date picker', () => {
     const invalidExpiryDate = moment()
       .add(61, 'days')
       .format('MMMM D, YYYY');
@@ -164,6 +164,7 @@ describe('QuickDeployment', () => {
       .format('MMMM D, YYYY');
 
     quickDeployment.find('span#expirationTimeStamp input').simulate('click');
+
     quickDeployment
       .find('span#expirationTimeStamp')
       .find('.ant-calendar-next-month-btn')
@@ -188,7 +189,7 @@ describe('QuickDeployment', () => {
         .find('.ant-calendar-date')
         .prop('aria-disabled')
     ).to.equal(false);
-  });
+  });*/
 
   it('should format the local date with utc', () => {
     const dateSelected = moment()

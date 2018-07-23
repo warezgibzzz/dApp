@@ -1,6 +1,7 @@
 import { Col, Form, Icon, InputNumber, Row, Popover } from 'antd';
 import React, { Component } from 'react';
-import Rx from 'rxjs/Rx';
+import { ajax } from 'rxjs/ajax';
+import { map } from 'rxjs/operators';
 
 import { isTestnetOrMainnet } from '../util/utils';
 
@@ -89,7 +90,7 @@ class GasPriceField extends Component {
 
   getMessage(condition, gasLimit, gasPrice) {
     const time = this.getTime(condition, gasPrice);
-    const cost = gasLimit * gasPrice / 1000000000;
+    const cost = (gasLimit * gasPrice) / 1000000000;
     const message = !condition
       ? `The following MetaMask settings will cost ${cost} ETH, the confirmation time depends on the overall network traffic`
       : time >= 0
@@ -102,13 +103,13 @@ class GasPriceField extends Component {
   componentDidMount() {
     const gasInfoUrl = 'https://ethgasstation.info/json/ethgasAPI.json';
 
-    this.subscription = Rx.Observable.ajax({
+    this.subscription = ajax({
       url: gasInfoUrl,
       method: 'GET',
       responseType: 'json',
       crossDomain: true
     })
-      .map(data => data.response)
+      .pipe(map(data => data.response))
       .subscribe(this.updateNetworkCondition);
   }
 
