@@ -82,7 +82,9 @@ describe('TradesContainer', () => {
       asks: [],
       bids: [],
       simExchange: {
-        contract: {}
+        contract: {
+          MARKET_COLLATERAL_POOL_ADDRESS: new BigNumber()
+        }
       }
     };
 
