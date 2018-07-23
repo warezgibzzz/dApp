@@ -1,7 +1,8 @@
-import { Affix, Menu } from 'antd';
+import { Affix, Menu, Popover, Icon } from 'antd';
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
+import Media from 'react-media';
 
 import logo from '../img/market-logo-white.png';
 import '../less/Header.less';
@@ -32,37 +33,65 @@ class Header extends Component {
 
     return (
       <Affix>
-        <header id="header" className="clearfix">
-          <div className="ant-row">
-            <div className="ant-col-xs-24 ant-col-sm-24 ant-col-md-6 ant-col-lg-5 ant-col-xl-5 ant-col-xxl-4">
-              <Link to="/" id="logo">
-                <img src={logo} alt="Market Protocol Logo" />
-              </Link>
-            </div>
-            <div className="ant-col-xs-0 ant-col-sm-0 ant-col-md-18 ant-col-lg-19 ant-col-xl-19 ant-col-xxl-20">
-              <Menu
-                mode="horizontal"
-                className="menu-site"
-                id="nav"
-                selectedKeys={[path]}
-              >
-                <SubMenu title="Deploy Contracts">
-                  {subMenuItems.map(item => (
+        <header id="header">
+          <Link to="/" id="logo">
+            <img src={logo} alt="Market Protocol Logo" />
+          </Link>
+          <Media query="(min-width: 768px)">
+            {matches =>
+              matches ? (
+                <Menu
+                  mode="horizontal"
+                  className="menu-site"
+                  id="nav"
+                  selectedKeys={[path]}
+                >
+                  <SubMenu title="Deploy Contracts">
+                    {subMenuItems.map(item => (
+                      <MenuItem key={item.to}>
+                        <Link to={item.to}>{item.name}</Link>
+                      </MenuItem>
+                    ))}
+                  </SubMenu>
+                  {mainMenuItems.map(item => (
                     <MenuItem key={item.to}>
-                      <Link to={item.to}>{item.name}</Link>
+                      <Link to={item.to} target={item.target}>
+                        {item.name}
+                      </Link>
                     </MenuItem>
                   ))}
-                </SubMenu>
-                {mainMenuItems.map(item => (
-                  <MenuItem key={item.to}>
-                    <Link to={item.to} target={item.target}>
-                      {item.name}
-                    </Link>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </div>
-          </div>
+                </Menu>
+              ) : (
+                <Popover
+                  id="mobile-popover"
+                  placement="bottomRight"
+                  trigger="click"
+                  content={
+                    <Menu mode="inline" id="nav-mobile" selectedKeys={[path]}>
+                      <SubMenu title="Deploy Contracts">
+                        {subMenuItems.map(item => (
+                          <MenuItem key={item.to}>
+                            <Link to={item.to}>{item.name}</Link>
+                          </MenuItem>
+                        ))}
+                      </SubMenu>
+                      {mainMenuItems.map(item => (
+                        <MenuItem key={item.to}>
+                          <Link to={item.to} target={item.target}>
+                            {item.name}
+                          </Link>
+                        </MenuItem>
+                      ))}
+                    </Menu>
+                  }
+                >
+                  <div className="mobile-button">
+                    <Icon className="iconHamburger" type="menu" />
+                  </div>
+                </Popover>
+              )
+            }
+          </Media>
         </header>
       </Affix>
     );

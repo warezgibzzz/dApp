@@ -2,8 +2,11 @@
     -webkit-transition: all 0.3s;
     transition: all 0.3s;
     background: @body-background;
+    display: flex;
+    justify-content: space-between;
     -webkit-box-shadow: 0 2px 0px #15181d;
     box-shadow: 0 2px 0px #15181d;
+    padding: 0 40px;
     position: relative;
     z-index: 10;
     max-width: 100%;
@@ -11,8 +14,6 @@
 
 #logo {
     overflow: hidden;
-    padding-left: 40px;
-    float: left;
     height: 64px;
     line-height: 64px;
     text-decoration: none;
@@ -32,12 +33,87 @@
     margin-right: 50px;
 }
 
+#nav-mobile {
+    background-color: transparent;
+    border-right: none;
+
+    li,
+    a {
+        color: #000;
+    }
+    .ant-menu-sub {
+        background-color: rgba(0, 0, 0, 0.05);
+
+        .ant-menu-item {
+            padding-left: 24px !important;
+        }
+    }
+
+    .ant-menu-submenu-arrow {
+        &:before,
+        &:after {
+            background-color: red !important;
+        }
+    }
+
+    .ant-menu-item-active a {
+        color: #00e2c1;
+    }
+
+    .ant-menu-item-selected {
+        background-color: transparent;
+
+        a {
+            color: #00e2c1;
+        }
+
+        &::after {
+            content: '';
+            display: none;
+        }
+    }
+}
+
+#mobile-popover {
+    .ant-popover-inner-content {
+        padding: 0;
+    }
+}
+
+.mobile-button {
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+}
+
 .ant-menu {
     font-weight: 500;
 }
 
 .ant-menu-item-selected {
     pointer-events: none;
+}
+
+.iconHamburger {
+    display: block;
+    position: relative;
+    z-index: 1000;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+}
+
+.iconHamburger:before {
+    background: #ffffff;
+    border-radius: 2px;
+    box-shadow: 0 6px 0 0 #ffffff, 0 12px 0 0 #ffffff;
+    content: '';
+    display: block;
+    height: 2px;
+    position: absolute;
+    width: 24px;
+    top: 18px;
+    right: 13px;
 }
 
 /* Medium screens */
