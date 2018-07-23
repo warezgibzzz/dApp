@@ -11,7 +11,7 @@ import Table from '../../../src/components/SimExchange/TradeComponents/Table';
 import BigNumber from 'bignumber.js';
 
 const mockContract = {
-  key: '0x6467854f25ff1f1ff8c11a717faf03e409b53635',
+  contract: { key: '0x6467854f25ff1f1ff8c11a717faf03e409b53635' },
   CONTRACT_NAME: 'ETHXBT',
   COLLATERAL_TOKEN: 'FakeDollars',
   COLLATERAL_TOKEN_ADDRESS: '0x6467854f25ff1f1ff8c11a717faf03e409b53635',
@@ -258,6 +258,9 @@ describe('TradesContainer', () => {
       }
     };
     fetchStub.returns(Promise.resolve(response));
+    trades.setProps({
+      simExchange: mockContract
+    });
     trades.instance().getOrders('0x46e1c3951a2a2eef584a2136cbdf06161e6e5f99');
 
     expect(spy.called).to.equal(true);
