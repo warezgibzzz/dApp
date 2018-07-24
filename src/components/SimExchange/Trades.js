@@ -12,6 +12,7 @@ class Trades extends Component {
   constructor(props) {
     super(props);
 
+    this.getOrders = this.getOrders.bind(this);
     this.getUnallocatedCollateral = this.getUnallocatedCollateral.bind(this);
 
     this.state = {
@@ -20,34 +21,61 @@ class Trades extends Component {
   }
 
   componentDidMount() {
-    this.props.simExchange.contract !== null &&
-      this.props.simExchange.contract.MARKET_COLLATERAL_POOL_ADDRESS &&
-      this.getUnallocatedCollateral(this.props);
+    const { simExchange } = this.props;
+
+    if (
+      simExchange.contract !== null &&
+      simExchange.contract.MARKET_COLLATERAL_POOL_ADDRESS
+    ) {
+      this.getUnallocatedCollateral(
+        simExchange.contract.MARKET_COLLATERAL_POOL_ADDRESS
+      );
+      this.getOrders(simExchange.contract.key);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (
-      nextProps.simExchange.contract !== this.props.simExchange.contract &&
-      nextProps.simExchange.contract !== null
-    ) {
+    const newContract = nextProps.simExchange.contract;
+    const oldContract = this.props.simExchange.contract;
+
+    if (newContract !== oldContract && newContract !== null) {
       this.getUnallocatedCollateral(nextProps);
+      this.getOrders(nextProps.simExchange.contract.key);
     }
+  }
+
+  getOrders(contractAddress) {
+    fetch(`https://dev.api.marketprotocol.io/orders/${contractAddress}/`)
+      .then(function(response) {
+        return response.json();
+      })
+      .then(
+        function(response) {
+          this.setState({
+            buys: response.buys,
+            sells: response.sells,
+            contract: response.contract
+          });
+        }.bind(this)
+      );
   }
 
   getUnallocatedCollateral(props) {
     const { simExchange } = props;
 
-    MarketJS.getUserAccountBalanceAsync(simExchange.contract, true).then(
-      balance => {
-        this.setState({
-          unallocatedCollateral: balance
-        });
-      }
-    );
+    if (simExchange) {
+      MarketJS.getUserAccountBalanceAsync(simExchange.contract, true).then(
+        balance => {
+          this.setState({
+            unallocatedCollateral: balance
+          });
+        }
+      );
+    }
   }
 
   render() {
-    const { unallocatedCollateral } = this.state;
+    const { unallocatedCollateral, buys, sells, contract } = this.state;
     const { simExchange } = this.props;
 
     return (
@@ -66,7 +94,8 @@ class Trades extends Component {
                 {...this.props}
                 type="bids"
                 market=""
-                data={this.props.bids}
+                data={buys}
+                contract={contract}
               />
             </Col>
             <Col span={12}>
@@ -74,7 +103,8 @@ class Trades extends Component {
                 {...this.props}
                 type="asks"
                 market=""
-                data={this.props.asks}
+                data={sells}
+                contract={contract}
               />
             </Col>
           </Row>
