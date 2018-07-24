@@ -46,11 +46,7 @@ const createSignedOrderAsync = orderData => {
       salt: web3.toBigNumber(Math.random())
     };
 
-    return marketjs
-      .createOrderHashAsync(orderLib.address, order)
-      .then(orderHash => {
-        return marketjs.signOrderHashAsync(orderHash, web3.eth.coinbase);
-      });
+    return marketjs.createSignedOrderAsync(orderLib.address, ...Object.values(order));
   });
 };
 
