@@ -5,7 +5,8 @@ import {
   Input,
   InputNumber,
   Select,
-  Popover
+  Popover,
+  Radio
 } from 'antd';
 import moment from 'moment';
 import React from 'react';
@@ -18,6 +19,7 @@ import ExchangeSources from './ExchangeSources';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+const RadioGroup = Radio.Group;
 
 const ethAddressValidator = (rule, value, callback) => {
   const web3 = store.getState().web3.web3Instance;
@@ -119,7 +121,7 @@ const fieldSettingsByName = {
       }
     ],
     extra: `Name of contract should be descriptive, e.g. "ETH/BTC-20180228-Kraken"`,
-    component: ({ showHint }) => <Input />
+    component: () => <Input />
   },
 
   collateralTokenAddress: {
@@ -167,7 +169,6 @@ const fieldSettingsByName = {
       return (
         <InputNumber
           min={0}
-          step={0.1}
           style={{ width: '100%' }}
           onChange={() => {
             setTimeout(() => {
@@ -206,7 +207,6 @@ const fieldSettingsByName = {
       return (
         <InputNumber
           min={0}
-          step={0.1}
           style={{ width: '100%' }}
           onChange={() => {
             setTimeout(() => {
@@ -240,11 +240,11 @@ const fieldSettingsByName = {
     extra: `The lower bound of price exposure this contract will trade. If the oracle reports a price below this 
     value the contract will enter into settlement`,
 
-    component: ({ form }) => {
+    component: ({ form, stepValue }) => {
       return (
         <InputNumber
           min={0}
-          step={0.1}
+          step={stepValue}
           style={{ width: '100%' }}
           onChange={() => {
             setTimeout(() => {
@@ -278,11 +278,11 @@ const fieldSettingsByName = {
     extra: `The upper bound of price exposure this contract will trade. If the oracle reports a price above this
     value the contract will enter into settlement`,
 
-    component: ({ form }) => {
+    component: ({ form, stepValue }) => {
       return (
         <InputNumber
           min={0}
-          step={0.1}
+          step={stepValue}
           style={{ width: '100%' }}
           onChange={() => {
             setTimeout(() => {
@@ -441,11 +441,43 @@ const fieldSettingsByName = {
         </Select>
       );
     }
+  },
+
+  tokenPairOptions: {
+    initialValue: 'ETH',
+    rules: [
+      {
+        required: true,
+        message: 'Please select an option'
+      }
+    ],
+    extra: 'Available token pairs',
+
+    component: ({ pairs }) => {
+      return (
+        <RadioGroup>
+          {pairs.map((pair, i) => (
+            <Radio key={i} value={pair}>
+              {pair} Pairs
+            </Radio>
+          ))}
+        </RadioGroup>
+      );
+    }
   }
 };
 
 function DeployContractField(props) {
-  const { name, form, initialValue, showHint, onChange, hideLabel } = props;
+  const {
+    name,
+    form,
+    initialValue,
+    showHint,
+    onChange,
+    hideLabel,
+    stepValue,
+    pairs
+  } = props;
   const { getFieldDecorator } = form;
   const fieldSettings = fieldSettingsByName[name];
 
@@ -462,7 +494,10 @@ function DeployContractField(props) {
     </span>
   );
   return (
-    <FormItem label={label}>
+    <FormItem
+      label={label}
+      className={name === 'tokenPairOptions' ? 'm-bottom-10' : ''}
+    >
       {getFieldDecorator(name, {
         initialValue,
         rules
@@ -471,7 +506,9 @@ function DeployContractField(props) {
           form,
           fieldSettings,
           showHint,
-          onChange
+          onChange,
+          stepValue,
+          pairs
         })
       )}
     </FormItem>

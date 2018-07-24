@@ -3,7 +3,7 @@ import React from 'react';
 import { getExchangeObj } from './ExchangeSources';
 
 const FormItem = Form.Item;
-const { Option, OptGroup } = Select;
+const { Option } = Select;
 
 const Hint = props => (
   <Popover
@@ -37,6 +37,7 @@ class SelectTokenField extends React.Component {
         priceDecimalPlaces: '',
         priceCap: '',
         priceFloor: '',
+        price: '',
         qtyMultiplier: '',
         oracleDataSource: ''
       });
@@ -95,7 +96,7 @@ class SelectTokenField extends React.Component {
   }
 
   render() {
-    const { name, form, initialValue, showHint } = this.props;
+    const { name, form, initialValue, showHint, hideLabel } = this.props;
     const { getFieldDecorator } = form;
     const fieldSettings = {
       label: 'Select ETH or USDT based pair',
@@ -110,7 +111,7 @@ class SelectTokenField extends React.Component {
     ];
     const label = (
       <span>
-        {fieldSettings.label}{' '}
+        {!hideLabel && fieldSettings.label}{' '}
         {showHint && (
           <Hint hint={fieldSettings.extra} hintTitle={fieldSettings.label} />
         )}
@@ -134,18 +135,15 @@ class SelectTokenField extends React.Component {
               );
             }}
           >
-            {this.state.quotes.map(quoteAsset => (
-              <OptGroup key={quoteAsset} label={quoteAsset}>
-                {this.state.pairs.map(
-                  (symbol, index) =>
-                    symbol.quoteAsset === quoteAsset && (
-                      <Option key={index} value={index}>
-                        {symbol.symbol}
-                      </Option>
-                    )
-                )}
-              </OptGroup>
-            ))}
+            {this.state.pairs.map(
+              (symbol, index) =>
+                symbol.quoteAsset ===
+                  form.getFieldValue('tokenPairOptions') && (
+                  <Option key={index} value={index}>
+                    {symbol.symbol}
+                  </Option>
+                )
+            )}
           </Select>
         )}
       </FormItem>

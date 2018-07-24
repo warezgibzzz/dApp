@@ -2,7 +2,7 @@
  * Steps for use by GuidedDeployment.
  *
  */
-import { Button, Form, Icon, Collapse, Steps, Input, Tooltip } from 'antd';
+import { Button, Form, Icon, Steps, Input, Tooltip } from 'antd';
 import moment from 'moment';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
@@ -15,7 +15,6 @@ import { getEtherscanUrl, copyTextToClipboard } from '../../util/utils';
 import { PriceGraph } from './PriceGraph';
 
 // extract antd subcomponents
-const Panel = Collapse.Panel;
 const Step = Steps.Step;
 const ButtonGroup = Button.Group;
 
@@ -46,7 +45,6 @@ class BaseStepComponent extends Component {
    */
   handleSubmit(e) {
     e.preventDefault();
-
     this.props.form.validateFields((err, fieldsValue) => {
       if (err) {
         return;
@@ -158,6 +156,34 @@ NameContractStep = Form.create()(NameContractStep);
  *
  */
 class PricingStep extends BaseStepComponent {
+  /**
+   * Method for calibrating the step counter for Price floor &
+   * Price cap input fields
+   *
+   * @param (number)
+   */
+  getStepValue(number) {
+    // Taking care if the number passed is integer
+    if (parseInt(number, 10) === number) {
+      // Returning the least value if the number is integer
+      return 1;
+    }
+
+    // Converting the number to string in order to calculate the number of
+    // decimal digits.
+    return (
+      1 /
+      parseFloat('1'.padEnd(number.toString().split('.')[1].length + 1, '0'))
+    );
+  }
+
+  componentDidMount() {
+    this.props.form.setFieldsValue({
+      priceCapSimplified: this.props.priceCap,
+      priceFloorSimplified: this.props.priceFloor
+    });
+  }
+
   render() {
     return (
       <Form
@@ -175,26 +201,33 @@ class PricingStep extends BaseStepComponent {
           }
         >
           {this.props.isSimplified && (
-            <h3 className="text-center">
-              Current Price of {this.props.symbolName}:{' '}
-              <span className="text-primary">{this.props.price}</span>
-            </h3>
+            <div>
+              <Field
+                name="price"
+                initialValue={this.props.price}
+                form={this.props.form}
+              />
+              <h3 className="text-center">
+                Current Price of {this.props.symbolName}:{' '}
+                <span className="text-primary">{this.props.price}</span>
+              </h3>
+            </div>
           )}
           {!this.props.isSimplified && (
-            <p>
-              The Price Floor and Cap define the range of a contract. If an
-              oracle reports a price above a Cap or below a Floor the contract
-              will enter settlement and no longer trade. Additionally, these
-              parameters define a participants maximum loss when entering a
-              trade and therefore the amount collateral that must be posted.
-              <br />
-              <br />
-              <h3>
+            <div>
+              <p>
+                The Price Floor and Cap define the range of a contract. If an
+                oracle reports a price above a Cap or below a Floor the contract
+                will enter settlement and no longer trade. Additionally, these
+                parameters define a participants maximum loss when entering a
+                trade and therefore the amount collateral that must be posted.
+              </p>
+              <h3 className="m-top-20 m-bottom-20">
                 All prices must in an integer format (e.g 1245, not 12.45),
                 floating point values (decimals), are not currently supported by
                 Ethereum.
               </h3>
-            </p>
+            </div>
           )}
           <br />
           {!this.props.isSimplified && (
@@ -222,40 +255,62 @@ class PricingStep extends BaseStepComponent {
             className={this.props.isSimplified ? 'step-inner-container' : ''}
           >
             <h2>Price Cap</h2>
-            {!this.props.isSimplified && (
-              <p>
-                This is the upper bound of price exposure this contract will
-                trade. If the oracle reports a price above this value the
-                contract will enter into settlement. Following our example, if
-                we decide the Cap for our contract should be 230.00, we would
-                enter 23000 as our Cap.
-              </p>
+            {!this.props.isSimplified ? (
+              <div>
+                <p>
+                  This is the upper bound of price exposure this contract will
+                  trade. If the oracle reports a price above this value the
+                  contract will enter into settlement. Following our example, if
+                  we decide the Cap for our contract should be 230.00, we would
+                  enter 23000 as our Cap.
+                </p>
+                <Field
+                  name="priceCap"
+                  initialValue={this.props.priceCap}
+                  form={this.props.form}
+                  hideLabel
+                />
+              </div>
+            ) : (
+              <Field
+                name="priceCapSimplified"
+                initialValue={this.props.priceCap.toFixed(
+                  this.props.price.toString().split('.')[1].length
+                )}
+                form={this.props.form}
+                hideLabel
+                stepValue={this.getStepValue(this.props.price)}
+              />
             )}
-            <Field
-              name={this.props.isSimplified ? 'priceCapSimplified' : 'priceCap'}
-              initialValue={this.props.priceCap}
-              form={this.props.form}
-              hideLabel
-            />
             <h2>Price Floor</h2>
-            {!this.props.isSimplified && (
-              <p>
-                This is the lower bound of price exposure this contract will
-                trade. If the oracle reports a price below this value the
-                contract will enter into settlement. This should also be
-                represented as a whole number. If we take the example above of a
-                price of 190.22 and decide the Floor for our contract should be
-                150.00, we would enter 15000 here.
-              </p>
+            {!this.props.isSimplified ? (
+              <div>
+                <p>
+                  This is the lower bound of price exposure this contract will
+                  trade. If the oracle reports a price below this value the
+                  contract will enter into settlement. This should also be
+                  represented as a whole number. If we take the example above of
+                  a price of 190.22 and decide the Floor for our contract should
+                  be 150.00, we would enter 15000 here.
+                </p>
+                <Field
+                  name="priceFloor"
+                  initialValue={this.props.priceFloor}
+                  form={this.props.form}
+                  hideLabel
+                />
+              </div>
+            ) : (
+              <Field
+                name="priceFloorSimplified"
+                initialValue={this.props.priceFloor.toFixed(
+                  this.props.price.toString().split('.')[1].length
+                )}
+                form={this.props.form}
+                hideLabel
+                stepValue={this.getStepValue(this.props.price)}
+              />
             )}
-            <Field
-              name={
-                this.props.isSimplified ? 'priceFloorSimplified' : 'priceFloor'
-              }
-              initialValue={this.props.priceFloor}
-              form={this.props.form}
-              hideLabel
-            />
             {this.props.isSimplified && (
               <div className="m-top-30">
                 <PriceGraph
@@ -314,6 +369,7 @@ PricingStep = Form.create()(PricingStep);
  */
 class ExpirationStep extends BaseStepComponent {
   render() {
+    console.log(this.props);
     const {
       expirationTimeStamp,
       form,
@@ -733,31 +789,25 @@ class DeployStep extends BaseStepComponent {
                   )}
                 </div>
               ) : (
-                <Collapse bordered={false} className="m-bottom-40">
-                  <Panel
-                    header="Help me understand this"
-                    style={{ color: '#00e2c1' }}
-                    showArrow={false}
-                  >
-                    <p className={'deploy-step-description'}>
-                      Transaction Hash:
-                      {txHash ? (
-                        <a
-                          href={`${getEtherscanUrl(
-                            this.props.network
-                          )}/tx/${txHash}`}
-                          target={'_blank'}
-                        >
-                          {txHash}
-                        </a>
-                      ) : (
-                        'TBD'
-                      )}
-                    </p>
-                    <h4>{description.title}</h4>
-                    <p>{description.explanation}</p>
-                  </Panel>
-                </Collapse>
+                <div>
+                  <p className={'deploy-step-description'}>
+                    Transaction Hash:
+                    {txHash ? (
+                      <a
+                        href={`${getEtherscanUrl(
+                          this.props.network
+                        )}/tx/${txHash}`}
+                        target={'_blank'}
+                      >
+                        {txHash}
+                      </a>
+                    ) : (
+                      'TBD'
+                    )}
+                  </p>
+                  <h4>{description.title}</h4>
+                  <p>{description.explanation}</p>
+                </div>
               ))}
           </div>
         }
@@ -813,11 +863,18 @@ class ExchangeStep extends BaseStepComponent {
             form={this.props.form}
           />
           <h2>Symbol</h2>
+          <Field
+            name="tokenPairOptions"
+            form={this.props.form}
+            pairs={['ETH', 'USDT']}
+            initialValue={'ETH'}
+          />
           <SelectTokenField
             name="tokenPair"
             form={this.props.form}
             exchange={this.state.exchangeApi}
             onSelect={this.props.updateDeploymentState}
+            hideLabel
           />
           <h2>Contract Name</h2>
           <Field

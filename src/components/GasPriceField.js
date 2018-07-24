@@ -123,7 +123,7 @@ class GasPriceField extends Component {
         time depends on the overall network traffic
       </div>
     ) : time >= 0 ? (
-      <div>
+      <div style={{ color: 'ff003a' }}>
         The transaction will take around{' '}
         <strong style={{ color: '#00ffe2' }}>{time} min</strong> to process for{' '}
         <strong>{cost} ETH</strong>
@@ -131,8 +131,10 @@ class GasPriceField extends Component {
     ) : (
       <div style={{ fontSize: '14px' }}>
         The gas price is below the market low safe price (currently about{' '}
-        <strong>{condition.safeLow / 10} gwei)</strong>, your transaction might
-        take forever to get confirmed
+        <strong>{condition.safeLow / 10} gwei)</strong>, your{' '}
+        <span style={{ color: '#ff5e5e' }}>
+          transaction might take forever to get confirmed
+        </span>
       </div>
     );
     return message;
@@ -163,40 +165,6 @@ class GasPriceField extends Component {
       );
   }
 
-  getGasPriceSliderMarks() {
-    const slowestValue = this.state.condition
-      ? (this.state.condition.safeLow - 10) / 10
-      : 1;
-    const averageValue = this.state.condition
-      ? this.state.condition.average / 10
-      : 5;
-    const fastValue = this.state.condition
-      ? this.state.condition.fast / 10
-      : 10;
-    const marks = {};
-
-    marks[slowestValue] = {
-      style: {
-        color: '#f50'
-      },
-      label: <strong>Slow</strong>
-    };
-    marks[averageValue] = {
-      style: {
-        color: '#fff'
-      },
-      label: <strong>Medium</strong>
-    };
-    marks[fastValue] = {
-      style: {
-        color: '#00ffe2'
-      },
-      label: <strong>Fast</strong>
-    };
-
-    return marks;
-  }
-
   componentWillUnmount() {
     this.subscription.unsubscribe();
   }
@@ -218,7 +186,7 @@ class GasPriceField extends Component {
                 }}
               >
                 {this.state.message}
-                <Collapse bordered={false} className="m-bottom-40">
+                <Collapse bordered={false} className="m-bottom-20">
                   <Panel header="Help me understand this">
                     <ul>
                       <li>
@@ -259,8 +227,12 @@ class GasPriceField extends Component {
                 onChange={this.onGasPriceChange.bind(this)}
                 step={0.01}
                 tipFormatter={null}
-                marks={this.getGasPriceSliderMarks()}
               />
+              <div className="speed-container m-top-30 m-bottom-30">
+                <div className="slow" />
+                <div className="average" />
+                <div className="fast" />
+              </div>
             </div>
           ) : (
             <div className="text-center m-top-20 m-bottom-20">

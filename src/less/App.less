@@ -320,10 +320,11 @@ code {
 
     #gas-settings {
         .ant-slider-handle {
-            margin-top: -11px;
+            margin-top: -8px;
             height: 25px;
             width: 25px;
             font-family: 'anticon';
+            border-color: @primary-6;
 
             &:after {
                 content: '\e604';
@@ -331,6 +332,7 @@ code {
                 position: absolute;
                 top: 4px;
                 right: 3px;
+                color: @primary-color;
             }
             &:before {
                 content: '\e605';
@@ -338,7 +340,17 @@ code {
                 position: absolute;
                 top: 4px;
                 left: 3px;
+                color: @primary-color;
             }
+        }
+        .ant-slider-rail {
+            height: 10px;
+            border-radius: 10px;
+            background-color: #181e26;
+            border: solid 1px #cccccc;
+        }
+        .ant-slider-track {
+            background-color: transparent;
         }
         .ant-slider-mark {
             top: 30px;

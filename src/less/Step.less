@@ -109,3 +109,41 @@
 .example-hint-text {
     font-family: Courier;
 }
+.speed-container {
+    display: flex;
+
+    > div {
+        text-align: center;
+        flex: 1;
+        height: 12px;
+        border: 1px solid #6f6f6f;
+        border-top: 0;
+        margin: 0 5px;
+
+        &:after {
+            top: 12px;
+            position: relative;
+        }
+    }
+
+    .slow {
+        &:after {
+            color: @negative-color;
+            content: 'Slow';
+        }
+    }
+
+    .average {
+        &:after {
+            color: #fff;
+            content: 'Average';
+        }
+    }
+
+    .fast {
+        &:after {
+            color: @primary-color;
+            content: 'Fast';
+        }
+    }
+}
