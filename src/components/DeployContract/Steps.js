@@ -156,11 +156,16 @@ NameContractStep = Form.create()(NameContractStep);
  *
  */
 class PricingStep extends BaseStepComponent {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
   /**
    * Method for calibrating the step counter for Price floor &
    * Price cap input fields
    *
    * @param (number)
+   * @return {number}
    */
   getStepValue(number) {
     // Taking care if the number passed is integer
@@ -178,10 +183,12 @@ class PricingStep extends BaseStepComponent {
   }
 
   componentDidMount() {
-    this.props.form.setFieldsValue({
-      priceCapSimplified: this.props.priceCap,
-      priceFloorSimplified: this.props.priceFloor
-    });
+    if (this.props.isSimplified) {
+      this.props.form.setFieldsValue({
+        priceCapSimplified: this.props.priceCap,
+        priceFloorSimplified: this.props.priceFloor
+      });
+    }
   }
 
   render() {
@@ -202,15 +209,15 @@ class PricingStep extends BaseStepComponent {
         >
           {this.props.isSimplified && (
             <div>
+              <h3 className="text-center">
+                Current Price of {this.props.symbolName}:{' '}
+                <span className="text-primary">{this.props.price}</span>
+              </h3>
               <Field
                 name="price"
                 initialValue={this.props.price}
                 form={this.props.form}
               />
-              <h3 className="text-center">
-                Current Price of {this.props.symbolName}:{' '}
-                <span className="text-primary">{this.props.price}</span>
-              </h3>
             </div>
           )}
           {!this.props.isSimplified && (
@@ -274,9 +281,7 @@ class PricingStep extends BaseStepComponent {
             ) : (
               <Field
                 name="priceCapSimplified"
-                initialValue={this.props.priceCap.toFixed(
-                  this.props.price.toString().split('.')[1].length
-                )}
+                initialValue={this.props.priceCap}
                 form={this.props.form}
                 hideLabel
                 stepValue={this.getStepValue(this.props.price)}
@@ -303,15 +308,13 @@ class PricingStep extends BaseStepComponent {
             ) : (
               <Field
                 name="priceFloorSimplified"
-                initialValue={this.props.priceFloor.toFixed(
-                  this.props.price.toString().split('.')[1].length
-                )}
+                initialValue={this.props.priceFloor}
                 form={this.props.form}
                 hideLabel
                 stepValue={this.getStepValue(this.props.price)}
               />
             )}
-            {this.props.isSimplified && (
+            {this.props.showPricingGraph && (
               <div className="m-top-30">
                 <PriceGraph
                   priceCap={this.props.form.getFieldValue('priceCapSimplified')}
@@ -535,8 +538,7 @@ class DeployStep extends BaseStepComponent {
 
     this.stepKeys = [
       'Deploy Contract',
-      'Deploy Collateral Pool',
-      'Link Contract',
+      'Deploy Collateral Pool & Link Contract',
       'Deployment Results'
     ];
 
@@ -551,29 +553,20 @@ class DeployStep extends BaseStepComponent {
             We want other's to be able to find your awesome new contract, and are adding it to our registry so it will show up in the Contract Explorer page.`
         }
       },
-      'Deploy Collateral Pool': {
-        key: 'Deploy Collateral Pool',
+      'Deploy Collateral Pool & Link Contract': {
+        key: 'Deploy Collateral Pool & Link Contract',
         stepNum: 2,
         completed: false,
         description: {
-          title: 'Deploying a new Collateral Pool for your contract',
-          explanation:
-            'Each MARKET Protocol Smart Contract needs its own collateral pool to ensure that all trades are always 100% collateralized and solvent!'
-        }
-      },
-      'Link Contract': {
-        key: 'Link Contract',
-        stepNum: 3,
-        completed: false,
-        description: {
-          title: 'Linking the Collateral Pool to your contract',
-          explanation:
-            'Finally, we must link your newly deployed contracts together to ensure all functionality is in place. Shortly, your contract will be all set for use. Happy Trading!'
+          title:
+            'Deploying a new Collateral Pool for your contract & linking the same to your contract',
+          explanation: `Each MARKET Protocol Smart Contract needs its own collateral pool to ensure that all trades are always 100% collateralized and solvent!.
+             Finally, we must link your newly deployed contracts together to ensure all functionality is in place. Shortly, your contract will be all set for use. Happy Trading!`
         }
       },
       'Deployment Results': {
         key: 'Deployment Results',
-        stepNum: 4,
+        stepNum: 3,
         completed: false
       }
     };
@@ -651,7 +644,9 @@ class DeployStep extends BaseStepComponent {
         currentStep: 'pending'
       }
     });
-    this.props.deployContract();
+    if (this.props.deployContract) {
+      this.props.deployContract();
+    }
   }
 
   onUpdateCurrStep(currentStep) {
@@ -667,12 +662,9 @@ class DeployStep extends BaseStepComponent {
       case 'collateralPoolDeploying':
         currStepNum = 2;
         break;
-      case 'linkContract':
-        currStepNum = 3;
-        break;
       case 'rejected':
       case 'fulfilled':
-        currStepNum = 4;
+        currStepNum = 3;
         break;
       default:
         currStepNum = 1;
@@ -885,9 +877,9 @@ class ExchangeStep extends BaseStepComponent {
           />
         </div>
         <BiDirectionalNav text="View Pricing Rules" {...this.props} />
-        <Link to={'/contract/deploy?mode=quick'}>
+        <a href={'/contract/deploy?mode=quick'}>
           <p className="m-top-40 m-bottom-40">View advanced deploy</p>
-        </Link>
+        </a>
       </Form>
     );
   }

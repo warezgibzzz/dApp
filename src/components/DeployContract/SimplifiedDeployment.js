@@ -118,6 +118,7 @@ class SimplifiedDeployment extends Component {
         onNextClicked={this.toNextStep.bind(this)}
         updateDeploymentState={this.setState.bind(this)}
         isSimplified={true}
+        showPricingGraph
         {...this.state}
         {...this.props}
       />,

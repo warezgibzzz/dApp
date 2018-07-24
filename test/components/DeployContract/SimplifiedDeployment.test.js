@@ -8,7 +8,8 @@ import {
   PricingStep,
   ExpirationStep,
   ExchangeStep,
-  DeployStep
+  DeployStep,
+  GasStep
 } from '../../../src/components/DeployContract/Steps';
 import SimplifiedDeployment from '../../../src/components/DeployContract/SimplifiedDeployment';
 
@@ -16,7 +17,8 @@ describe('SimplifiedDeployment', () => {
   const exchangeStep = 0;
   const pricingStep = 1;
   const expirationStep = 2;
-  const deployStep = 3;
+  const gasStep = 3;
+  const deployStep = 4;
 
   let simplifiedDeployment;
   let onDeployContractSpy;
@@ -28,7 +30,7 @@ describe('SimplifiedDeployment', () => {
   });
 
   it('should render 4 steps', () => {
-    expect(simplifiedDeployment.find(Steps.Step)).to.have.length(4);
+    expect(simplifiedDeployment.find(Steps.Step)).to.have.length(5);
   });
 
   it('should render ExchangeStep default', () => {
@@ -55,6 +57,11 @@ describe('SimplifiedDeployment', () => {
   it('should render ExpirationStep', () => {
     simplifiedDeployment.setState({ step: expirationStep });
     expect(simplifiedDeployment.find(ExpirationStep)).to.have.length(1);
+  });
+
+  it('should render GasStep', () => {
+    simplifiedDeployment.setState({ step: gasStep });
+    expect(simplifiedDeployment.find(GasStep)).to.have.length(1);
   });
 
   it('should reset to inital step', () => {

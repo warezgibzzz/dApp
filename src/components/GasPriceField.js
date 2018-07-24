@@ -73,9 +73,9 @@ class GasPriceField extends Component {
       this.props.onUpdateGasPrice(value);
     }
 
-    this.props.form.setFieldsValue({
-      gasPrice: value
-    });
+    // this.props.form.setFieldsValue({
+    //   gasPrice: value
+    // });
   }
 
   updateNetworkCondition(data) {

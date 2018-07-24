@@ -76,11 +76,6 @@ function ContractFormFullWidthCol(props) {
  *
  */
 class QuickDeployment extends Component {
-  handleReset(event) {
-    event.preventDefault();
-    this.props.form.resetFields();
-  }
-
   handleDeploy(event) {
     if (event) event.preventDefault();
 
@@ -95,7 +90,7 @@ class QuickDeployment extends Component {
           fieldsValue['expirationTimeStamp'].valueOf() / 1000
         )
       };
-
+      window.scrollTo(0, 0);
       this.props.onDeployContract(values);
     });
   }
@@ -307,23 +302,29 @@ class QuickDeployment extends Component {
 
         {/* show contract deployment flow if contract is deploying */
         null === currentStep ? null : (
-          <DeployStep
-            network={this.props.network}
-            containerStyles={{ padding: '20px 10px 20px 10px' }}
-            history={this.props.history}
-            showErrorMessage={this.props.showErrorMessage}
-            showSuccessMessage={this.props.showSuccessMessage}
-            onDeployContract={this.handleDeploy.bind(this)}
-            onResetDeploymentState={this.props.onResetDeploymentState}
-            loading={this.props.loading}
-            contract={this.props.contract}
-            error={this.props.error}
-            currentStep={this.props.currentStep}
-            contractDeploymentTxHash={this.props.contractDeploymentTxHash}
-            collateralPoolDeploymentTxHash={
-              this.props.collateralPoolDeploymentTxHash
-            }
-          />
+          <div className="page">
+            <Row type="flex" justify="center" style={{ margin: '20px 0' }}>
+              <Col span={18}>
+                <DeployStep
+                  network={this.props.network}
+                  containerStyles={{ padding: '20px 10px 20px 10px' }}
+                  history={this.props.history}
+                  showErrorMessage={this.props.showErrorMessage}
+                  showSuccessMessage={this.props.showSuccessMessage}
+                  onDeployContract={this.handleDeploy.bind(this)}
+                  onResetDeploymentState={this.props.onResetDeploymentState}
+                  loading={this.props.loading}
+                  contract={this.props.contract}
+                  error={this.props.error}
+                  currentStep={this.props.currentStep}
+                  contractDeploymentTxHash={this.props.contractDeploymentTxHash}
+                  collateralPoolDeploymentTxHash={
+                    this.props.collateralPoolDeploymentTxHash
+                  }
+                />
+              </Col>
+            </Row>
+          </div>
         )}
       </div>
     );

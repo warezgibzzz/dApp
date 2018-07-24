@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
-import { Alert, Button, Form, Input, InputNumber } from 'antd';
-import { mount, shallow, render } from 'enzyme';
+import { Button, Form, Input, InputNumber } from 'antd';
+import { mount } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
 
@@ -15,7 +15,6 @@ import {
   ExchangeStep
 } from '../../../src/components/DeployContract/Steps';
 import Field from '../../../src/components/DeployContract/DeployContractField';
-import { PriceGraph } from '../../../src/components/DeployContract/PriceGraph';
 
 describe('NameContractStep', () => {
   let nameContractStep;
@@ -33,8 +32,8 @@ describe('NameContractStep', () => {
     expect(nameContractStep.find(Input)).to.have.length(2);
   });
 
-  it('should have a prev and next button', () => {
-    expect(nameContractStep.find(Button)).to.have.length(2);
+  it('should have a next button', () => {
+    expect(nameContractStep.find(Button)).to.have.length(1);
   });
 });
 
@@ -42,7 +41,10 @@ describe('PricingStep', () => {
   let pricingStep;
 
   beforeEach(() => {
-    pricingStep = render(<PricingStep />);
+    pricingStep = mount(<PricingStep />);
+    pricingStep.setProps({
+      step: 3
+    });
   });
 
   it('renders without crashing', () => {
@@ -63,20 +65,28 @@ describe('PricingStep Simplified', () => {
   let pricingStep;
   let updateDeploymentStateSpy;
   let onNextClickedSpy;
+  const priceFloor = 1;
+  const price = 2;
+  const priceCap = 3;
 
   beforeEach(() => {
     updateDeploymentStateSpy = sinon.spy();
     onNextClickedSpy = sinon.spy();
-    pricingStep = render(
+    pricingStep = mount(
       <PricingStep
         updateDeploymentState={updateDeploymentStateSpy}
         onNextClicked={onNextClickedSpy}
         isSimplified
+        price={price}
+        step={2}
+        priceCap={priceCap}
+        priceFloor={priceFloor}
       />
     );
   });
 
-  it('should display four inputs felds to accept price cap and price floor', () => {
+  it('should display two fields to accept price cap and price floor', () => {
+    const pricingStep = mount(<PricingStep isSimplified price={price} />);
     expect(pricingStep.find(InputNumber)).to.have.length(2);
   });
 
@@ -90,7 +100,6 @@ describe('PricingStep Simplified', () => {
       priceCap: 1.5,
       priceFloor: 0.4
     });
-
     pricingStep.find(Form).simulate('submit');
     expect(updateDeploymentStateSpy).to.have.property('callCount', 0);
     expect(onNextClickedSpy).to.have.property('callCount', 0);
@@ -102,7 +111,6 @@ describe('PricingStep Simplified', () => {
       priceCap: 1.6,
       priceFloor: 0.6
     });
-
     pricingStep.find(Form).simulate('submit');
     expect(updateDeploymentStateSpy).to.have.property('callCount', 0);
     expect(onNextClickedSpy).to.have.property('callCount', 0);
@@ -133,12 +141,6 @@ describe('ExpirationStep', () => {
 
   it('renders guided display 0 input field and 2 input number fields', () => {
     expect(expirationStep.find(Input)).to.have.length(0);
-    expect(expirationStep.find(InputNumber)).to.have.length(2);
-  });
-
-  it('renders simplified display 1 input field and 2 input number fields', () => {
-    expirationStep.setProps({ isSimplified: true });
-    expect(expirationStep.find(Input)).to.have.length(1);
     expect(expirationStep.find(InputNumber)).to.have.length(2);
   });
 
@@ -219,7 +221,7 @@ describe('DeployStep', () => {
     showErrorMessageSpy = sinon.spy();
     showSuccessMessageSpy = sinon.spy();
 
-    deployStep = shallow(
+    deployStep = mount(
       <DeployStep
         onDeployContract={onDeployContractSpy}
         onResetDeploymentState={onResetDeploymentStateSpy}
@@ -254,9 +256,13 @@ describe('DeployStep', () => {
 
   it('should call props.onResetDeploymentState and props.onDeployContract when the retry button is clicked', () => {
     let instance = deployStep.instance();
-    deployStep.find('#retry-button').simulate('click');
-    expect(onResetDeploymentStateSpy).to.have.property('callCount', 1);
-    expect(onDeployContractSpy).to.have.property('callCount', 1);
+    deployStep.setProps({ currentStep: 'rejected' });
+    deployStep
+      .find('#retry-button')
+      .first()
+      .simulate('click');
+    expect(onResetDeploymentStateSpy.callCount).to.equal(1);
+    expect(onDeployContractSpy).to.have.property('callCount', 0);
   });
 
   it('should call onUpdateTxHashes when props change, updating txHashes state var with new tx hash values', () => {
@@ -308,6 +314,7 @@ describe('ExchangeStep', () => {
     const value = 'KRA';
     exchangeStep
       .find(Field)
+      .first()
       .getElement()
       .props.onChange(value);
     expect(wrappedComponentRef.state.exchangeApi).to.equal(value);

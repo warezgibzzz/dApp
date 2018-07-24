@@ -198,7 +198,7 @@ describe('QuickDeployment', () => {
 
     const dateFormated = moment()
       .add(2, 'days')
-      .format('YYYY-MM-DD HH:mm:ss ([UTC/GMT]Z)');
+      .format('YYYY-MM-DD HH:mm:ss');
 
     quickDeployment.find('span#expirationTimeStamp input').simulate('click');
 

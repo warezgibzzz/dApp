@@ -15,6 +15,7 @@ export class PriceGraph extends React.Component {
     this.updateCanvas();
     this.setDPI(this.refs.canvas, 300);
   }
+
   componentDidUpdate() {
     this.updateCanvas();
   }
@@ -22,33 +23,35 @@ export class PriceGraph extends React.Component {
   componentWillReceiveProps() {
     this.updateCanvas();
   }
+
   updateCanvas() {
     const ctx = this.refs.canvas.getContext('2d');
-    ctx.clearRect(0, 0, 300, 160);
-    line(ctx, 20, '#ffffff', 'Price Cap');
-    line(ctx, 150, '#ffffff', 'Price Floor');
+    if (ctx) {
+      ctx.clearRect(0, 0, 300, 160);
+      line(ctx, 20, '#ffffff', 'Price Cap');
+      line(ctx, 150, '#ffffff', 'Price Floor');
 
-    let pY =
-      150 -
-      130 /
-        100 *
-        ((this.props.price - this.props.priceFloor) *
-          100 /
-          (this.props.priceCap - this.props.priceFloor));
-    pY = pY >= 135 ? 135 : pY <= 35 ? 35 : pY;
-    line(ctx, pY, '#00FFE2', this.props.price);
+      let pY =
+        150 -
+        (130 / 100) *
+          (((this.props.price - this.props.priceFloor) * 100) /
+            (this.props.priceCap - this.props.priceFloor));
+      pY = pY >= 135 ? 135 : pY <= 35 ? 35 : pY;
+      line(ctx, pY, '#00FFE2', this.props.price);
+    }
   }
   setDPI(canvas, dpi) {
     canvas.style.width = canvas.style.width || canvas.width + 'px';
     canvas.style.height = canvas.style.height || canvas.height + 'px';
-    var scaleFactor = dpi / 96;
-    var width = parseFloat(canvas.style.width);
-    var height = parseFloat(canvas.style.height);
-    var oldScale = canvas.width / width;
-    var backupScale = scaleFactor / oldScale;
-    var backup = canvas.cloneNode(false);
+    let scaleFactor = dpi / 96;
+    let width = parseFloat(canvas.style.width);
+    let height = parseFloat(canvas.style.height);
+    let oldScale = canvas.width / width;
+    let backupScale = scaleFactor / oldScale;
+    let backup = canvas.cloneNode(false);
+
     backup.getContext('2d').drawImage(canvas, 0, 0);
-    var ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext('2d');
     canvas.width = Math.ceil(width * scaleFactor);
     canvas.height = Math.ceil(height * scaleFactor);
     ctx.setTransform(backupScale, 0, 0, backupScale, 0, 0);

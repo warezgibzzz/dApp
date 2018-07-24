@@ -3,15 +3,17 @@ import { render } from 'enzyme';
 import { expect } from 'chai';
 import { PriceGraph } from '../../../src/components/DeployContract/PriceGraph';
 
-describe("Price cap/floor graph", () => {
+describe('Price cap/floor graph', () => {
   let wrapper;
   const priceFloor = 1;
   const price = 2;
   const priceCap = 3;
 
   beforeAll(() => {
-    wrapper = render((<PriceGraph priceFloor={priceFloor} price={price} priceCap={priceCap} />))
-  })
+    wrapper = render(
+      <PriceGraph priceFloor={priceFloor} price={price} priceCap={priceCap} />
+    );
+  });
 
   it('renders the canvas', () => {
     expect(wrapper[0].name).to.equal('canvas');
