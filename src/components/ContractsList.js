@@ -236,9 +236,18 @@ class ContractsList extends Component {
     if (!this.state.contracts) {
       return <Loader />;
     }
+    let table = (
+      <Table
+        columns={columns}
+        dataSource={this.state.contracts}
+        onChange={this.handleChange}
+        pagination={{ pageSize: 25 }}
+        // scroll={{ y: '60vh' }}
+      />
+    );
 
     if (this.state.contracts.length === 0) {
-      //  return <div>No contracts found</div>;
+      table = <div>No contracts found</div>;
     }
 
     return (
@@ -284,15 +293,7 @@ class ContractsList extends Component {
           </Col>
         </Row>
 
-        <Row style={{ padding: '0px 20px' }}>
-          <Table
-            columns={columns}
-            dataSource={this.state.contracts}
-            onChange={this.handleChange}
-            pagination={{ pageSize: 25 }}
-            // scroll={{ y: '60vh' }}
-          />
-        </Row>
+        <Row style={{ padding: '0px 20px' }}>{table}</Row>
       </div>
     );
   }
