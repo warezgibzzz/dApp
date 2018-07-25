@@ -131,6 +131,16 @@ code {
     .ant-calendar-picker-container {
         border: 1px solid @primary-color;
     }
+    .ant-pagination-prev {
+        margin-right: 140px;
+    }
+    .ant-pagination-prev:after {
+        position: absolute;
+        margin-top: -30px;
+        margin-left: 30px;
+        width: 100px;
+        font-family: 'Work Sans';
+    }
     .ant-message-notice-content {
         background: #fff;
     }
@@ -188,8 +198,16 @@ code {
         }
     }
     .contractPage {
-        .ant-table {
+        .ant-input::placeholder {
+            color: white;
+        }
+        .ant-select-selection__placeholder {
+            font-weight: 400;
+        }
+        .ant .ant-table {
             max-width: 1192px;
+            font-size: 18px;
+            font-weight: light;
         }
         .ant-table-row {
             background-color: fade(#fff, 0%);
@@ -225,6 +243,9 @@ code {
         }
         .ant-table-thead > tr > th {
             border-bottom: none;
+            color: #cccccc;
+            font-size: 14px;
+            font-weight: 500;
         }
         .ant-table-pagination.ant-pagination {
             float: none;
@@ -261,6 +282,9 @@ code {
         }
         .custom-sort-arrow-ascend {
             margin-top: 6px;
+        }
+        .ant-pagination-item {
+            display: none;
         }
     }
 }

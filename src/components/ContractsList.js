@@ -25,7 +25,9 @@ class ContractsList extends Component {
   state = {
     filters: null,
     sort: { columnKey: 'CONTRACT_NAME', order: 'descend' },
-    contracts: this.props.contracts
+    contracts: this.props.contracts,
+    page: 1,
+    pageSize: 25
   };
 
   componentDidMount() {
@@ -51,9 +53,11 @@ class ContractsList extends Component {
   }
 
   handleChange = (pagination, filters, sorter) => {
+    console.log(pagination);
     this.setState({
       filters: filters,
-      sort: sorter
+      sort: sorter,
+      page: pagination.current
     });
   };
 
@@ -85,6 +89,12 @@ class ContractsList extends Component {
     sort = sort || {};
     filters = filters || {};
     contracts = contracts || [];
+    let pageInfo =
+      this.state.page +
+      '-' +
+      Math.min(this.state.page * this.state.pageSize, contracts.length) +
+      ' of ' +
+      contracts.length.toLocaleString();
 
     let customSort = (text, columnKey) => {
       let icon = '';
@@ -102,15 +112,14 @@ class ContractsList extends Component {
         <span
           role="button"
           tabIndex="0"
-          style={{ outline: 'none', userSelect: 'none' }}
+          style={{ outline: 'none', userSelect: 'none', width: '100%' }}
           onKeyPress={e => {}}
           onClick={() => {
             var newsort = { columnKey: columnKey, order: newOrder };
             this.setState({ sort: newsort });
           }}
         >
-          {' '}
-          {text} {icon}{' '}
+          {text} {icon}
         </span>
       );
     };
@@ -270,7 +279,7 @@ class ContractsList extends Component {
         columns={columns}
         dataSource={this.state.contracts}
         onChange={this.handleChange}
-        pagination={{ pageSize: 25 }}
+        pagination={{ pageSize: this.state.pageSize }}
         ref="table"
         // scroll={{ y: '60vh' }}
       />
@@ -322,6 +331,18 @@ class ContractsList extends Component {
             </Select>
           </Col>
         </Row>
+        <style
+          dangerouslySetInnerHTML={{
+            __html:
+              `
+          .ant-pagination-prev:after {
+            content:"` +
+              pageInfo +
+              `"
+          }
+        `
+          }}
+        />
 
         <Row style={{ padding: '0px 20px' }}>{table}</Row>
       </div>
