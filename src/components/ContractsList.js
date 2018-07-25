@@ -32,8 +32,8 @@ class ContractsList extends Component {
     selectedContractFilter: 'All Contracts',
     allContractsFilters: {
       'All Contracts': contract => contract,
-      'high balance': contract => contract.collateralPoolBalance > 0.5,
-      'expiring soon': contract =>
+      'High Balance': contract => contract.collateralPoolBalance > 0.5,
+      'Expiring Soon': contract =>
         moment.unix(contract.EXPIRATION).isBefore(moment().add(7, 'd'))
     }
   };
