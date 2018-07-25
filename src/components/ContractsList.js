@@ -1,4 +1,4 @@
-import { Col, Input, Row, Table, Select, Popover } from 'antd';
+import { Col, Input, Row, Table, Select, Popover, Icon } from 'antd';
 import { formatedTimeFrom } from '../util/utils';
 import React, { Component } from 'react';
 
@@ -24,19 +24,21 @@ const Option = Select.Option;
 class ContractsList extends Component {
   state = {
     filters: null,
-    sort: null,
+    sort: { columnKey: 'CONTRACT_NAME', order: 'descend' },
     contracts: this.props.contracts
   };
 
-  componentWillMount() {
+  componentDidMount() {
     if (!this.props.contracts) {
       this.props.onLoad();
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.contracts !== this.state.contracts) {
-      this.setState({ contracts: nextProps.contracts });
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.contracts !== prevState.contracts) {
+      return { contracts: nextProps.contracts };
+    } else {
+      return {};
     }
   }
 
@@ -84,15 +86,42 @@ class ContractsList extends Component {
     filters = filters || {};
     contracts = contracts || [];
 
+    let customSort = (text, columnKey) => {
+      let icon = '';
+      let newOrder = 'descend';
+      if (sort.columnKey === columnKey) {
+        icon = (
+          <Icon
+            className={'custom-sort-arrow custom-sort-arrow-' + sort.order}
+            type={'caret-' + (sort.order === 'ascend' ? 'up' : 'down')}
+          />
+        );
+        newOrder = sort.order === 'ascend' ? 'descend' : 'ascend';
+      }
+      return (
+        <span
+          role="button"
+          tabIndex="0"
+          style={{ outline: 'none', userSelect: 'none' }}
+          onKeyPress={e => {}}
+          onClick={() => {
+            var newsort = { columnKey: columnKey, order: newOrder };
+            this.setState({ sort: newsort });
+          }}
+        >
+          {' '}
+          {text} {icon}{' '}
+        </span>
+      );
+    };
     let collateralTokenSymbols = [
       ...new Set(contracts.map(item => item.COLLATERAL_TOKEN_SYMBOL))
     ].map(item => {
       return { value: item, text: item };
     });
-    console.log(filters);
     const columns = [
       {
-        title: 'Name',
+        title: customSort('Name', 'CONTRACT_NAME'),
         dataIndex: 'CONTRACT_NAME',
         width: 200,
         sorter: (a, b) => {
@@ -159,15 +188,15 @@ class ContractsList extends Component {
       },
 
       {
-        title: 'Balance',
+        title: customSort('Balance', 'collateralPoolBalance'),
         dataIndex: 'collateralPoolBalance',
-        width: 120,
+        width: 150,
 
         sorter: (a, b) => a.collateralPoolBalance - b.collateralPoolBalance,
         sortOrder: sort.columnKey === 'collateralPoolBalance' && sort.order
       },
       {
-        title: 'Expiration',
+        title: customSort('Expiration', 'EXPIRATION'),
         dataIndex: 'EXPIRATION',
         width: 200,
         render: (text, row, index) => {
@@ -222,7 +251,7 @@ class ContractsList extends Component {
               placement={'bottomLeft'}
               trigger="click"
             >
-              <div role="button" className="dotdotdot" tabIndex="0" Save>
+              <div role="button" className="dotdotdot" tabIndex="0">
                 <span className="dot" />
                 <span className="dot" />
                 <span className="dot" />
@@ -242,10 +271,11 @@ class ContractsList extends Component {
         dataSource={this.state.contracts}
         onChange={this.handleChange}
         pagination={{ pageSize: 25 }}
+        ref="table"
         // scroll={{ y: '60vh' }}
       />
     );
-
+    this.table = table;
     if (this.state.contracts.length === 0) {
       table = <div>No contracts found</div>;
     }
