@@ -6,6 +6,7 @@ import '../less/ContractsList.less';
 import Loader from './Loader';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
+import moment from 'moment';
 const Search = Input.Search;
 // Example Contract
 /* {
@@ -27,7 +28,14 @@ class ContractsList extends Component {
     sort: { columnKey: 'CONTRACT_NAME', order: 'descend' },
     contracts: this.props.contracts,
     page: 1,
-    pageSize: 25
+    pageSize: 25,
+    selectedContractFilter: 'All Contracts',
+    allContractsFilters: {
+      'All Contracts': contract => contract,
+      'high balance': contract => contract.collateralPoolBalance > 0.5,
+      'expiring soon': contract =>
+        moment.unix(contract.EXPIRATION).isBefore(moment().add(7, 'd'))
+    }
   };
 
   componentDidMount() {
@@ -75,7 +83,10 @@ class ContractsList extends Component {
         }
         return record;
       })
-      .filter(record => !!record);
+      .filter(record => !!record)
+      .filter(
+        this.state.allContractsFilters[this.state.selectedContractFilter]
+      );
     this.setState({
       [searchVisibleKey]: false,
       [filteredKey]: !!searchText,
@@ -306,7 +317,7 @@ class ContractsList extends Component {
               showArrow={true}
               optionFilterProp="children"
               onChange={value => {
-                this.setState({ CONTRACT_NAME_SEARCH_TEXT: value }, () => {
+                this.setState({ selectedContractFilter: value }, () => {
                   this.onSearch(
                     'CONTRACT_NAME',
                     'CONTRACT_NAME_SEARCH_TEXT',
@@ -316,9 +327,9 @@ class ContractsList extends Component {
                 });
               }}
             >
-              {contracts.map(e => (
-                <Option key={e.key} value={e.CONTRACT_NAME}>
-                  {e.CONTRACT_NAME}
+              {Object.keys(this.state.allContractsFilters).map(e => (
+                <Option key={'filterOption' + e} value={e}>
+                  {e}
                 </Option>
               ))}
             </Select>
