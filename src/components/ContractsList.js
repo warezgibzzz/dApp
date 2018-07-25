@@ -289,8 +289,13 @@ class ContractsList extends Component {
 
     return (
       <div className="page contractPage" style={{ margin: '0 13%' }}>
-        <Row style={{ padding: '30px 20px' }} gutter={16}>
-          <Col span={8}>
+        <Row
+          type="flex"
+          justify="start"
+          style={{ padding: '30px 20px' }}
+          gutter={16}
+        >
+          <Col span={10}>
             <div>
               <Search
                 ref={ele => (this.contractNameSearchInput = ele)}
@@ -310,9 +315,9 @@ class ContractsList extends Component {
               />
             </div>
           </Col>
-          <Col span={4}>
+          <Col span={6}>
             <Select
-              style={{ width: 200 }}
+              style={{ width: '100%' }}
               placeholder="All Contracts"
               showArrow={true}
               optionFilterProp="children"
@@ -334,10 +339,10 @@ class ContractsList extends Component {
               ))}
             </Select>
           </Col>
-          <Col span={4}>
+          <Col span={6}>
             <Select
               mode="multiple"
-              style={{ width: 200 }}
+              style={{ width: '100%' }}
               placeholder="All Tokens"
               showArrow={true}
               optionFilterProp="children"
