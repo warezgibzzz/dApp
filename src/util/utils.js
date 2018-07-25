@@ -3,6 +3,9 @@ import abi from 'human-standard-token-abi';
 
 import { NULL_ADDRESS } from '../constants';
 
+import moment from 'moment';
+
+
 /**
  *
  * @param priceFloor
@@ -44,6 +47,34 @@ export const calculateCollateral = function(
  * @param errorMessage
  * @return getMetamaskError
  */
+export const formatedTimeFrom = function(text) {
+  var now = moment();
+  var then = moment.unix(text);
+  var ago = '';
+  var ms = moment(then, 'DD/MM/YYYY HH:mm:ss').diff(
+    moment(now, 'DD/MM/YYYY HH:mm:ss')
+  );
+  if (ms < 0) {
+    ms = moment(now, 'DD/MM/YYYY HH:mm:ss').diff(
+      moment(then, 'DD/MM/YYYY HH:mm:ss')
+    );
+    ago = ' ago';
+  }
+
+  var d = moment.duration(ms);
+
+  return [
+    d.days(),
+    'd ',
+    d.hours(),
+    'h ',
+    d.minutes(),
+    'm ',
+    d.days() < 1 ? d.seconds() : '',
+    d.days() < 1 ? 's ' : '',
+    ago
+  ].join('');
+};
 export const getMetamaskError = function(errorMessage) {
   if (errorMessage.indexOf('User denied transaction') !== -1)
     return 'User denied transaction';

@@ -131,6 +131,16 @@ code {
     .ant-calendar-picker-container {
         border: 1px solid @primary-color;
     }
+    .ant-pagination-prev {
+        margin-right: 140px;
+    }
+    .ant-pagination-prev:after {
+        position: absolute;
+        margin-top: -30px;
+        margin-left: 30px;
+        width: 100px;
+        font-family: 'Work Sans';
+    }
     .ant-message-notice-content {
         background: #fff;
     }
@@ -160,6 +170,128 @@ code {
     .ant-calendar-last-month-cell .ant-calendar-date,
     .ant-calendar-next-month-btn-day .ant-calendar-date {
         color: rgba(255, 255, 255, 0.25);
+    }
+
+    .dot {
+        height: 6px;
+        width: 6px;
+        margin: 2px;
+        background-color: #666;
+        border-radius: 50%;
+        display: inline-block;
+    }
+    .contractPopOver {
+        max-width: 500px !important;
+        color: white;
+        .ant-popover-inner {
+            color: white;
+            background-color: white;
+            border: 2px solid #00ffe2;
+        }
+        .ant-popover-inner-content {
+            background-color: black;
+            color: white;
+            padding: 0px;
+        }
+        .ant-popover-arrow {
+            display: none;
+        }
+    }
+    .contractPage {
+        .ant-input::placeholder {
+            color: white;
+        }
+        .ant-select-selection__placeholder {
+            font-weight: 400;
+            color: white;
+        }
+        .ant .ant-table {
+            max-width: 1192px;
+            font-size: 18px;
+        }
+        .ant-table-body {
+            font-size: 18px;
+        }
+        .ant-table-row {
+            background-color: fade(#fff, 0%);
+        }
+        .ant-table-row:nth-child(odd) {
+            background-color: #000000;
+        }
+        .ant-table-row:nth-child(even) {
+            background-color: fade(#fff, 0%);
+        }
+        .ant-table-row td {
+            border-bottom: none;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100px;
+        }
+
+        .ant-select::before {
+            content: '';
+            border: solid #04b9a0;
+            border-width: 0 2px 2px 0;
+            display: inline-block;
+            padding: 4px;
+            vertical-align: middle;
+            position: absolute;
+            right: 12px;
+            top: 17px;
+
+            z-index: 1;
+            transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
+        }
+        .ant-table-thead > tr > th {
+            border-bottom: none;
+            color: #cccccc;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .ant-table-pagination.ant-pagination {
+            float: none;
+            text-align: center;
+        }
+        .ant-table-thead > tr > th.ant-table-column-sort {
+            background-color: fade(#fff, 0%);
+        }
+        .dotdotdot {
+            outline: none;
+        }
+        .ant-popover-open {
+            border: 0;
+        }
+        .ant-popover-open .dot {
+            background-color: #00ffe2;
+        }
+        .ant-pagination-item-link {
+            background-color: black;
+            color: #00e2c1;
+        }
+        .ant-table-column-sorter-up {
+            display: none;
+        }
+        .ant-table-column-sorter-down {
+            display: none;
+        }
+        .custom-sort-arrow {
+            color: #00e2c1;
+            font-size: 10px;
+            position: absolute;
+            margin-top: 3px;
+            margin-left: 5px;
+        }
+        .ant-select-arrow {
+            display: none;
+        }
+        .custom-sort-arrow-ascend {
+            margin-top: 6px;
+        }
+        .ant-pagination-item {
+            display: none;
+        }
     }
 }
 
