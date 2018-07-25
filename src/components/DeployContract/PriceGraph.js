@@ -16,12 +16,13 @@ export class PriceGraph extends React.Component {
     this.setDPI(this.refs.canvas, 300);
   }
 
-  componentDidUpdate() {
-    this.updateCanvas();
-  }
-
-  componentWillReceiveProps() {
-    this.updateCanvas();
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.priceCap !== prevProps.priceCap ||
+      this.props.priceFloor !== prevProps.priceFloor
+    ) {
+      this.updateCanvas();
+    }
   }
 
   updateCanvas() {
