@@ -185,8 +185,8 @@ class PricingStep extends BaseStepComponent {
   componentDidMount() {
     if (this.props.isSimplified) {
       this.props.form.setFieldsValue({
-        priceCapSimplified: this.props.priceCap,
-        priceFloorSimplified: this.props.priceFloor
+        priceCapSimplified: this.props.priceCapSimplified,
+        priceFloorSimplified: this.props.priceFloorSimplified
       });
     }
   }
@@ -217,6 +217,7 @@ class PricingStep extends BaseStepComponent {
                 name="price"
                 initialValue={this.props.price}
                 form={this.props.form}
+                style={{ display: 'none' }}
               />
             </div>
           )}
@@ -281,7 +282,7 @@ class PricingStep extends BaseStepComponent {
             ) : (
               <Field
                 name="priceCapSimplified"
-                initialValue={this.props.priceCap}
+                initialValue={this.props.priceCapSimplified}
                 form={this.props.form}
                 hideLabel
                 stepValue={this.getStepValue(this.props.price)}
@@ -308,7 +309,7 @@ class PricingStep extends BaseStepComponent {
             ) : (
               <Field
                 name="priceFloorSimplified"
-                initialValue={this.props.priceFloor}
+                initialValue={this.props.priceFloorSimplified}
                 form={this.props.form}
                 hideLabel
                 stepValue={this.getStepValue(this.props.price)}

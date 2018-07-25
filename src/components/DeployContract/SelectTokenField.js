@@ -73,8 +73,8 @@ class SelectTokenField extends React.Component {
       oracleQuery: exchange.genOracleQuery(symbol),
       price: symbol.price * 1.0, // force number
       priceDecimalPlaces: symbol.priceDecimalPlaces,
-      priceCap: symbol.price * 1.5,
-      priceFloor: symbol.price * 0.5,
+      priceCapSimplified: symbol.price * 1.5,
+      priceFloorSimplified: symbol.price * 0.5,
       qtyMultiplier: 10 ** (18 - symbol.priceDecimalPlaces),
       oracleDataSource: 'URL'
     });
