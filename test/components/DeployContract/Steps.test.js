@@ -294,13 +294,16 @@ describe('ExchangeStep', () => {
   let exchangeStep;
   let updateDeploymentStateSpy;
   let wrappedComponentRef;
+  let resetStateSpy;
   beforeEach(() => {
     updateDeploymentStateSpy = sinon.spy();
+    resetStateSpy = sinon.spy();
 
     exchangeStep = mount(
       <ExchangeStep
         wrappedComponentRef={inst => (wrappedComponentRef = inst)}
         updateDeploymentState={updateDeploymentStateSpy}
+        resetState={resetStateSpy}
       />
     );
   });
@@ -311,7 +314,7 @@ describe('ExchangeStep', () => {
   });
 
   it('should change exchangeApi state when select api', () => {
-    const value = 'KRA';
+    const value = 'BIN';
     exchangeStep
       .find(Field)
       .first()

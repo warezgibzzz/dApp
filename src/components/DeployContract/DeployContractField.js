@@ -434,7 +434,11 @@ const fieldSettingsByName = {
       return (
         <Select onChange={onChange}>
           {ExchangeSources.map(exchange => (
-            <Option key={exchange.key} value={exchange.key}>
+            <Option
+              key={exchange.key}
+              value={exchange.key}
+              disabled={exchange.key === 'KRA'}
+            >
               {exchange.name}
             </Option>
           ))}
@@ -453,9 +457,9 @@ const fieldSettingsByName = {
     ],
     extra: 'Available token pairs',
 
-    component: ({ pairs }) => {
+    component: ({ pairs, onChange }) => {
       return (
-        <RadioGroup>
+        <RadioGroup onChange={onChange}>
           {pairs.map((pair, i) => (
             <Radio key={i} value={pair}>
               {pair} Pairs

@@ -208,7 +208,7 @@ class PricingStep extends BaseStepComponent {
           }
         >
           {this.props.isSimplified && (
-            <div>
+            <div id="pricing-step-header">
               <h3 className="text-center">
                 Current Price of {this.props.symbolName}:{' '}
                 <span className="text-primary">{this.props.price}</span>
@@ -836,6 +836,32 @@ class ExchangeStep extends BaseStepComponent {
     this.state = { exchangeApi: 'BIN' };
   }
 
+  onChangeExchange(exchangeApi) {
+    this.props.resetState();
+    this.setState({ exchangeApi });
+    this.props.form.resetFields([
+      'tokenPairOptions',
+      'tokenPair',
+      'contractName',
+      'priceFloorSimplified',
+      'priceCapSimplified',
+      'price'
+    ]);
+  }
+
+  onChangeTokenPair() {
+    this.props.form.resetFields(['tokenPair', 'contractName']);
+    this.props.resetState();
+    this.props.form.resetFields([
+      'tokenPairOptions',
+      'tokenPair',
+      'contractName',
+      'priceFloorSimplified',
+      'priceCapSimplified',
+      'price'
+    ]);
+  }
+
   render() {
     const { form, contractName } = this.props;
 
@@ -850,7 +876,7 @@ class ExchangeStep extends BaseStepComponent {
         <div className="step-inner-container">
           <h2>Exchange API</h2>
           <Field
-            onChange={exchangeApi => this.setState({ exchangeApi })}
+            onChange={this.onChangeExchange.bind(this)}
             name="exchangeApi"
             initialValue={this.state.exchangeApi}
             form={this.props.form}
@@ -861,6 +887,7 @@ class ExchangeStep extends BaseStepComponent {
             form={this.props.form}
             pairs={['ETH', 'USDT']}
             initialValue={'ETH'}
+            onChange={this.onChangeTokenPair.bind(this)}
           />
           <SelectTokenField
             name="tokenPair"

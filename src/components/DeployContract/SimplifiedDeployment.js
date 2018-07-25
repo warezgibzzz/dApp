@@ -43,6 +43,8 @@ class SimplifiedDeployment extends Component {
       collateralTokenAddress: '',
       priceFloor: '',
       priceCap: '',
+      priceFloorSimplified: '',
+      priceCapSimplified: '',
       priceDecimalPlaces: '',
       qtyMultiplier: '',
       expirationTimeStamp: '',
@@ -71,6 +73,25 @@ class SimplifiedDeployment extends Component {
     this.setState({
       step: 0,
       transitionDirection: 'prev'
+    });
+  }
+
+  resetState() {
+    this.setState({
+      contractName: '',
+      quoteAsset: '',
+      collateralTokenAddress: '',
+      priceFloor: '',
+      priceCap: '',
+      price: '',
+      priceFloorSimplified: '',
+      priceCapSimplified: '',
+      priceDecimalPlaces: '',
+      qtyMultiplier: '',
+      expirationTimeStamp: '',
+      oracleDataSource: '',
+      oracleQuery: '',
+      symbolName: ''
     });
   }
 
@@ -108,6 +129,7 @@ class SimplifiedDeployment extends Component {
         onNextClicked={this.toNextStep.bind(this)}
         updateDeploymentState={this.setState.bind(this)}
         isSimplified={true}
+        resetState={this.resetState.bind(this)}
         {...this.state}
         {...this.props}
       />,
