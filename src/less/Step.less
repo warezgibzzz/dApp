@@ -37,3 +37,121 @@
     padding: 12px 20px;
     margin: 16px 0;
 }
+
+.step-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.step-inner-container {
+    padding: 50px 100px;
+    border-radius: 4px;
+    background-color: rgb(17, 22, 28);
+    border: solid 2px #0f141b;
+    width: 480px;
+}
+
+// Step button navigation
+.step-back-button {
+    border: 0;
+    padding: 0;
+    color: #cccccc;
+    position: absolute;
+    left: 0;
+}
+.step-action-button {
+    padding: 0 35px;
+}
+.step-button-nav-container {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+// Pricing Step
+#pricing-step-header {
+    .ant-form-item {
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+}
+
+// Deploy contract
+#deploy-step {
+    .ant-steps-vertical .ant-steps-item-content {
+        min-height: 80px;
+    }
+    .deploy-step-description {
+        word-break: break-word;
+    }
+    .ant-collapse-header {
+        color: #00e2c1;
+        font-size: 10px;
+        padding: 0;
+    }
+    .ant-collapse-content-box {
+        padding: 20px 0 0 0;
+    }
+
+    .contract-result-input-container {
+        input {
+            width: 70%;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        button {
+            padding: 0px 15px;
+            border-radius: 0;
+            border-right-color: #0f141b;
+            font-size: 16px;
+        }
+        a {
+            font-size: 16px;
+            padding: 0px 15px;
+            border-left-color: #0f141b;
+            border-radius: 0 4px 4px 0;
+        }
+    }
+}
+.example-hint-text {
+    font-family: Courier;
+}
+.speed-container {
+    display: flex;
+
+    > div {
+        text-align: center;
+        flex: 1;
+        height: 12px;
+        border: 1px solid #6f6f6f;
+        border-top: 0;
+        margin: 0 5px;
+
+        &:after {
+            top: 12px;
+            position: relative;
+        }
+    }
+
+    .slow {
+        &:after {
+            color: @negative-color;
+            content: 'Slow';
+        }
+    }
+
+    .average {
+        &:after {
+            color: #fff;
+            content: 'Average';
+        }
+    }
+
+    .fast {
+        &:after {
+            color: @primary-color;
+            content: 'Fast';
+        }
+    }
+}

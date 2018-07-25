@@ -10,7 +10,7 @@ code {
 }
 
 .page {
-    padding: 40px 0;
+    padding: 40px 0 100px 0;
     margin: 0;
 }
 
@@ -22,18 +22,6 @@ code {
     color: #fff;
     text-align: center;
     background-color: #11161c;
-}
-
-.clearfix {
-    zoom: 1;
-}
-
-.text-center {
-    text-align: center;
-}
-
-.text-primary {
-    color: @primary-color;
 }
 
 .absolute-center {
@@ -65,6 +53,20 @@ code {
         }
     }
 
+    .deploy-contract-container {
+        border-radius: 4px;
+        background-color: rgb(17, 22, 28);
+        border: solid 2px #0f141b;
+    }
+
+    .quick-deploy {
+        padding: 50px 5%;
+    }
+
+    .guided-deploy {
+        padding: 50px 100px;
+    }
+
     .ant-calendar {
         width: 300px;
     }
@@ -78,8 +80,13 @@ code {
         margin: 0;
     }
     .ant-select-arrow,
-    .ant-calendar-picker-icon:after {
+    .ant-calendar-picker-icon:after,
+    .ant-time-picker-icon:after,
+    .ant-time-picker-panel-clear-btn:after {
         color: #fff;
+    }
+    .ant-time-picker-panel-input {
+        background: rgba(255, 0, 0, 0);
     }
     .custom-filter-dropdown {
         background: @body-background;
@@ -293,6 +300,103 @@ code {
             display: none;
         }
     }
+
+    .ant-select-dropdown-menu-item-disabled {
+        color: rgb(107, 107, 107);
+    }
+
+    #gas-settings {
+        .ant-collapse > .ant-collapse-item > .ant-collapse-header .arrow {
+            left: 0;
+        }
+        .ant-collapse > .ant-collapse-item > .ant-collapse-header {
+            padding: 12px 0 12px 15px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .ant-collapse-borderless {
+            background: transparent;
+        }
+        .ant-collapse-item {
+            border: 0;
+        }
+        .ant-slider-handle {
+            margin-top: -8px;
+            height: 25px;
+            width: 25px;
+            font-family: 'anticon';
+            border-color: @primary-6;
+
+            &:after {
+                content: '\e604';
+                font-size: 8px;
+                position: absolute;
+                top: 4px;
+                right: 3px;
+                color: @primary-color;
+            }
+            &:before {
+                content: '\e605';
+                font-size: 8px;
+                position: absolute;
+                top: 4px;
+                left: 3px;
+                color: @primary-color;
+            }
+        }
+        .ant-slider-rail {
+            height: 10px;
+            border-radius: 10px;
+            background-color: #181e26;
+            border: solid 1px #cccccc;
+        }
+        .ant-slider-track {
+            background-color: transparent;
+        }
+        .ant-slider-mark {
+            top: 30px;
+        }
+        .ant-collapse > .ant-collapse-item > .ant-collapse-header {
+            padding: 12px 0 12px 15px;
+        }
+    }
+}
+
+/* Utility Classes */
+.clearfix {
+    zoom: 1;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-primary {
+    color: @primary-color;
+}
+.m-top-10 {
+    margin-top: 30px;
+}
+.m-top-20 {
+    margin-top: 30px;
+}
+.m-top-30 {
+    margin-top: 30px;
+}
+.m-top-40 {
+    margin-top: 40px;
+}
+.m-bottom-10 {
+    margin-bottom: 10px;
+}
+.m-bottom-20 {
+    margin-bottom: 20px;
+}
+.m-bottom-30 {
+    margin-bottom: 30px;
+}
+.m-bottom-40 {
+    margin-bottom: 40px;
 }
 
 /* Mobile screens */

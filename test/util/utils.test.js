@@ -7,7 +7,8 @@ import {
   getLocationOrigin,
   toBaseUnit,
   fromBaseUnit,
-  getEtherscanUrl
+  getEtherscanUrl,
+  copyTextToClipboard
 } from '../../src/util/utils';
 
 describe('getMetamaskError', () => {
@@ -109,6 +110,12 @@ describe('getCollateralTokenAddress', () => {
     );
     expect(getCollateralTokenAddress('rinkeby', 'INVALIDQUOTE')).to.equal('');
     expect(getCollateralTokenAddress('invalidnetwork', 'ETH')).to.equal('');
+  });
+});
+
+describe('copyTextToClipboard', () => {
+  it('should copy text to clipboard and show message ', () => {
+    expect(copyTextToClipboard('The is a test message')).to.equal();
   });
 });
 

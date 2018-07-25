@@ -55,6 +55,13 @@ describe('GasPriceField', () => {
   });
 
   it('should update gasprice with changes in gas price input', () => {
+    gasPriceField.setProps({
+      form: {
+        getFieldDecorator(name, params) {
+          return component => component;
+        }
+      }
+    });
     const price = 3;
     gasPriceField
       .find(InputNumber)
@@ -65,6 +72,13 @@ describe('GasPriceField', () => {
   });
 
   it('should not update gasprice with invalid gas price input', () => {
+    gasPriceField.setProps({
+      form: {
+        getFieldDecorator(name, params) {
+          return component => component;
+        }
+      }
+    });
     const price = 'notnumber';
     const currentprice = gasPriceField.state('gasprice');
     gasPriceField

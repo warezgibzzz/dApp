@@ -2,7 +2,13 @@ import { Col, Row, Steps } from 'antd';
 import React, { Component } from 'react';
 
 import StepAnimation from '../StepAnimation';
-import { DeployStep, ExpirationStep, ExchangeStep, PricingStep } from './Steps';
+import {
+  DeployStep,
+  ExpirationStep,
+  ExchangeStep,
+  GasStep,
+  PricingStep
+} from './Steps';
 
 import showMessage from '../message';
 import { getCollateralTokenAddress } from '../../util/utils';
@@ -10,11 +16,11 @@ import { getCollateralTokenAddress } from '../../util/utils';
 const Step = Steps.Step;
 
 const parentColLayout = {
-  lg: {
-    span: 18
+  xl: {
+    span: 8
   },
-  sm: {
-    span: 22
+  md: {
+    span: 12
   },
   xs: {
     span: 24
@@ -37,6 +43,8 @@ class SimplifiedDeployment extends Component {
       collateralTokenAddress: '',
       priceFloor: '',
       priceCap: '',
+      priceFloorSimplified: '',
+      priceCapSimplified: '',
       priceDecimalPlaces: '',
       qtyMultiplier: '',
       expirationTimeStamp: '',
@@ -46,6 +54,7 @@ class SimplifiedDeployment extends Component {
   }
 
   toNextStep() {
+    window.scrollTo(0, 0);
     this.setState({
       step: this.state.step + 1,
       transitionDirection: 'next'
@@ -53,6 +62,7 @@ class SimplifiedDeployment extends Component {
   }
 
   toPrevStep() {
+    window.scrollTo(0, 0);
     this.setState({
       step: this.state.step - 1,
       transitionDirection: 'prev'
@@ -63,6 +73,25 @@ class SimplifiedDeployment extends Component {
     this.setState({
       step: 0,
       transitionDirection: 'prev'
+    });
+  }
+
+  resetState() {
+    this.setState({
+      contractName: '',
+      quoteAsset: '',
+      collateralTokenAddress: '',
+      priceFloor: '',
+      priceCap: '',
+      price: '',
+      priceFloorSimplified: '',
+      priceCapSimplified: '',
+      priceDecimalPlaces: '',
+      qtyMultiplier: '',
+      expirationTimeStamp: '',
+      oracleDataSource: '',
+      oracleQuery: '',
+      symbolName: ''
     });
   }
 
@@ -99,6 +128,8 @@ class SimplifiedDeployment extends Component {
         key="0"
         onNextClicked={this.toNextStep.bind(this)}
         updateDeploymentState={this.setState.bind(this)}
+        isSimplified={true}
+        resetState={this.resetState.bind(this)}
         {...this.state}
         {...this.props}
       />,
@@ -109,12 +140,23 @@ class SimplifiedDeployment extends Component {
         onNextClicked={this.toNextStep.bind(this)}
         updateDeploymentState={this.setState.bind(this)}
         isSimplified={true}
+        showPricingGraph
         {...this.state}
         {...this.props}
       />,
 
       <ExpirationStep
         key="2"
+        location={this.props.location}
+        onPrevClicked={this.toPrevStep.bind(this)}
+        onNextClicked={this.toNextStep.bind(this)}
+        updateDeploymentState={this.setState.bind(this)}
+        isSimplified={true}
+        {...this.state}
+      />,
+
+      <GasStep
+        key="3"
         gas={gas}
         location={this.props.location}
         onPrevClicked={this.toPrevStep.bind(this)}
@@ -126,7 +168,7 @@ class SimplifiedDeployment extends Component {
       />,
 
       <DeployStep
-        key="3"
+        key="4"
         deployContract={this.onDeployContract.bind(this)}
         showErrorMessage={showMessage.bind(showMessage, 'error')}
         showSuccessMessage={showMessage.bind(showMessage, 'success')}
@@ -148,8 +190,8 @@ class SimplifiedDeployment extends Component {
 
     return (
       <div className="page">
-        <Row type="flex" justify="center">
-          <Col {...parentColLayout}>
+        <Row type="flex" justify="center" style={{ margin: '20px 0' }}>
+          <Col span={18}>
             <Steps
               network={this.props.network}
               current={currentStep}
@@ -158,8 +200,13 @@ class SimplifiedDeployment extends Component {
               <Step title="Exchange" />
               <Step title="Pricing" />
               <Step title="Expiration" />
+              <Step title="Gas" />
               <Step network={this.props.network} title="Deploy" />
             </Steps>
+          </Col>
+        </Row>
+        <Row type="flex" justify="center">
+          <Col {...parentColLayout}>
             <StepAnimation direction={this.state.transitionDirection}>
               {steps.filter((step, index) => currentStep === index)}
             </StepAnimation>

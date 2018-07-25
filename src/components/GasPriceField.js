@@ -1,4 +1,13 @@
-import { Col, Form, Icon, InputNumber, Row, Popover } from 'antd';
+import {
+  Col,
+  Form,
+  Icon,
+  InputNumber,
+  Row,
+  Popover,
+  Slider,
+  Collapse
+} from 'antd';
 import React, { Component } from 'react';
 import { ajax } from 'rxjs/ajax';
 import { map } from 'rxjs/operators';
@@ -6,6 +15,7 @@ import { map } from 'rxjs/operators';
 import { isTestnetOrMainnet } from '../util/utils';
 
 const FormItem = Form.Item;
+const Panel = Collapse.Panel;
 
 class GasPriceField extends Component {
   constructor(props) {
@@ -31,6 +41,7 @@ class GasPriceField extends Component {
       gaslimit: props.gaslimit,
       gasprice: 2,
       condition: null,
+      isGasAPILoading: false,
       message: this.getMessage(null, props.gaslimit, 2)
     };
 
@@ -61,13 +72,28 @@ class GasPriceField extends Component {
     if (this.props.onUpdateGasPrice) {
       this.props.onUpdateGasPrice(value);
     }
+
+    // this.props.form.setFieldsValue({
+    //   gasPrice: value
+    // });
   }
 
   updateNetworkCondition(data) {
+    const recommendedGasPrice = data.average / 10;
     this.setState({
       condition: data,
-      message: this.getMessage(data, this.state.gaslimit, this.state.gasprice)
+      gasprice: recommendedGasPrice,
+      isGasAPILoading: false,
+      message: this.getMessage(data, this.state.gaslimit, recommendedGasPrice)
     });
+  }
+
+  getMinValueForGasPrice() {
+    return this.state.condition ? (this.state.condition.safeLow - 10) / 10 : 1;
+  }
+
+  getMaxValueForGasPrice() {
+    return this.state.condition ? this.state.condition.fast / 10 : 10;
   }
 
   getTime(condition, price) {
@@ -90,19 +116,36 @@ class GasPriceField extends Component {
 
   getMessage(condition, gasLimit, gasPrice) {
     const time = this.getTime(condition, gasPrice);
-    const cost = (gasLimit * gasPrice) / 1000000000;
-    const message = !condition
-      ? `The following MetaMask settings will cost ${cost} ETH, the confirmation time depends on the overall network traffic`
-      : time >= 0
-        ? `The following MetaMask settings should give a ${time} min confirmation for ${cost} ETH`
-        : `The gas price is below the market low safe price (currently about ${condition.safeLow /
-            10} gwei), your transaction might take forever to get confirmed`;
+    const cost = (gasLimit * gasPrice / 1000000000).toFixed(5);
+    const message = !condition ? (
+      <div style={{ fontSize: '14px' }}>
+        The transaction will cost <strong>{cost} ETH</strong>, the confirmation
+        time depends on the overall network traffic
+      </div>
+    ) : time >= 0 ? (
+      <div style={{ color: 'ff003a' }}>
+        The transaction will take around{' '}
+        <strong style={{ color: '#00ffe2' }}>{time} min</strong> to process for{' '}
+        <strong>{cost} ETH</strong>
+      </div>
+    ) : (
+      <div style={{ fontSize: '14px' }}>
+        The gas price is below the market low safe price (currently about{' '}
+        <strong>{condition.safeLow / 10} gwei)</strong>, your{' '}
+        <span style={{ color: '#ff5e5e' }}>
+          transaction might take forever to get confirmed
+        </span>
+      </div>
+    );
     return message;
   }
 
   componentDidMount() {
     const gasInfoUrl = 'https://ethgasstation.info/json/ethgasAPI.json';
-
+    let _this = this;
+    _this.setState({
+      isGasAPILoading: true
+    });
     this.subscription = ajax({
       url: gasInfoUrl,
       method: 'GET',
@@ -110,7 +153,16 @@ class GasPriceField extends Component {
       crossDomain: true
     })
       .pipe(map(data => data.response))
-      .subscribe(this.updateNetworkCondition);
+      .subscribe(
+        function(data) {
+          _this.updateNetworkCondition(data);
+        },
+        function(e) {
+          _this.setState({
+            isGasAPILoading: false
+          });
+        }
+      );
   }
 
   componentWillUnmount() {
@@ -121,17 +173,81 @@ class GasPriceField extends Component {
     const isMetamask = isTestnetOrMainnet(this.props.network);
 
     return (
-      <Row>
+      <Row id="gas-settings">
         <Col>
-          <h2>Gas Setting</h2>
-          <div>{this.state.message}</div>
-          <br />
+          {!this.props.isSimplified && <h2>Gas Setting</h2>}
+          {!this.state.isGasAPILoading ? (
+            <div>
+              <div
+                style={{
+                  minHeight: '100px',
+                  fontSize: '18px',
+                  fontWeight: '100'
+                }}
+              >
+                {this.state.message}
+                <Collapse bordered={false} className="m-bottom-20">
+                  <Panel header="Help me understand this">
+                    <ul>
+                      <li>
+                        <a
+                          href="https://www.cryptocompare.com/coins/guides/what-is-the-gas-in-ethereum/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Why do I need gas?
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="https://etherscan.io/gastracker"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          What gas price should I use?
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="https://ethgasstation.info/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          What are the current network conditions?
+                        </a>
+                      </li>
+                    </ul>
+                  </Panel>
+                </Collapse>
+              </div>
+              <Slider
+                min={this.getMinValueForGasPrice()}
+                max={this.getMaxValueForGasPrice()}
+                value={this.state.gasprice}
+                onChange={this.onGasPriceChange.bind(this)}
+                step={0.01}
+                tipFormatter={null}
+              />
+              <div className="speed-container m-top-30 m-bottom-30">
+                <div className="slow" />
+                <div className="average" />
+                <div className="fast" />
+              </div>
+            </div>
+          ) : (
+            <div className="text-center m-top-20 m-bottom-20">
+              <Icon type="loading" /> Estimating Gas settings
+            </div>
+          )}
           <Row gutter={16}>
-            <Col lg={12} xs={24}>
+            <Col span={this.props.isSimplified ? 24 : 12} className="m-top-40">
               <FormItem
                 label={
-                  <span>
-                    Gas Limit (units){' '}
+                  <h2 style={{ position: 'relative' }}>
+                    Gas Limit{' '}
+                    <span style={{ fontSize: '14px', fontWeight: '300' }}>
+                      (units)
+                    </span>
                     <Popover
                       content="Gas limit is how many cycles (think opcodes) your transaction will take"
                       title="More about `Gas Limit`"
@@ -139,10 +255,16 @@ class GasPriceField extends Component {
                     >
                       <Icon
                         type="question-circle-o"
-                        style={{ cursor: 'pointer' }}
+                        style={{
+                          cursor: 'pointer',
+                          position: 'absolute',
+                          right: '0',
+                          lineHeight: '1.8',
+                          fontSize: '18px'
+                        }}
                       />
                     </Popover>
-                  </span>
+                  </h2>
                 }
               >
                 {this.props.form ? (
@@ -151,7 +273,7 @@ class GasPriceField extends Component {
                   })(
                     <InputNumber
                       min={0}
-                      placeholder="Gas Limit (units)"
+                      placeholder="Gas Limit"
                       onChange={this.onGasLimitChange.bind(this)}
                       style={{ width: '100%' }}
                       disabled={isMetamask}
@@ -160,7 +282,7 @@ class GasPriceField extends Component {
                 ) : (
                   <InputNumber
                     min={0}
-                    placeholder="Gas Limit (units)"
+                    placeholder="Gas Limit"
                     onChange={this.onGasLimitChange.bind(this)}
                     style={{ width: '100%' }}
                     value={this.state.gaslimit}
@@ -169,11 +291,17 @@ class GasPriceField extends Component {
                 )}
               </FormItem>
             </Col>
-            <Col lg={12} xs={24}>
+            <Col
+              span={this.props.isSimplified ? 24 : 12}
+              className={this.props.isSimplified ? '' : 'm-top-40'}
+            >
               <FormItem
                 label={
-                  <span>
-                    Gas Price (gwei){' '}
+                  <h2 style={{ position: 'relative' }}>
+                    Gas Price{' '}
+                    <span style={{ fontSize: '14px', fontWeight: '300' }}>
+                      (gwei)
+                    </span>
                     <Popover
                       content="Gas price is how much ETH you’re willing to pay per cycle"
                       title="More about `Gas Price`"
@@ -181,10 +309,16 @@ class GasPriceField extends Component {
                     >
                       <Icon
                         type="question-circle-o"
-                        style={{ cursor: 'pointer' }}
+                        style={{
+                          cursor: 'pointer',
+                          position: 'absolute',
+                          right: '0',
+                          lineHeight: '1.8',
+                          fontSize: '18px'
+                        }}
                       />
                     </Popover>
-                  </span>
+                  </h2>
                 }
               >
                 {this.props.form ? (
@@ -192,17 +326,19 @@ class GasPriceField extends Component {
                     initialValue: this.state.gasprice
                   })(
                     <InputNumber
-                      min={0}
+                      min={this.getMinValueForGasPrice()}
                       onChange={this.onGasPriceChange.bind(this)}
-                      placeholder="Gas Price (gwei)"
+                      placeholder="Gas Price"
+                      step={0.01}
                       style={{ width: '100%' }}
                     />
                   )
                 ) : (
                   <InputNumber
-                    min={0}
+                    min={this.getMinValueForGasPrice()}
                     onChange={this.onGasPriceChange.bind(this)}
-                    placeholder="Gas Price (gwei)"
+                    placeholder="Gas Price"
+                    step={0.01}
                     value={this.state.gasprice}
                     style={{ width: '100%' }}
                   />
@@ -210,39 +346,6 @@ class GasPriceField extends Component {
               </FormItem>
             </Col>
           </Row>
-          <div>
-            <strong>Help:</strong>
-            <ul>
-              <li>
-                <a
-                  href="https://www.cryptocompare.com/coins/guides/what-is-the-gas-in-ethereum/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Why do I need metamask / gas?
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://etherscan.io/gastracker"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  What gas price should I use?
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://ethgasstation.info/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  What are current network conditions?
-                </a>
-              </li>
-            </ul>
-          </div>
-          <br />
         </Col>
       </Row>
     );
