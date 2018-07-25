@@ -35,12 +35,9 @@ class ContractsList extends Component {
       this.props.onLoad();
     }
   }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.contracts !== prevState.contracts) {
-      return { contracts: nextProps.contracts };
-    } else {
-      return {};
+  componentDidUpdate(prevProps) {
+    if (this.props.contracts !== prevProps.contracts) {
+      this.setState({ contracts: this.props.contracts });
     }
   }
 
@@ -69,18 +66,20 @@ class ContractsList extends Component {
     const searchText = this.state[searchKey];
     const reg = new RegExp(searchText, 'gi');
     this.resetSearchFilter();
+    let newContracts = this.props.contracts
+      .map(record => {
+        const match = record[dataKey].match(reg);
+        if (!match) {
+          console.log(reg, record[dataKey]);
+          return null;
+        }
+        return record;
+      })
+      .filter(record => !!record);
     this.setState({
       [searchVisibleKey]: false,
       [filteredKey]: !!searchText,
-      contracts: this.props.contracts
-        .map(record => {
-          const match = record[dataKey].match(reg);
-          if (!match) {
-            return null;
-          }
-          return record;
-        })
-        .filter(record => !!record)
+      contracts: newContracts
     });
   };
 
@@ -136,19 +135,7 @@ class ContractsList extends Component {
         sorter: (a, b) => {
           return a.CONTRACT_NAME.localeCompare(b.CONTRACT_NAME);
         },
-        sortOrder: sort.columnKey === 'CONTRACT_NAME' && sort.order,
-
-        contractSearchVisible: this.state.contractSearchVisible,
-        onFilterDropdownVisibleChange: visible => {
-          this.setState(
-            {
-              contractSearchVisible: visible
-            },
-            () =>
-              this.contractNameSearchInput &&
-              this.contractNameSearchInput.focus()
-          );
-        }
+        sortOrder: sort.columnKey === 'CONTRACT_NAME' && sort.order
       },
       {
         title: 'Base Token',
@@ -316,8 +303,18 @@ class ContractsList extends Component {
             <Select
               style={{ width: 200 }}
               placeholder="All Contracts"
-              showArrow={false}
+              showArrow={true}
               optionFilterProp="children"
+              onChange={value => {
+                this.setState({ CONTRACT_NAME_SEARCH_TEXT: value }, () => {
+                  this.onSearch(
+                    'CONTRACT_NAME',
+                    'CONTRACT_NAME_SEARCH_TEXT',
+                    'contractSearchVisible',
+                    'contractFiltered'
+                  );
+                });
+              }}
             >
               {contracts.map(e => (
                 <Option key={e.key} value={e.CONTRACT_NAME}>
