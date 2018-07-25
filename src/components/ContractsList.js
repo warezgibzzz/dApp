@@ -314,6 +314,20 @@ class ContractsList extends Component {
           </Col>
           <Col span={4}>
             <Select
+              style={{ width: 200 }}
+              placeholder="All Contracts"
+              showArrow={false}
+              optionFilterProp="children"
+            >
+              {contracts.map(e => (
+                <Option key={e.key} value={e.CONTRACT_NAME}>
+                  {e.CONTRACT_NAME}
+                </Option>
+              ))}
+            </Select>
+          </Col>
+          <Col span={4}>
+            <Select
               mode="multiple"
               style={{ width: 200 }}
               placeholder="All Tokens"
