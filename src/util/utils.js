@@ -198,7 +198,7 @@ export const getCollateralTokenAddress = (network, quoteAsset) => {
 };
 
 /**
- * reads .json truffle artifacts
+ * gets contract address from .json truffle artifacts
  * @param {string} contract
  * @param {number} networkId of the web3 network
  * @return {string}
