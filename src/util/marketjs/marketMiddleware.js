@@ -177,32 +177,6 @@ const withdrawCollateralAsync = amount => {
   });
 };
 
-const tradeOrderAsync = signedOrderJSON => {
-  const { marketjs } = store.getState();
-  const web3 = store.getState().web3.web3Instance;
-  const signedOrder = JSON.parse(signedOrderJSON);
-
-  const txParams = {
-    from: web3.eth.coinbase
-  };
-
-  signedOrder.taker = web3.eth.coinbase;
-  signedOrder.expirationTimestamp = new BigNumber(
-    signedOrder.expirationTimestamp
-  );
-  signedOrder.makerFee = new BigNumber(signedOrder.makerFee);
-  signedOrder.orderQty = new BigNumber(signedOrder.orderQty);
-  signedOrder.price = new BigNumber(signedOrder.price);
-  signedOrder.remainingQty = new BigNumber(signedOrder.remainingQty);
-  signedOrder.takerFee = new BigNumber(signedOrder.takerFee);
-
-  marketjs
-    .tradeOrderAsync(signedOrder, signedOrder.orderQty, txParams)
-    .then(res => {
-      return res;
-    });
-};
-
 export const MarketJS = {
   createSignedOrderAsync,
   depositCollateralAsync,
