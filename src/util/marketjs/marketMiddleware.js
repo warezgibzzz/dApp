@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 import abi from 'human-standard-token-abi';
 import moment from 'moment';
+import BigNumber from 'bignumber.js';
 
 import store from '../../store';
 
@@ -185,26 +186,18 @@ const tradeOrderAsync = signedOrderJSON => {
     from: web3.eth.coinbase
   };
 
-  console.log('signedOrder', signedOrder);
-
   signedOrder.taker = web3.eth.coinbase;
-  signedOrder.expirationTimestamp = web3.toBigNumber(
+  signedOrder.expirationTimestamp = new BigNumber(
     signedOrder.expirationTimestamp
   );
-  signedOrder.makerFee = web3.toBigNumber(signedOrder.makerFee);
-  signedOrder.orderQty = web3.toBigNumber(signedOrder.orderQty);
-  signedOrder.price = web3.toBigNumber(signedOrder.price);
-  signedOrder.remainingQty = web3.toBigNumber(signedOrder.remainingQty);
-  signedOrder.takerFee = web3.toBigNumber(signedOrder.takerFee);
-
-  console.log('signedOrderafter', signedOrder);
+  signedOrder.makerFee = new BigNumber(signedOrder.makerFee);
+  signedOrder.orderQty = new BigNumber(signedOrder.orderQty);
+  signedOrder.price = new BigNumber(signedOrder.price);
+  signedOrder.remainingQty = new BigNumber(signedOrder.remainingQty);
+  signedOrder.takerFee = new BigNumber(signedOrder.takerFee);
 
   marketjs
-    .tradeOrderAsync(
-      signedOrder,
-      web3.toBigNumber(signedOrder.orderQty),
-      txParams
-    )
+    .tradeOrderAsync(signedOrder, signedOrder.orderQty, txParams)
     .then(res => {
       return res;
     });
