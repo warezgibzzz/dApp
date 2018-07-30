@@ -40,35 +40,35 @@ class TestQueryForm extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.getGasEstimate();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.loading && !nextProps.loading) {
-      if (nextProps.error) {
+  componentDidUpdate(prevProps) {
+    if (this.props.loading && !prevProps.loading) {
+      if (this.props.error) {
         // We had an error
         showMessage(
           'error',
-          `There was an error deploying the contract: ${nextProps.error}`,
+          `There was an error deploying the contract: ${this.props.error}`,
           8
         );
       }
     }
 
-    if (this.props.transaction !== nextProps.transaction) {
+    if (this.props.transaction !== prevProps.transaction) {
       showMessage(
         'info',
         TestQuerySuccess({
           network: this.props.network,
-          txHash: nextProps.transaction
+          txHash: this.props.transaction
         }),
         8
       );
     }
 
-    if (this.props.gas !== nextProps.gas) {
-      this.setState({ gas: nextProps.gas });
+    if (this.props.gas !== prevProps.gas) {
+      this.setState({ gas: this.props.gas });
     }
   }
 

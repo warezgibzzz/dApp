@@ -31,13 +31,13 @@ class FindContractForm extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.loading && !nextProps.loading) {
-      if (nextProps.error) {
+  componentDidUpdate(prevProps) {
+    if (!this.props.loading && prevProps.loading) {
+      if (this.props.error) {
         this.props.showErrorMessage('Contract not found at this address!', 8);
-      } else if (nextProps.contract) {
+      } else if (this.props.contract) {
         this.props.showSuccessMessage(
-          FindContractSuccess({ contract: nextProps.contract }),
+          FindContractSuccess({ contract: this.props.contract }),
           3
         );
       }

@@ -27,8 +27,8 @@ class SelectTokenField extends React.Component {
     this.onSelect = this.onSelect.bind(this);
   }
 
-  componentWillReceiveProps(newProps) {
-    if (this.props.exchange !== newProps.exchange) {
+  componentDidUpate(prevProps) {
+    if (this.props.exchange !== prevProps.exchange) {
       this.setState({ pairs: [] });
       this.props.onSelect({
         contractName: '',
@@ -41,7 +41,7 @@ class SelectTokenField extends React.Component {
         qtyMultiplier: '',
         oracleDataSource: ''
       });
-      getExchangeObj(newProps.exchange)
+      getExchangeObj(this.props.exchange)
         .fetchList(this.state.quotes)
         .subscribe(this.updateList);
     }

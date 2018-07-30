@@ -7,6 +7,7 @@ function DeployContractSuccess({ contract }) {
       <a
         href={`https://etherscan.io/address/${contract.address}`}
         target="_blank"
+        rel="noopener noreferrer"
       >
         {contract.address}
       </a>
