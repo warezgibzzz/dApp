@@ -12,15 +12,15 @@ import './SimExchange.less';
 const { Content, Header, Sider } = Layout;
 
 class SimExchange extends Component {
-  componentWillMount() {
+  componentDidMount() {
     if (!this.props.contracts) {
       this.props.getContracts();
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.contracts && !nextProps.contract) {
-      this.props.selectContract(nextProps.contracts[0]);
+  componentDidUpdate(prevProps) {
+    if (this.props.contracts && !this.props.contract) {
+      this.props.selectContract(this.props.contracts[0]);
     }
   }
 

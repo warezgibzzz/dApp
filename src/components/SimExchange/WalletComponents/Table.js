@@ -19,12 +19,12 @@ class BuyTable extends Component {
     this.decoder = new InputDataDecoder(abi);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { simExchange, web3 } = nextProps;
+  componentDidUpdate(prevProps) {
+    const { simExchange, web3 } = this.props;
 
     if (
       simExchange.contract &&
-      this.props.simExchange.contract !== simExchange.contract
+      simExchange.contract !== prevProps.simExchange.contract
     ) {
       let filter = web3.web3Instance.eth.filter({
         fromBlock: '0x0',

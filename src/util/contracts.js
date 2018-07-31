@@ -7,7 +7,7 @@ export async function processContractsList(
 ) {
   let promises = deployedContracts.map(async contract => {
     if (
-      process.env.NODE_ENV == 'development' &&
+      process.env.NODE_ENV === 'development' &&
       localStorage.getItem(String(contract))
     ) {
       return JSON.parse(localStorage.getItem(String(contract)));
