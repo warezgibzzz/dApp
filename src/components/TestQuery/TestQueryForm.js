@@ -15,11 +15,17 @@ import {
 const Step = Steps.Step;
 
 const parentColLayout = {
-  lg: {
-    span: 20
+  xxl: {
+    span: 10
   },
-  sm: {
-    span: 22
+  xl: {
+    span: 12
+  },
+  lg: {
+    span: 14
+  },
+  md: {
+    span: 18
   },
   xs: {
     span: 24
@@ -176,14 +182,18 @@ class TestQueryForm extends Component {
 
     return (
       <div className="page">
-        <Row type="flex" justify="center">
-          <Col {...parentColLayout}>
+        <Row type="flex" justify="center" style={{ margin: '20px 0' }}>
+          <Col span={18}>
             <Steps current={currentStep} style={{ marginBottom: '40px' }}>
               <Step title="Introduction" />
               <Step title="Oracle Data Source" />
               <Step title="Oracle Query" />
               <Step title="Result" />
             </Steps>
+          </Col>
+        </Row>
+        <Row type="flex" justify="center">
+          <Col {...parentColLayout}>
             <StepAnimation direction={this.state.transitionDirection}>
               {steps.filter((step, index) => currentStep === index)[0]}
             </StepAnimation>
