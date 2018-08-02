@@ -18,7 +18,6 @@ const subMenuItems = [
 
 const mainMenuItems = [
   { name: 'Explore Contracts', to: '/contract/explorer' },
-  { name: 'Find Contracts', to: '/contract/find' },
   { name: 'Test Query', to: '/test' },
   {
     name: 'Documentation',
