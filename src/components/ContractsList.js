@@ -175,8 +175,7 @@ class ContractsList extends Component {
         },
 
         filteredValue: filters.COLLATERAL_TOKEN_SYMBOL || null,
-        onFilter: (value, record) =>
-          record.COLLATERAL_TOKEN_SYMBOL.includes(value)
+        onFilter: (value, record) => record.COLLATERAL_TOKEN_SYMBOL === value
       },
       {
         title: 'Oracle Query',
