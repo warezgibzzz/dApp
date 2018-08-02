@@ -4,8 +4,10 @@ import { mount } from 'enzyme';
 import sinon from 'sinon';
 import { from } from 'rxjs';
 
-import { Form, Select } from 'antd';
-import SelectTokenField from '../../../src/components/DeployContract/SelectTokenField';
+import { Popover, Form, Select } from 'antd';
+import SelectTokenField, {
+  Hint
+} from '../../../src/components/DeployContract/SelectTokenField';
 import ExchangeSources from '../../../src/components/DeployContract/ExchangeSources';
 
 let FormSelectTokenField = Form.create()(SelectTokenField);
@@ -49,6 +51,11 @@ describe('SelectTokenField', () => {
     onSelectSpy = sinon.spy();
   });
 
+  it('should render a hint', () => {
+    const wrapper = mount(<Hint hint="asd" hintTitle="asdasd" />);
+    expect(wrapper.find(Popover)).to.have.length(1);
+  });
+
   it('should render a select', () => {
     let selectTokenField = mount(
       <FormSelectTokenField
@@ -58,6 +65,32 @@ describe('SelectTokenField', () => {
       />
     );
     expect(selectTokenField.find(Select)).to.have.length(1);
+  });
+
+  it('should reset when exchange changes', () => {
+    let selectTokenField = mount(
+      <FormSelectTokenField
+        name="tokenPair"
+        exchange="TEX1"
+        onSelect={onSelectSpy}
+      />
+    );
+    selectTokenField.setProps({
+      exchange: 'TEX2'
+    });
+    expect(
+      onSelectSpy.calledWith({
+        contractName: '',
+        oracleQuery: '',
+        quoteAsset: '',
+        priceDecimalPlaces: '',
+        priceCap: '',
+        priceFloor: '',
+        price: '',
+        qtyMultiplier: '',
+        oracleDataSource: ''
+      })
+    ).to.equal(true);
   });
 
   it('should called onSelect when select (without getPrice)', () => {

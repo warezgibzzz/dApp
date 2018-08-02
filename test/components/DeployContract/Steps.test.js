@@ -12,9 +12,13 @@ import {
   ExpirationStep,
   DataSourceStep,
   DeployStep,
-  ExchangeStep
+  ExchangeStep,
+  GasStep
 } from '../../../src/components/DeployContract/Steps';
-import Field from '../../../src/components/DeployContract/DeployContractField';
+import Field, {
+  PriceCapSimplifiedValidator,
+  PriceFloorSimplifiedValidator
+} from '../../../src/components/DeployContract/DeployContractField';
 
 describe('NameContractStep', () => {
   let nameContractStep;
@@ -92,6 +96,28 @@ describe('PricingStep Simplified', () => {
 
   it('should have two buttons to navigate back and forward', () => {
     expect(pricingStep.find(Button)).to.have.length(2);
+  });
+
+  it('should validate price cap input', () => {
+    const callbackSpy = sinon.spy();
+    const form = pricingStep.instance();
+    PriceCapSimplifiedValidator(form, null, 100, callbackSpy);
+    expect(
+      callbackSpy.calledWith(
+        'Price cap must be smaller than 155% of the current price'
+      )
+    );
+  });
+
+  it('should validate price floor input', () => {
+    const callbackSpy = sinon.spy();
+    const form = pricingStep.instance();
+    PriceFloorSimplifiedValidator(form, null, 0, callbackSpy);
+    expect(
+      callbackSpy.calledWith(
+        'Price floor must be larger than 45% of the current price'
+      )
+    );
   });
 
   it('should not proceed on error in form: price floor too low', () => {
@@ -214,12 +240,14 @@ describe('DeployStep', () => {
   let onResetDeploymentStateSpy;
   let showErrorMessageSpy;
   let showSuccessMessageSpy;
+  let deployContractSpy;
 
   beforeEach(() => {
     onDeployContractSpy = sinon.spy();
     onResetDeploymentStateSpy = sinon.spy();
     showErrorMessageSpy = sinon.spy();
     showSuccessMessageSpy = sinon.spy();
+    deployContractSpy = sinon.spy();
 
     deployStep = mount(
       <DeployStep
@@ -227,6 +255,7 @@ describe('DeployStep', () => {
         onResetDeploymentState={onResetDeploymentStateSpy}
         showErrorMessage={showErrorMessageSpy}
         showSuccessMessage={showSuccessMessageSpy}
+        deployContract={deployContractSpy}
       />
     );
   });
@@ -252,10 +281,11 @@ describe('DeployStep', () => {
     expect(instance.state.currStepNum).to.equal(3);
     deployStep.setProps({ currentStep: 'fulfilled' });
     expect(instance.state.currStepNum).to.equal(3);
+    deployStep.setProps({ currentStep: 'arbitraryString' });
+    expect(instance.state.currStepNum).to.equal(1);
   });
 
   it('should call props.onResetDeploymentState and props.onDeployContract when the retry button is clicked', () => {
-    let instance = deployStep.instance();
     deployStep.setProps({ currentStep: 'rejected' });
     deployStep
       .find('#retry-button')
@@ -263,6 +293,19 @@ describe('DeployStep', () => {
       .simulate('click');
     expect(onResetDeploymentStateSpy.callCount).to.equal(1);
     expect(onDeployContractSpy).to.have.property('callCount', 0);
+  });
+
+  it('should call deployContract with prop when retry btn clicked', () => {
+    let deployContractSpy = sinon.spy();
+    deployStep.setProps({
+      currentStep: 'rejected',
+      deployContract: deployContractSpy
+    });
+    deployStep
+      .find('#retry-button')
+      .first()
+      .simulate('click');
+    expect(deployContractSpy.calledOnce).to.equal(true);
   });
 
   it('should call onUpdateTxHashes when props change, updating txHashes state var with new tx hash values', () => {
@@ -288,6 +331,27 @@ describe('DeployStep', () => {
     deployStep.setProps({ contract: { address: '0x00000' }, loading: false });
     expect(showSuccessMessageSpy).to.have.property('callCount', 1);
   });
+
+  it('should call props.onResetDeploymentState when component unmounts', () => {
+    deployStep.unmount();
+    expect(onResetDeploymentStateSpy.callCount).to.equal(1);
+  });
+
+  it('should call props.deployContract() if prop is passed', () => {
+    expect(deployContractSpy.callCount).to.equal(1);
+  });
+});
+
+describe('GasStep', () => {
+  let gasStep;
+  beforeEach(() => {
+    gasStep = mount(<GasStep />);
+  });
+
+  it('renders without crashing', () => {
+    const div = document.createElement('div');
+    ReactDOM.render(<GasStep />, div);
+  });
 });
 
 describe('ExchangeStep', () => {
@@ -311,6 +375,11 @@ describe('ExchangeStep', () => {
   it('renders without crashing', () => {
     const div = document.createElement('div');
     ReactDOM.render(<ExchangeStep />, div);
+  });
+
+  it('should reset state onChangeTokenPair', () => {
+    wrappedComponentRef.onChangeTokenPair();
+    expect(resetStateSpy.called).to.equal(true);
   });
 
   it('should change exchangeApi state when select api', () => {

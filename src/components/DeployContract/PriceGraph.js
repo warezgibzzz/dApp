@@ -1,15 +1,5 @@
 import React from 'react';
 
-function line(ctx, position, color, text) {
-  ctx.strokeStyle = color;
-  ctx.fillStyle = color;
-  ctx.beginPath();
-  ctx.moveTo(20, position);
-  ctx.lineTo(180, position);
-  ctx.stroke();
-  ctx.font = "14px 'Work Sans', sans-serif ";
-  ctx.fillText(text, 200, position + 5, 100);
-}
 export class PriceGraph extends React.Component {
   componentDidMount() {
     this.updateCanvas();
@@ -25,12 +15,23 @@ export class PriceGraph extends React.Component {
     }
   }
 
+  line(ctx, position, color, text) {
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(20, position);
+    ctx.lineTo(180, position);
+    ctx.stroke();
+    ctx.font = "14px 'Work Sans', sans-serif ";
+    ctx.fillText(text, 200, position + 5, 100);
+  }
+
   updateCanvas() {
     const ctx = this.refs.canvas.getContext('2d');
     if (ctx) {
       ctx.clearRect(0, 0, 300, 160);
-      line(ctx, 20, '#ffffff', 'Price Cap');
-      line(ctx, 150, '#ffffff', 'Price Floor');
+      this.line(ctx, 20, '#ffffff', 'Price Cap');
+      this.line(ctx, 150, '#ffffff', 'Price Floor');
 
       let pY =
         150 -
@@ -38,9 +39,10 @@ export class PriceGraph extends React.Component {
           (((this.props.price - this.props.priceFloor) * 100) /
             (this.props.priceCap - this.props.priceFloor));
       pY = pY >= 135 ? 135 : pY <= 35 ? 35 : pY;
-      line(ctx, pY, '#00FFE2', this.props.price);
+      this.line(ctx, pY, '#00FFE2', this.props.price);
     }
   }
+
   setDPI(canvas, dpi) {
     canvas.style.width = canvas.style.width || canvas.width + 'px';
     canvas.style.height = canvas.style.height || canvas.height + 'px';

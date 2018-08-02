@@ -373,7 +373,6 @@ PricingStep = Form.create()(PricingStep);
  */
 class ExpirationStep extends BaseStepComponent {
   render() {
-    console.log(this.props);
     const {
       expirationTimeStamp,
       form,

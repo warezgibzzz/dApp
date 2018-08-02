@@ -42,6 +42,30 @@ describe('SimplifiedDeployment', () => {
     expect(simplifiedDeployment.find(ExchangeStep)).to.have.length(1);
   });
 
+  it('should reset the state', () => {
+    const spy = sinon.spy(simplifiedDeployment.instance(), 'setState');
+    simplifiedDeployment.setState({ step: exchangeStep });
+    simplifiedDeployment.instance().resetState();
+    expect(
+      spy.calledWith({
+        contractName: '',
+        quoteAsset: '',
+        collateralTokenAddress: '',
+        priceFloor: '',
+        priceCap: '',
+        price: '',
+        priceFloorSimplified: '',
+        priceCapSimplified: '',
+        priceDecimalPlaces: '',
+        qtyMultiplier: '',
+        expirationTimeStamp: '',
+        oracleDataSource: '',
+        oracleQuery: '',
+        symbolName: ''
+      })
+    );
+  });
+
   it('should move to prev step on PricingStep.onPrevClicked', () => {
     simplifiedDeployment.setState({ step: pricingStep });
     simplifiedDeployment.find(PricingStep).simulate('prevClicked');

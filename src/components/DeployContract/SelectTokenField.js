@@ -5,7 +5,7 @@ import { getExchangeObj } from './ExchangeSources';
 const FormItem = Form.Item;
 const { Option } = Select;
 
-const Hint = props => (
+export const Hint = props => (
   <Popover
     content={props.hint}
     title={'More about `' + props.hintTitle + '`'}
@@ -27,7 +27,7 @@ class SelectTokenField extends React.Component {
     this.onSelect = this.onSelect.bind(this);
   }
 
-  componentDidUpate(prevProps) {
+  componentDidUpdate(prevProps) {
     if (this.props.exchange !== prevProps.exchange) {
       this.setState({ pairs: [] });
       this.props.onSelect({
