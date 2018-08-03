@@ -1,14 +1,11 @@
-import store from '../../store';
+import BigNumber from 'bignumber.js';
 import abi from 'human-standard-token-abi';
 import moment from 'moment';
 
+import store from '../../store';
+
 import { toBaseUnit } from '../utils';
 import showMessage from '../../components/message';
-
-import Contracts from '../../Contracts.js';
-import CreateInitializer, {
-  contractConstructor
-} from '../web3/contractInitializer';
 
 // PUBLIC
 
@@ -25,29 +22,22 @@ const createSignedOrderAsync = orderData => {
   const { marketjs, simExchange } = store.getState();
   const web3 = store.getState().web3.web3Instance;
 
-  const initializeContracts = CreateInitializer(
-    contractConstructor.bind(null, web3)
-  );
-  const contracts = initializeContracts(Contracts);
+  let order = {
+    contractAddress: simExchange.contract.key,
+    expirationTimestamp: new BigNumber(
+      moment(orderData.expirationTimestamp).unix()
+    ),
+    feeRecipient: '0x0000000000000000000000000000000000000000',
+    maker: web3.eth.coinbase,
+    makerFee: new BigNumber(0),
+    taker: '',
+    takerFee: new BigNumber(0),
+    orderQty: new BigNumber(orderData.qty),
+    price: new BigNumber(orderData.price),
+    salt: new BigNumber(1)
+  };
 
-  return contracts.OrderLib.deployed().then(orderLib => {
-    let order = {
-      contractAddress: simExchange.contract.MARKET_COLLATERAL_POOL_ADDRESS,
-      expirationTimestamp: web3.toBigNumber(
-        moment(orderData.expirationTimestamp).unix()
-      ),
-      feeRecipient: '0x0000000000000000000000000000000000000000',
-      maker: web3.eth.coinbase,
-      makerFee: web3.toBigNumber(0),
-      taker: '',
-      takerFee: web3.toBigNumber(0),
-      orderQty: web3.toBigNumber(orderData.qty),
-      price: web3.toBigNumber(orderData.price),
-      salt: web3.toBigNumber(Math.random())
-    };
-
-    return marketjs.createSignedOrderAsync(orderLib.address, ...Object.values(order));
-  });
+  return marketjs.createSignedOrderAsync(...Object.values(order));
 };
 
 /**
@@ -83,8 +73,8 @@ const depositCollateralAsync = amount => {
         } else {
           marketjs
             .depositCollateralAsync(
-              simExchange.contract.MARKET_COLLATERAL_POOL_ADDRESS,
-              web3.toBigNumber(toBaseUnit(amount.number, decimals)),
+              simExchange.contract.key,
+              new BigNumber(toBaseUnit(amount.number, decimals)),
               txParams
             )
             .then(res => {
@@ -107,10 +97,7 @@ const getUserAccountBalanceAsync = (contract, toString) => {
   const web3 = store.getState().web3.web3Instance;
 
   return marketjs
-    .getUserAccountBalanceAsync(
-      contract.MARKET_COLLATERAL_POOL_ADDRESS,
-      web3.eth.coinbase
-    )
+    .getUserAccountBalanceAsync(contract.key, web3.eth.coinbase)
     .then(res => {
       switch (toString) {
         case true:
@@ -144,7 +131,7 @@ const withdrawCollateralAsync = amount => {
   collateralTokenContractInstance.decimals.call((err, decimals) => {
     marketjs
       .withdrawCollateralAsync(
-        simExchange.contract.MARKET_COLLATERAL_POOL_ADDRESS,
+        simExchange.contract.key,
         toBaseUnit(amount.number, decimals),
         txParams
       )
