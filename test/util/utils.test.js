@@ -94,6 +94,8 @@ describe('getEtherscanUrl', () => {
     expect(getEtherscanUrl('rinkeby')).to.equal('https://rinkeby.etherscan.io');
 
     expect(getEtherscanUrl('kovan')).to.equal('https://kovan.etherscan.io');
+
+    expect(getEtherscanUrl('invalidnetwork')).to.equal('');
   });
 });
 
