@@ -520,4 +520,6 @@ function DeployContractField(props) {
 }
 
 export const FieldSettings = fieldSettingsByName;
+export const PriceCapSimplifiedValidator = priceCapSimplifiedValidator;
+export const PriceFloorSimplifiedValidator = priceFloorSimplifiedValidator;
 export default DeployContractField;
