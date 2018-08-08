@@ -20,10 +20,12 @@ class FillOrder extends Component {
     };
   }
 
-  onSubmit(e) {
+  async onSubmit(e) {
     e.preventDefault();
 
-    MarketJS.tradeOrderAsync(this.state.orderJSON, this.state.orderJSON);
+    await MarketJS.tradeOrderAsync(this.state.orderJSON).then(res => {
+      console.log('tradeOrderAsync', res);
+    });
   }
 
   updateOrderJSON(e) {

@@ -30,7 +30,7 @@ const createSignedOrderAsync = orderData => {
     expirationTimestamp: new BigNumber(
       moment(orderData.expirationTimestamp).unix()
     ),
-    feeRecipient: '0x0000000000000000000000000000000000000000',
+    feeRecipient: NULL_ADDRESS,
     maker: web3.eth.coinbase,
     makerFee: new BigNumber(0),
     taker: NULL_ADDRESS,
@@ -121,7 +121,8 @@ const tradeOrderAsync = signedOrderJSON => {
   const signedOrder = JSON.parse(signedOrderJSON);
 
   const txParams = {
-    from: web3.eth.coinbase
+    from: web3.eth.coinbase,
+    gas: 40000
   };
 
   signedOrder.expirationTimestamp = new BigNumber(
@@ -135,7 +136,7 @@ const tradeOrderAsync = signedOrderJSON => {
   signedOrder.takerFee = new BigNumber(signedOrder.takerFee);
   signedOrder.salt = new BigNumber(signedOrder.salt);
 
-  marketjs
+  return marketjs
     .tradeOrderAsync(signedOrder, signedOrder.orderQty, txParams)
     .then(res => {
       return res;
