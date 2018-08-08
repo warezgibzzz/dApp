@@ -417,7 +417,7 @@ class ExpirationStep extends BaseStepComponent {
                   ? moment(expirationTimeStamp * 1000)
                   : isSimplified
                     ? moment().add(30, 'days')
-                    : ''
+                    : null
               }
               form={form}
               hideLabel
