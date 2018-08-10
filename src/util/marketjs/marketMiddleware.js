@@ -21,9 +21,10 @@ import { NULL_ADDRESS } from '../../constants';
  * @param orderData user inputed order data object {qty, price, expirationTimestamp}
  * @returns {object} signed order hash
  **/
-const createSignedOrderAsync = orderData => {
-  const { marketjs, simExchange } = store.getState();
-  const web3 = store.getState().web3.web3Instance;
+const createSignedOrderAsync = (orderData, str = store) => {
+  const { marketjs, simExchange, web3 } = str.getState();
+
+  console.log('simExchange', simExchange, 'web3', web3);
 
   let order = {
     contractAddress: simExchange.contract.key,
@@ -31,7 +32,7 @@ const createSignedOrderAsync = orderData => {
       moment(orderData.expirationTimestamp).unix()
     ),
     feeRecipient: NULL_ADDRESS,
-    maker: web3.eth.coinbase,
+    maker: web3.web3Instance.eth.coinbase,
     makerFee: new BigNumber(0),
     taker: NULL_ADDRESS,
     takerFee: new BigNumber(0),
@@ -53,9 +54,9 @@ const createSignedOrderAsync = orderData => {
  * @param amount the amount of collateral tokens you want to deposit
  * @returns boolean
  **/
-const depositCollateralAsync = amount => {
-  const { simExchange, marketjs } = store.getState();
-  const web3 = store.getState().web3.web3Instance;
+const depositCollateralAsync = (amount, str = store) => {
+  const { simExchange, marketjs } = str.getState();
+  const web3 = str.getState().web3.web3Instance;
 
   const txParams = {
     from: web3.eth.coinbase
@@ -95,9 +96,9 @@ const depositCollateralAsync = amount => {
   });
 };
 
-const getUserAccountBalanceAsync = (contract, toString) => {
-  const marketjs = store.getState().marketjs;
-  const web3 = store.getState().web3.web3Instance;
+const getUserAccountBalanceAsync = (contract, toString, str = store) => {
+  const marketjs = str.getState().marketjs;
+  const web3 = str.getState().web3.web3Instance;
 
   return marketjs
     .getUserAccountBalanceAsync(contract.key, web3.eth.coinbase)
@@ -115,16 +116,15 @@ const getUserAccountBalanceAsync = (contract, toString) => {
     });
 };
 
-const tradeOrderAsync = signedOrderJSON => {
-  const { marketjs } = store.getState();
-  const web3 = store.getState().web3.web3Instance;
+const tradeOrderAsync = (signedOrderJSON, str = store) => {
+  const { marketjs } = str.getState();
+  const web3 = str.getState().web3.web3Instance;
   const signedOrder = JSON.parse(signedOrderJSON);
 
   const txParams = {
     from: web3.eth.coinbase,
     gas: 40000
   };
-
   signedOrder.expirationTimestamp = new BigNumber(
     signedOrder.expirationTimestamp
   );
@@ -135,6 +135,8 @@ const tradeOrderAsync = signedOrderJSON => {
   signedOrder.remainingQty = new BigNumber(signedOrder.remainingQty);
   signedOrder.takerFee = new BigNumber(signedOrder.takerFee);
   signedOrder.salt = new BigNumber(signedOrder.salt);
+
+  console.log('signedOrderJSON', signedOrder);
 
   return marketjs
     .tradeOrderAsync(signedOrder, signedOrder.orderQty, txParams)
@@ -147,9 +149,9 @@ const tradeOrderAsync = signedOrderJSON => {
  * @param amount the amount of collateral tokens you want to deposit
  * @returns boolean
  **/
-const withdrawCollateralAsync = amount => {
-  const { simExchange, marketjs } = store.getState();
-  const web3 = store.getState().web3.web3Instance;
+const withdrawCollateralAsync = (amount, str = store) => {
+  const { simExchange, marketjs } = str.getState();
+  const web3 = str.getState().web3.web3Instance;
 
   const txParams = {
     from: web3.eth.coinbase
