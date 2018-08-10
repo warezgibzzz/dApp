@@ -2,10 +2,10 @@ import { message } from 'antd';
 import store from '../store';
 import abi from 'human-standard-token-abi';
 
+import copy from 'copy-to-clipboard';
 import { NULL_ADDRESS } from '../constants';
 
 import moment from 'moment';
-
 
 /**
  *
@@ -214,15 +214,12 @@ export const getContractAddress = (contract, networkId) => {
  * @param {string} text
  */
 export const copyTextToClipboard = text => {
-  let textArea = document.createElement('textarea');
-  textArea.value = text;
-  document.body.appendChild(textArea);
-  textArea.select();
   try {
-    document.execCommand('copy');
+    copy(text);
     message.success('Copied successfully to clipboard');
+    return true;
   } catch (err) {
     console.log('Unable to copy the contract address to clipboard');
+    return false;
   }
-  document.body.removeChild(textArea);
 };
