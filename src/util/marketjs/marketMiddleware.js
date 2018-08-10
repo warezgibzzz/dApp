@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js';
 import abi from 'human-standard-token-abi';
 import moment from 'moment';
-import BigNumber from 'bignumber.js';
 
 import store from '../../store';
 
@@ -24,8 +23,6 @@ import { NULL_ADDRESS } from '../../constants';
 const createSignedOrderAsync = (orderData, str = store) => {
   const { marketjs, simExchange, web3 } = str.getState();
 
-  console.log('simExchange', simExchange, 'web3', web3);
-
   let order = {
     contractAddress: simExchange.contract.key,
     expirationTimestamp: new BigNumber(
@@ -38,10 +35,13 @@ const createSignedOrderAsync = (orderData, str = store) => {
     takerFee: new BigNumber(0),
     orderQty: new BigNumber(orderData.qty),
     price: new BigNumber(orderData.price),
-    salt: new BigNumber(1)
+    salt: new BigNumber(Math.floor(Math.random() * (99999999999 - 1 + 1)) + 1)
   };
 
-  return marketjs.createSignedOrderAsync(...Object.values(order), true);
+  return marketjs.createSignedOrderAsync(
+    ...Object.values(order),
+    web3.web3Instance.currentProvider.isMetaMask ? true : false
+  );
 };
 
 /**

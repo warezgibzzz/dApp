@@ -33,20 +33,9 @@
     "web3-fake-provider": "^0.1.0"
   },
   "dependencies": {
-<<<<<<< HEAD
-<<<<<<< HEAD
-    "@marketprotocol/abis": "0.0.2",
-    "@marketprotocol/marketjs": "^0.2.2",
-=======
     "@marketprotocol/abis": "^0.0.2",
     "@marketprotocol/marketjs": "^0.2.3",
->>>>>>> 8821d5a... fills an order using tradeOrderAsync
     "@marketprotocol/marketprotocol": "^1.3.0",
-=======
-    "@marketprotocol/abis": "^0.0.1",
-    "@marketprotocol/marketjs": "^0.0.13",
-    "@marketprotocol/marketprotocol": "^1.2.0",
->>>>>>> e8a460f... fills order
     "antd": "^3.7.0",
     "autoprefixer": "7.1.6",
     "babel-core": "^6.26.3",
