@@ -8,6 +8,7 @@ import { toBaseUnit } from '../utils';
 import showMessage from '../../components/message';
 
 import { NULL_ADDRESS } from '../../constants';
+import { Utils } from '@marketprotocol/marketjs';
 
 // PUBLIC
 
@@ -35,7 +36,7 @@ const createSignedOrderAsync = (orderData, str = store) => {
     takerFee: new BigNumber(0),
     orderQty: new BigNumber(orderData.qty),
     price: new BigNumber(orderData.price),
-    salt: new BigNumber(Math.floor(Math.random() * (99999999999 - 1 + 1)) + 1)
+    salt: new BigNumber(Utils.generatePseudoRandomSalt())
   };
 
   return marketjs.createSignedOrderAsync(
